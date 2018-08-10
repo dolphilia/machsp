@@ -1,0 +1,12 @@
+f = 440.0
+
+repeat qframe()*100
+    if (dcnt \ (qrate() / f)) < (qrate() / (2.0 * f)) {
+        qins 0.99
+    }
+    else {
+        qins -0.99
+    }
+loop
+
+qplay

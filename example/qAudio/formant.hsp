@@ -1,0 +1,173 @@
+j = 0
+k = 0
+tau1 = 0
+tau2 = 0
+index = 0
+fk = 0.0
+w = 0.0
+f0 = 0.0
+rindex = 0.0
+
+pi = qpi()
+twopi = 2.0 * pi
+expo = 2.7182818284590452354
+fs = qrate()
+sec = 1.6
+idg_wave = 1
+dt = 1.0 / fs
+nsample = int(fs * sec)
+morapsec = 10.0 / 3.0
+gain = 0.50
+nres = 4
+fmt_id = 1
+
+ddim F,5,10
+ddim a,4
+ddim band,4
+ddim xx,nsample : boxf 0,0,640,480
+ddim x,2000
+ddim y,4,2000
+ddim y1,4,2000
+
+F.0.0=110.0
+F.1.0=250.0
+F.2.0=2100.0
+F.3.0=2900.0
+F.4.0=3700.0
+
+F.0.1=160.0
+F.1.1=450.0
+F.2.1=1900.0
+F.3.1=2650.0
+F.4.1=3800.0
+
+F.0.2=110.0
+F.1.2=700.0
+F.2.2=1250.0
+F.3.2=2500.0
+F.4.2=3900.0
+
+F.0.3=110.0
+F.1.3=500.0
+F.2.3=1050.0
+F.3.3=2700.0
+F.4.3=3700.0
+
+F.0.4=110.0
+F.1.4=330.0
+F.2.4=1500.0
+F.3.4=2400.0
+F.4.4=3650.0
+
+F.0.5=110.0
+F.1.5=335.0
+F.2.5=1550.0
+F.3.5=2450.0
+F.4.5=3800.0
+
+f0 = (F.0.0 + F.0.1) / 2.0
+
+band = 50.0, 70.0, 110.0, 200.0
+
+repeat 4
+    a.cnt = pi * band.cnt
+loop
+
+gain *= 0.0001
+
+ipos = 0
+nrepeat = 0
+id = 0
+i = 0
+
+repeat
+    if ipos > nsample {
+        break
+    }
+
+    rindex = dt * morapsec * double(ipos)        
+    index = int(rindex)
+    if index > 4 {
+        index = 4
+    }
+
+    f0 = (F.0.0 + F.0.1) / 2.0 + (F.0.0 - F.0.1) / 2.0 * sin(twopi * dt * morapsec / 5.0 * double(ipos) + twopi / 4.0)
+
+    nrepeat = fs / f0
+
+    if idg_wave = 0 {
+        tau1 = 0.25 * double(nrepeat)
+        tau2 = 0.50 * double(nrepeat)
+        repeat nrepeat
+            if cnt <= tau1 {
+                x.cnt = gain * double(cnt) / double(tau1)
+            }
+            else : if cnt < (tau1+tau2) {
+                x.cnt = -gain / tau2 * double((cnt - tau1)) + gain
+            }
+            else {
+                x.cnt = 0.0
+            }
+        loop
+    }
+    else {
+        x.0 = gain
+        j = 1
+        repeat nrepeat
+            x.j = 0.0;
+            j++
+        loop
+    }
+
+    k = 1
+    repeat 4
+        tmp_a = cnt
+        tmp_e = index+1
+
+        fk = F.k.index + (F.k.tmp_e - F.k.index) * (rindex - double(index))
+        w = twopi * fk
+
+        B = 2.0 * powf(expo, -a.tmp_a * dt) * cos(w * dt)
+        C = powf(expo, -2.0 * a.tmp_a * dt)
+        D = ((a.tmp_a * a.tmp_a + w * w) / w) * powf(expo, -a.tmp_a * dt) * sin(w * dt)
+
+        if id = 0 {
+            y1.tmp_a.0 = 0.0
+            y1.tmp_a.1 = 0.0
+        }
+        else {
+            tmp_b = int(nrepeat)-2
+            tmp_c = int(nrepeat)-1
+            y1.tmp_a.0 = y1.tmp_a.tmp_b
+            y1.tmp_a.1 = y1.tmp_a.tmp_c
+        }
+
+        repeat nrepeat
+            tmp_b = cnt + 2
+            tmp_c = cnt + 1
+            y1.tmp_a.tmp_b = B * y1.tmp_a.tmp_c - C * y1.tmp_a.cnt + x.cnt;
+            y.tmp_a.cnt = D * y1.tmp_a.tmp_c;
+        loop    
+
+        if k != 1 {
+            repeat nrepeat
+                y.0.cnt += y.tmp_a.cnt
+            loop
+        }
+        k++
+    loop
+
+    repeat nrepeat
+        tmp_d = ipos+cnt
+        xx.tmp_d = y.0.cnt
+    loop
+
+    ipos = ipos + nrepeat
+    id = 1
+    i++
+
+    title ""+ipos+"/"+nsample
+loop
+
+qpush xx,nsample
+qplay

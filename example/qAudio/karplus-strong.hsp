@@ -1,0 +1,32 @@
+dimtype buf,vartype("double"),qframe() * 1000
+
+f = 220.0
+len = int(qrate() / f)
+len2 = 100000
+tlen = 0.15 * qrate()
+
+repeat len
+    buf.i = randf(-1,1)
+    i++
+loop
+
+i = len
+n = 0
+
+repeat len2-len
+    m = i - len
+    n = i - 1
+    buf.i = 0.5 * (buf.m + buf.n)
+    i++
+loop
+
+i = len2 - tlen
+
+repeat tlen
+    n = 0.0 + i
+    buf.i = buf.i * ((n - len2 + tlen) * (-1.0 / tlen) + 1.0 )
+    i++
+loop
+
+qpush buf,len2
+qplay

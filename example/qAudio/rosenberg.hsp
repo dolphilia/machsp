@@ -1,0 +1,21 @@
+f = 440.0
+t = 0.0
+tau1 = 0.40
+tau2 = 0.16
+
+repeat qframe()*100
+    data = 0.0
+    t += f / qrate()
+    t -= 0.0 + int(t)
+    if t <= tau1 {
+        data = 2.0 * (3.0 * powf(t / tau1, 2.0) - 2.0 * powf(t / tau1, 3.0)) - 1.0
+    }
+    else {
+        if t < tau1 + tau2 {
+            data = 2.0 * (1.0 - powf((t - tau1) / tau2, 2.0)) - 1.0
+        }
+    }
+    qins data
+loop
+
+qplay
