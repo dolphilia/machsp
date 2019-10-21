@@ -416,7 +416,7 @@
 				TargetAttributes = {
 					74EF0BF01C94093D0085B93F = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = T4VK9CQYCA;
+						DevelopmentTeam = 8Q6U63H235;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
@@ -634,7 +634,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = T4VK9CQYCA;
+				DEVELOPMENT_TEAM = 8Q6U63H235;
 				INFOPLIST_FILE = hsed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dolphilia.hsed;
@@ -648,7 +648,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = T4VK9CQYCA;
+				DEVELOPMENT_TEAM = 8Q6U63H235;
 				INFOPLIST_FILE = hsed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dolphilia.hsed;

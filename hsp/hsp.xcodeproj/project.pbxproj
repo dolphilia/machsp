@@ -426,7 +426,7 @@
 				TargetAttributes = {
 					8B719A0E1D8650A300F35EC5 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = T4VK9CQYCA;
+						DevelopmentTeam = 8Q6U63H235;
 						ProvisioningStyle = Automatic;
 					};
 					8B719A241D8650A300F35EC5 = {
@@ -658,7 +658,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = T4VK9CQYCA;
+				DEVELOPMENT_TEAM = 8Q6U63H235;
 				INFOPLIST_FILE = hsp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dolphilia.hsp;
@@ -672,7 +672,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 8Q6U63H235;
 				INFOPLIST_FILE = hsp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dolphilia.hsp;
