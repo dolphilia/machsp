@@ -18,7 +18,7 @@
 //----hsp system support
 
 - (char *)getdir:(int)id {
-    DEBUG_IN;
+    
     //		dirinfo命令の内容をstmpに設定する
     //
     char *p;
@@ -81,12 +81,12 @@
         }
     }
     
-    DEBUG_OUT;
+    
     return p;
 }
 
 - (int)sysinfo:(int)p2 {
-    DEBUG_IN;
+    
     //		System strings get
     //
     int fl;
@@ -96,18 +96,18 @@
     p1 = hsp3gr_ctx->stmp;
     *p1 = 0;
     
-    DEBUG_OUT;
+    
     return fl;
 }
 
 - (void *)ex_getbmscr:(int)wid {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return NULL;
 }
 
 - (void)ex_mref:(PVal *)pval prm:(int)prm {
-    DEBUG_IN;
+    
     int t, size;
     void *ptr;
     const int GETBM = 0x60;
@@ -136,7 +136,7 @@
         }
     }
     HspVarCoreDupPtr(pval, t, ptr, size);
-    DEBUG_OUT;
+    
 }
 
 //------------------------------------------------------------
@@ -144,7 +144,7 @@
 //------------------------------------------------------------
 
 - (int)cmdfunc_extcmd:(int)cmd {
-    DEBUG_IN;
+    
     //		cmdfunc : TYPE_EXTCMD
     //		(内蔵GUIコマンド)
     //
@@ -411,12 +411,12 @@
              @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
-    DEBUG_OUT;
+    
     return RUNMODE_RUN;
 }
 
 - (void)cmdfunc_button {
-    DEBUG_IN;
+    
     char *ps;
     unsigned short *sbr;
     ps = [self code_gets];
@@ -440,17 +440,17 @@
     if (myButtonIndex >= 64) {
         myButtonIndex = 64;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_chgdisp {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"chgdisp命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_exec {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"exec命令は未実装です"];
     // char *ps;
     // char fname[HSP_MAX_PATH];
@@ -458,11 +458,11 @@
     // p1 = [self code_getdi:0];
     // ps = [self code_getds:""];
     // ExecFile( fname, ps, p1 );
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_dialog {
-    DEBUG_IN;
+    
     char *message_string = [self code_gets];
     int alert_style = [self code_getdi:0];
     char *title_string = [self code_getds:""];
@@ -529,42 +529,42 @@
     //                //デフォルトボタンが押された時の処理
     //        }
     //    }];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mmload {
-    DEBUG_IN;
+    
     char *p1 = [self code_gets];
     int p2 = [self code_getdi:0];
     [self code_getdi:0];
     [myAudio loadWithFilename:[NSString stringWithCString:p1
                                                  encoding:NSUTF8StringEncoding]
                         index:p2];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mmplay {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     [myAudio play:p1];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mmstop {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:-1];
     [myAudio stop:p1];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mci {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"mci命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_pset {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];        // X座標
     int p2 = [self code_getdi:0];        // Y座標
     int p3 = [self code_getdi:INT_MIN];  // X座標
@@ -573,11 +573,11 @@
     } else {
         [myLayer d3pset:p1 y:p2 z:p3];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_pget {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:INT_MIN];  // X座標
     int p2 = [self code_getdi:INT_MIN];  // Y座標
     if (p1 == INT_MIN && p2 == INT_MIN) {
@@ -586,11 +586,11 @@
     } else {
         [myLayer get_pixel_color:p1 point_y:p2];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_syscolor {
-    DEBUG_IN;
+    
     // NSAlert *alert = [[NSAlert alloc] init];
     //[alert setMessageText:@"エラー"];
     //[alert setInformativeText:@"syscolor命令は未実装です"];
@@ -722,11 +722,11 @@
     int b = (int)(color.blueComponent * 255.0);
     
     [myLayer set_color_rgba:r green:g blue:b alpha:255];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mes {
-    DEBUG_IN;
+    
     // char stmp[1024];
     char *ptr;
     int chk;
@@ -782,20 +782,20 @@
     //	printf( "%s\n",stmp );
     //	if ( chk == 0 ) break;
     //}
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_title {
-    DEBUG_IN;
+    
     char *p1;
     p1 = [self code_gets];
     global.title_text =
     [NSString stringWithCString:p1 encoding:NSUTF8StringEncoding];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_pos {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
     int p3 = [self code_getdi:INT_MIN];
@@ -804,11 +804,11 @@
     } else {
         [myLayer d3pos:p1 y:p2 z:p3];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_circle {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
     int p3 = [self code_getdi:0];
@@ -819,11 +819,11 @@
     } else {  //塗りつぶし
         [myLayer fill_circle_rgba:p1 y1:p2 x2:p3 y2:p4];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_cls {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     [myLayer clear_canvas:p1];
     
@@ -849,11 +849,11 @@
         //[[myTextFields objectAtIndex:myTextFieldIndex] setEditable:NO];
     }
     myTextFieldIndex = 0;
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_font {
-    DEBUG_IN;
+    
     char *p1 = [self code_gets];
     int p2 = [self code_getdi:12];
     int p3 = [self code_getdi:0];
@@ -862,33 +862,33 @@
      set_font:[NSString stringWithCString:p1 encoding:NSUTF8StringEncoding]
      size:p2
      style:p3];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_sysfont {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"sysfont命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_objsize {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"objsize命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_picload {
-    DEBUG_IN;
+    
     char *p1 = [self code_gets];
     int p2 = [self code_getdi:0];
     // NSSize pictureSize =
     [myLayer picload:[NSString stringWithCString:p1 encoding:NSUTF8StringEncoding]
                 mode:p2];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_color {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
     int p3 = [self code_getdi:0];
@@ -898,44 +898,44 @@
     } else {
         [myLayer set_color_rgba:p1 green:p2 blue:p3 alpha:p4];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_palcolor {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"palcolor命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_palette {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"palette命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_redraw {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     [myLayer set_redraw_flag:(BOOL)p1];
     [myLayer redraw];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_width {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"width命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_gsel {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     myLayer->buf_index = p1;
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_gcopy {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
     int p3 = [self code_getdi:0];
@@ -943,17 +943,17 @@
     int p5 = [self code_getdi:-1];
     //[myLayer vcopy:p1];
     [myLayer gcopy:p1 px:p2 py:p3 sx:p4 sy:p5];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_gzoom {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"gzoom命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_gmode {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:32];
     int p3 = [self code_getdi:32];
@@ -966,33 +966,33 @@
         [myLayer set_current_copy_height:p3];
     }
     [myLayer set_current_blend_opacity:p4];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_bmpsave {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"bmpsave命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_hsvcolor {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
     int p3 = [self code_getdi:0];
     [myLayer set_color_hsv:p1 saturation:p2 brightness:p3];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_getkey {
-    DEBUG_IN;
+    
     PVal *pval;
     APTR aptr;
     int res;
     aptr = [self code_getva:&pval];
     int p1 = [self code_getdi:0];
     // p2 = [self code_getdi:1];
-    int ckey, cklast, cktrg;
+    int ckey, cklast = 0, cktrg;
     ckey = 0;
     res = 0;
     
@@ -1373,11 +1373,11 @@
     res = cktrg;  //|(ckey&p1);
     // = 255;
     [self code_setva:pval aptr:aptr type:TYPE_INUM ptr:&res];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_chkbox {
-    DEBUG_IN;
+    
     int posx = [myLayer get_current_point_x];
     int posy = [myLayer get_current_point_y];
     [[myCheckBoxs objectAtIndex:myCheckBoxIndex]
@@ -1400,23 +1400,23 @@
     if (myCheckBoxIndex >= 64) {
         myCheckBoxIndex = 64;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_listbox {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"listbox命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_combox {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"combox命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_input {
-    DEBUG_IN;
+    
     int posx = [myLayer get_current_point_x];
     int posy = [myLayer get_current_point_y];
     
@@ -1518,17 +1518,17 @@
      [self code_setva:pval aptr:aptr type:TYPE_STRING ptr:hsp3gr_ctx->stmp];
      }
      */
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mesbox {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"mesbox命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_buffer {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:640];
     int p3 = [self code_getdi:480];
@@ -1536,11 +1536,11 @@
     myLayer->buf_width[myLayer->buf_index] = p2;
     myLayer->buf_height[myLayer->buf_index] = p3;
     [myLayer clear_canvas:0];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_screen {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:640];
     int p3 = [self code_getdi:480];
@@ -1558,11 +1558,11 @@
     myLayer->buf_height[myLayer->buf_index] = p3;
     
     [myLayer clear_canvas:0];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_bgscr {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:640];
     int p3 = [self code_getdi:480];
@@ -1575,29 +1575,29 @@
     
     [myLayer clear_canvas:0];
     
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mouse {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"mouse命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_objsel {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"objsel命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_groll {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"groll命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_line {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
     int p3 = [self code_getdi:0];
@@ -1620,11 +1620,11 @@
             [myLayer d3line:p1 sy:p2 sz:p3 ex:p4 ey:p5 ez:p6];
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_clrobj {
-    DEBUG_IN;
+    
     //ボタンを画面外に
     for (int i = 0; i < 64; i++) {
         [[myButtons objectAtIndex:i] setFrameOrigin:NSMakePoint(0, -9999)];
@@ -1635,41 +1635,41 @@
         [[mySliders objectAtIndex:i] setFrameOrigin:NSMakePoint(0, -9999)];
     }
     mySliderIndex = 0;
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_boxf {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
     int p3 = [self code_getdi:myLayer->buf_width[myLayer->buf_index]];
     int p4 = [self code_getdi:myLayer->buf_height[myLayer->buf_index]];
     
     [myLayer fill_rect_rgba:p1 y1:p2 x2:p3 y2:p4];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_objprm {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"objprm命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_objmode {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"objmode命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_stick {
-    DEBUG_IN;
+    
     PVal *pval;
     APTR aptr;
     int res;
     aptr = [self code_getva:&pval];
     int p1 = [self code_getdi:0];
     [self code_getdi:1];
-    int ckey, cklast, cktrg;
+    int ckey, cklast = 0, cktrg;
     ckey = 0;
     res = 0;
     
@@ -1722,25 +1722,25 @@
     [self code_setva:pval aptr:aptr type:TYPE_INUM ptr:&res];
     //[self code_event:HSPEVENT_STICK prm1:TYPE_INUM prm2:aptr prm3:&res];
     //[self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:[self code_gets]];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_grect {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"grect命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_grotate {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"grotate命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_gsquare {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"gsquare命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 typedef unsigned long DWORD;
@@ -1751,7 +1751,7 @@ typedef DWORD COLORREF;
 (((unsigned long)(unsigned char)(b)) << 16)))
 
 - (void)cmdfunc_gradf {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
     int p3 = [self code_getdi:myLayer->buf_width[myLayer->buf_index]];
@@ -1767,8 +1767,8 @@ typedef DWORD COLORREF;
     res |= (color & 0xff) << 16;
     int p5 = [self code_getdi:color];
     int p6 = [self code_getdi:color];
-    UInt8 color_a[3];
-    UInt8 color_b[3];
+    int color_a[3];
+    int color_b[3];
     memcpy(color_a, &p5, sizeof(int));
     memcpy(color_b, &p6, sizeof(int));
     [myLayer fillGradation:p1
@@ -1782,117 +1782,117 @@ typedef DWORD COLORREF;
                color_red_b:color_b[0]
              color_green_b:color_b[1]
               color_blue_b:color_b[2]];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_objimage {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"objimage命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_objskip {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"命令はobjskip未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_objenable {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"objenable命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_celload {
-    DEBUG_IN;
+    
     [self cmdfunc_picload];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_celdiv {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"celdiv命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_celput {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"celput命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_gfilter {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"gfilter命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_setreq {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"setreq命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_getreq {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"getreq命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mmvol {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"mmvol命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mmpan {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"mmpan命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mmstat {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"mmstat命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 - (void)cmdfunc_mtlist {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"mtlist命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mtinfo {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"mtinfo命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_devinfo {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"devinfo命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 - (void)cmdfunc_devinfoi {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"devinfoi命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_devprm {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"devprm命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_devcontrol {
-    DEBUG_IN;
+    
     [self show_alert_dialog:@"devcontrol命令は未実装です"];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_qins {
-    DEBUG_IN;
+    
     // qAudioがスタートしているか
     if (qAudio->isInitialized != YES) {
         [qAudio start];
@@ -1924,11 +1924,11 @@ typedef DWORD COLORREF;
             [global.q_audio_buffer addObject:m];
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_qpush {
-    DEBUG_IN;
+    
     // qAudioがスタートしているか
     if (qAudio->isInitialized != YES) {
         [qAudio start];
@@ -1981,44 +1981,44 @@ typedef DWORD COLORREF;
             }
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_qstart {
-    DEBUG_IN;
+    
     [qAudio start];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_qend {
-    DEBUG_IN;
+    
     [qAudio end];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_qplay {
-    DEBUG_IN;
+    
     if (qAudio->isInitialized != YES) {
         [qAudio start];
     }
     [qAudio play];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_qstop {
-    DEBUG_IN;
+    
     [qAudio stop];
 }
 
 - (void)cmdfunc_qvol {
-    DEBUG_IN;
+    
     double vol = [self code_getd];
     [qAudio setVolume:vol];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_slider {
-    DEBUG_IN;
+    
     // p1 = 初期値(double)
     // p2 = 最小値(double)
     // p3 = 最大値(double)
@@ -2062,7 +2062,7 @@ typedef DWORD COLORREF;
     if (mySliderIndex >= 64) {
         mySliderIndex = 64;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_onmidi {
@@ -2076,7 +2076,7 @@ typedef DWORD COLORREF;
 }
 
 - (void)cmdfunc_box {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
     int p3 = [self code_getdi:0];
@@ -2096,31 +2096,31 @@ typedef DWORD COLORREF;
             [myLayer d3box:p1 sy:p2 sz:p3 ex:p4 ey:p5 ez:p6];
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_antialiasing {
-    DEBUG_IN;
+    
     if ([self code_getdi:0] == 0) {
         isSmooth = NO;
     } else {
         isSmooth = YES;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_smooth {
-    DEBUG_IN;
+    
     if ([self code_getdi:1] == 1) {
         isSmooth = YES;
     } else {
         isSmooth = NO;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_setcam {
-    DEBUG_IN;
+    
     double x1 = [self code_getdd:500];
     double y1 = [self code_getdd:500];
     double z1 = [self code_getdd:500];
@@ -2128,11 +2128,11 @@ typedef DWORD COLORREF;
     double y2 = [self code_getdd:0];
     double z2 = [self code_getdd:0];
     [myLayer d3setcam:x1 y1:y1 z1:z1 x2:x2 y2:y2 z2:z2];
-    DEBUG_OUT;
+    
 }
 
 - (void *)reffunc_function:(int *)type_res arg:(int)arg {
-    DEBUG_IN;
+    
     void *ptr;
     //		返値のタイプを設定する
     //
@@ -2155,7 +2155,7 @@ typedef DWORD COLORREF;
     if (*hsp3gr_val != '(') {
         // NSLog(@"aiueo");
         // '('がない場合は拡張システム変数とみなす
-        DEBUG_OUT;
+        
         return [self reffunc_sysvar:type_res arg:arg];
         
         // throw HSPERR_INVALID_FUNCPARAM;
@@ -2198,19 +2198,19 @@ typedef DWORD COLORREF;
     }
     [self code_next];
     
-    DEBUG_OUT;
+    
     return ptr;
 }
 
 - (void *)reffunc_sysvar:(int *)type_res arg:(int)arg {
-    DEBUG_IN;
+    
     //		reffunc : TYPE_EXTSYSVAR
     //		(拡張システム変数)
     //
     
     void *ptr;
     if (arg & 0x100) {
-        DEBUG_OUT;
+        
         return [self reffunc_function:type_res arg:arg];
     }
     
@@ -2248,21 +2248,21 @@ typedef DWORD COLORREF;
              @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
-    DEBUG_OUT;
+    
     return ptr;
 }
 
 - (int)termfunc_extcmd:(int)option {
-    DEBUG_IN;
+    
     //		termfunc : TYPE_EXTCMD
     //		(内蔵GUI)
     //
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (void)hsp3typeinit_cl_extcmd:(HSP3TYPEINFO *)info {
-    DEBUG_IN;
+    
     HSP_ExtraInfomation *exinfo;  // Info for Plugins
     
     hsp3gr_ctx = info->hspctx;
@@ -2285,13 +2285,13 @@ typedef DWORD COLORREF;
     //		バイナリモードを設定
     //
     //_setmode( _fileno(stdin),  _O_BINARY );
-    DEBUG_OUT;
+    
 }
 
 - (void)hsp3typeinit_cl_extfunc:(HSP3TYPEINFO *)info {
-    DEBUG_IN;
+    
     info->reffuncNumber = 4;  // reffunc_function;
-    DEBUG_OUT;
+    
 }
 
 @end

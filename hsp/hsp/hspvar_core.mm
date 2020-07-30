@@ -75,7 +75,7 @@ HspVarCorePtrAPTR(PVal* pv, APTR ofs)
 void
 HspVarCoreInit(void)
 {
-    DEBUG_IN;
+    
     int i;
     hspvarproc = (HspVarProc*)sbAlloc(sizeof(HspVarProc) * HSPVAR_FLAG_MAX);
     hspvartype_max = HSPVAR_FLAG_MAX;
@@ -92,13 +92,13 @@ HspVarCoreInit(void)
         pval->mode = HSPVAR_MODE_NONE;
         pval->flag = HSPVAR_FLAG_INT; // 仮の型
     }
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarCoreBye(void)
 {
-    DEBUG_IN;
+    
     int i;
     for (i = 0; i < hspvartype_max; i++) {
         if (mem_pval[i].mode == HSPVAR_MODE_MALLOC) {
@@ -126,13 +126,13 @@ HspVarCoreBye(void)
     }
     sbFree(mem_pval);
     sbFree(hspvarproc);
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarCoreResetVartype(int expand)
 {
-    DEBUG_IN;
+    
     //		VARTYPEを初期化する(HspVarCoreInitの後で呼ぶ)
     //		(expandに拡張するVARTYPEの数を指定する)
     //
@@ -151,13 +151,13 @@ HspVarCoreResetVartype(int expand)
     HspVarCoreRegisterType(HSPVAR_FLAG_DOUBLE, (char*)"double");
     HspVarCoreRegisterType(HSPVAR_FLAG_STRUCT, (char*)"struct");
     HspVarCoreRegisterType(HSPVAR_FLAG_LABEL, (char*)"label"); // ラベル型(3.1)
-    DEBUG_OUT;
+    
 }
 
 int
 HspVarCoreAddType()
 {
-    DEBUG_IN;
+    
     int id;
     PVal* pval;
     if (hspvartype_max >= hspvartype_limit)
@@ -171,33 +171,33 @@ HspVarCoreAddType()
     pval = &mem_pval[id];
     pval->mode = HSPVAR_MODE_NONE;
     pval->flag = HSPVAR_FLAG_INT; // 仮の型
-    DEBUG_OUT;
+    
     return id;
 }
 
-static void
-PutInvalid(void)
-{
-    DEBUG_IN;
-    NSString* error_str =
-    [NSString stringWithFormat:@"%d", HSPERR_UNSUPPORTED_FUNCTION];
-    @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
-    DEBUG_OUT;
-}
+//static void
+//PutInvalid(void)
+//{
+//
+//    NSString* error_str =
+//    [NSString stringWithFormat:@"%d", HSPERR_UNSUPPORTED_FUNCTION];
+//    @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+//
+//}
 
 void
 HspVarCoreRegisterType(int flag, char* vartype_name)
 {
-    DEBUG_IN;
+    
     int id;
-    void** procs;
+    //void** procs;
     HspVarProc* p;
     
     id = flag;
     if (id < 0) {
         id = HspVarCoreAddType();
         if (id < 0) {
-            DEBUG_OUT;
+            
             return;
         }
     }
@@ -229,7 +229,7 @@ HspVarCoreRegisterType(int flag, char* vartype_name)
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     // func( p );
-    DEBUG_OUT;
+    
 }
 
 /*------------------------------------------------------------*/
@@ -237,7 +237,7 @@ HspVarCoreRegisterType(int flag, char* vartype_name)
 void
 HspVarCoreDupPtr(PVal* pval, int flag, void* ptr, int size)
 {
-    DEBUG_IN;
+    
     //		指定されたポインタからのクローンになる
     //
     PDAT* buf;
@@ -283,13 +283,13 @@ HspVarCoreDupPtr(PVal* pval, int flag, void* ptr, int size)
     pval->offset = 0;
     pval->arraycnt = 0;
     pval->support = HSPVAR_SUPPORT_STORAGE;
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarCoreDup(PVal* pval, PVal* arg, APTR aptr)
 {
-    DEBUG_IN;
+    
     //		指定された変数のクローンになる
     //
     int size;
@@ -321,13 +321,13 @@ HspVarCoreDup(PVal* pval, PVal* arg, APTR aptr)
     }
     
     HspVarCoreDupPtr(pval, arg->flag, buf, size);
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarCoreDim(PVal* pval, int flag, int len1, int len2, int len3, int len4)
 {
-    DEBUG_IN;
+    
     //		配列を確保する
     //		(len1〜len4は、4byte単位なので注意)
     //
@@ -384,14 +384,14 @@ HspVarCoreDim(PVal* pval, int flag, int len1, int len2, int len3, int len4)
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarCoreDimFlex(PVal* pval, int flag, int len0, int len1, int len2, int len3,
                   int len4)
 {
-    DEBUG_IN;
+    
     //		配列を確保する(可変長配列用)
     //		(len1〜len4は、4byte単位なので注意)
     //
@@ -450,13 +450,13 @@ HspVarCoreDimFlex(PVal* pval, int flag, int len0, int len1, int len2, int len3,
     
     pval->len[0] = 1;
     
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarCoreReDim(PVal* pval, int lenid, int len)
 {
-    DEBUG_IN;
+    
     //		配列を拡張する
     //
     HspVarProc* p;
@@ -476,34 +476,34 @@ HspVarCoreReDim(PVal* pval, int lenid, int len)
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarCoreClear(PVal* pval, int flag)
 {
-    DEBUG_IN;
+    
     //		指定タイプの変数を最小メモリで初期化する
     //
     HspVarCoreDim(pval, flag, 1, 0, 0, 0); // 最小サイズのメモリを確保
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarCoreClearTemp(PVal* pval, int flag)
 {
-    DEBUG_IN;
+    
     //		指定タイプの変数を最小メモリで初期化する(テンポラリ用)
     //
     HspVarCoreDim(pval, flag, 1, 0, 0, 0); // 最小サイズのメモリを確保
     pval->support |= HSPVAR_SUPPORT_TEMPVAR;
-    DEBUG_OUT;
+    
 }
 
 void*
 HspVarCoreCnvPtr(PVal* pval, int flag)
 {
-    DEBUG_IN;
+    
     //		指定されたtypeフラグに変換された値のポインタを得る
     //
     PDAT* dst;
@@ -569,14 +569,14 @@ HspVarCoreCnvPtr(PVal* pval, int flag)
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     return (void*)dst; //( hspvarproc[flag].Cnv( buf, pval->flag ) );
-    DEBUG_OUT;
+    
 }
 
 #if 0
 PDAT *
 HspVarCorePtrAPTR( PVal *pv, APTR ofs )
 {
-    DEBUG_IN;
+    
     //		変数データの実態ポインタを得る
     //		(APTRとpvalから実態を求める)
     //
@@ -603,7 +603,7 @@ HspVarCorePtrAPTR( PVal *pv, APTR ofs )
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     
-    DEBUG_OUT;
+    
     return dst;//[(pv)->flag].GetPtr(pv);
 }
 #endif
@@ -611,26 +611,26 @@ HspVarCorePtrAPTR( PVal *pv, APTR ofs )
 HspVarProc*
 HspVarCoreSeekProc(const char* name)
 {
-    DEBUG_IN;
+    
     int i;
     HspVarProc* p;
     for (i = 0; i < hspvartype_max; i++) {
         p = &hspvarproc[i];
         if (p->flag) {
             if (strcmp(p->vartype_name, name) == 0) {
-                DEBUG_OUT;
+                
                 return p;
             }
         }
     }
-    DEBUG_OUT;
+    
     return NULL;
 }
 
 void
 HspVarCoreArray(PVal* pval, int offset)
 {
-    DEBUG_IN;
+    
     //		配列要素の指定 (index)
     //		( Reset後に次元数だけ連続で呼ばれます )
     //
@@ -656,7 +656,7 @@ HspVarCoreArray(PVal* pval, int offset)
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     pval->offset += offset * pval->arraymul;
-    DEBUG_OUT;
+    
 }
 
 //=============================================================================<<<hspvar_core

@@ -11,7 +11,7 @@
 @implementation ViewController (stack)
 
 - (void)StackInit {
-    DEBUG_IN;
+    
     int i;
     StackManagerData *stm;
     
@@ -27,40 +27,40 @@
         stm->ptr = (char *)&(stm->ival);
         stm++;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)StackTerm {
-    DEBUG_IN;
+    
     [self StackReset];
     free(stack_mem_stm);
-    DEBUG_OUT;
+    
 }
 
 - (void)StackAlloc:(StackManagerData *)stm size:(int)size {
-    DEBUG_IN;
+    
     if (size <= STM_STRSIZE_DEFAULT) {
         //		stm->mode = STMMODE_SELF;
         //		stm->ptr = (char *)&(stm->ival);
-        DEBUG_OUT;
+        
         return;
     }
     stm->mode = STMMODE_ALLOC;
     stm->ptr = (char *)malloc(size);
-    DEBUG_OUT;
+    
 }
 
 - (void)StackReset {
-    DEBUG_IN;
+    
     while (1) {
         if (stack_stm_cur == stack_mem_stm) break;
         [self StackPop];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)StackPush:(int)type data:(char *)data size:(int)size {
-    DEBUG_IN;
+    
     StackManagerData *stm;
     // double *dptr;
     if (stack_stm_cur >= stack_stm_maxptr) {
@@ -77,7 +77,7 @@
             stm->ival = *(int *)data;
             //		stm->ptr = (char *)&(stm->ival);
             stack_stm_cur++;
-            DEBUG_OUT;
+            
             return;
         case HSPVAR_FLAG_DOUBLE:
             // dptr = (double *)&stm->ival;
@@ -86,7 +86,7 @@
             //		stm->mode = STMMODE_SELF;
             //		stm->ptr = (char *)dptr;
             stack_stm_cur++;
-            DEBUG_OUT;
+            
             return;
         default:
             break;
@@ -94,17 +94,17 @@
     [self StackAlloc:stm size:size];
     memcpy(stm->ptr, data, size);
     stack_stm_cur++;
-    DEBUG_OUT;
+    
 }
 
 - (void)StackPush:(int)type str:(char *)str {
-    DEBUG_IN;
+    
     [self StackPush:type data:str size:(int)strlen(str) + 1];
-    DEBUG_OUT;
+    
 }
 
 - (void *)StackPushSize:(int)type size:(int)size {
-    DEBUG_IN;
+    
     StackManagerData *stm;
     if (stack_stm_cur >= stack_stm_maxptr) {
         NSString *error_str =
@@ -116,17 +116,17 @@
     [self StackAlloc:stm size:size];
     stack_stm_cur++;
     return (void *)stm->ptr;
-    DEBUG_OUT;
+    
 }
 
 - (void)StackPushStr:(char *)str {
-    DEBUG_IN;
+    
     [self StackPush:HSPVAR_FLAG_STR data:str size:(int)strlen(str) + 1];
-    DEBUG_OUT;
+    
 }
 
 - (void)StackPushTypeVal:(int)type val:(int)val val2:(int)val2 {
-    DEBUG_IN;
+    
     StackManagerData *stm;
     int *iptr;
     //	if ( stack_stm_cur >= stack_stm_maxptr ) throw HSPERR_STACK_OVERFLOW;
@@ -137,11 +137,11 @@
     iptr = (int *)stm->itemp;
     *iptr = val2;
     stack_stm_cur++;
-    DEBUG_OUT;
+    
 }
 
 - (void)StackPushVar:(void *)pval aptr:(int)aptr {
-    DEBUG_IN;
+    
     StackManagerData *stm;
     //	if ( stack_stm_cur >= stack_stm_maxptr ) throw HSPERR_STACK_OVERFLOW;
     stm = stack_stm_cur;
@@ -150,21 +150,21 @@
     stm->pval = pval;
     stm->ival = aptr;
     stack_stm_cur++;
-    DEBUG_OUT;
+    
 }
 
 - (void)StackPushType:(int)type {
-    DEBUG_IN;
+    
     [self StackPushTypeVal:type val:0 val2:0];
-    DEBUG_OUT;
+    
 }
 
 - (void)StackPopFree {
-    DEBUG_IN;
+    
     free(stack_stm_cur->ptr);
     stack_stm_cur->mode = STMMODE_SELF;
     stack_stm_cur->ptr = (char *)&(stack_stm_cur->ival);
-    DEBUG_OUT;
+    
 }
 
 //void

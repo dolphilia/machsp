@@ -15,13 +15,13 @@
 
 - (void)show_alert_dialog:(NSString*)message
 {
-    DEBUG_IN;
+    
     NSAlert* alert = [[NSAlert alloc] init];
     [alert setMessageText:@"エラー"];
     [alert setInformativeText:message];
     [alert addButtonWithTitle:@"OK"];
     [alert runModal];
-    DEBUG_OUT;
+    
 }
 
 - (NSException*)make_nsexception:(int)hsp_error_type
@@ -32,7 +32,7 @@
 
 - (void)viewDidLoad
 {
-    DEBUG_IN;
+    
     [super viewDidLoad];
     
     // Do any additional setup after loading the view.
@@ -242,22 +242,22 @@
     
     global.is_app_run = YES;
     isInitialized = YES;
-    DEBUG_OUT;
+    
 }
 
 - (void)setRepresentedObject:(id)representedObject
 {
-    DEBUG_IN;
+    
     [super setRepresentedObject:representedObject];
     
     // Update the view, if already loaded.
-    DEBUG_OUT;
+    
 }
 
 - (void)awakeFromNib
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
 }
 
 - (void)onTimerMidiEvent:(NSTimer*)timer
@@ -381,13 +381,13 @@
 - (void)controlTextDidEndEditing:
 (NSNotification*)notification // Enterが押された時
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
 }
 
 - (void)controlTextDidChange:(NSNotification*)notification //内容が変更された時
 {
-    DEBUG_IN;
+    
     NSTextField* textField = [notification object];
     NSString* identifier = [textField identifier];
     if ([identifier isEqualToString:@"TextField"]) {
@@ -399,12 +399,12 @@
                      ptr:state];
         // NSLog(@"%d",(int)textField.tag);
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)checkEvent:(id)sender
 {
-    DEBUG_IN;
+    
     int state;
     if ([sender state] == NSOnState) {
         state = 1;
@@ -419,28 +419,28 @@
                     type:TYPE_INUM
                      ptr:&state];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)sliderEvent:(id)sender
 {
-    DEBUG_IN;
+    
     vc_hspctx->iparam = (int)[sender tag];
     vc_hspctx->refdval = [[mySliders objectAtIndex:[sender tag]] doubleValue];
     [self cmdfunc_gosub:mySliderLabel[[sender tag]]];
-    DEBUG_OUT;
+    
 }
 
 - (void)buttonEvent:(id)sender
 {
-    DEBUG_IN;
+    
     [self cmdfunc_gosub:myButtonLabel[[sender tag]]];
-    DEBUG_OUT;
+    
 }
 
 - (void)runStartax
 {
-    DEBUG_IN;
+    
     NSString* path; // = NSHomeDirectory();
     //ファイルの有無の確認 順序 -> resourcePath/start.ax ->
     //Documents/hsptmp/start.ax -> Home/start.ax -> Desktop/start.ax
@@ -485,7 +485,7 @@
     [self hsp3cl_init:(char*)path.UTF8String];
     [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
         while (1) { //実行できる状態になるまで待つ
-            if (global.is_app_run) {
+            if (self->global.is_app_run) {
                 break;
             }
             usleep(1000);
@@ -493,7 +493,7 @@
         [self hsp3cl_exec];
     }];
     
-    DEBUG_OUT;
+    
 }
 
 @end

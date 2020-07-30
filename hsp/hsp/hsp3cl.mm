@@ -18,17 +18,17 @@
 @implementation ViewController (hsp3cl)
 
 - (void)dealloc {
-    DEBUG_IN;
+    
     //		すべて破棄
     //
     [self code_termfunc];
     [self Dispose];
     [self code_bye];
-    DEBUG_OUT;
+    
 }
 
 - (int)hsp3cl_exec {
-    DEBUG_IN;
+    
     //		実行メインを呼び出す
     //
     int runmode;
@@ -43,7 +43,7 @@ rerun:
             [self hsp3cl_error];
         } @catch (NSException *error) {
         }
-        DEBUG_OUT;
+        
         return -1;
     }
     if (runmode == RUNMODE_EXITRUN) {
@@ -56,7 +56,7 @@ rerun:
         [self hsp3cl_bye];
         res = [self hsp3cl_init:fname];
         if (res) {
-            DEBUG_OUT;
+            
             return res;
         }
         
@@ -66,12 +66,12 @@ rerun:
     }
     endcode = vc_hspctx->endcode;
     [self hsp3cl_bye];
-    DEBUG_OUT;
+    
     return endcode;
 }
 
 - (int)hsp3cl_init:(char *)startfile {
-    DEBUG_IN;
+    
     //		システム関連の初期化
     //		( mode:0=debug/1=release )
     //
@@ -100,7 +100,7 @@ rerun:
     
     if (*startfile == 0) {
         printf("OpenHSP CL ver%s / onion software 1997-2009\n", HSP_VERSION);
-        DEBUG_OUT;
+        
         return -1;
     }
     [self SetFileName:startfile];
@@ -129,7 +129,7 @@ rerun:
     
     if ([self Reset:mode]) {
         [self hsp3win_dialog:(char *)"Startup failed."];
-        DEBUG_OUT;
+        
         return -1;
     }
     
@@ -152,26 +152,26 @@ rerun:
     [self hsp3typeinit_cl_extcmd:[self code_gettypeinfo:TYPE_EXTCMD]];
     [self hsp3typeinit_cl_extfunc:[self code_gettypeinfo:TYPE_EXTSYSVAR]];
     
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (void)hsp3win_dialog:(char *)mes {
-    DEBUG_IN;
+    
     printf("%s\n", mes);
-    DEBUG_OUT;
+    
 }
 
 - (void)hsp3cl_bye {
-    DEBUG_IN;
+    
     //		HSP関連の解放
     //
     // delete hsp;
-    DEBUG_OUT;
+    
 }
 
 - (void)hsp3cl_msgfunc:(HSPContext *)_hspctx {
-    DEBUG_IN;
+    
     while (1) {
         switch (_hspctx->runmode) {
             case RUNMODE_STOP: {
@@ -219,14 +219,14 @@ rerun:
                 
             default:
                 return;
-                DEBUG_OUT;
+                
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)hsp3cl_error {
-    DEBUG_IN;
+    
     char errmsg[1024];
     char *msg;
     char *fname;
@@ -248,7 +248,7 @@ rerun:
     [self hsp3win_dialog:errmsg];
     [self hsp3win_dialog:(char *)"[ERROR] Press any key..."];
     getchar();
-    DEBUG_OUT;
+    
 }
 
 //================================================================================>>>HSP3
@@ -260,22 +260,22 @@ rerun:
 /*------------------------------------------------------------*/
 
 - (void)SetFileName:(char *)name {
-    DEBUG_IN;
+    
     if (*name == 0) {
         hsp3cl_axname = NULL;
-        DEBUG_OUT;
+        
         return;
     }
     hsp3cl_axname = name;
-    DEBUG_OUT;
+    
 }
 
 - (void)Dispose {
-    DEBUG_IN;
+    
     //		axを破棄
     //
     if (abc_hspctx.mem_mcs == NULL) {
-        DEBUG_OUT;
+        
         return;
     }
     if (abc_hspctx.mem_var != NULL) {
@@ -310,11 +310,11 @@ rerun:
         mem_bye(hsp3cl_axfile);
         hsp3cl_axfile = NULL;
     }
-    DEBUG_OUT;
+    
 }
 
 - (int)Reset:(int)mode {
-    DEBUG_IN;
+    
     //		axを初期化
     //		mode: 0 = normal(debug) mode
     //		      other = packfile PTR
@@ -364,12 +364,12 @@ rerun:
         }
         *p = 0;
         if (sum != 0x6cced385) {
-            DEBUG_OUT;
+            
             return -1;
         }
         if (mode) {
             if ([self dpm_filebase:fname] != 1) {
-                DEBUG_OUT;
+                
                 return -1;  // DPM,packfileからのみstart.axを読み込む
             }
         }
@@ -379,7 +379,7 @@ rerun:
     
     ptr = [self dpm_readalloc:fname];
     if (ptr == NULL) {
-        DEBUG_OUT;
+        
         return -1;
     }
     
@@ -392,7 +392,7 @@ rerun:
     if ((hsphed->h1 != 'H') || (hsphed->h2 != 'S') || (hsphed->h3 != 'P') ||
         (hsphed->h4 != '3')) {
         mem_bye(hsp3cl_axfile);
-        DEBUG_OUT;
+        
         return -1;
     }
     
@@ -439,15 +439,15 @@ rerun:
     // hsphed->max_ot, hsphed->max_val );
     [self code_setpc:abc_hspctx.mem_mcs];
     [self code_debug_init];
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (void)SetPackValue:(int)sum dec:(int)dec {
-    DEBUG_IN;
+    
     hsp3cl_hsp_sum = sum;
     hsp3cl_hsp_dec = dec;
-    DEBUG_OUT;
+    
 }
 
 /*------------------------------------------------------------*/
@@ -457,20 +457,20 @@ rerun:
 /*------------------------------------------------------------*/
 
 - (void *)copy_DAT:(char *)ptr size:(size_t)size {
-    DEBUG_IN;
+    
     if (size <= 0) {
-        DEBUG_OUT;
+        
         return ptr;
     }
     
     void *dst = malloc(size);
     memcpy(dst, ptr, size);
-    DEBUG_OUT;
+    
     return dst;
 }
 
 - (LIBDAT *)copy_LIBDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size {
-    DEBUG_IN;
+    
     //	libdatの準備
     int i, max;
     int newsize;
@@ -495,14 +495,14 @@ rerun:
         ptr += sizeof(HED_LIBDAT);
     }
     hsphed->max_linfo = newsize;
-    DEBUG_OUT;
+    
     return mem_dst;
 }
 
 - (STRUCTDAT *)copy_STRUCTDAT:(HSPHED *)hsphed
                           ptr:(char *)ptr
                          size:(size_t)size {
-    DEBUG_IN;
+    
     //	structdatの準備
     int i, max;
     int newsize;
@@ -533,7 +533,7 @@ rerun:
         ptr += sizeof(HED_STRUCTDAT);
     }
     hsphed->max_finfo = newsize;
-    DEBUG_OUT;
+    
     return mem_dst;
 }
 //================================================================================<<<HSP3

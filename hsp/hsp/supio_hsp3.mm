@@ -45,7 +45,7 @@
 static void
 _splitpath(char* path, char* p_drive, char* dir, char* fname, char* ext)
 {
-    DEBUG_IN;
+    
     //		Linux用ファイルパス切り出し
     //
     char* p;
@@ -70,13 +70,13 @@ _splitpath(char* path, char* p_drive, char* dir, char* fname, char* ext)
         p[1] = 0;
         strcpy(dir, pathtmp);
     }
-    DEBUG_OUT;
+    
 }
 
 static int
 wildcard(char* text, char* wc)
 {
-    DEBUG_IN;
+    
     //		textに対してワイルドカード処理を適応
     //		return value: yes 1, no 0
     //
@@ -101,7 +101,7 @@ wildcard(char* text, char* wc)
     if ((*text != '\0') && (wc[0] == *text)) {
         return wildcard(text + 1, wc + 1);
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 
@@ -113,23 +113,23 @@ wildcard(char* text, char* wc)
 char*
 mem_ini(int size)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (char*)calloc(size, 1);
 }
 
 void
 mem_bye(void* ptr)
 {
-    DEBUG_IN;
+    
     free(ptr);
-    DEBUG_OUT;
+    
 }
 
 int
 mem_save(char* fname, void* mem, int msize, int seekofs)
 {
-    DEBUG_IN;
+    
     FILE* fp;
     int flen;
     
@@ -144,14 +144,14 @@ mem_save(char* fname, void* mem, int msize, int seekofs)
         fseek(fp, seekofs, SEEK_SET);
     flen = (int)fwrite(mem, 1, msize, fp);
     fclose(fp);
-    DEBUG_OUT;
+    
     return flen;
 }
 
 void
 strcase(char* target)
 {
-    DEBUG_IN;
+    
     //		strをすべて小文字に(全角対応版)
     //		注意! : SJISのみ対応です
     //
@@ -169,13 +169,13 @@ strcase(char* target)
                 p++;
         }
     }
-    DEBUG_OUT;
+    
 }
 
 int
 strcpy2(char* str1, char* str2)
 {
-    DEBUG_IN;
+    
     //	string copy (ret:length)
     //
     char* p;
@@ -190,14 +190,14 @@ strcpy2(char* str1, char* str2)
         *p++ = a1;
     }
     *p++ = 0;
-    DEBUG_OUT;
+    
     return (int)(p - str1);
 }
 
 int
 strcat2(char* str1, char* str2)
 {
-    DEBUG_IN;
+    
     //	string cat (ret:length)
     //
     char* src;
@@ -211,14 +211,14 @@ strcat2(char* str1, char* str2)
         src++;
     }
     i = (int)(src - str1);
-    DEBUG_OUT;
+    
     return (strcpy2(src, str2) + i);
 }
 
 char*
 strstr2(char* target, char* src)
 {
-    DEBUG_IN;
+    
     //		strstr関数の全角対応版
     //		注意! : SJISのみ対応です
     //
@@ -253,14 +253,14 @@ strstr2(char* target, char* src)
                 p++;
         }
     }
-    DEBUG_OUT;
+    
     return NULL;
 }
 
 char*
 strchr2(char* target, char code)
 {
-    DEBUG_IN;
+    
     //		str中最後のcode位置を探す(全角対応版)
     //		注意! : SJISのみ対応です
     //
@@ -281,14 +281,14 @@ strchr2(char* target, char code)
                 p++;
         }
     }
-    DEBUG_OUT;
+    
     return res;
 }
 
 void
 getpath(char* stmp, char* outbuf, int p2)
 {
-    DEBUG_IN;
+    
     char* p;
     char tmp[_MAX_PATH];
     char p_drive[_MAX_PATH];
@@ -322,30 +322,30 @@ getpath(char* stmp, char* outbuf, int p2)
             strcpy(p, tmp);
             break;
     }
-    DEBUG_OUT;
+    
 }
 
 int
 makedir(char* name)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return mkdir(name, 0755);
 }
 
 int
 changedir(char* name)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return chdir(name);
 }
 
 int
 delfile(char* name)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return unlink(name);
     // return remove( name );		// ディレクトリにもファイルにも対応
 }
@@ -353,7 +353,7 @@ delfile(char* name)
 int
 dirlist(char* fname, char** target, int p3)
 {
-    DEBUG_IN;
+    
     //		Linux System
     //
     enum
@@ -421,14 +421,14 @@ dirlist(char* fname, char** target, int p3)
         fd = readdir(sh);
     }
     closedir(sh);
-    DEBUG_OUT;
+    
     return stat_main;
 }
 
 int
 gettime(int index)
 {
-    DEBUG_IN;
+    
     /*
      Get system time entries
      index :
@@ -469,7 +469,7 @@ gettime(int index)
             /*	一応マイクロ秒まで取れる	*/
             return (int)tv.tv_usec % 10000;
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 
@@ -478,23 +478,23 @@ static int splc; // split pointer
 void
 strsp_ini(void)
 {
-    DEBUG_IN;
+    
     splc = 0;
-    DEBUG_OUT;
+    
 }
 
 int
 strsp_getptr(void)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return splc;
 }
 
 int
 strsp_get(char* srcstr, char* dststr, char splitchr, int len)
 {
-    DEBUG_IN;
+    
     //		split string with parameters
     //
     char a1;
@@ -531,14 +531,14 @@ strsp_get(char* srcstr, char* dststr, char splitchr, int len)
             break;
     }
     dststr[a] = 0;
-    DEBUG_OUT;
+    
     return (int)a1;
 }
 
 char*
 strsp_cmds(char* srcstr)
 {
-    DEBUG_IN;
+    
     //		Skip 1parameter from command line
     //
     int spmode;
@@ -557,26 +557,26 @@ strsp_cmds(char* srcstr)
         if (a1 == 0x22)
             spmode ^= 1;
     }
-    DEBUG_OUT;
+    
     return cmdchk;
 }
 
 int
 GetLimit(int num, int min, int max)
 {
-    DEBUG_IN;
+    
     if (num > max)
         return max;
     if (num < min)
         return min;
-    DEBUG_OUT;
+    
     return num;
 }
 
 void
 CutLastChr(char* p, char code)
 {
-    DEBUG_IN;
+    
     //		最後の'\\'を取り除く
     //
     char* ss;
@@ -589,13 +589,13 @@ CutLastChr(char* p, char code)
         if ((i > 3) && (ss == ss2))
             *ss = 0;
     }
-    DEBUG_OUT;
+    
 }
 
 static int
 htoi_sub(char hstr)
 {
-    DEBUG_IN;
+    
     //	exchange hex to int
     
     char a1;
@@ -604,14 +604,14 @@ htoi_sub(char hstr)
         return a1 - '0';
     if ((a1 >= 'a') && (a1 <= 'f'))
         return a1 - 'a' + 10;
-    DEBUG_OUT;
+    
     return 0;
 }
 
 int
 htoi(char* str)
 {
-    DEBUG_IN;
+    
     char a1;
     int d;
     int conv;
@@ -623,7 +623,7 @@ htoi(char* str)
             break;
         conv = (conv << 4) + htoi_sub(a1);
     }
-    DEBUG_OUT;
+    
     return conv;
 }
 
@@ -634,7 +634,7 @@ htoi(char* str)
 char*
 strchr3(char* target, int code, int sw, char** findptr)
 {
-    DEBUG_IN;
+    
     //		文字列中のcode位置を探す(2バイトコード、全角対応版)
     //		sw = 0 : findptr = 最後に見つかったcode位置
     //		sw = 1 : findptr = 最初に見つかったcode位置
@@ -690,18 +690,18 @@ strchr3(char* target, int code, int sw, char** findptr)
                     return (char*)p;
                 break;
             case 2:
-                DEBUG_OUT;
+                
                 return (char*)p;
         }
     }
-    DEBUG_OUT;
+    
     return pres;
 }
 
 void
 TrimCodeR(char* p, int code)
 {
-    DEBUG_IN;
+    
     //		最後のcodeを取り除く
     //
     char* ss;
@@ -718,13 +718,13 @@ TrimCodeR(char* p, int code)
             break;
         *ss2 = 0;
     }
-    DEBUG_OUT;
+    
 }
 
 void
 TrimCode(char* p, int code)
 {
-    DEBUG_IN;
+    
     //		すべてのcodeを取り除く
     //
     char* ss;
@@ -735,13 +735,13 @@ TrimCode(char* p, int code)
             break;
         strcpy(ss2, ss);
     }
-    DEBUG_OUT;
+    
 }
 
 void
 TrimCodeL(char* p, int code)
 {
-    DEBUG_IN;
+    
     //		最初のcodeを取り除く
     //
     char* ss;
@@ -752,7 +752,7 @@ TrimCodeL(char* p, int code)
             break;
         strcpy(ss2, ss);
     }
-    DEBUG_OUT;
+    
 }
 
 @end

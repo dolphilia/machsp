@@ -53,60 +53,60 @@ private:
 CAutoSbFree::CAutoSbFree(char **pptr) : pptr_(pptr) {}
 
 CAutoSbFree::~CAutoSbFree() {
-    DEBUG_IN;
+    
     sbFree(*pptr_);
-    DEBUG_OUT;
+    
 }
 
 @implementation ViewController (hsp3int)
 
 //----Sort Routines
 - (bool)less_int_1:(DATA const &)lhs rhs:(DATA const &)rhs {
-    DEBUG_IN;
+    
     int cmp = (lhs.as.ikey - rhs.as.ikey);
-    DEBUG_OUT;
+    
     return (cmp < 0) || (cmp == 0 && lhs.info < rhs.info);
 }
 
 - (bool)less_int_0:(DATA const &)lhs rhs:(DATA const &)rhs {
-    DEBUG_IN;
+    
     int cmp = (lhs.as.ikey - rhs.as.ikey);
-    DEBUG_OUT;
+    
     return (cmp > 0) || (cmp == 0 && lhs.info < rhs.info);
 }
 
 - (bool)less_double_1:(DATA const &)lhs rhs:(DATA const &)rhs {
-    DEBUG_IN;
+    
     int cmp =
     (lhs.as.dkey < rhs.as.dkey ? -1 : (lhs.as.dkey > rhs.as.dkey ? 1 : 0));
-    DEBUG_OUT;
+    
     return (cmp < 0) || (cmp == 0 && lhs.info < rhs.info);
 }
 
 - (bool)less_double_0:(DATA const &)lhs rhs:(DATA const &)rhs {
-    DEBUG_IN;
+    
     int cmp =
     (lhs.as.dkey < rhs.as.dkey ? -1 : (lhs.as.dkey > rhs.as.dkey ? 1 : 0));
-    DEBUG_OUT;
+    
     return (cmp > 0) || (cmp == 0 && lhs.info < rhs.info);
 }
 
 - (bool)less_str_1:(DATA const &)lhs rhs:(DATA const &)rhs {
-    DEBUG_IN;
+    
     int cmp = (strcmp(lhs.as.skey, rhs.as.skey));
-    DEBUG_OUT;
+    
     return (cmp < 0) || (cmp == 0 && lhs.info < rhs.info);
 }
 
 - (bool)less_str_0:(DATA const &)lhs rhs:(DATA const &)rhs {
-    DEBUG_IN;
+    
     int cmp = (strcmp(lhs.as.skey, rhs.as.skey));
-    DEBUG_OUT;
+    
     return (cmp > 0) || (cmp == 0 && lhs.info < rhs.info);
 }
 
 - (int)NoteToData:(char *)adr data:(DATA *)data {
-    DEBUG_IN;
+    
     char *p = adr;
     int line = 0;
     while (*p != '\0') {
@@ -126,12 +126,12 @@ CAutoSbFree::~CAutoSbFree() {
         }
         line++;
     }
-    DEBUG_OUT;
+    
     return line;
 }
 
 - (int)GetNoteLines:(char *)adr {
-    DEBUG_IN;
+    
     int line = 0;
     char *p = adr;
     while (*p != '\0') {
@@ -145,24 +145,24 @@ CAutoSbFree::~CAutoSbFree() {
         }
         line++;
     }
-    DEBUG_OUT;
+    
     return line;
 }
 
 - (size_t)DataToNoteLen:(DATA *)data num:(int)num {
-    DEBUG_IN;
+    
     size_t len = 0;
     int i;
     for (i = 0; i < num; i++) {
         char *s = data[i].as.skey;
         len += strlen(s) + 2;  // strlen("¥r¥n")
     }
-    DEBUG_OUT;
+    
     return len;
 }
 
 - (void)DataToNote:(DATA *)data adr:(char *)adr num:(int)num {
-    DEBUG_IN;
+    
     int a;
     char *p;
     char *s;
@@ -175,31 +175,31 @@ CAutoSbFree::~CAutoSbFree() {
         *p++ = 10;  // Add CR/LF
     }
     *p = 0;
-    DEBUG_OUT;
+    
 }
 
 //----Sort Interface
 
 - (void)DataBye {
-    DEBUG_IN;
+    
     if (hsp3int_data_temp != NULL) {
         mem_bye(hsp3int_data_temp);
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)DataIni:(int)size {
-    DEBUG_IN;
+    
     [self DataBye];
     hsp3int_data_temp = (DATA *)mem_ini(sizeof(DATA) * size);
     hsp3int_data_tmp_size = size;
-    DEBUG_OUT;
+    
 }
 
 // static void
 // DataExpand( int size )
 //{
-//    DEBUG_IN;
+//
 //    if (size <= hsp3int_data_tmp_size) return;
 //    int new_size = hsp3int_data_tmp_size;
 //    if (new_size < 16) new_size = 16;
@@ -211,16 +211,16 @@ CAutoSbFree::~CAutoSbFree() {
 //    memset( hsp3int_data_temp + hsp3int_data_tmp_size, 0,
 //    sizeof(DATA)*(new_size - hsp3int_data_tmp_size) );
 //    hsp3int_data_tmp_size = new_size;
-//    DEBUG_OUT;
+//
 //}
 
 // static void
 // DataInc( int n )
 //{
-//    DEBUG_IN;
+//
 //    DataExpand( n + 1 );
 //    hsp3int_data_temp[n].info ++;
-//    DEBUG_OUT;
+//
 //}
 
 /*------------------------------------------------------------*/
@@ -232,203 +232,203 @@ CAutoSbFree::~CAutoSbFree() {
 /*------------------------------------------------------------*/
 
 - (double)_ease_linear:(double)t {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return hsp3int_ease_diff * t + hsp3int_ease_start;
 }
 
 - (double)_ease_quad_in:(double)t {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return hsp3int_ease_diff * t * t + hsp3int_ease_start;
 }
 
 - (double)_ease_quad_out:(double)t {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return -hsp3int_ease_diff * t * (t - 2) + hsp3int_ease_start;
 }
 
 - (double)_ease_quad_inout:(double)t {
-    DEBUG_IN;
+    
     double tt;
     tt = t * 2;
     if (tt < 1) {
-        DEBUG_OUT;
+        
         return hsp3int_ease_diff * 0.5 * tt * tt + hsp3int_ease_start;
     }
     tt = tt - 1;
-    DEBUG_OUT;
+    
     return -hsp3int_ease_diff * 0.5 * (tt * (tt - 2) - 1) + hsp3int_ease_start;
 }
 
 - (double)_ease_cubic_in:(double)t {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return hsp3int_ease_diff * t * t * t + hsp3int_ease_start;
 }
 
 - (double)_ease_cubic_out:(double)t {
-    DEBUG_IN;
+    
     double tt;
     tt = t - 1;
-    DEBUG_OUT;
+    
     return hsp3int_ease_diff * (tt * tt * tt + 1) + hsp3int_ease_start;
 }
 
 - (double)_ease_cubic_inout:(double)t {
-    DEBUG_IN;
+    
     double tt;
     tt = t * 2;
     if (tt < 1) {
         return hsp3int_ease_diff * 0.5 * tt * tt * tt + hsp3int_ease_start;
     }
     tt = tt - 2;
-    DEBUG_OUT;
+    
     return hsp3int_ease_diff * 0.5 * (tt * tt * tt + 2) + hsp3int_ease_start;
 }
 
 - (double)_ease_quartic_in:(double)t {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return hsp3int_ease_diff * t * t * t * t + hsp3int_ease_start;
 }
 
 - (double)_ease_quartic_out:(double)t {
-    DEBUG_IN;
+    
     double tt;
     tt = t - 1;
-    DEBUG_OUT;
+    
     return -hsp3int_ease_diff * (tt * tt * tt * tt - 1) + hsp3int_ease_start;
 }
 
 - (double)_ease_quartic_inout:(double)t {
-    DEBUG_IN;
+    
     double tt;
     tt = t * 2;
     if (tt < 1) {
-        DEBUG_OUT;
+        
         return hsp3int_ease_diff * 0.5 * tt * tt * tt * tt + hsp3int_ease_start;
     }
     tt = tt - 2;
-    DEBUG_OUT;
+    
     return -hsp3int_ease_diff * 0.5 * (tt * tt * tt * tt - 2) +
     hsp3int_ease_start;
 }
 
 - (double)_ease_bounce:(double)t {
-    DEBUG_IN;
+    
     if (t < (1 / 2.75)) {
-        DEBUG_OUT;
+        
         return hsp3int_ease_diff * (7.5625 * t * t);
     } else if (t < (2 / 2.75)) {
-        DEBUG_OUT;
+        
         double tmp = t - 1.5 / 2.75;
         return hsp3int_ease_diff * (7.5625 * tmp * t + .75);
     } else if (t < (2.5 / 2.75)) {
-        DEBUG_OUT;
+        
         double tmp = t - 2.25 / 2.75;
         return hsp3int_ease_diff * (7.5625 * tmp * t + .9375);
     } else {
-        DEBUG_OUT;
+        
         double tmp = t - 2.625 / 2.75;
         return hsp3int_ease_diff * (7.5625 * tmp * t + .984375);
     }
 }
 
 - (double)_ease_bounce_in:(double)t {
-    DEBUG_IN;
+    
     double tt;
     tt = (double)1 - t;
-    DEBUG_OUT;
+    
     return hsp3int_ease_diff - [self _ease_bounce:tt] + hsp3int_ease_start;
 }
 
 - (double)_ease_bounce_out:(double)t {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return [self _ease_bounce:t] + hsp3int_ease_start;
 }
 
 - (double)_ease_bounce_inout:(double)t {
-    DEBUG_IN;
+    
     double tt;
     if (t < 0.5) {
         tt = (double)1 - (t * 2);
-        DEBUG_OUT;
+        
         return (hsp3int_ease_diff - [self _ease_bounce:tt]) * 0.5 +
         hsp3int_ease_start;
     }
-    DEBUG_OUT;
+    
     return [self _ease_bounce:t * 2 - 1] * 0.5 + hsp3int_ease_diff * 0.5 +
     hsp3int_ease_start;
 }
 
 - (double)_ease_shake:(double)t {
-    DEBUG_IN;
+    
     int pulse;
     double tt;
     tt = t * t * 8;
     pulse = (int)tt;
     tt -= (double)pulse;
     if (pulse & 1) {
-        DEBUG_OUT;
+        
         return ((double)1 - tt);
     }
-    DEBUG_OUT;
+    
     return tt;
 }
 
 - (double)_ease_shake_in:(double)t {
-    DEBUG_IN;
+    
     double tt;
     tt = (double)1 - t;
-    DEBUG_OUT;
+    
     return (hsp3int_ease_diff * [self _ease_shake:tt]) * tt -
     hsp3int_ease_diff * 0.5 * tt + hsp3int_ease_start;
 }
 
 - (double)_ease_shake_out:(double)t {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (hsp3int_ease_diff * [self _ease_shake:t]) * t -
     hsp3int_ease_diff * 0.5 * t + hsp3int_ease_start;
 }
 
 - (double)_ease_shake_inout:(double)t {
-    DEBUG_IN;
+    
     double tt;
     tt = t * 2;
     if (tt < 1) {
-        DEBUG_OUT;
+        
         return [self _ease_shake_in:tt];
     }
     tt = tt - 1;
-    DEBUG_OUT;
+    
     return [self _ease_shake_out:tt];
 }
 
 /*------------------------------------------------------------*/
 
 - (void)initEase {
-    DEBUG_IN;
+    
     hsp3int_ease_4096 = (double)1.0 / (double)4096.0;
-    DEBUG_OUT;
+    
 }
 
 - (void)setEase:(int)type
     value_start:(double)value_start
       value_end:(double)value_end {
-    DEBUG_IN;
+    
     hsp3int_ease_type = type;
     hsp3int_ease_reverse = 0;
     hsp3int_ease_org_start = hsp3int_ease_start = value_start;
     hsp3int_ease_org_diff = hsp3int_ease_diff = value_end - value_start;
-    DEBUG_OUT;
+    
 }
 
 - (double)getEase:(double)value {
-    DEBUG_IN;
+    
     int type;
     int reverse;
     double t;
@@ -459,71 +459,71 @@ CAutoSbFree::~CAutoSbFree() {
     
     switch (type) {
         case EASE_QUAD_IN:
-            DEBUG_OUT;
+            
             return [self _ease_quad_in:t];
         case EASE_QUAD_OUT:
-            DEBUG_OUT;
+            
             return [self _ease_quad_out:t];
         case EASE_QUAD_INOUT:
-            DEBUG_OUT;
+            
             return [self _ease_quad_inout:t];
         case EASE_CUBIC_IN:
-            DEBUG_OUT;
+            
             return [self _ease_cubic_in:t];
         case EASE_CUBIC_OUT:
-            DEBUG_OUT;
+            
             return [self _ease_cubic_out:t];
         case EASE_CUBIC_INOUT:
-            DEBUG_OUT;
+            
             return [self _ease_cubic_inout:t];
         case EASE_QUARTIC_IN:
-            DEBUG_OUT;
+            
             return [self _ease_quartic_in:t];
         case EASE_QUARTIC_OUT:
-            DEBUG_OUT;
+            
             return [self _ease_quartic_out:t];
         case EASE_QUARTIC_INOUT:
-            DEBUG_OUT;
+            
             return [self _ease_quartic_inout:t];
         case EASE_BOUNCE_IN:
-            DEBUG_OUT;
+            
             return [self _ease_bounce_in:t];
         case EASE_BOUNCE_OUT:
-            DEBUG_OUT;
+            
             return [self _ease_bounce_out:t];
         case EASE_BOUNCE_INOUT:
-            DEBUG_OUT;
+            
             return [self _ease_bounce_inout:t];
         case EASE_SHAKE_IN:
-            DEBUG_OUT;
+            
             return [self _ease_shake_in:t];
         case EASE_SHAKE_OUT:
-            DEBUG_OUT;
+            
             return [self _ease_shake_out:t];
         case EASE_SHAKE_INOUT:
-            DEBUG_OUT;
+            
             return [self _ease_shake_inout:t];
             
         case EASE_LINEAR:
         default:
             break;
     }
-    DEBUG_OUT;
+    
     return [self _ease_linear:t];
 }
 
 - (double)getEase:(double)value maxvalue:(double)maxvalue {
-    DEBUG_IN;
+    
     if (maxvalue == 0) {
-        DEBUG_OUT;
+        
         return (double)0;
     }
-    DEBUG_OUT;
+    
     return [self getEase:value / maxvalue];
 }
 
 - (int)getEaseInt:(int)i_value i_maxvalue:(int)i_maxvalue {
-    DEBUG_IN;
+    
     int i;
     double value;
     if (i_maxvalue > 0) {
@@ -532,7 +532,7 @@ CAutoSbFree::~CAutoSbFree() {
         value = hsp3int_ease_4096 * i_value;
     }
     i = (int)[self getEase:value];
-    DEBUG_OUT;
+    
     return i;
 }
 
@@ -543,14 +543,14 @@ CAutoSbFree::~CAutoSbFree() {
 /*------------------------------------------------------------*/
 
 - (char *)note_update {
-    DEBUG_IN;
+    
     char *p;
     if (vc_hspctx->note_pval == NULL) {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
     p = (char *)HspVarCorePtrAPTR(vc_hspctx->note_pval, vc_hspctx->note_aptr);
     [self Select:p];
-    DEBUG_OUT;
+    
     return p;
 }
 
@@ -558,7 +558,7 @@ CAutoSbFree::~CAutoSbFree() {
                 capacity:(int *)capacity
                      len:(int)len
                        n:(int)n {
-    DEBUG_IN;
+    
     int needed_size = len + n + 1;
     int capa = *capacity;
     if (needed_size > capa) {
@@ -568,11 +568,11 @@ CAutoSbFree::~CAutoSbFree() {
         *p = sbExpand(*p, capa);
         *capacity = capa;
     }
-    DEBUG_OUT;
+    
 }
 
 - (char *)cnvformat {
-    DEBUG_IN;
+    
     //		フォーマット付き文字列を作成する
     //
 #if (WIN32 || _WIN32) && !__CYGWIN__
@@ -703,7 +703,7 @@ CAutoSbFree::~CAutoSbFree() {
     
     char *result = [self code_stmp:len + 1];
     strcpy(result, p);
-    DEBUG_OUT;
+    
     return result;
 }
 
@@ -711,7 +711,7 @@ CAutoSbFree::~CAutoSbFree() {
                    aptr:(APTR)aptr
                     str:(char *)str
                     len:(int)len {
-    DEBUG_IN;
+    
     //		変数にstrからlenバイトの文字列を代入する
     //
     HspVarProc *proc = HspVarCoreGetProc(HSPVAR_FLAG_STR);
@@ -775,11 +775,11 @@ CAutoSbFree::~CAutoSbFree() {
     
     memcpy(ptr, str, len);
     ptr[len] = '\0';
-    DEBUG_OUT;
+    
 }
 
 - (int)cmdfunc_intcmd:(int)cmd {
-    DEBUG_IN;
+    
     //		cmdfunc : TYPE_INTCMD
     //		(内蔵コマンド)
     //
@@ -888,12 +888,12 @@ CAutoSbFree::~CAutoSbFree() {
              @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
-    DEBUG_OUT;
+    
     return RUNMODE_RUN;
 }
 
 - (void)cmdfunc_on:(int)cmd {
-    DEBUG_IN;
+    
     /*
      rev 45
      不具合 : (onxxx系命令) (ラベル型変数)  形式の書式でエラー
@@ -940,11 +940,11 @@ CAutoSbFree::~CAutoSbFree() {
     irq->ptr = sbr;
     irq->custom = cust;
     irq->custom2 = actid;
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_exist {
-    DEBUG_IN;
+    
     //カレントディレクトリ+パラメータ
     char *ps = [self code_gets];
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
@@ -972,11 +972,11 @@ CAutoSbFree::~CAutoSbFree() {
     } else {
         abc_hspctx.strsize = -1;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_delete {
-    DEBUG_IN;
+    
     //カレントディレクトリ+パラメータ
     char *ps = [self code_gets];
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
@@ -988,11 +988,11 @@ CAutoSbFree::~CAutoSbFree() {
     [filemanager removeItemAtPath:nPs error:&error];
     //[self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:[self code_gets]];
     //[self code_event:HSPEVENT_FEXIST + (cmd - 0x11) prm1:0 prm2:0 prm3:NULL];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_mkdir {
-    DEBUG_IN;
+    
     char *ps = [self code_gets];
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     nPs = [global.current_directory_path stringByAppendingPathComponent:nPs];
@@ -1002,11 +1002,11 @@ CAutoSbFree::~CAutoSbFree() {
                               withIntermediateDirectories:YES
                                                attributes:nil
                                                     error:&error];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_chdir {
-    DEBUG_IN;
+    
     char *ps = [self code_gets];
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     NSArray *paths = [nPs pathComponents];
@@ -1022,11 +1022,11 @@ CAutoSbFree::~CAutoSbFree() {
         }
     }
     chdir([global.current_directory_path UTF8String]);
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_dirlist {
-    DEBUG_IN;
+    
     PVal *pval;
     APTR aptr;
     char *ptr;
@@ -1036,11 +1036,11 @@ CAutoSbFree::~CAutoSbFree() {
     [self code_event:HSPEVENT_FDIRLIST1 prm1:p1 prm2:0 prm3:&ptr];
     [self code_setva:pval aptr:aptr type:TYPE_STRING ptr:ptr];
     [self code_event:HSPEVENT_FDIRLIST2 prm1:0 prm2:0 prm3:NULL];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_bload_bsave:(int)cmd {
-    DEBUG_IN;
+    
     PVal *pval;
     char *ptr;
     int size;
@@ -1057,18 +1057,18 @@ CAutoSbFree::~CAutoSbFree() {
     } else {
         [self code_event:HSPEVENT_FWRITE prm1:p2 prm2:p1 prm3:ptr];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_bcopy {
-    DEBUG_IN;
+    
     [self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:[self code_gets]];
     [self code_event:HSPEVENT_FCOPY prm1:0 prm2:0 prm3:[self code_gets]];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_memfile {
-    DEBUG_IN;
+    
     PVal *pval;
     char *ptr;
     int size;
@@ -1077,11 +1077,11 @@ CAutoSbFree::~CAutoSbFree() {
     int p2 = [self code_getdi:0];
     if (p2 == 0) p2 = size - p1;
     [self dpm_memfile:ptr + p1 size:p2];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_poke_wpoke_lpoke:(int)cmd {
-    DEBUG_IN;
+    
     PVal *pval;
     char *ptr;
     int size;
@@ -1143,11 +1143,11 @@ CAutoSbFree::~CAutoSbFree() {
         }
         *(int *)ptr = (*(int *)bp);
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_getstr {
-    DEBUG_IN;
+    
     PVal *pval2;
     PVal *pval;
     APTR aptr;
@@ -1168,11 +1168,11 @@ CAutoSbFree::~CAutoSbFree() {
     vc_hspctx->stat = strsp_get(ptr, p, p2, p3);
     vc_hspctx->strsize = strsp_getptr();
     [self code_setva:pval aptr:aptr type:HSPVAR_FLAG_STR ptr:p];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_chdpm {
-    DEBUG_IN;
+    
     [self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:[self code_gets]];
     int p1 = [self code_getdi:-1];
     [self dpm_bye];
@@ -1180,11 +1180,11 @@ CAutoSbFree::~CAutoSbFree() {
     if (p2) {
          @throw [self make_nsexception:HSPERR_FILE_IO];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_memexpand {
-    DEBUG_IN;
+    
     PVal *pval;
     APTR aptr;
     PDAT *ptr;
@@ -1215,11 +1215,11 @@ CAutoSbFree::~CAutoSbFree() {
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_memcpy {
-    DEBUG_IN;
+    
     PVal *pval;
     char *sptr;
     char *tptr;
@@ -1245,11 +1245,11 @@ CAutoSbFree::~CAutoSbFree() {
     if (p1 > 0) {
         memmove(tptr, sptr, p1);
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_memset {
-    DEBUG_IN;
+    
     PVal *pval;
     char *ptr;
     int size;
@@ -1267,11 +1267,11 @@ CAutoSbFree::~CAutoSbFree() {
     if (p2 > 0) {
         memset(ptr, p1, p2);
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_notesel {
-    DEBUG_IN;
+    
     vc_hspctx->notep_aptr = vc_hspctx->note_aptr;
     vc_hspctx->notep_pval = vc_hspctx->note_pval;
     vc_hspctx->note_aptr = [self code_getva:&vc_hspctx->note_pval];
@@ -1281,11 +1281,11 @@ CAutoSbFree::~CAutoSbFree() {
                     type:TYPE_STRING
                      ptr:""];
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_noteadd {
-    DEBUG_IN;
+    
     char *ps = [self code_gets];
     int p1 = [self code_getdi:-1];
     int p2 = [self code_getdi:0];
@@ -1349,11 +1349,11 @@ CAutoSbFree::~CAutoSbFree() {
     vc_hspctx->note_pval->pt = ret;  // noteselで指定されている変数に情報を書き込む
     vc_hspctx->note_pval->size = (int)strlen(ret) + 1;  //サイズを書き込む
     
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_notedel {
-    DEBUG_IN;
+    
     int p1 = [self code_getdi:0];
     char *cStr = vc_hspctx->note_pval->pt;
     NSString *nStr =
@@ -1373,11 +1373,11 @@ CAutoSbFree::~CAutoSbFree() {
     char *ret = (char *)[nRet UTF8String];  // NSString -> char
     vc_hspctx->note_pval->pt = ret;  // noteselで指定されている変数に情報を書き込む
     vc_hspctx->note_pval->size = (int)strlen(ret) + 1;  //サイズを書き込む
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_noteload {
-    DEBUG_IN;
+    
     char *ps = [self code_gets];
     NSString *filename =
     [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
@@ -1404,11 +1404,11 @@ CAutoSbFree::~CAutoSbFree() {
     char *ret = (char *)[str UTF8String];    // NSString -> char
     vc_hspctx->note_pval->pt = ret;  // noteselで指定されている変数に情報を書き込む
     vc_hspctx->note_pval->size = (int)strlen(ret) + 1;  //サイズを書き込む
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_notesave {
-    DEBUG_IN;
+    
     char *ps = [self code_gets];
     NSString *filename =
     [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
@@ -1431,11 +1431,11 @@ CAutoSbFree::~CAutoSbFree() {
            atomically:YES
              encoding:NSUTF8StringEncoding
                 error:nil];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_randomize {
-    DEBUG_IN;
+    
     int p2 = (int)time(0);  // Windows以外のランダムシード値
     int p1 = [self code_getdi:p2];
 #ifdef HSPRANDMT
@@ -1443,18 +1443,18 @@ CAutoSbFree::~CAutoSbFree() {
 #else
     srand(p1);
 #endif
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_noteunsel {
-    DEBUG_IN;
+    
     vc_hspctx->note_aptr = vc_hspctx->notep_aptr;
     vc_hspctx->note_pval = vc_hspctx->notep_pval;
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_noteget {
-    DEBUG_IN;
+    
     PVal *pval;
     APTR aptr;
     char *p;
@@ -1464,11 +1464,11 @@ CAutoSbFree::~CAutoSbFree() {
     p = [self GetLineDirect:p1];
     [self code_setva:pval aptr:aptr type:TYPE_STRING ptr:p];
     [self ResumeLineDirect];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_split {
-    DEBUG_IN;
+    
     //	指定した文字列で分割された要素を代入する(fujidig)
     PVal *pval = NULL;
     int aptr = 0;
@@ -1529,11 +1529,11 @@ CAutoSbFree::~CAutoSbFree() {
         sptr = newsptr + sep_len;
     }
     vc_hspctx->stat = n;
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_strrep {
-    DEBUG_IN;
+    
     PVal *pval;
     APTR aptr;
     char *ss;
@@ -1552,22 +1552,22 @@ CAutoSbFree::~CAutoSbFree() {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
     
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_setease {
-    DEBUG_IN;
+    
     double dval;
     double dval2;
     dval = [self code_getd];
     dval2 = [self code_getd];
     int p1 = [self code_getdi:hsp3int_ease_type];
     [self setEase:p1 value_start:dval value_end:dval2];
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_sortval {
-    DEBUG_IN;
+    
     int a, i;
     PVal *p1;
     APTR ap;
@@ -1628,11 +1628,11 @@ CAutoSbFree::~CAutoSbFree() {
              @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_sortstr {
-    DEBUG_IN;
+    
     int i, len, order;
     char *p;
     PVal *pv;
@@ -1679,11 +1679,11 @@ CAutoSbFree::~CAutoSbFree() {
             sbSetOption(pvstr[i], &pvstr[i]);
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_sortnote {
-    DEBUG_IN;
+    
     int i, sflag;
     char *p;
     char *stmp;
@@ -1715,11 +1715,11 @@ CAutoSbFree::~CAutoSbFree() {
     
     [self code_setva:pv aptr:ap type:HSPVAR_FLAG_STR ptr:stmp];  // 変数に値を代入
     
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_sortget {
-    DEBUG_IN;
+    
     PVal *pv;
     APTR ap;
     int result;
@@ -1737,11 +1737,11 @@ CAutoSbFree::~CAutoSbFree() {
         result = 0;
     }
     [self code_setva:pv aptr:ap type:HSPVAR_FLAG_INT ptr:&result];
-    DEBUG_OUT;
+    
 }
 
 - (void *)reffunc_intfunc:(int *)type_res arg:(int)arg {
-    DEBUG_IN;
+    
     //		reffunc : TYPE_INTFUNC
     //		(内蔵関数)
     //
@@ -2404,7 +2404,7 @@ CAutoSbFree::~CAutoSbFree() {
     }
     [self code_next];
     
-    DEBUG_OUT;
+    
     return ptr;
 }
 
@@ -2415,16 +2415,16 @@ CAutoSbFree::~CAutoSbFree() {
 /*------------------------------------------------------------*/
 
 - (int)termfunc_intcmd:(int)option {
-    DEBUG_IN;
+    
     //		termfunc : TYPE_INTCMD
     //		(内蔵)
     //
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (void)hsp3typeinit_intcmd:(HSP3TYPEINFO *)info {
-    DEBUG_IN;
+    
     hsp3int_ctx = info->hspctx;
     hsp3int_exinfo = info->hspexinfo;
     hsp3int_type = hsp3int_exinfo->nptype;
@@ -2434,13 +2434,13 @@ CAutoSbFree::~CAutoSbFree() {
     // info->cmdfunc = cmdfunc_intcmd;
     info->cmdfuncNumber = 8;  //内臓コマンド memo.md
     // info->termfunc = termfunc_intcmd;
-    DEBUG_OUT;
+    
 }
 
 - (void)hsp3typeinit_intfunc:(HSP3TYPEINFO *)info {
-    DEBUG_IN;
+    
     info->reffuncNumber = 5;  // reffunc_intfunc;
-    DEBUG_OUT;
+    
 }
 
 //================================================================================>>>CStrNote
@@ -2450,20 +2450,20 @@ CAutoSbFree::~CAutoSbFree() {
 //-------------------------------------------------------------
 
 - (void)Select:(char *)str {
-    DEBUG_IN;
+    
     hsp3int_base = str;
-    DEBUG_OUT;
+    
 }
 
 - (int)GetSize {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (int)strlen(hsp3int_base);
 }
 
 - (char *)GetStr {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (char *)"";
 }
 
@@ -2472,7 +2472,7 @@ CAutoSbFree::~CAutoSbFree() {
 //-------------------------------------------------------------
 
 - (int)nnget:(char *)nbase line:(int)line {
-    DEBUG_IN;
+    
     //	指定した行の先頭ポインタを求める
     //		hsp3int_nn = 先頭ポインタ
     //		hsp3int_lastcr : CR/LFで終了している
@@ -2487,7 +2487,7 @@ CAutoSbFree::~CAutoSbFree() {
     if (line < 0) {
         i = (int)strlen(nbase);
         if (i == 0) {
-            DEBUG_OUT;
+            
             return 0;
         }
         hsp3int_nn += i;
@@ -2499,7 +2499,7 @@ CAutoSbFree::~CAutoSbFree() {
         while (1) {
             a1 = *hsp3int_nn;
             if (a1 == 0) {
-                DEBUG_OUT;
+                
                 return 1;
             }
             hsp3int_nn++;
@@ -2517,12 +2517,12 @@ CAutoSbFree::~CAutoSbFree() {
         }
     }
     hsp3int_lastcr++;
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (int)GetLine:(char *)nres line:(int)line {
-    DEBUG_IN;
+    
     //		Get specified line from note
     //				result:0=ok/1=no line
     //
@@ -2530,7 +2530,7 @@ CAutoSbFree::~CAutoSbFree() {
     char *pp;
     pp = nres;
     if ([self nnget:hsp3int_base line:line]) {
-        DEBUG_OUT;
+        
         return 1;
     }
     if (*hsp3int_nn == 0) return 1;
@@ -2543,12 +2543,12 @@ CAutoSbFree::~CAutoSbFree() {
         *pp++ = a1;
     }
     *pp = 0;
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (int)GetLine:(char *)nres line:(int)line max:(int)max {
-    DEBUG_IN;
+    
     //		Get specified line from note
     //				result:0=ok/1=no line
     //
@@ -2558,11 +2558,11 @@ CAutoSbFree::~CAutoSbFree() {
     pp = nres;
     cnt = 0;
     if ([self nnget:hsp3int_base line:line]) {
-        DEBUG_OUT;
+        
         return 1;
     }
     if (*hsp3int_nn == 0) {
-        DEBUG_OUT;
+        
         return 1;
     }
     while (1) {
@@ -2576,12 +2576,12 @@ CAutoSbFree::~CAutoSbFree() {
         cnt++;
     }
     *pp = 0;
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (char *)GetLineDirect:(int)line {
-    DEBUG_IN;
+    
     //		Get specified line from note
     //
     char a1;
@@ -2597,20 +2597,20 @@ CAutoSbFree::~CAutoSbFree() {
     }
     hsp3int_lastcode = a1;
     *hsp3int_lastnn = 0;
-    DEBUG_OUT;
+    
     return hsp3int_nn;
 }
 
 - (void)ResumeLineDirect {
-    DEBUG_IN;
+    
     //		Resume last GetLineDirect function
     //
     *hsp3int_lastnn = hsp3int_lastcode;
-    DEBUG_OUT;
+    
 }
 
 - (int)GetMaxLine {
-    DEBUG_IN;
+    
     //		Get total lines
     //
     int a, b;
@@ -2643,15 +2643,15 @@ CAutoSbFree::~CAutoSbFree() {
         if (b == 0) {
             a--;
         }
-        DEBUG_OUT;
+        
         return a;
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (int)PutLine:(char *)nstr line:(int)line ovr:(int)ovr {
-    DEBUG_IN;
+    
     //		Pet specified line to note
     //				result:0=ok/1=no line
     //
@@ -2660,9 +2660,9 @@ CAutoSbFree::~CAutoSbFree() {
     char *pp;
     char *p1;
     char *p2;
-    char *nstr2;
+    char *nstr2 = nullptr;
     if ([self nnget:hsp3int_base line:line]) {
-        DEBUG_OUT;
+        
         return 1;
     }
     if (hsp3int_lastcr == 0) {
@@ -2729,15 +2729,15 @@ CAutoSbFree::~CAutoSbFree() {
             if (a1 == 0) break;
             *hsp3int_nn++ = a1;
         }
-        DEBUG_OUT;
+        
         return 0;
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (int)FindLine:(char *)nstr mode:(int)mode {
-    DEBUG_IN;
+    
     //		Search string from note
     //				nstr:search string
     //				mode:STRNOTE_FIND_*
@@ -2763,7 +2763,7 @@ CAutoSbFree::~CAutoSbFree() {
                 res = [self FindLineSub:nstr mode:mode];
                 *hsp3int_nn = hsp3int_lastcode;
                 if (res) {
-                    DEBUG_OUT;
+                    
                     return curline;
                 }
             }
@@ -2781,7 +2781,7 @@ CAutoSbFree::~CAutoSbFree() {
                 res = [self FindLineSub:nstr mode:mode];
                 *hsp3int_nn = hsp3int_lastcode;
                 if (res) {
-                    DEBUG_OUT;
+                    
                     return curline;
                 }
             }
@@ -2799,17 +2799,17 @@ CAutoSbFree::~CAutoSbFree() {
     //	最終行に文字列があればサーチ
     if (len) {
         if ([self FindLineSub:nstr mode:mode]) {
-            DEBUG_OUT;
+            
             return curline;
         }
     }
     
-    DEBUG_OUT;
+    
     return -1;
 }
 
 - (int)FindLineSub:(char *)nstr mode:(int)mode {
-    DEBUG_IN;
+    
     //		全体サーチ用文字列比較
     //		mode : STRNOTE_FIND_MATCH = 完全一致
     //		       STRNOTE_FIND_FIRST = 前方一致
@@ -2818,7 +2818,7 @@ CAutoSbFree::~CAutoSbFree() {
     switch (mode) {
         case STRNOTE_FIND_MATCH:  // 完全一致
             if (strcmp(hsp3int_baseline, nstr) == 0) {
-                DEBUG_OUT;
+                
                 return 1;
             }
             break;
@@ -2827,7 +2827,7 @@ CAutoSbFree::~CAutoSbFree() {
             char *p = strstr2(hsp3int_baseline, nstr);
             if (p != NULL) {
                 if (p == hsp3int_baseline) {
-                    DEBUG_OUT;
+                    
                     return 1;
                 }
             }
@@ -2835,14 +2835,14 @@ CAutoSbFree::~CAutoSbFree() {
         }
         case STRNOTE_FIND_INSTR:  // 部分一致
             if (strstr2(hsp3int_baseline, nstr) != NULL) {
-                DEBUG_OUT;
+                
                 return 1;
             }
             break;
         default:
             break;
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 //================================================================================<<<CStrNote

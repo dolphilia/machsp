@@ -53,7 +53,7 @@ static STRBUF* freelist;
 static void
 BlockPtrPrepare(void)
 {
-    DEBUG_IN;
+    
     STRBUF* sb;
     
     if (str_blockcur == 0) {
@@ -82,13 +82,13 @@ BlockPtrPrepare(void)
         freelist = p;
         p++;
     }
-    DEBUG_OUT;
+    
 }
 
 static STRBUF*
 BlockEntry(void)
 {
-    DEBUG_IN;
+    
     //		空きエントリーブロックを探す
     //
     if (freelist == NULL) {
@@ -96,14 +96,14 @@ BlockEntry(void)
     }
     STRBUF* buf = freelist;
     freelist = STRBUF_NEXT(freelist);
-    DEBUG_OUT;
+    
     return buf;
 }
 
 static char*
 BlockAlloc(int size)
 {
-    DEBUG_IN;
+    
     int* p;
     STRBUF* st;
     STRBUF* st2;
@@ -126,35 +126,35 @@ BlockAlloc(int size)
     }
     *p = 0;
     // return inf->ptr;
-    DEBUG_OUT;
+    
     return (char*)p;
 }
 
 static void
 FreeExtPtr(STRINF* inf)
 {
-    DEBUG_IN;
+    
     if (inf->flag == STRINF_FLAG_USEEXT) {
         FREE(inf->extptr);
     }
-    DEBUG_OUT;
+    
 }
 
 static void
 BlockFree(STRINF* inf)
 {
-    DEBUG_IN;
+    
     FreeExtPtr(inf);
     STRINF_NEXT(*inf) = freelist;
     freelist = (STRBUF*)inf;
     inf->flag = STRINF_FLAG_NONE;
-    DEBUG_OUT;
+    
 }
 
 static char*
 BlockRealloc(STRBUF* st, int size)
 {
-    DEBUG_IN;
+    
     char* p;
     STRINF* inf;
     STRBUF* newst;
@@ -172,19 +172,19 @@ BlockRealloc(STRBUF* st, int size)
     inf->extptr = newst;
     
     newst->inf = *inf;
-    DEBUG_OUT;
+    
     return p;
 }
 
 void
 BlockInfo(STRINF* inf)
 {
-    DEBUG_IN;
+    
     STRBUF* newst;
     if (inf->flag == STRINF_FLAG_USEEXT) {
         newst = (STRBUF*)inf->extptr;
     }
-    DEBUG_OUT;
+    
 }
 
 /*------------------------------------------------------------*/
@@ -196,18 +196,18 @@ BlockInfo(STRINF* inf)
 void
 sbInit(void)
 {
-    DEBUG_IN;
+    
     str_blockcur = 0;
     freelist = NULL;
     slot_len = STRBUF_BLOCK_DEFAULT;
     BlockPtrPrepare();
-    DEBUG_OUT;
+    
 }
 
 void
 sbBye(void)
 {
-    DEBUG_IN;
+    
     int i;
     for (i = 0; i < str_blockcur; i++) {
         STRBUF* mem = mem_sb[i].mem;
@@ -220,44 +220,44 @@ sbBye(void)
         FREE(mem);
     }
     FREE(mem_sb);
-    DEBUG_OUT;
+    
 }
 
 STRINF*
 sbGetSTRINF(char* ptr)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (STRINF*)(ptr - sizeof(STRINF));
 }
 
 char*
 sbAlloc(int size)
 {
-    DEBUG_IN;
+    
     int sz;
     sz = size;
     if (size < STRBUF_BLOCKSIZE)
         sz = STRBUF_BLOCKSIZE;
-    DEBUG_OUT;
+    
     return BlockAlloc(sz);
 }
 
 char*
 sbAllocClear(int size)
 {
-    DEBUG_IN;
+    
     char* p;
     p = sbAlloc(size);
     memset(p, 0, size);
-    DEBUG_OUT;
+    
     return p;
 }
 
 void
 sbFree(void* ptr)
 {
-    DEBUG_IN;
+    
     char* p;
     STRBUF* st;
     STRINF* inf;
@@ -265,27 +265,27 @@ sbFree(void* ptr)
     st = (STRBUF*)(p - sizeof(STRINF));
     inf = GET_INTINF(st);
     if (p != (inf->ptr)) {
-        DEBUG_OUT;
+        
         return;
     }
     BlockFree(inf);
-    DEBUG_OUT;
+    
 }
 
 char*
 sbExpand(char* ptr, int size)
 {
-    DEBUG_IN;
+    
     STRBUF* st;
     st = (STRBUF*)(ptr - sizeof(STRINF));
-    DEBUG_OUT;
+    
     return BlockRealloc(st, size);
 }
 
 void
 sbCopy(char** pptr, char* data, int size)
 {
-    DEBUG_IN;
+    
     int sz;
     char* ptr;
     char* p;
@@ -299,13 +299,13 @@ sbCopy(char** pptr, char* data, int size)
         *pptr = p;
     }
     memcpy(p, data, size);
-    DEBUG_OUT;
+    
 }
 
 void
 sbAdd(char** pptr, char* data, int size, int mode)
 {
-    DEBUG_IN;
+    
     //		mode:0=normal/1=string
     int sz, newsize;
     STRBUF* st;
@@ -327,46 +327,46 @@ sbAdd(char** pptr, char* data, int size, int mode)
         *pptr = p;
     }
     memcpy(p + sz, data, size);
-    DEBUG_OUT;
+    
 }
 
 void
 sbStrCopy(char** ptr, char* str)
 {
-    DEBUG_IN;
+    
     sbCopy(ptr, str, (int)strlen(str) + 1);
-    DEBUG_OUT;
+    
 }
 
 void
 sbStrAdd(char** ptr, char* str)
 {
-    DEBUG_IN;
+    
     sbAdd(ptr, str, (int)strlen(str) + 1, 1);
-    DEBUG_OUT;
+    
 }
 
 void*
 sbGetOption(char* ptr)
 {
-    DEBUG_IN;
+    
     STRBUF* st;
     st = (STRBUF*)(ptr - sizeof(STRINF));
-    DEBUG_OUT;
+    
     return st->inf.opt;
 }
 
 void
 sbSetOption(char* ptr, void* option)
 {
-    DEBUG_IN;
+    
     STRBUF* st;
     STRINF* inf;
     st = (STRBUF*)(ptr - sizeof(STRINF));
     st->inf.opt = option;
     inf = GET_INTINF(st);
     inf->opt = option;
-    DEBUG_OUT;
+    
 }
 
 @end

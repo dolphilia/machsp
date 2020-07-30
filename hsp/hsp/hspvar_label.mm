@@ -28,15 +28,15 @@
 PDAT*
 HspVarLabel_GetPtr(PVal* pval)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (PDAT*)(((HSPVAR_LABEL*)(pval->pt)) + pval->offset);
 }
 
 int
 HspVarLabel_GetVarSize(PVal* pval)
 {
-    DEBUG_IN;
+    
     //		PVALポインタの変数が必要とするサイズを取得する
     //		(sizeフィールドに設定される)
     //
@@ -49,14 +49,14 @@ HspVarLabel_GetVarSize(PVal* pval)
     if (pval->len[4])
         size *= pval->len[4];
     size *= sizeof(HSPVAR_LABEL);
-    DEBUG_OUT;
+    
     return size;
 }
 
 void
 HspVarLabel_Free(PVal* pval)
 {
-    DEBUG_IN;
+    
     //		PVALポインタの変数メモリを解放する
     //
     if (pval->mode == HSPVAR_MODE_MALLOC) {
@@ -64,13 +64,13 @@ HspVarLabel_Free(PVal* pval)
     }
     pval->pt = NULL;
     pval->mode = HSPVAR_MODE_NONE;
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarLabel_Alloc(PVal* pval, const PVal* pval2)
 {
-    DEBUG_IN;
+    
     //		pval変数が必要とするサイズを確保する。
     //		(pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
     //		(flagの設定は呼び出し側が行なう)
@@ -95,15 +95,15 @@ HspVarLabel_Alloc(PVal* pval, const PVal* pval2)
     }
     pval->pt = pt;
     pval->size = size;
-    DEBUG_OUT;
+    
 }
 
 // Size
 int
 HspVarLabel_GetSize(const PDAT* pval)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return sizeof(HSPVAR_LABEL);
 }
 
@@ -112,8 +112,8 @@ int
 HspVarLabel_GetUsing(const PDAT* pdat)
 {
     //		(実態のポインタが渡されます)
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (*pdat != NULL);
 }
 
@@ -121,25 +121,25 @@ HspVarLabel_GetUsing(const PDAT* pdat)
 void
 HspVarLabel_Set(PVal* pval, PDAT* pdat, const void* in)
 {
-    DEBUG_IN;
+    
     *hspvar_label_GetPtr(pdat) = *((HSPVAR_LABEL*)(in));
-    DEBUG_OUT;
+    
 }
 
 void*
 HspVarLabel_GetBlockSize(PVal* pval, PDAT* pdat, int* size)
 {
-    DEBUG_IN;
+    
     *size = pval->size - (int)(((char*)pdat) - pval->pt);
-    DEBUG_OUT;
+    
     return (pdat);
 }
 
 void
 HspVarLabel_AllocBlock(PVal* pval, PDAT* pdat, int size)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
 }
 
 /*------------------------------------------------------------*/
@@ -147,7 +147,7 @@ HspVarLabel_AllocBlock(PVal* pval, PDAT* pdat, int size)
 void
 HspVarLabel_Init(HspVarProc* p)
 {
-    DEBUG_IN;
+    
     //    p->Set = HspVarLabel_Set;
     //    p->GetPtr = HspVarLabel_GetPtr;
     //    p->GetSize = HspVarLabel_GetSize;
@@ -164,7 +164,7 @@ HspVarLabel_Init(HspVarProc* p)
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize =
     sizeof(HSPVAR_LABEL); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
-    DEBUG_OUT;
+    
 }
 
 /*------------------------------------------------------------*/

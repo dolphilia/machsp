@@ -34,13 +34,13 @@
 @implementation ViewController (hsp)
 
 - (int)getU32:(unsigned short *)mcs {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (mcs[1] << 16) | (mcs[0]);
 }
 
 - (void)code_next {
-    DEBUG_IN;
+    
     //		Get 1 command block
     //		(ver3.0以降用)
     //
@@ -63,33 +63,33 @@
     
     //	printf( "%08x : hsp_type_tmp[%d] val[%d]
     //ex[%d]¥n",(int)(hsp_mcs-hspctx->mem_mcs), hsp_type_tmp,val,hsp_exflg );
-    DEBUG_OUT;
+    
 }
 
 // void
 // code_next( void )
 //{
-//    DEBUG_IN;
+//
 //    __[self code_next];
-//    DEBUG_OUT;
+//
 //}
 
 - (void)code_puterror:(HSPERROR)error {
-    DEBUG_IN;
+    
     //		エラー例外を発生させる
     //
     if (error == HSPERR_NONE) {
         hsp_hspctx->runmode = RUNMODE_END;
-        DEBUG_OUT;
+        
         return;
     }
     @throw [self make_nsexception:error];
-    DEBUG_OUT;
+    
 }
 
 - (int)code_getexflg {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return hsp_exflg;
 }
 
@@ -97,7 +97,7 @@
            pval:(PDAT *)pval
             exp:(int)exp
             ptr:(void *)ptr {
-    DEBUG_IN;
+    
     //		Caluculate parameter args (valiant)
     //
     switch (exp) {
@@ -269,11 +269,11 @@
              @throw [self make_nsexception:HSPVAR_ERROR_INVALID];
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)calcprmf:(int *)mval exp:(int)exp p:(int)p {
-    DEBUG_IN;
+    
     //		Caluculate parameter args (int)
     //
     switch (exp) {
@@ -343,11 +343,11 @@
              @throw [self make_nsexception:HSPVAR_ERROR_INVALID];
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)code_calcop:(int)op {
-    DEBUG_IN;
+    
     //		スタックから引数を２つPOPしたものを演算する
     //
     HspVarProc *varproc;
@@ -372,7 +372,7 @@
                          p:stm2->ival];  // 高速化された演算(intのみ)
             StackDecLevel;               // stack->Pop() の代わり(高速に)
             stm2->ival = stm1->ival;  // １段目スタックの値を入れ替える
-            DEBUG_OUT;
+            
             return;
         }
     }
@@ -445,11 +445,11 @@
         }
     }
     [self StackPush:tflag data:mpval->pt size:basesize];
-    DEBUG_OUT;
+    
 }
 
 - (void)code_checkarray:(PVal *)pval {
-    DEBUG_IN;
+    
     //		Check PVal Array information
     //		(配列要素(int)の取り出し)
     //
@@ -476,15 +476,15 @@
                 if (chk == PARAM_SPLIT) break;
             }
             [self code_next];  // ')'を読み飛ばす
-            DEBUG_OUT;
+            
             return;
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)code_arrayint2:(PVal *)pval offset:(int)offset {
-    DEBUG_IN;
+    
     //		配列要素の指定 (index)
     //		( Reset後に次元数だけ連続で呼ばれます )
     //
@@ -506,18 +506,18 @@
                 // Alertf("Expand.(%d)",offset);
                 HspVarCoreReDim(pval, pval->arraycnt, offset + 1);  // 配列を拡張する
                 pval->offset += offset * pval->arraymul;
-                DEBUG_OUT;
+                
                 return;
             }
         }
          @throw [self make_nsexception:HSPVAR_ERROR_ARRAYOVER];
     }
     pval->offset += offset * pval->arraymul;
-    DEBUG_OUT;
+    
 }
 
 - (void)code_checkarray2:(PVal *)pval {
-    DEBUG_IN;
+    
     //		Check PVal Array information
     //		(配列要素(int)の取り出し)(配列の拡張に対応)
     //
@@ -544,21 +544,21 @@
                 if (chk == PARAM_SPLIT) break;
             }
             [self code_next];  // ')'を読み飛ばす
-            DEBUG_OUT;
+            
             return;
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (char *)code_checkarray_obj:(PVal *)pval mptype:(int *)mptype {
-    DEBUG_IN;
+    
     //		Check PVal Array object information
     //		( 配列要素(オブジェクト)の取り出し )
     //		( 返値 : 汎用データのポインタ )
     //		( mptype : 汎用データのタイプを返す )
     //
-    char *ptr;
+    char *ptr = nullptr;
     HspVarProc *varproc;
     /*
      FlexValue *fv;
@@ -599,7 +599,7 @@
             //＄使用できるArrayObjectReadは存在しない
             // ptr = (char *)varproc->ArrayObjectRead( pval, mptype );
             [self code_next];  // ')'を読み飛ばす
-            DEBUG_OUT;
+            
             return ptr;
             //			}
             //			code_checkarray( pval );
@@ -626,7 +626,7 @@
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
     
-    DEBUG_OUT;
+    
     return (char *)dst;  //(char *)HspVarCorePtr( pval );
 }
 
@@ -643,7 +643,7 @@
  */
 
 - (char *)code_get_proxyvar:(char *)ptr mptype:(int *)mptype {
-    DEBUG_IN;
+    
     //		マルチパラメーターの変数を処理する
     //
     MPVarData *var;
@@ -662,17 +662,17 @@
             break;
         case MPTYPE_LOCALSTRING:
             *mptype = MPTYPE_STRING;
-            DEBUG_OUT;
+            
             return *(char **)ptr;
         case MPTYPE_LABEL:
             *mptype = HSPVAR_FLAG_LABEL;
-            DEBUG_OUT;
+            
             return ptr;
         case MPTYPE_ARRAYVAR:
             var = (MPVarData *)ptr;
             getv_pval = var->pval;
             if (getv_pval->support & HSPVAR_SUPPORT_MISCTYPE) {
-                DEBUG_OUT;
+                
                 return [self code_checkarray_obj:getv_pval mptype:mptype];
             } else {
                 [self code_checkarray:getv_pval];
@@ -681,14 +681,14 @@
         case MPTYPE_LOCALVAR:
             getv_pval = (PVal *)ptr;
             if (getv_pval->support & HSPVAR_SUPPORT_MISCTYPE) {
-                DEBUG_OUT;
+                
                 return [self code_checkarray_obj:getv_pval mptype:mptype];
             } else {
                 [self code_checkarray:getv_pval];
             }
             break;
         default:
-            DEBUG_OUT;
+            
             return ptr;
     }
     *mptype = getv_pval->flag;
@@ -713,12 +713,12 @@
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
     
-    DEBUG_OUT;
+    
     return (char *)dst;  // HspVarCorePtr( getv_pval );
 }
 
 - (void)code_checkarray_obj2:(PVal *)pval {
-    DEBUG_IN;
+    
     //		Check PVal Array object information
     //		( 配列要素(オブジェクト)の取り出し・変数指定時 )
     //		( 変数の内容を参照する場合にはcode_checkarray_objを使用します )
@@ -737,11 +737,11 @@
             [self code_next];  // ')'を読み飛ばす
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (int)code_get {
-    DEBUG_IN;
+    
     //		parameter analysis
     //			result: 0=ok(PARAM_OK)  -1=end(PARAM_END)
     //-2=default(PARAM_DEFAULT)
@@ -765,19 +765,19 @@
     if (hsp_exflg & EXFLG_1) return PARAM_END;  // パラメーター終端
     if (hsp_exflg & EXFLG_2) {  // パラメーター区切り(デフォルト時)
         hsp_exflg ^= EXFLG_2;
-        DEBUG_OUT;
+        
         return PARAM_DEFAULT;
     }
     if (hsp_type_tmp == TYPE_MARK) {
         if (hsp_val_tmp == 63) {  // パラメーター省略時('?')
             [self code_next];
             hsp_exflg &= ~EXFLG_2;
-            DEBUG_OUT;
+            
             return PARAM_DEFAULT;
         }
         if (hsp_val_tmp == ')') {  // 関数内のパラメーター省略時
             hsp_exflg &= ~EXFLG_2;
-            DEBUG_OUT;
+            
             return PARAM_ENDSPLIT;
         }
     }
@@ -828,7 +828,7 @@
         }
         [self code_next];
         hsp_exflg &= ~EXFLG_2;
-        DEBUG_OUT;
+        
         return 0;
     }
     
@@ -1078,12 +1078,12 @@
          @throw [self make_nsexception:HSPERR_STACK_OVERFLOW];
     }
     
-    DEBUG_OUT;
+    
     return resval;
 }
 
 - (char *)code_gets {
-    DEBUG_IN;
+    
     //		文字列パラメーターを取得
     //
     int chk;
@@ -1094,12 +1094,12 @@
     if (mpval->flag != HSPVAR_FLAG_STR) {
          @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
-    DEBUG_OUT;
+    
     return (mpval->pt);
 }
 
 - (char *)code_getds:(const char *)defval {
-    DEBUG_IN;
+    
     //		文字列パラメーターを取得(デフォルト値あり)
     //
     int chk;
@@ -1110,12 +1110,12 @@
     if (mpval->flag != HSPVAR_FLAG_STR) {
          @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
-    DEBUG_OUT;
+    
     return (mpval->pt);
 }
 
 - (char *)code_getdsi:(const char *)defval {
-    DEBUG_IN;
+    
     //		文字列パラメーターを取得(デフォルト値あり・数値も可)
     //
     int chk;
@@ -1130,12 +1130,12 @@
         // ptr = (char *)HspVarCoreCnv( mpval->flag, HSPVAR_FLAG_STR, ptr );
         ptr = (char *)HspVarCoreCnvPtr(mpval, HSPVAR_FLAG_STR);
     }
-    DEBUG_OUT;
+    
     return ptr;
 }
 
 - (int)code_geti {
-    DEBUG_IN;
+    
     //		数値パラメーターを取得
     //
     int chk;
@@ -1149,12 +1149,12 @@
         }
         return (int)(*(double *)(mpval->pt));  // doubleの時はintに変換
     }
-    DEBUG_OUT;
+    
     return *(int *)(mpval->pt);
 }
 
 - (int)code_getdi:(const int)defval {
-    DEBUG_IN;
+    
     //		数値パラメーターを取得(デフォルト値あり)
     //
     int chk;
@@ -1168,12 +1168,12 @@
         }
         return (int)(*(double *)(mpval->pt));  // doubleの時はintに変換
     }
-    DEBUG_OUT;
+    
     return *(int *)(mpval->pt);
 }
 
 - (double)code_getd {
-    DEBUG_IN;
+    
     //		数値(double)パラメーターを取得
     //
     int chk;
@@ -1187,12 +1187,12 @@
         }
         return (double)(*(int *)(mpval->pt));  // intの時はdoubleに変換
     }
-    DEBUG_OUT;
+    
     return *(double *)(mpval->pt);
 }
 
 - (double)code_getdd:(const double)defval {
-    DEBUG_IN;
+    
     //		数値(double)パラメーターを取得(デフォルト値あり)
     //
     int chk;
@@ -1206,12 +1206,12 @@
         }
         return (double)(*(int *)(mpval->pt));  // intの時はdoubleに変換
     }
-    DEBUG_OUT;
+    
     return *(double *)(mpval->pt);
 }
 
 - (APTR)code_getv_sub:(PVal **)pval {
-    DEBUG_IN;
+    
     //		pvalの実体を検索する(マルチパラメーターの場合があるため)
     //		( 返値が新しいPValポインタとなる )
     //
@@ -1226,7 +1226,7 @@
         return HspVarCoreGetAPTR(getv_pval);
     }
     [self code_checkarray2:*pval];  // 通常の配列検索(拡張あり)
-    DEBUG_OUT;
+    
     return HspVarCoreGetAPTR(getv_pval);
 }
 
@@ -1254,7 +1254,7 @@
  */
 
 - (APTR)code_getv_proxy:(PVal **)pval var:(MPVarData *)var mptype:(int)mptype {
-    DEBUG_IN;
+    
     PVal *getv_pval;
     APTR aptr;
     switch (mptype) {  // マルチパラメーターを取得
@@ -1282,13 +1282,13 @@
         }
     }
     *pval = getv_pval;
-    DEBUG_OUT;
+    
     return aptr;
 }
 
 // static inline
 - (APTR)code_getva_struct:(PVal **)pval {
-    DEBUG_IN;
+    
     //		置き換えパラメーターを変数の代わりに取得
     //
     MPModVarData *var;
@@ -1312,7 +1312,7 @@
         }
         *pval = var->pval;
         hsp_exflg &= EXFLG_1;
-        DEBUG_OUT;
+        
         return var->aptr;
     }
     
@@ -1332,12 +1332,12 @@
     out += prm->offset;
     aptr = [self code_getv_proxy:pval var:(MPVarData *)out mptype:prm->mptype];
     hsp_exflg &= EXFLG_1;  // for 2nd prm_get
-    DEBUG_OUT;
+    
     return aptr;
 }
 
 - (APTR)code_getva:(PVal **)pval {
-    DEBUG_IN;
+    
     //		変数パラメーターを取得(pval+APTR)
     //
     PVal *getv_pval;
@@ -1360,12 +1360,12 @@
     
     hsp_exflg &= EXFLG_1;  // for 2nd prm_get
     *pval = getv_pval;
-    DEBUG_OUT;
+    
     return aptr;
 }
 
 - (PVal *)code_getpval {
-    DEBUG_IN;
+    
     //		変数パラメーターを取得(PVal)
     //
     PVal *getv_pval;
@@ -1374,12 +1374,12 @@
     if (aptr != 0) {
          @throw [self make_nsexception:HSPERR_BAD_ARRAY_EXPRESSION];
     }
-    DEBUG_OUT;
+    
     return getv_pval;
 }
 
 - (unsigned short *)code_getlb {
-    DEBUG_IN;
+    
     //		ラベルパラメーターを取得
     //
     if (hsp_type_tmp != TYPE_LABEL) {
@@ -1397,26 +1397,26 @@
              @throw [self make_nsexception:HSPERR_LABEL_REQUIRED];
         }
         hsp_mcs = hsp_mcsbak;
-        DEBUG_OUT;
+        
         return p;
     }
-    DEBUG_OUT;
+    
     return (unsigned short *)(abc_hspctx.mem_mcs +
                               (abc_hspctx.mem_ot[hsp_val_tmp]));
 }
 
 - (unsigned short *)code_getlb2 {
-    DEBUG_IN;
+    
     unsigned short *s;
     s = [self code_getlb];
     [self code_next];
     hsp_exflg &= ~EXFLG_2;
-    DEBUG_OUT;
+    
     return s;
 }
 
 - (STRUCTPRM *)code_getstprm {
-    DEBUG_IN;
+    
     //		構造体パラメーターを取得
     //
     STRUCTPRM *prm;
@@ -1426,12 +1426,12 @@
     prm = &hsp_hspctx->mem_minfo[hsp_val_tmp];
     [self code_next];
     hsp_exflg &= ~EXFLG_2;
-    DEBUG_OUT;
+    
     return prm;
 }
 
 - (STRUCTDAT *)code_getstruct {
-    DEBUG_IN;
+    
     //		構造体パラメーターを取得
     //
     STRUCTDAT *st;
@@ -1441,12 +1441,12 @@
          @throw [self make_nsexception:HSPERR_STRUCT_REQUIRED];
     }
     st = &hsp_hspctx->mem_finfo[prm->subid];
-    DEBUG_OUT;
+    
     return st;
 }
 
 - (STRUCTDAT *)code_getcomst {
-    DEBUG_IN;
+    
     //		COM構造体パラメーターを取得
     //
     STRUCTDAT *st;
@@ -1460,7 +1460,7 @@
     st = &hsp_hspctx->mem_finfo[hsp_val_tmp];
     [self code_next];
     hsp_exflg &= ~EXFLG_2;
-    DEBUG_OUT;
+    
     return st;
 }
 
@@ -1492,7 +1492,7 @@
               aptr:(APTR)aptr
               type:(int)type
                ptr:(const void *)ptr {
-    DEBUG_IN;
+    
     //		変数にパラメーターを指定する
     //
     HspVarProc *proc;
@@ -1533,16 +1533,16 @@
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    DEBUG_OUT;
+    
 }
 
 - (char *)code_getvptr:(PVal **)pval size:(int *)size {
-    DEBUG_IN;
+    
     //		変数ポインタを得る
     //
     APTR aptr;
     aptr = [self code_getva:pval];
-    DEBUG_OUT;
+    
     
     void *dst;
     if (strcmp(hspvarproc[(*pval)->flag].vartype_name, "int") ==
@@ -1576,7 +1576,7 @@
 /*------------------------------------------------------------*/
 
 - (void)customstack_delete:(STRUCTDAT *)st stackptr:(char *)stackptr {
-    DEBUG_IN;
+    
     //	custom command stack delete
     //
     int i;
@@ -1618,11 +1618,11 @@
         }
         prm++;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)cmdfunc_return {
-    DEBUG_IN;
+    
     //		return execute
     //
     StackManagerData *stm;
@@ -1649,11 +1649,11 @@
     [self code_next];
     
     [self StackPop];
-    DEBUG_OUT;
+    
 }
 
 - (int)cmdfunc_gosub:(unsigned short *)subr {
-    DEBUG_IN;
+    
     //		gosub execute
     //
     HSPROUTINE r;
@@ -1716,18 +1716,18 @@
                 [self code_def_msgfunc:&(abc_hspctx)];
             }
             if (abc_hspctx.runmode == RUNMODE_END) {
-                DEBUG_OUT;
+                
                 return RUNMODE_END;
             }
         }
     }
     
-    DEBUG_OUT;
+    
     return RUNMODE_RUN;
 }
 
 - (int)code_callfunc:(int)cmd {
-    DEBUG_IN;
+    
     //	ユーザー拡張命令を呼び出す
     //
     STRUCTDAT *st;
@@ -1811,7 +1811,7 @@
         }
     }
     
-    DEBUG_OUT;
+    
     return RUNMODE_RUN;
 }
 
@@ -1822,7 +1822,7 @@
 /*------------------------------------------------------------*/
 
 APTR code_newstruct(PVal *pval) {
-    DEBUG_IN;
+    
     int i, max;
     APTR ofs;
     FlexValue *fv;
@@ -1834,7 +1834,7 @@ APTR code_newstruct(PVal *pval) {
         if (fv[i].type == FLEXVAL_TYPE_NONE) return i;
     }
     HspVarCoreReDim(pval, 1, max + 1);  // 配列を拡張する
-    DEBUG_OUT;
+    
     return max;
 }
 
@@ -1843,7 +1843,7 @@ APTR code_newstruct(PVal *pval) {
                       ptr:(void *)ptr
                      size:(int)size
                     subid:(int)subid {
-    DEBUG_IN;
+    
     //		TYPE_STRUCTの変数を設定する
     //		(返値:構造体を収めるための情報ポインタ)
     //
@@ -1853,12 +1853,12 @@ APTR code_newstruct(PVal *pval) {
     fv.size = size;
     fv.ptr = ptr;
     [self code_setva:pval aptr:aptr type:TYPE_STRUCT ptr:&fv];
-    DEBUG_OUT;
+    
     return (FlexValue *)HspVarCorePtrAPTR(pval, aptr);
 }
 
 - (void)code_expandstruct:(char *)p st:(STRUCTDAT *)st option:(int)option {
-    DEBUG_IN;
+    
     //	構造体の項目にパラメーターを代入する
     //
     int i, chk;
@@ -1981,11 +1981,11 @@ APTR code_newstruct(PVal *pval) {
         }
         prm++;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)code_delstruct:(PVal *)in_pval in_aptr:(APTR)in_aptr {
-    DEBUG_IN;
+    
     //		モジュール変数を破棄する
     //
     int i;
@@ -1999,7 +1999,7 @@ APTR code_newstruct(PVal *pval) {
     fv = (FlexValue *)HspVarCorePtrAPTR(in_pval, in_aptr);
     
     if (fv->type != FLEXVAL_TYPE_ALLOC) {
-        DEBUG_OUT;
+        
         return;
     }
     
@@ -2051,11 +2051,11 @@ APTR code_newstruct(PVal *pval) {
     // Alertf("STRUCT:BYE");
     sbFree(fv->ptr);
     fv->type = FLEXVAL_TYPE_NONE;
-    DEBUG_OUT;
+    
 }
 
 - (void)code_delstruct_all:(PVal *)pval {
-    DEBUG_IN;
+    
     //		モジュール変数全体を破棄する
     //
     int i;
@@ -2064,33 +2064,33 @@ APTR code_newstruct(PVal *pval) {
             [self code_delstruct:pval in_aptr:i];
         }
     }
-    DEBUG_OUT;
+    
 }
 
 - (char *)code_stmp:(int)size {
-    DEBUG_IN;
+    
     //		stmp(文字列一時バッファ)を指定サイズで初期化する
     //
     if (size > 1024) {
         hsp_hspctx->stmp = sbExpand(hsp_hspctx->stmp, size);
     }
-    DEBUG_OUT;
+    
     return hsp_hspctx->stmp;
 }
 
 - (char *)code_stmpstr:(char *)src {
-    DEBUG_IN;
+    
     //		stmp(文字列一時バッファ)にsrcをコピーする
     //
     char *p;
     p = [self code_stmp:(int)strlen(src) + 1];
     strcpy(p, src);
-    DEBUG_OUT;
+    
     return p;
 }
 
 - (char *)code_getsptr:(int *)type {
-    DEBUG_IN;
+    
     int fl;
     char *bp;
     if ([self code_get] <= PARAM_END) {
@@ -2105,7 +2105,7 @@ APTR code_newstruct(PVal *pval) {
         }
     }
     *type = fl;
-    DEBUG_OUT;
+    
     return bp;
 }
 
@@ -2116,7 +2116,7 @@ APTR code_newstruct(PVal *pval) {
 /*------------------------------------------------------------*/
 
 - (int)cmdfunc_default:(int)cmd {
-    DEBUG_IN;
+    
     //		cmdfunc : default
     //
     int tmp;
@@ -2129,12 +2129,12 @@ APTR code_newstruct(PVal *pval) {
          @throw [self make_nsexception:HSPERR_WRONG_NAME];
     }
      @throw [self make_nsexception:HSPERR_TOO_MANY_PARAMETERS];
-    DEBUG_OUT;
+    
     return RUNMODE_ERROR;
 }
 
 - (int)cmdfunc_custom:(int)cmd {
-    DEBUG_IN;
+    
     //	custom command execute
     //
     STRUCTDAT *st;
@@ -2144,12 +2144,12 @@ APTR code_newstruct(PVal *pval) {
     if (st->index != STRUCTDAT_INDEX_FUNC) {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    DEBUG_OUT;
+    
     return [self code_callfunc:cmd];
 }
 
 - (void *)reffunc_custom:(int *)type_res arg:(int)arg {
-    DEBUG_IN;
+    
     //	custom function execute
     //
     STRUCTDAT *st;
@@ -2206,12 +2206,12 @@ APTR code_newstruct(PVal *pval) {
     [self code_next];
     
     hsp_funcres = old_funcres;
-    DEBUG_OUT;
+    
     return ptr;
 }
 
 - (int)cmdfunc_var:(int)cmd {
-    DEBUG_IN;
+    
     //		cmdfunc : TYPE_VAR
     //		(変数代入 : 変数名が先頭に来る場合)
     //
@@ -2287,7 +2287,7 @@ APTR code_newstruct(PVal *pval) {
                  @throw [self make_nsexception:HSPERR_SYNTAX];
             }
         }
-        DEBUG_OUT;
+        
         return RUNMODE_RUN;
     }
     
@@ -2304,7 +2304,7 @@ APTR code_newstruct(PVal *pval) {
             if (hsp_arrayobj_flag) {
                 //$使用できるObjectWrite関数は存在しない
                 // proc->ObjectWrite( pval, ptr, mpval->flag );
-                DEBUG_OUT;
+                
                 return RUNMODE_RUN;
             }
         }
@@ -2346,7 +2346,7 @@ APTR code_newstruct(PVal *pval) {
         }
         
         if (hsp_exflg) {
-            DEBUG_OUT;
+            
             return RUNMODE_RUN;
         }
         
@@ -2422,16 +2422,16 @@ APTR code_newstruct(PVal *pval) {
     if (proc->aftertype != pval->flag) {  // 演算後に型が変わる場合
          @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
-    DEBUG_OUT;
+    
     return RUNMODE_RUN;
 }
 
 - (void)cmdfunc_return_setval {
-    DEBUG_IN;
+    
     //		引数をシステム変数にセットする(返値用)
     //
     if ([self code_get] <= PARAM_END) {
-        DEBUG_OUT;
+        
         return;
     }
     
@@ -2451,11 +2451,11 @@ APTR code_newstruct(PVal *pval) {
         default:
             throw HSPERR_TYPE_MISMATCH;
     }
-    DEBUG_OUT;
+    
 }
 
 - (int)cmdfunc_ifcmd:(int)cmd {
-    DEBUG_IN;
+    
     //	'if' command execute
     //
     int i;
@@ -2469,12 +2469,12 @@ APTR code_newstruct(PVal *pval) {
     }
     hsp_mcs = mcstmp;
     [self code_next];
-    DEBUG_OUT;
+    
     return RUNMODE_RUN;
 }
 
 - (void)cmdfunc_mref:(PVal *)pval prm:(int)prm {
-    DEBUG_IN;
+    
     //		mref command
     //
     int t, size;
@@ -2489,7 +2489,7 @@ APTR code_newstruct(PVal *pval) {
         //$HspFunc_mref／ex_mrefは現状は無効
         // if ( exinfo->HspFunc_mref != NULL )
         //    exinfo->HspFunc_mref( pval, prm );
-        DEBUG_OUT;
+        
         return;
     }
     if ((prm & 0x30) || (prm >= 8)) {
@@ -2502,11 +2502,11 @@ APTR code_newstruct(PVal *pval) {
     t = HSPVAR_FLAG_INT;
     size = sizeof(int);
     HspVarCoreDupPtr(pval, t, (out + (size * prm)), size);
-    DEBUG_OUT;
+    
 }
 
 - (int)cmdfunc_prog:(int)cmd {
-    DEBUG_IN;
+    
     //		cmdfunc : TYPE_PROGCMD
     //
     [self code_next];  // 次のコードを取得(最初に必ず必要です)
@@ -2520,7 +2520,7 @@ APTR code_newstruct(PVal *pval) {
         {
             unsigned short *sbr;
             sbr = [self code_getlb];
-            DEBUG_OUT;
+            
             return [self cmdfunc_gosub:sbr];
         }
         case 0x02:  // return
@@ -2747,19 +2747,19 @@ APTR code_newstruct(PVal *pval) {
             // printf("end");
             // hspctx.endcode = [self code_getdi:0];
             // hspctx.runmode = RUNMODE_END;
-            DEBUG_OUT;
+            
             return RUNMODE_END;
         case 0x1b:  // assert
         {
             int p1 = [self code_getdi:0];
             if (p1) break;
             abc_hspctx.runmode = RUNMODE_ASSERT;
-            DEBUG_OUT;
+            
             return RUNMODE_ASSERT;
         }
         case 0x11:  // stop
             abc_hspctx.runmode = RUNMODE_STOP;
-            DEBUG_OUT;
+            
             return RUNMODE_STOP;
         case 0x12:  // newmod
         case 0x13:  // setmod
@@ -2797,7 +2797,7 @@ APTR code_newstruct(PVal *pval) {
                 hsp_modvar_init.subid = prm->subid;
                 hsp_modvar_init.pval = pval;
                 hsp_modvar_init.aptr = aptr;
-                DEBUG_OUT;
+                
                 return [self code_callfunc:prm->offset];
             }
             break;
@@ -2892,7 +2892,7 @@ APTR code_newstruct(PVal *pval) {
             }
             if (otbak != NULL) {
                 [self code_call:otbak];
-                DEBUG_OUT;
+                
                 return abc_hspctx.runmode;
             }
             break;
@@ -2942,12 +2942,12 @@ APTR code_newstruct(PVal *pval) {
              @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
-    DEBUG_OUT;
+    
     return RUNMODE_RUN;
 }
 
 - (void *)reffunc_sysvar:(int *)type_res arg:(int)arg {
-    DEBUG_IN;
+    
     //		reffunc : TYPE_SYSVAR
     //		(内蔵システム変数)
     //
@@ -3019,7 +3019,7 @@ APTR code_newstruct(PVal *pval) {
              @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
-    DEBUG_OUT;
+    
     return ptr;
 }
 
@@ -3030,42 +3030,42 @@ APTR code_newstruct(PVal *pval) {
 /*------------------------------------------------------------*/
 
 - (void)hsp3typeinit_var:(HSP3TYPEINFO *)info {
-    DEBUG_IN;
+    
     // info->cmdfunc = cmdfunc_var;
     info->cmdfuncNumber = 0;  //変数代入 memo.md
-    DEBUG_OUT;
+    
 }
 
 - (void)hsp3typeinit_prog:(HSP3TYPEINFO *)info {
-    DEBUG_IN;
+    
     // info->cmdfunc = cmdfunc_prog;
     info->cmdfuncNumber = 1;  //プログラム制御 memo.md
-    DEBUG_OUT;
+    
 }
 
 - (void)hsp3typeinit_ifcmd:(HSP3TYPEINFO *)info {
-    DEBUG_IN;
+    
     // info->cmdfunc = cmdfunc_ifcmd;
     info->cmdfuncNumber = 2;  // if文 memo.md
-    DEBUG_OUT;
+    
 }
 
 - (void)hsp3typeinit_sysvar:(HSP3TYPEINFO *)info {
-    DEBUG_IN;
+    
     info->reffuncNumber = 0;
-    DEBUG_OUT;
+    
 }
 
 - (void)hsp3typeinit_custom:(HSP3TYPEINFO *)info {
-    DEBUG_IN;
+    
     // info->cmdfunc = cmdfunc_custom;
     info->cmdfuncNumber = 3;  //カスタム memo.md
     info->reffuncNumber = 1;  // reffunc_custom;
-    DEBUG_OUT;
+    
 }
 
 - (void)hsp3typeinit_default:(int)type {
-    DEBUG_IN;
+    
     //		typeinfoの初期化
     HSP3TYPEINFO *info;
     info = GetTypeInfoPtr(type);
@@ -3078,11 +3078,11 @@ APTR code_newstruct(PVal *pval) {
     info->reffuncNumber = -1;
     info->termfunc = NULL;
     info->eventfunc = NULL;
-    DEBUG_OUT;
+    
 }
 
 - (HSP3TYPEINFO *)code_gettypeinfo:(int)type {
-    DEBUG_IN;
+    
     //		指定されたタイプのHSP3TYPEINFO構造体を取得します。
     //		( typeがマイナスの場合は、新規typeIDを発行 )
     //
@@ -3096,28 +3096,28 @@ APTR code_newstruct(PVal *pval) {
         [self hsp3typeinit_default:id];
     }
     info = GetTypeInfoPtr(id);
-    DEBUG_OUT;
+    
     return info;
 }
 
 - (void)code_setctx:(HSPContext *)_ctx {
-    DEBUG_IN;
+    
     //		HSPコンテキストを設定
     //
     hsp_hspctx = _ctx;
-    DEBUG_OUT;
+    
 }
 
 - (void)code_def_msgfunc:(HSPContext *)ctx {
-    DEBUG_IN;
+    
     //	デフォルトのHSPメッセージコールバック
     //
     ctx->runmode = RUNMODE_END;
-    DEBUG_OUT;
+    
 }
 
 - (void)code_resetctx:(HSPContext *)_ctx {
-    DEBUG_IN;
+    
     //		コンテキストのリセット(オブジェクトロード後の初期化)
     //
     hsp_mpval_int = HspVarCoreGetPVal(HSPVAR_FLAG_INT);
@@ -3141,73 +3141,73 @@ APTR code_newstruct(PVal *pval) {
     _ctx->note_pval = NULL;
     _ctx->notep_pval = NULL;
     //_ctx->msgfunc = code_def_msgfunc;
-    DEBUG_OUT;
+    
 }
 
 - (void)code_enable_typeinfo:(HSP3TYPEINFO *)info {
-    DEBUG_IN;
+    
     //		typeinfoを有効にする(オプションチェック)
     //
     hsp_hspevent_opt |= info->option;
-    DEBUG_OUT;
+    
 }
 
 - (HspVarProc *)HspFunc_getproc:(int)id {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (&hspvarproc[id]);
 }
 
 - (HSPERROR)code_geterror {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return hsp_hspctx->err;
 }
 
 - (void)code_setpc:(const unsigned short *)pc {
-    DEBUG_IN;
+    
     //		プログラムカウンタを設定
     //
     if (hsp_hspctx->runmode == RUNMODE_END) return;
     hsp_mcs = (unsigned short *)pc;
     [self code_next];
     hsp_hspctx->runmode = RUNMODE_RUN;
-    DEBUG_OUT;
+    
 }
 
 - (void)code_setpci:(const unsigned short *)pc {
-    DEBUG_IN;
+    
     //		プログラムカウンタを設定(interrput)
     //
     [self code_setpc:pc];
     hsp_hspctx->runmode = RUNMODE_INTJUMP;
-    DEBUG_OUT;
+    
 }
 
 - (void)code_call:(const unsigned short *)pc {
-    DEBUG_IN;
+    
     //		サブルーチンジャンプを行なう
     //
     hsp_mcs = hsp_mcsbak;
     [self cmdfunc_gosub:(unsigned short *)pc];
     if (abc_hspctx.runmode == RUNMODE_END) {
-        DEBUG_OUT;
+        
         return;
     }
     abc_hspctx.runmode = RUNMODE_RUN;
-    DEBUG_OUT;
+    
 }
 
 //
 //		Error report routines
 //
 - (int)code_getdebug_line {
-    DEBUG_IN;
+    
     return 0;  // code_getdebug_line( hsp_mcsbak );
 }
 
 - (int)code_getdebug_line:(unsigned short *)pt {
-    DEBUG_IN;
+    
     //		Get current debug line info
     //		(最後に実行した場所を示す)
     //			result :  0=none  others=line#
@@ -3221,7 +3221,7 @@ APTR code_newstruct(PVal *pval) {
     debpt = 0;
     curpt = (int)(pt - hsp_hspctx->mem_mcs);
     if (mem_di[0] == 255) {
-        DEBUG_OUT;
+        
         return -1;
     }
     
@@ -3233,7 +3233,7 @@ APTR code_newstruct(PVal *pval) {
             case 252:
                 debpt += (mem_di[a + 1] << 8) + mem_di[a];
                 if (curpt <= debpt) {
-                    DEBUG_OUT;
+                    
                     return cl;
                 }
                 cl++;
@@ -3249,7 +3249,7 @@ APTR code_newstruct(PVal *pval) {
                 a += 5;
                 break;
             case 255:
-                DEBUG_OUT;
+                
                 return -1;
             default:
                 debpt += ofs;
@@ -3258,16 +3258,16 @@ APTR code_newstruct(PVal *pval) {
                 break;
         }
     }
-    DEBUG_OUT;
+    
     return cl;
 #else
-    DEBUG_OUT;
+    
     return -1;
 #endif
 }
 
 - (int)code_debug_init {
-    DEBUG_IN;
+    
     //		hsp_mem_di_valを更新
     //
     unsigned char ofs;
@@ -3279,7 +3279,7 @@ APTR code_newstruct(PVal *pval) {
     hsp_mem_di_val = NULL;
     mem_di = hsp_hspctx->mem_di;
     if (mem_di[0] == 255) {
-        DEBUG_OUT;
+        
         return -1;
     }
     while (1) {
@@ -3290,37 +3290,37 @@ APTR code_newstruct(PVal *pval) {
                 break;
             case 253:
                 hsp_mem_di_val = &mem_di[a - 1];
-                DEBUG_OUT;
+                
                 return 0;
             case 254:
                 cl = (mem_di[a + 4] << 8) + mem_di[a + 3];
                 a += 5;
                 break;
             case 255:
-                DEBUG_OUT;
+                
                 return -1;
             default:
                 cl++;
                 break;
         }
     }
-    DEBUG_OUT;
+    
     return cl;
 }
 
 - (char *)code_getdebug_varname:(int)val_id {
-    DEBUG_IN;
+    
     unsigned char *mm;
     int i;
     if (hsp_mem_di_val == NULL) return (char *)"";
     mm = hsp_mem_di_val + (val_id * 6);
     i = (mm[3] << 16) + (mm[2] << 8) + mm[1];
-    DEBUG_OUT;
+    
     return strp(i);
 }
 
 - (int)code_getdebug_seekvar:(const char *)name {
-    DEBUG_IN;
+    
     unsigned char *mm;
     int i, ofs;
     if (hsp_mem_di_val != NULL) {
@@ -3331,18 +3331,18 @@ APTR code_newstruct(PVal *pval) {
             mm += 6;
         }
     }
-    DEBUG_OUT;
+    
     return -1;
 }
 
 - (char *)code_getdebug_name {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return strp(hsp_srcname);
 }
 
 - (int)code_exec_wait:(int)tick {
-    DEBUG_IN;
+    
     //		時間待ち(wait)
     //		(awaitに変換します)
     //
@@ -3351,12 +3351,12 @@ APTR code_newstruct(PVal *pval) {
         return RUNMODE_RUN;
     }
     hsp_hspctx->waittick = tick + (hsp_hspctx->waitcount * 10);
-    DEBUG_OUT;
+    
     return RUNMODE_AWAIT;
 }
 
 - (int)code_exec_await:(int)tick {
-    DEBUG_IN;
+    
     //		時間待ち(await)
     //
     if (hsp_hspctx->waittick < 0) {
@@ -3368,7 +3368,7 @@ APTR code_newstruct(PVal *pval) {
         hsp_hspctx->runmode = RUNMODE_RUN;
         return RUNMODE_RUN;
     }
-    DEBUG_OUT;
+    
     return RUNMODE_AWAIT;
 }
 
@@ -3379,28 +3379,28 @@ APTR code_newstruct(PVal *pval) {
 /*------------------------------------------------------------*/
 
 - (int)code_cnv_get {
-    DEBUG_IN;
+    
     //		データを取得(プラグイン交換用)
     //
     abc_hspctx.exinfo.mpval = &mpval;
-    DEBUG_OUT;
+    
     return [self code_get];
 }
 
 - (void *)code_cnv_getv {
-    DEBUG_IN;
+    
     //		変数データアドレスを取得(2.61互換用)
     //
     char *ptr;
     int size;
     ptr = [self code_getvptr:&hsp_plugin_pval size:&size];
     abc_hspctx.exinfo.mpval = &hsp_plugin_pval;
-    DEBUG_OUT;
+    
     return (void *)ptr;
 }
 
 - (int)code_cnv_realloc:(PVal *)pv size:(int)size mode:(int)mode {
-    DEBUG_IN;
+    
     //		変数データバッファを拡張(2.61互換用)
     //
     PDAT *ptr;
@@ -3426,12 +3426,12 @@ APTR code_newstruct(PVal *pval) {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
     
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (void)code_init {
-    DEBUG_IN;
+    
     int i;
     HSP_ExtraInfomation *exinfo;
     
@@ -3563,11 +3563,11 @@ APTR code_newstruct(PVal *pval) {
     // hsp_dbginfo.dbg_set = [self code_dbgset];
     // hsp_dbginfo.dbg_callstack = code_dbgcallstack;
 #endif
-    DEBUG_OUT;
+    
 }
 
 - (void)code_termfunc {
-    DEBUG_IN;
+    
     // NSLog(@"code_termfunc");
     //		コードの終了処理
     //
@@ -3628,11 +3628,11 @@ APTR code_newstruct(PVal *pval) {
         //    info->termfunc( 0 );
     }
     
-    DEBUG_OUT;
+    
 }
 
 - (void)code_bye {
-    DEBUG_IN;
+    
     //		コード実行を終了
     //
     HspVarCoreBye();
@@ -3649,11 +3649,11 @@ APTR code_newstruct(PVal *pval) {
     sbFree(hsp_hsp3tinfo);
     [self StackTerm];
     sbBye();
-    DEBUG_OUT;
+    
 }
 
 - (int)code_execcmd {
-    DEBUG_IN;
+    
     //		命令実行メイン
     //
     int i;
@@ -3730,7 +3730,7 @@ rerun:
                     [self code_def_msgfunc:&(abc_hspctx)];
                 }
                 if (abc_hspctx.runmode == RUNMODE_END) {
-                    DEBUG_OUT;
+                    
                     return RUNMODE_END;
                     //					i = hspctx->runmode;
                     //					break;
@@ -3759,7 +3759,7 @@ rerun:
                             wparam:(int)code
                             lparam:[self code_getdebug_line]];
                 if (abc_hspctx.runmode != i) goto rerun;
-                DEBUG_OUT;
+                
                 return i;
             }
         }
@@ -3768,17 +3768,17 @@ rerun:
 #ifdef FLAG_SYSTEM_ERROR_HANDLE
     @catch (NSException *error) {  // その他の例外発生時
         abc_hspctx.err = HSPERR_UNKNOWN_CODE;
-        DEBUG_OUT;
+        
         return RUNMODE_ERROR;
     }
 #endif
     abc_hspctx.runmode = i;
-    DEBUG_OUT;
+    
     return i;
 }
 
 - (int)code_execcmd2 {
-    DEBUG_IN;
+    
     //		部分的な実行を行なう(ENDSESSION用)
     //
     while (1) {
@@ -3821,7 +3821,7 @@ rerun:
             break;
         }
     }
-    DEBUG_OUT;
+    
     return abc_hspctx.runmode;
 }
 
@@ -3836,10 +3836,10 @@ rerun:
                  prm1:(int)prm1
                  prm2:(int)prm2
                  prm3:(void *)prm3 {
-    DEBUG_IN;
+    
     //		各タイプのイベントコールバックを呼び出す
     //
-    int i, res;
+    int i, res = 0;
     HSP3TYPEINFO *info;
     for (i = HSP3_TYPE_USER; i < hsp_current_type_info_id; i++) {
         info = GetTypeInfoPtr(i);
@@ -3848,18 +3848,18 @@ rerun:
                 //$使用できるeventfunc関数は存在しない
                 // res = info->eventfunc( event, prm1, prm2, prm3 );
                 if (res) {
-                    DEBUG_OUT;
+                    
                     return res;
                 }
             }
         }
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (int)code_event:(int)event prm1:(int)prm1 prm2:(int)prm2 prm3:(void *)prm3 {
-    DEBUG_IN;
+    
     //		HSP内部イベント実行
     //		(result:0=Not care/1=Done)
     //
@@ -3980,22 +3980,22 @@ rerun:
             // picload (n/a,n/a,HDC)
             break;
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (void)code_bload:(char *)fname ofs:(int)ofs size:(int)size ptr:(void *)ptr {
-    DEBUG_IN;
+    
     [self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:fname];
     [self code_event:HSPEVENT_FREAD prm1:ofs prm2:size prm3:ptr];
-    DEBUG_OUT;
+    
 }
 
 - (void)code_bsave:(char *)fname ofs:(int)ofs size:(int)size ptr:(void *)ptr {
-    DEBUG_IN;
+    
     [self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:fname];
     [self code_event:HSPEVENT_FWRITE prm1:ofs prm2:size prm3:ptr];
-    DEBUG_OUT;
+    
 }
 
 /*------------------------------------------------------------*/
@@ -4005,13 +4005,13 @@ rerun:
 /*------------------------------------------------------------*/
 
 - (IRQDAT *)code_getirq:(int)id {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return &hsp_hspctx->mem_irq[id];
 }
 
 - (void)code_enableirq:(int)id sw:(int)sw {
-    DEBUG_IN;
+    
     //		IRQの有効・無効切り替え
     //
     IRQDAT *irq;
@@ -4021,14 +4021,14 @@ rerun:
     } else {
         irq->flag = IRQ_FLAG_ENABLE;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)code_setirq:(int)id
 opt:(int)opt
 custom:(int)custom
 ptr:(unsigned short *)ptr {
-    DEBUG_IN;
+    
     //		IRQイベントを設定する
     //
     IRQDAT *irq;
@@ -4037,18 +4037,18 @@ ptr:(unsigned short *)ptr {
     irq->opt = opt;
     irq->ptr = ptr;
     irq->custom = custom;
-    DEBUG_OUT;
+    
 }
 
 - (int)code_isirq:(int)id {
-    DEBUG_IN;
+    
     //		指定したIRQイベントがENABLEかを調べる
     //
     if (hsp_hspctx->mem_irq[id].flag != IRQ_FLAG_ENABLE) {
-        DEBUG_OUT;
+        
         return 0;
     }
-    DEBUG_OUT;
+    
     return 1;
 }
 
@@ -4056,34 +4056,34 @@ ptr:(unsigned short *)ptr {
 iparam:(int)iparam
 wparam:(int)wparam
 lparam:(int)lparam {
-    DEBUG_IN;
+    
     //		指定したIRQイベントを発生
     //
     IRQDAT *irq;
     irq = [self code_getirq:id];
     irq->iparam = iparam;
     [self code_event:HSPEVENT_HSPIRQ prm1:wparam prm2:lparam prm3:irq];
-    DEBUG_OUT;
+    
     return abc_hspctx.runmode;
 }
 
 - (int)code_isuserirq {
-    DEBUG_IN;
+    
     //		カスタム指定のIRQイベントがあるかどうか調べる
     //
     if (hsp_hspctx->irqmax > HSPIRQ_USERDEF) {
         if (hsp_hspctx->mem_irq[HSPIRQ_USERDEF].flag == IRQ_FLAG_ENABLE) return 1;
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (int)code_irqresult:(int *)value {
-    DEBUG_IN;
+    
     //		IRQイベントの戻り値を取得する
     //
     *value = (hsp_hspctx->stat);
-    DEBUG_OUT;
+    
     return (hsp_hspctx->retval_level);
 }
 
@@ -4091,7 +4091,7 @@ lparam:(int)lparam {
 message:(int)message
 wparam:(int)wparam
 lparam:(int)lparam {
-    DEBUG_IN;
+    
     //		指定したメッセージに対応するイベントを発生
     //
     int i, cur;
@@ -4113,22 +4113,22 @@ lparam:(int)lparam {
                                     wparam:wparam
                                     lparam:lparam];
                         if (abc_hspctx.retval_level != cur) {
-                            DEBUG_OUT;
+                            
                             return 0;
                         }  // returnの戻り値がなければ0を返す
                     }
-                    DEBUG_OUT;
+                    
                     return 1;
                 }
             }
         }
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (IRQDAT *)code_seekirq:(int)actid custom:(int)custom {
-    DEBUG_IN;
+    
     //		指定したcustomを持つIRQを検索する
     //
     int i;
@@ -4141,12 +4141,12 @@ lparam:(int)lparam {
             }
         }
     }
-    DEBUG_OUT;
+    
     return NULL;
 }
 
 - (IRQDAT *)code_addirq {
-    DEBUG_IN;
+    
     //		IRQを追加する
     //
     int id;
@@ -4165,12 +4165,12 @@ lparam:(int)lparam {
     irq->iparam = 0;
     irq->ptr = NULL;
     irq->callback = NULL;
-    DEBUG_OUT;
+    
     return irq;
 }
 
 - (void)code_execirq:(IRQDAT *)irq wparam:(int)wparam lparam:(int)lparam {
-    DEBUG_IN;
+    
     //		IRQを実行する
     //
     abc_hspctx.iparam = irq->iparam;
@@ -4187,7 +4187,7 @@ lparam:(int)lparam {
         }
     }
     // Alertf("sublev%d", hspctx->sublev );
-    DEBUG_OUT;
+    
 }
 
 /*------------------------------------------------------------*/
@@ -4209,65 +4209,65 @@ lparam:(int)lparam {
 - (void)code_adddbg3:(char const *)s1
                  sep:(char const *)sep
                   s2:(char const *)s2 {
-    DEBUG_IN;
+    
     char tmp[2048];
     strncpy(tmp, s1, 64);
     strncat(tmp, sep, 8);
     strncat(tmp, s2, 1973);
     strcat(tmp, "\r\n");
     sbStrAdd(&hsp_dbgbuf, tmp);
-    DEBUG_OUT;
+    
 }
 
 - (void)code_adddbg:(char *)name str:(char *)str {
-    DEBUG_IN;
+    
     [self code_adddbg3:name sep:"\r\n" s2:str];
-    DEBUG_OUT;
+    
 }
 
 - (void)code_adddbg2:(char *)name str:(char *)str {
-    DEBUG_IN;
+    
     [self code_adddbg3:name sep:":" s2:str];
-    DEBUG_OUT;
+    
 }
 
 - (void)code_adddbg:(char *)name val:(double)val {
-    DEBUG_IN;
+    
     char tmp[400];
     sprintf(tmp, "%-36.16f", val);
     [self code_adddbg:name str:tmp];
-    DEBUG_OUT;
+    
 }
 
 - (void)code_adddbg:(char *)name intval:(int)intval {
-    DEBUG_IN;
+    
     char tmp[32];
     
     sprintf(tmp, "%d", intval);
     
     [self code_adddbg:name str:tmp];
-    DEBUG_OUT;
+    
 }
 
 - (void)code_adddbg2:(char *)name val:(int)val {
-    DEBUG_IN;
+    
     char tmp[32];
     
     sprintf(tmp, "%d", val);
     
     [self code_adddbg2:name str:tmp];
-    DEBUG_OUT;
+    
 }
 
 - (char *)code_inidbg {
-    DEBUG_IN;
+    
     hsp_dbgbuf = sbAlloc(0x4000);
-    DEBUG_OUT;
+    
     return hsp_dbgbuf;
 }
 
 - (void)code_dbg_global {
-    DEBUG_IN;
+    
     HSPHED *hed;
     hed = hsp_hspctx->hsphed;
     [self code_adddbg:(char *)"axサイズ" intval:hed->allsize];
@@ -4285,7 +4285,7 @@ lparam:(int)lparam {
     [self code_adddbg:(char *)"lparam" intval:hsp_hspctx->lparam];
     [self code_adddbg:(char *)"refstr" str:hsp_hspctx->refstr];
     [self code_adddbg:(char *)"refdval" val:hsp_hspctx->refdval];
-    DEBUG_OUT;
+    
 }
 
 /*
@@ -4294,7 +4294,7 @@ lparam:(int)lparam {
  */
 
 - (void)code_dbgdump:(char const *)mem size:(int)size {
-    DEBUG_IN;
+    
     //		memory Hex dump
     //
     int adr = 0;
@@ -4309,11 +4309,11 @@ lparam:(int)lparam {
         strcat(tline, "\r\n");
         sbStrAdd(&hsp_dbgbuf, tline);
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)code_dbgvarinf_ext:(PVal *)pv src:(void *)src buf:(char *)buf {
-    DEBUG_IN;
+    
     //		特殊な変数の内容を取得
     //		(256bytes程度のバッファを確保しておいて下さい)
     //
@@ -4337,11 +4337,11 @@ lparam:(int)lparam {
             strcpy(buf, "Unknown");
             break;
     }
-    DEBUG_OUT;
+    
 }
 
 - (void)code_arraydump:(PVal *)pv {
-    DEBUG_IN;
+    
     //		variable array dump
     //
     char t[512];
@@ -4391,11 +4391,11 @@ lparam:(int)lparam {
         }
         sbStrAdd(&hsp_dbgbuf, t);
     }
-    DEBUG_OUT;
+    
 }
 
 - (char *)code_dbgvarinf:(char *)target option:(int)option {
-    DEBUG_IN;
+    
     //		変数情報取得
     //		option
     //			bit0 : sort ( 受け側で処理 )
@@ -4428,7 +4428,7 @@ lparam:(int)lparam {
                 sbStrAdd(&hsp_dbgbuf, (char *)"\r\n");
             }
         }
-        DEBUG_OUT;
+        
         return hsp_dbgbuf;
     }
     
@@ -4529,42 +4529,42 @@ lparam:(int)lparam {
         [self code_dbgdump:padr size:size];
     }
     
-    DEBUG_OUT;
+    
     return hsp_dbgbuf;
 }
 
 - (void)code_dbgcurinf {
-    DEBUG_IN;
+    
     unsigned short *bak;
     bak = hsp_mcsbak;
     hsp_mcsbak = hsp_mcs;
     hsp_dbginfo.line = [self code_getdebug_line];
     hsp_dbginfo.fname = [self code_getdebug_name];
     hsp_mcsbak = bak;
-    DEBUG_OUT;
+    
 }
 
 - (void)code_dbgclose:(char *)buf {
-    DEBUG_IN;
+    
     sbFree(hsp_dbgbuf);
-    DEBUG_OUT;
+    
 }
 
 - (HSP3DEBUG *)code_getdbg {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return &hsp_dbginfo;
 }
 
 - (char *)code_dbgvalue:(int)type {
-    DEBUG_IN;
+    
     //	ダミー用関数
-    DEBUG_OUT;
+    
     return [self code_inidbg];
 }
 
 - (int)code_dbgset:(int)id {
-    DEBUG_IN;
+    
     //	デバッグモード設定
     //
     switch (hsp_hspctx->runmode) {
@@ -4576,7 +4576,7 @@ lparam:(int)lparam {
                 } else {
                     hsp_dbgmode = id;
                 }
-                DEBUG_OUT;
+                
                 return 0;
             }
             break;
@@ -4585,17 +4585,17 @@ lparam:(int)lparam {
             if (id == HSPDEBUG_STOP) {
                 hsp_hspctx->runmode = RUNMODE_STOP;
                 hsp_dbgmode = HSPDEBUG_NONE;
-                DEBUG_OUT;
+                
                 return 0;
             }
             break;
     }
-    DEBUG_OUT;
+    
     return -1;
 }
 
 - (char *)code_dbgcallstack {
-    DEBUG_IN;
+    
     StackManagerData *it;
     HSPROUTINE *routine;
     int line;
@@ -4614,12 +4614,12 @@ lparam:(int)lparam {
         }
     }
     
-    DEBUG_OUT;
+    
     return hsp_dbgbuf;
 }
 
 - (void)code_dbgtrace {
-    DEBUG_IN;
+    
     //	トレース処理
     //
     int i;
@@ -4630,7 +4630,7 @@ lparam:(int)lparam {
         // hsp_hspctx->msgfunc( hsp_hspctx );
         [self code_def_msgfunc:hsp_hspctx];
     }
-    DEBUG_OUT;
+    
 }
 #endif
 //================================================================================<<<HSP3Code

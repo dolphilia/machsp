@@ -29,8 +29,8 @@
 PDAT*
 HspVarStruct_GetPtr(PVal* pval)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (PDAT*)(((FlexValue*)(pval->pt)) + pval->offset);
 }
 
@@ -61,7 +61,7 @@ HspVarStruct_GetPtr(PVal* pval)
 void
 HspVarStruct_Free(PVal* pval)
 {
-    DEBUG_IN;
+    
     //		PVALポインタの変数メモリを解放する
     //
     int i;
@@ -80,13 +80,13 @@ HspVarStruct_Free(PVal* pval)
         sbFree(pval->pt);
     }
     pval->mode = HSPVAR_MODE_NONE;
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarStruct_Alloc(PVal* pval, const PVal* pval2)
 {
-    DEBUG_IN;
+    
     //		pval変数が必要とするサイズを確保する。
     //		(pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
     //		(pval2がNULLの場合は、新規データ)
@@ -119,7 +119,7 @@ HspVarStruct_Alloc(PVal* pval, const PVal* pval2)
     }
     pval->pt = pt;
     pval->size = size;
-    DEBUG_OUT;
+    
 }
 
 /*
@@ -136,9 +136,9 @@ HspVarStruct_Alloc(PVal* pval, const PVal* pval2)
 int
 HspVarStruct_GetSize(const PDAT* pdat)
 {
-    DEBUG_IN;
+    
     //		(実態のポインタが渡されます)
-    DEBUG_OUT;
+    
     return sizeof(FlexValue);
 }
 
@@ -146,11 +146,11 @@ HspVarStruct_GetSize(const PDAT* pdat)
 int
 HspVarStruct_GetUsing(const PDAT* pdat)
 {
-    DEBUG_IN;
+    
     //		(実態のポインタが渡されます)
     FlexValue* fv;
     fv = (FlexValue*)pdat;
-    DEBUG_OUT;
+    
     return fv->type;
 }
 
@@ -158,7 +158,7 @@ HspVarStruct_GetUsing(const PDAT* pdat)
 void
 HspVarStruct_Set(PVal* pval, PDAT* pdat, const void* in)
 {
-    DEBUG_IN;
+    
     FlexValue* fv;
     FlexValue* fv_src;
     fv = (FlexValue*)in;
@@ -169,7 +169,7 @@ HspVarStruct_Set(PVal* pval, PDAT* pdat, const void* in)
     }
     memcpy(pdat, fv, sizeof(FlexValue));
     // sbCopy( (char **)pdat, (char *)fv->ptr, fv->size );
-    DEBUG_OUT;
+    
 }
 
 /*
@@ -183,19 +183,19 @@ HspVarStruct_Set(PVal* pval, PDAT* pdat, const void* in)
 void*
 HspVarStruct_GetBlockSize(PVal* pval, PDAT* pdat, int* size)
 {
-    DEBUG_IN;
+    
     FlexValue* fv;
     fv = (FlexValue*)pdat;
     *size = fv->size;
-    DEBUG_OUT;
+    
     return (void*)(fv->ptr);
 }
 
 void
 HspVarStruct_AllocBlock(PVal* pval, PDAT* pdat, int size)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
 }
 
 /*------------------------------------------------------------*/
@@ -203,7 +203,7 @@ HspVarStruct_AllocBlock(PVal* pval, PDAT* pdat, int size)
 void
 HspVarStruct_Init(HspVarProc* p)
 {
-    DEBUG_IN;
+    
     //    p->Set = HspVarStruct_Set;
     //    p->GetPtr = HspVarStruct_GetPtr;
     //    //	p->Cnv = HspVarStruct_Cnv;
@@ -243,7 +243,7 @@ HspVarStruct_Init(HspVarProc* p)
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize =
     sizeof(FlexValue); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
-    DEBUG_OUT;
+    
 }
 
 /*------------------------------------------------------------*/

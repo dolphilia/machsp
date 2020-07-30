@@ -54,7 +54,7 @@ static unsigned char dpm_lastchr;
 static FILE *fp;
 
 - (int)dpmchk:(char *)fname {
-    DEBUG_IN;
+    
     int a1, a2;
     char c1;
     char f1[HSP_MAX_PATH];
@@ -75,7 +75,7 @@ static FILE *fp;
     }
     
     if (mem_dpm == NULL) {
-        DEBUG_OUT;
+        
         return -1;
     }
     a2 = -1;
@@ -89,7 +89,7 @@ static FILE *fp;
         ss += 32;
     }
     if (a2 == -1) {
-        DEBUG_OUT;
+        
         return -1;
     }
     
@@ -97,7 +97,7 @@ static FILE *fp;
     fptr = getdw(d_fent);
     fp = fopen(dpm_file, "rb");
     if (fp == NULL) {
-        DEBUG_OUT;
+        
         return -1;
     }
     
@@ -105,12 +105,12 @@ static FILE *fp;
     dpm_fenc = (int)getdw(d_fenc);
     dpm_lastchr = 0;
     dpm_opmode = 1;
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (int)dpm_chkmemf:(char *)fname {
-    DEBUG_IN;
+    
     //		メモリストリームをチェック
     //
     int i;
@@ -127,53 +127,53 @@ static FILE *fp;
             [self dpm_ini:fname + 4 dpmofs:0 chksum:-1 deckey:-1];
             strcpy(fname, tmp);
         }
-        DEBUG_OUT;
+        
         return 0;
     }
     if ((i == 0x3a4d454d) || (i == 0x3a6d656d)) {  // 'MEM:'をチェックする
         memf_flag = 1;
-        DEBUG_OUT;
+        
         return 1;
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (FILE *)dpm_open:(char *)fname {
-    DEBUG_IN;
+    
     [self dpm_chkmemf:fname];
     if (memf_flag) {
         memfile.cur = 0;
         if (memfile.size < 0) {
-            DEBUG_OUT;
+            
             return NULL;
         }
-        DEBUG_OUT;
+        
         return (FILE *)&memfile;
     }
     if (dpm_flag) {
         if ([self dpmchk:fname] == 0) {
-            DEBUG_OUT;
+            
             return fp;
         }
     }
     fp = fopen(fname, "rb");
-    DEBUG_OUT;
+    
     return fp;
 }
 
 - (void)dpm_close {
-    DEBUG_IN;
+    
     if (memf_flag) {
-        DEBUG_OUT;
+        
         return;
     }
     fclose(fp);
-    DEBUG_OUT;
+    
 }
 
 - (int)dpm_fread:(void *)mem size:(int)size stream:(FILE *)stream {
-    DEBUG_IN;
+    
     // int a;
     int len;
     // unsigned char *p;
@@ -187,11 +187,11 @@ static FILE *fp;
             memcpy(mem, memfile.pt + memfile.cur, len);
             memfile.cur += len;
         }
-        DEBUG_OUT;
+        
         return len;
     }
     len = (int)fread(mem, 1, size, stream);
-    DEBUG_OUT;
+    
     return len;
 }
 
@@ -201,7 +201,7 @@ static FILE *fp;
         dpmofs:(long)dpmofs
         chksum:(int)chksum
         deckey:(int)deckey {
-    DEBUG_IN;
+    
     //
     //		DPMファイル読み込みの初期化
     //
@@ -223,7 +223,7 @@ static FILE *fp;
     
     fp = fopen(_dpmfile, "rb");
     if (fp == NULL) {
-        DEBUG_OUT;
+        
         return -1;
     }
     
@@ -236,7 +236,7 @@ static FILE *fp;
     
     buf[4] = 0;
     if (strcmp((char *)buf, "DPMX") != 0) {
-        DEBUG_OUT;
+        
         return -1;
     }
     
@@ -245,7 +245,7 @@ static FILE *fp;
     hedsize = 16 + namsize + dirsize;
     mem_dpm = (unsigned char *)malloc(hedsize);
     if (mem_dpm == NULL) {
-        DEBUG_OUT;
+        
         return -1;
     }
     
@@ -273,7 +273,7 @@ static FILE *fp;
         fclose(fp);
         sum &= 0xffff;  // lower 16bit sum
         if (chksum != sum) {
-            DEBUG_OUT;
+            
             return -2;
         }
         sumsize -= hedsize;
@@ -283,22 +283,22 @@ static FILE *fp;
     //
     dpm_flag = 1;
     strcpy(dpm_file, _dpmfile);
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (void)dpm_bye {
-    DEBUG_IN;
+    
     if (mem_dpm != NULL) free(mem_dpm);
     dpm_flag = 0;
-    DEBUG_OUT;
+    
 }
 
 - (int)dpm_read:(char *)fname
         readmem:(void *)readmem
            rlen:(int)rlen
         seekofs:(int)seekofs {
-    DEBUG_IN;
+    
     char *lpRd;
     FILE *ff;
     int a1;
@@ -317,7 +317,7 @@ static FILE *fp;
         memfile.cur = seeksize;
         a1 = [self dpm_fread:lpRd size:rlen stream:NULL];
         [self dpm_close];
-        DEBUG_OUT;
+        
         return a1;
     }
     
@@ -330,14 +330,14 @@ static FILE *fp;
             
             ff = fopen(dpm_file, "rb");
             if (ff == NULL) {
-                DEBUG_OUT;
+                
                 return -1;
             }
             fseek(ff, optr + fptr + seeksize, SEEK_SET);
             if (rlen < filesize) filesize = rlen;
             a1 = [self dpm_fread:lpRd size:filesize stream:ff];
             fclose(ff);
-            DEBUG_OUT;
+            
             return a1;
         }
     }
@@ -345,31 +345,31 @@ static FILE *fp;
     //	Read normal file
     ff = fopen(fname, "rb");
     if (ff == NULL) {
-        DEBUG_OUT;
+        
         return -1;
     }
     if (seekofs >= 0) fseek(ff, seeksize, SEEK_SET);
     a1 = (int)fread(lpRd, 1, rlen, ff);
     fclose(ff);
-    DEBUG_OUT;
+    
     return a1;
 }
 
 - (int)dpm_exist:(char *)fname {
-    DEBUG_IN;
+    
     FILE *ff;
     int length;
     
     [self dpm_chkmemf:fname];
     if (memf_flag) {  // メモリストリーム時
-        DEBUG_OUT;
+        
         return memfile.size;
     }
     
     if (dpm_flag) {
         if ([self dpmchk:fname] == 0) {
             [self dpm_close];
-            DEBUG_OUT;
+            
             return (int)fs;  // dpm file size
         }
     }
@@ -379,40 +379,40 @@ static FILE *fp;
     length = (int)ftell(ff);  // normal file size
     fclose(ff);
     
-    DEBUG_OUT;
+    
     return length;
 }
 
 - (int)dpm_filebase:(char *)fname {
-    DEBUG_IN;
+    
     //		指定ファイルがどこにあるかを得る
     //		(-1:error/0=file/1=dpm/2=memory)
     //
     FILE *ff;
     [self dpm_chkmemf:fname];
     if (memf_flag) {
-        DEBUG_OUT;
+        
         return 2;
     }
     if (dpm_flag) {
         if ([self dpmchk:fname] == 0) {
             [self dpm_close];
-            DEBUG_OUT;
+            
             return 1;
         }
     }
     ff = fopen(fname, "rb");
     if (ff == NULL) {
-        DEBUG_OUT;
+        
         return -1;
     }
     fclose(ff);
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (void)dpm_getinf:(char *)inf {
-    DEBUG_IN;
+    
     long a;
     a = dpm_ofs;
     if (dpm_flag == 0) a = -1;
@@ -422,11 +422,11 @@ static FILE *fp;
      に対処
      */
     sprintf(inf, "%s,%d", dpm_file, static_cast<int>(a));
-    DEBUG_OUT;
+    
 }
 
 - (int)dpm_filecopy:(char *)fname sname:(char *)sname {
-    DEBUG_IN;
+    
     FILE *fp1;
     FILE *fp2;
     int fres;
@@ -438,13 +438,13 @@ static FILE *fp;
     [self dpm_chkmemf:fname];
     flen = [self dpm_exist:fname];
     if (flen < 0) {
-        DEBUG_OUT;
+        
         return 1;
     }
     
     fp2 = fopen(sname, "wb");
     if (fp2 == NULL) {
-        DEBUG_OUT;
+        
         return 1;
     }
     fp1 = [self dpm_open:fname];
@@ -467,34 +467,34 @@ static FILE *fp;
     free(mem);
     
     if (flen != 0) {
-        DEBUG_OUT;
+        
         return 1;
     }
-    DEBUG_OUT;
+    
     return 0;
 }
 
 - (void)dpm_memfile:(void *)mem size:(int)size {
-    DEBUG_IN;
+    
     memfile.pt = (char *)mem;
     memfile.cur = 0;
     memfile.size = size;
-    DEBUG_OUT;
+    
 }
 
 - (char *)dpm_readalloc:(char *)fname {
-    DEBUG_IN;
+    
     char *p;
     int len;
     len = [self dpm_exist:fname];
     if (len < 0) {
-        DEBUG_OUT;
+        
         return NULL;
     }
     p = mem_ini(len + 1);
     [self dpm_read:fname readmem:p rlen:len seekofs:0];
     p[len] = 0;
-    DEBUG_OUT;
+    
     return p;
 }
 

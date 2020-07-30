@@ -32,15 +32,15 @@ int hspvar_int_conv;
 PDAT*
 HspVarInt_GetPtr(PVal* pval)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return (PDAT*)(((int*)(pval->pt)) + pval->offset);
 }
 
 void*
 HspVarInt_Cnv(const void* buffer, int flag)
 {
-    DEBUG_IN;
+    
     //		リクエストされた型 -> 自分の型への変換を行なう
     //		(組み込み型にのみ対応でOK)
     //		(参照元のデータを破壊しないこと)
@@ -52,13 +52,13 @@ HspVarInt_Cnv(const void* buffer, int flag)
             } else {
                 hspvar_int_conv = atoi((char*)buffer);
             }
-            DEBUG_OUT;
+            
             return &hspvar_int_conv;
         case HSPVAR_FLAG_INT:
             break;
         case HSPVAR_FLAG_DOUBLE:
             hspvar_int_conv = (int)(*(double*)buffer);
-            DEBUG_OUT;
+            
             return &hspvar_int_conv;
         default: {
             NSString* error_str =
@@ -66,7 +66,7 @@ HspVarInt_Cnv(const void* buffer, int flag)
             @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
         }
     }
-    DEBUG_OUT;
+    
     return (void*)buffer;
 }
 
@@ -85,7 +85,7 @@ HspVarInt_Cnv(const void* buffer, int flag)
 int
 HspVarInt_GetVarSize(PVal* pval)
 {
-    DEBUG_IN;
+    
     //		PVALポインタの変数が必要とするサイズを取得する
     //		(sizeフィールドに設定される)
     //
@@ -98,14 +98,14 @@ HspVarInt_GetVarSize(PVal* pval)
     if (pval->len[4])
         size *= pval->len[4];
     size *= sizeof(int);
-    DEBUG_OUT;
+    
     return size;
 }
 
 void
 HspVarInt_Free(PVal* pval)
 {
-    DEBUG_IN;
+    
     //		PVALポインタの変数メモリを解放する
     //
     if (pval->mode == HSPVAR_MODE_MALLOC) {
@@ -113,13 +113,13 @@ HspVarInt_Free(PVal* pval)
     }
     pval->pt = NULL;
     pval->mode = HSPVAR_MODE_NONE;
-    DEBUG_OUT;
+    
 }
 
 void
 HspVarInt_Alloc(PVal* pval, const PVal* pval2)
 {
-    DEBUG_IN;
+    
     //		pval変数が必要とするサイズを確保する。
     //		(pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
     //		(pval2がNULLの場合は、新規データ)
@@ -143,7 +143,7 @@ HspVarInt_Alloc(PVal* pval, const PVal* pval2)
     }
     pval->pt = pt;
     pval->size = size;
-    DEBUG_OUT;
+    
 }
 
 /*
@@ -160,8 +160,8 @@ HspVarInt_Alloc(PVal* pval, const PVal* pval2)
 int
 HspVarInt_GetSize(const PDAT* pval)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return sizeof(int);
 }
 
@@ -169,43 +169,43 @@ HspVarInt_GetSize(const PDAT* pval)
 void
 HspVarInt_Set(PVal* pval, PDAT* pdat, const void* in)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pdat) = *((int*)(in));
-    DEBUG_OUT;
+    
 }
 
 // Add
 void
 HspVarInt_AddI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) += *((int*)(val));
-    DEBUG_OUT;
+    
 }
 
 // Sub
 void
 HspVarInt_SubI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) -= *((int*)(val));
-    DEBUG_OUT;
+    
 }
 
 // Mul
 void
 HspVarInt_MulI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) *= *((int*)(val));
-    DEBUG_OUT;
+    
 }
 
 // Div
 void
 HspVarInt_DivI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     int p = *((int*)(val));
     if (p == 0) {
         NSString* error_str =
@@ -213,14 +213,14 @@ HspVarInt_DivI(PDAT* pval, const void* val)
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     *hspvar_int_GetPtr(pval) /= p;
-    DEBUG_OUT;
+    
 }
 
 // Mod
 void
 HspVarInt_ModI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     int p = *((int*)(val));
     if (p == 0) {
         NSString* error_str =
@@ -228,122 +228,122 @@ HspVarInt_ModI(PDAT* pval, const void* val)
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     *hspvar_int_GetPtr(pval) %= p;
-    DEBUG_OUT;
+    
 }
 
 // And
 void
 HspVarInt_AndI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) &= *((int*)(val));
-    DEBUG_OUT;
+    
 }
 
 // Or
 void
 HspVarInt_OrI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) |= *((int*)(val));
-    DEBUG_OUT;
+    
 }
 
 // Xor
 void
 HspVarInt_XorI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) ^= *((int*)(val));
-    DEBUG_OUT;
+    
 }
 
 // Eq
 void
 HspVarInt_EqI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) == *((int*)(val)));
-    DEBUG_OUT;
+    
 }
 
 // Ne
 void
 HspVarInt_NeI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) != *((int*)(val)));
-    DEBUG_OUT;
+    
 }
 
 // Gt
 void
 HspVarInt_GtI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) > *((int*)(val)));
-    DEBUG_OUT;
+    
 }
 
 // Lt
 void
 HspVarInt_LtI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) < *((int*)(val)));
-    DEBUG_OUT;
+    
 }
 
 // GtEq
 void
 HspVarInt_GtEqI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) >= *((int*)(val)));
-    DEBUG_OUT;
+    
 }
 
 // LtEq
 void
 HspVarInt_LtEqI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) <= *((int*)(val)));
-    DEBUG_OUT;
+    
 }
 
 // Rr
 void
 HspVarInt_RrI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) >>= *((int*)(val));
-    DEBUG_OUT;
+    
 }
 
 // Lr
 void
 HspVarInt_LrI(PDAT* pval, const void* val)
 {
-    DEBUG_IN;
+    
     *hspvar_int_GetPtr(pval) <<= *((int*)(val));
-    DEBUG_OUT;
+    
 }
 
 void*
 HspVarInt_GetBlockSize(PVal* pval, PDAT* pdat, int* size)
 {
-    DEBUG_IN;
+    
     *size = pval->size - (int)(((char*)pdat) - pval->pt);
-    DEBUG_OUT;
+    
     return (pdat);
 }
 
 void
 HspVarInt_AllocBlock(PVal* pval, PDAT* pdat, int size)
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
 }
 
 /*------------------------------------------------------------*/
@@ -351,7 +351,7 @@ HspVarInt_AllocBlock(PVal* pval, PDAT* pdat, int size)
 void
 HspVarInt_Init(HspVarProc* p)
 {
-    DEBUG_IN;
+    
     //    p->Set = HspVarInt_Set;
     //    p->Cnv = HspVarInt_Cnv;
     //    p->GetPtr = HspVarInt_GetPtr;
@@ -390,7 +390,7 @@ HspVarInt_Init(HspVarProc* p)
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize =
     sizeof(int); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
-    DEBUG_OUT;
+    
 }
 
 /*------------------------------------------------------------*/

@@ -18,7 +18,7 @@ AppDelegate ()
 - (void)applicationDidFinishLaunching:(NSNotification*)aNotification
 {
     // Insert code here to initialize your application
-    DEBUG_IN;
+    
     //メニューバーを初期化する
     id menubar = [NSMenu new];
     id rootmenu = [NSMenuItem new];
@@ -30,28 +30,28 @@ AppDelegate ()
     [appmenu addItem:quitmenu];
     [rootmenu setSubmenu:appmenu];
     [NSApp setMainMenu:menubar];
-    DEBUG_OUT;
+    
 }
 
 - (void)applicationWillTerminate:(NSNotification*)aNotification
 {
     // Insert code here to tear down your application
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
 }
 
 - (void)windowWillClose:(NSNotification*)aNotification
 {
-    DEBUG_IN;
+    
     [NSApp terminate:self];
-    DEBUG_OUT;
+    
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:
 (NSApplication*)theApplication
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return YES;
 }
 

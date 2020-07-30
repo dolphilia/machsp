@@ -12,20 +12,20 @@ Color get_pixel_color(uint8_t *pixel_data,
                       int32_t point_x, int32_t point_y,
                       int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     int index = point_y * canvas_size_width * 4 + point_x * 4;
     Color color;
     color.red = pixel_data[index];
     color.green = pixel_data[index+1];
     color.blue = pixel_data[index+2];
     color.alpha = pixel_data[index+3];
-    DEBUG_OUT;
+    
     return color;
 }
 
 Color get_color_hsv(int32_t hue, int32_t saturation, int32_t brightness)
 {
-    DEBUG_IN;
+    
     //hsvによる色指定
     //h(0-191)/s(0-255)/v(0-255)
     int h,s,v;
@@ -58,7 +58,7 @@ Color get_color_hsv(int32_t hue, int32_t saturation, int32_t brightness)
         case 5: color.red = v; color.green = p; color.blue = q; break;
     }
     
-    DEBUG_OUT;
+    
     return color;
 }
 
@@ -66,7 +66,7 @@ void clear_canvas_rgba(uint8_t *pixel_data,
                        int32_t canvas_size_width, int32_t canvas_size_height,
                        int32_t color_number)
 {
-    DEBUG_IN;
+    
     if(color_number==0) {
         memset(pixel_data, 255, sizeof(uint8_t) * canvas_size_width * canvas_size_height * 4);
     }
@@ -97,7 +97,7 @@ void clear_canvas_rgba(uint8_t *pixel_data,
             pixeldataAddr += canvas_size_width * 4;
         }
     }
-    DEBUG_OUT;
+    
 }
 
 void set_pixel_rgb(uint8_t *pixel_data,
@@ -105,7 +105,7 @@ void set_pixel_rgb(uint8_t *pixel_data,
                    uint8_t color_red, uint8_t color_green, uint8_t color_blue,
                    int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     if (point_x<0 || point_y<0 || point_x>=canvas_size_width || point_y>=canvas_size_height) {
         return;
     }
@@ -113,7 +113,7 @@ void set_pixel_rgb(uint8_t *pixel_data,
     pixel_data[index] = color_red;
     pixel_data[index+1] = color_green;
     pixel_data[index+2] = color_blue;
-    DEBUG_OUT;
+    
 }
 
 void set_pixel_rgba(uint8_t *pixel_data,
@@ -121,9 +121,9 @@ void set_pixel_rgba(uint8_t *pixel_data,
                     uint8_t color_red, uint8_t color_green, uint8_t color_blue, uint8_t color_alpha,
                     int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     if (point_x<0 || point_y<0 || point_x>=canvas_size_width || point_y>=canvas_size_height) {
-        DEBUG_OUT;
+        
         return;
     }
     int index = point_y * canvas_size_width * 4 + point_x * 4;
@@ -131,7 +131,7 @@ void set_pixel_rgba(uint8_t *pixel_data,
     pixel_data[index+1] = color_green;
     pixel_data[index+2] = color_blue;
     pixel_data[index+3] = color_alpha;
-    DEBUG_OUT;
+    
 }
 
 void set_pixel_rgba_protect_alpha(uint8_t *pixel_data,
@@ -140,7 +140,7 @@ void set_pixel_rgba_protect_alpha(uint8_t *pixel_data,
                                   int32_t canvas_size_width, int32_t canvas_size_height,
                                   int32_t protect_alpha)
 {
-    DEBUG_IN;
+    
     //点を打つ アルファ付き（透明度を保護する
     if (point_x<0 || point_y<0 || point_x >= canvas_size_width || point_y >= canvas_size_height) {
         return;
@@ -168,7 +168,7 @@ void set_pixel_rgba_protect_alpha(uint8_t *pixel_data,
     pixel_data[index+1] = color.green;
     pixel_data[index+2] = color.blue;
     pixel_data[index+3] = color.alpha;
-    DEBUG_OUT;
+    
 }
 
 
@@ -179,7 +179,7 @@ void set_pixel_rgba_protect_alpha_fast(uint8_t *pixel_data,
                                        int32_t protect_alpha,
                                        int32_t index)
 {
-    DEBUG_IN;
+    
     //改良版：点を打つ アルファ付き（透明度を保護する
     if (point_x<0 || point_y<0 || point_x >= canvas_size_width || point_y >= canvas_size_height) {
         return;
@@ -207,7 +207,7 @@ void set_pixel_rgba_protect_alpha_fast(uint8_t *pixel_data,
     pixel_data[index+1] = color.green;
     pixel_data[index+2] = color.blue;
     pixel_data[index+3] = color.alpha;
-    DEBUG_OUT;
+    
 }
 
 void set_line_rgb(uint8_t *pixel_data,
@@ -216,7 +216,7 @@ void set_line_rgb(uint8_t *pixel_data,
                   uint8_t color_red, uint8_t color_green, uint8_t color_blue,
                   int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     //let
     int deltax = abs(end_point_x - start_point_x);
     int deltay = abs(end_point_y - start_point_y);
@@ -264,7 +264,7 @@ void set_line_rgb(uint8_t *pixel_data,
             }
         }
     }
-    DEBUG_OUT;
+    
 }
 
 void set_line_rgba(uint8_t *pixel_data,
@@ -273,7 +273,7 @@ void set_line_rgba(uint8_t *pixel_data,
                    uint8_t color_red, uint8_t color_green, uint8_t color_blue, uint8_t color_alpha,
                    int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     //let
     int deltax = abs(end_point_x - start_point_x);
     int deltay = abs(end_point_y - start_point_y);
@@ -321,7 +321,7 @@ void set_line_rgba(uint8_t *pixel_data,
             }
         }
     }
-    DEBUG_OUT;
+    
 }
 
 void fill_circle_rgba_smooth(uint8_t *pixel_data,
@@ -330,7 +330,7 @@ void fill_circle_rgba_smooth(uint8_t *pixel_data,
                              int32_t canvas_size_width, int32_t canvas_size_height,
                              double radius)
 {
-    DEBUG_IN;
+    
     //アンチエイリアシング付き円塗りつぶし
     int nx1,ny1,nx2,ny2,ix,iy,jx,jy,count;
     double xx,yy,rr;
@@ -366,7 +366,7 @@ void fill_circle_rgba_smooth(uint8_t *pixel_data,
                                          protect_alpha);
         }
     }
-    DEBUG_OUT;
+    
 }
 
 void set_line_rgba_smooth(uint8_t *pixel_data,
@@ -377,7 +377,7 @@ void set_line_rgba_smooth(uint8_t *pixel_data,
                           double radius,
                           double interval)
 {
-    DEBUG_IN;
+    
     double dx,dy,len,t,t_interval,x,y,dtmp;
     double line_interval = interval;
     double line_last_t = 0;
@@ -402,7 +402,7 @@ void set_line_rgba_smooth(uint8_t *pixel_data,
         if(dtmp < 0.0001) dtmp = 0.0001;
         t += dtmp;
     }
-    DEBUG_OUT;
+    
 }
 
 void set_line_rgba_smooth_i(uint8_t *pixel_data,
@@ -411,14 +411,14 @@ void set_line_rgba_smooth_i(uint8_t *pixel_data,
                             uint8_t color_red, uint8_t color_green, uint8_t color_blue, uint8_t color_alpha,
                             int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     //アンチエイリアシング直線描画
     set_line_rgba_smooth(pixel_data,
                          (double)start_point_x, (double)start_point_y,
                          (double)end_point_x, (double)end_point_y,
                          color_red, color_green, color_blue, color_alpha,
                          canvas_size_width, canvas_size_height, 0.5, 1.0);
-    DEBUG_OUT;
+    
 }
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
@@ -430,7 +430,7 @@ void fill_rect_rgba_slow(uint8_t *pixel_data,
                          uint8_t color_red, uint8_t color_green, uint8_t color_blue, uint8_t color_alpha,
                          int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     //普通に描画する方法：若干遅い
     int minx = MIN(start_point_x,end_point_x);
     int miny = MIN(start_point_y,end_point_y);
@@ -444,7 +444,7 @@ void fill_rect_rgba_slow(uint8_t *pixel_data,
                            canvas_size_width, canvas_size_height);
         }
     }
-    DEBUG_OUT;
+    
 }
 
 void fill_rect_rgba(uint8_t *pixel_data,
@@ -453,23 +453,23 @@ void fill_rect_rgba(uint8_t *pixel_data,
                     uint8_t color_red, uint8_t color_green, uint8_t color_blue, uint8_t color_alpha,
                     int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     int minx = MIN(start_point_x,end_point_x);
     int miny = MIN(start_point_y,end_point_y);
     int diffx = MAX(start_point_y,end_point_x) - MIN(start_point_x,end_point_x) + 1;
     int diffy = MAX(start_point_y,end_point_y) - MIN(start_point_y,end_point_y) + 1;
     
     //クリップ
-    if (minx>canvas_size_width) { DEBUG_OUT; return; }
+    if (minx>canvas_size_width) {  return; }
     else if (minx<0) { minx=0; }
     
-    if (miny>canvas_size_height) { DEBUG_OUT; return; }
+    if (miny>canvas_size_height) {  return; }
     else if (miny<0) { miny=0; }
     
-    if ((minx+diffx)<0) { DEBUG_OUT; return; }
+    if ((minx+diffx)<0) {  return; }
     else if ((minx+diffx)>canvas_size_width) { diffx=canvas_size_width-minx; }
     
-    if ((miny+diffy)<0) { DEBUG_OUT; return; }
+    if ((miny+diffy)<0) {  return; }
     else if ((miny+diffy)>canvas_size_height) { diffy=canvas_size_height-miny; }
     
     uint8_t onepixel[4] = {color_red,color_green,color_blue,color_alpha};
@@ -490,7 +490,7 @@ void fill_rect_rgba(uint8_t *pixel_data,
         memcpy(pixeldataAddr, xline, xline_size);
         pixeldataAddr+=canvas_size_width*4;
     }
-    DEBUG_OUT;
+    
 }
 
 void set_circle_rgba(uint8_t *pixel_data,
@@ -499,7 +499,7 @@ void set_circle_rgba(uint8_t *pixel_data,
                      uint8_t color_red, uint8_t color_green, uint8_t color_blue, uint8_t color_alpha,
                      int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     if(start_point_x>=end_point_x || start_point_y>=end_point_y) {
         return;
     }
@@ -556,7 +556,7 @@ void set_circle_rgba(uint8_t *pixel_data,
             H += 4 * ratioHeightSquare * y;
         }
     }
-    DEBUG_OUT;
+    
 }
 
 void fill_circle_rgba(uint8_t *pixel_data,
@@ -565,9 +565,9 @@ void fill_circle_rgba(uint8_t *pixel_data,
                       uint8_t color_red, uint8_t color_green, uint8_t color_blue, uint8_t color_alpha,
                       int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     if(start_point_x>=end_point_x || start_point_y>=end_point_y) {
-        DEBUG_OUT;
+        
         return;
     }
     
@@ -597,7 +597,7 @@ void fill_circle_rgba(uint8_t *pixel_data,
             }
         }
     }
-    DEBUG_OUT;
+    
 }
 
 void copy_pixel_data(uint8_t *pixel_data_dest,
@@ -612,13 +612,13 @@ void copy_pixel_data(uint8_t *pixel_data_dest,
                      int8_t blend_mode,
                      int8_t blend_opacity)
 {
-    DEBUG_IN;
+    
     int cx = current_point_x; //カレントポジション
     int cy = current_point_y;
     
     if (cx >= canvas_dest_size_width ||
         cy >= canvas_dest_size_height) {
-        DEBUG_OUT;
+        
         return;
     }
     
@@ -633,7 +633,7 @@ void copy_pixel_data(uint8_t *pixel_data_dest,
     
     if (copy_point_x >= canvas_source_size_width ||
         copy_point_y >= canvas_source_size_height) {
-        DEBUG_OUT;
+        
         return;
     }
     
@@ -657,7 +657,7 @@ void copy_pixel_data(uint8_t *pixel_data_dest,
         memcpy(pixel_data_dest,
                pixel_data_source,
                sizeof(uint8_t) * canvas_dest_size_width * canvas_dest_size_height * 4);
-        DEBUG_OUT;
+        
         return;
     }
     
@@ -682,12 +682,12 @@ void copy_pixel_data(uint8_t *pixel_data_dest,
     }
     
     if (cx < 0 || cy < 0) {
-        DEBUG_OUT;
+        
         return;
     }
     
     if (w <= 0 || h <= 0) {
-        DEBUG_OUT;
+        
         return;
     }
     
@@ -870,5 +870,5 @@ void copy_pixel_data(uint8_t *pixel_data_dest,
             break;
         }
     }
-    DEBUG_OUT;
+    
 }

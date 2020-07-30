@@ -15,7 +15,7 @@
 
 - (instancetype)init
 {
-    DEBUG_IN;
+    
     self = [super init];
     if (self) {
         ax = 0.0;
@@ -61,45 +61,45 @@
         GSm21 = 0.0;
         GSmpy = 0.0;
     }
-    DEBUG_OUT;
+    
     return self;
 }
 
 - (void)set_winx:(double)x
 {
-    DEBUG_IN;
+    
     ginfo_winx = x;
     wincx = ginfo_winx / 2;
-    DEBUG_OUT;
+    
 }
 
 - (void)set_winy:(double)y
 {
-    DEBUG_IN;
+    
     ginfo_winy = y;
     wincy = ginfo_winy / 2;
-    DEBUG_OUT;
+    
 }
 
 // d3dist 距離 (ベクトル) の絶対値を求める (x, y, z)
 - (double)d3dist:(double)p1 p2:(double)p2 p3:(double)p3
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return sqrt((p1) * (p1) + (p2) * (p2) + (p3) * (p3));
 }
 
 - (double)d3dist:(double)p1 p2:(double)p2
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return [self d3dist:p1 p2:p2 p3:0];
 }
 
 - (double)d3dist:(double)p1
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return [self d3dist:p1 p2:0 p3:0];
 }
 
@@ -107,14 +107,14 @@
 //出力変数 x1 y1, 入力値 x0 y0, 回転角度 va
 - (double)d3rotateX:(double)x0 y0:(double)y0 va:(double)va
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return x0 * cos(va) - y0 * sin(va);
 }
 
 - (double)d3rotateY:(double)x0 y0:(double)y0 va:(double)va
 {
-    DEBUG_OUT;
+    
     return x0 * sin(va) + y0 * cos(va);
 }
 
@@ -129,7 +129,7 @@
                   va:(double)va
 
 {
-    DEBUG_IN;
+    
     // 回転軸の単位ベクトル化
     double r = [self d3dist:vx p2:vy p3:vz];
     ax = vx / r;
@@ -140,7 +140,7 @@
     sin1 = sin(va);
     cos1 = cos(va);
     l_cos1 = 1.0 - cos1;
-    DEBUG_OUT;
+    
     return (ax * ax * l_cos1 + cos1) * x0 + (ax * ay * l_cos1 - az * sin1) * y0 +
     (az * ax * l_cos1 + ay * sin1) * z0;
 }
@@ -152,7 +152,7 @@
                   vz:(double)vz
                   va:(double)va
 {
-    DEBUG_IN;
+    
     // 回転軸の単位ベクトル化
     double r = [self d3dist:vx p2:vy p3:vz];
     ax = vx / r;
@@ -163,7 +163,7 @@
     sin1 = sin(va);
     cos1 = cos(va);
     l_cos1 = 1.0 - cos1;
-    DEBUG_OUT;
+    
     return (ax * ay * l_cos1 + az * sin1) * x0 + (ay * ay * l_cos1 + cos1) * y0 +
     (ay * az * l_cos1 - ax * sin1) * z0;
 }
@@ -175,7 +175,7 @@
                   vz:(double)vz
                   va:(double)va
 {
-    DEBUG_IN;
+    
     // 回転軸の単位ベクトル化
     double r = [self d3dist:vx p2:vy p3:vz];
     ax = vx / r;
@@ -187,7 +187,7 @@
     cos1 = cos(va);
     l_cos1 = 1.0 - cos1;
     
-    DEBUG_OUT;
+    
     return (az * ax * l_cos1 - ay * sin1) * x0 +
     (ay * az * l_cos1 + ax * sin1) * y0 + (az * az * l_cos1 + cos1) * z0;
 }
@@ -207,7 +207,7 @@
                LGm12:(double)LGm12
                LGm22:(double)LGm22
 {
-    DEBUG_IN;
+    
     // Local->Global->Screen Matrix Setup
     // 座標変換演算用マトリクス設定 (Local->Global Matrix と Global->Screen Matrix
     // を合成演算)
@@ -225,7 +225,7 @@
     LGSm12 = GSm02 * LGm10 + GSm12 * LGm11 + GSm22 * LGm12;
     LGSm22 = GSm02 * LGm20 + GSm12 * LGm21 + GSm22 * LGm22;
     LGSmpz = GSm02 * LGmpx + GSm12 * LGmpy + GSm22 * LGmpz + GSmpz;
-    DEBUG_OUT;
+    
 }
 
 // d3setcamx カメラ位置設定 (cx, cy, cz,  tx, ty, tz)
@@ -237,7 +237,7 @@
               ppz:(double)ppz
               ppv:(double)ppv
 {
-    DEBUG_IN;
+    
     //パラメータ設定
     
     wincx = ginfo_winx / 2;
@@ -292,7 +292,7 @@
                  LGm02:0.0
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 
 // d3setcam カメラ位置設定 (cx, cy, cz,  tx, ty, tz, tv)
@@ -305,9 +305,9 @@
               tz:(double)tz
               tv:(double)tv
 {
-    DEBUG_IN;
+    
     [self d3setcamx:cpx cpy:cpy cpz:cpz ppx:tx ppy:ty ppz:tz ppv:tv];
-    DEBUG_OUT;
+    
 }
 
 - (void)d3setcam:(double)cpx
@@ -317,9 +317,9 @@
               ty:(double)ty
               tz:(double)tz
 {
-    DEBUG_IN;
+    
     [self d3setcamx:cpx cpy:cpy cpz:cpz ppx:tx ppy:ty ppz:tz ppv:1.0];
-    DEBUG_OUT;
+    
 }
 
 - (void)d3setcam:(double)cpx
@@ -328,44 +328,44 @@
               tx:(double)tx
               ty:(double)ty
 {
-    DEBUG_IN;
+    
     [self d3setcamx:cpx cpy:cpy cpz:cpz ppx:tx ppy:ty ppz:0.0 ppv:1.0];
-    DEBUG_OUT;
+    
 }
 
 - (void)d3setcam:(double)cpx cpy:(double)cpy cpz:(double)cpz tx:(double)tx
 {
-    DEBUG_IN;
+    
     [self d3setcamx:cpx cpy:cpy cpz:cpz ppx:tx ppy:0.0 ppz:0.0 ppv:1.0];
-    DEBUG_OUT;
+    
 }
 
 - (void)d3setcam:(double)cpx cpy:(double)cpy cpz:(double)cpz
 {
-    DEBUG_IN;
+    
     [self d3setcamx:cpx cpy:cpy cpz:cpz ppx:0.0 ppy:0.0 ppz:0.0 ppv:1.0];
-    DEBUG_OUT;
+    
 }
 
 - (void)d3setcam:(double)cpx cpy:(double)cpy
 {
-    DEBUG_IN;
+    
     [self d3setcamx:cpx cpy:cpy cpz:0.0 ppx:0.0 ppy:0.0 ppz:0.0 ppv:1.0];
-    DEBUG_OUT;
+    
 }
 
 - (void)d3setcam:(double)cpx
 {
-    DEBUG_IN;
+    
     [self d3setcamx:cpx cpy:0.0 cpz:0.0 ppx:0.0 ppy:0.0 ppz:0.0 ppv:1.0];
-    DEBUG_OUT;
+    
 }
 
 - (void)d3setcam
 {
-    DEBUG_IN;
+    
     [self d3setcamx:0.0 cpy:0.0 cpz:0.0 ppx:0.0 ppy:0.0 ppz:0.0 ppv:1.0];
-    DEBUG_OUT;
+    
 }
 
 // d3setlocal ローカル座標系設定 (px, py, pz,  m00, m01, m02,  m10, m11, m12,
@@ -385,7 +385,7 @@
                p11:(double)p11
                p12:(double)p12
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:p3
@@ -398,7 +398,7 @@
                  LGm02:p10
                  LGm12:p11
                  LGm22:p12];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
@@ -412,7 +412,7 @@
                p10:(double)p10
                p11:(double)p11
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:p3
@@ -425,7 +425,7 @@
                  LGm02:p10
                  LGm12:p11
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
@@ -438,7 +438,7 @@
                 p9:(double)p9
                p10:(double)p10
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:p3
@@ -451,7 +451,7 @@
                  LGm02:p10
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
@@ -463,7 +463,7 @@
                 p8:(double)p8
                 p9:(double)p9
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:p3
@@ -476,7 +476,7 @@
                  LGm02:0.0
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
@@ -487,7 +487,7 @@
                 p7:(double)p7
                 p8:(double)p8
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:p3
@@ -500,7 +500,7 @@
                  LGm02:0.0
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
@@ -510,7 +510,7 @@
                 p6:(double)p6
                 p7:(double)p7
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:p3
@@ -523,7 +523,7 @@
                  LGm02:0.0
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
@@ -532,7 +532,7 @@
                 p5:(double)p5
                 p6:(double)p6
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:p3
@@ -545,7 +545,7 @@
                  LGm02:0.0
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
@@ -553,7 +553,7 @@
                 p4:(double)p4
                 p5:(double)p5
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:p3
@@ -566,11 +566,11 @@
                  LGm02:0.0
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1 p2:(double)p2 p3:(double)p3 p4:(double)p4
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:p3
@@ -583,11 +583,11 @@
                  LGm02:0.0
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1 p2:(double)p2 p3:(double)p3
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:p3
@@ -600,11 +600,11 @@
                  LGm02:0.0
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1 p2:(double)p2
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:p2
                  LGmpz:0.0
@@ -617,11 +617,11 @@
                  LGm02:0.0
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 - (void)d3setlocal:(double)p1
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:p1
                  LGmpy:0.0
                  LGmpz:0.0
@@ -637,7 +637,7 @@
 }
 - (void)d3setlocal
 {
-    DEBUG_IN;
+    
     [self d3setlocalmx:0.0
                  LGmpy:0.0
                  LGmpz:0.0
@@ -650,13 +650,13 @@
                  LGm02:0.0
                  LGm12:0.0
                  LGm22:1.0];
-    DEBUG_OUT;
+    
 }
 
 // d3trans 座標変換 macro (inx, iny, inz,  oux, ouy, ouz, ouf)
 - (void)d3trans:(double)inx iny:(double)iny inz:(double)inz
 {
-    DEBUG_IN;
+    
     dz = LGSm01 * inx + LGSm11 * iny + LGSm21 * inz + LGSmpy;
     df = 0.0;
     if (dz > 0.0) {
@@ -666,11 +666,11 @@
             df = 1.0;
         }
     }
-    DEBUG_OUT;
+    
 }
 - (void)d3transTypeE:(double)inx iny:(double)iny inz:(double)inz
 {
-    DEBUG_IN;
+    
     ez = LGSm01 * inx + LGSm11 * iny + LGSm21 * inz + LGSmpy;
     af = 0.0;
     if (ez > 0.0) {
@@ -680,76 +680,76 @@
             af = 1.0;
         }
     }
-    DEBUG_OUT;
+    
 }
 
 // d3vpos 座標変換 (x, y, z) -> dx, dy, dz, df
 - (void)d3vpos:(double)v01 v02:(double)v02 v03:(double)v03
 {
-    DEBUG_IN;
+    
     // bkup last-data
     ex = dx;
     ey = dy;
     ef = df;
     [self d3trans:v01 iny:v02 inz:v03];
-    DEBUG_OUT;
+    
 }
 
 - (double)d3getposX:(double)x y:(double)y z:(double)z
 {
-    DEBUG_IN;
+    
     [self d3vpos:x v02:y v03:z];
     if (df == 1.0) {
     } else {
     }
     return dx;
-    DEBUG_OUT;
+    
 }
 - (double)d3getposY:(double)x y:(double)y z:(double)z
 {
-    DEBUG_IN;
+    
     [self d3vpos:x v02:y v03:z];
     if (df == 1.0) {
     } else {
     }
     return dy;
-    DEBUG_OUT;
+    
 }
 
 - (double)getdx
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return dx;
 }
 - (double)getdy
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return dy;
 }
 - (double)getdz
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return dz;
 }
 - (double)getex
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return ex;
 }
 - (double)getey
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return ey;
 }
 - (double)getez
 {
-    DEBUG_IN;
-    DEBUG_OUT;
+    
+    
     return ez;
 }
 

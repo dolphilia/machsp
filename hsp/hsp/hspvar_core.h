@@ -27,7 +27,7 @@ ViewController (hspvar_core) {
 void HspVarCoreInit(void);
 void HspVarCoreBye(void);
 void HspVarCoreResetVartype(int expand);
-int HspVarCoreAddType();
+int HspVarCoreAddType(void);
 void HspVarCoreRegisterType(int flag, char* vartype_name);
 HspVarProc* HspVarCoreSeekProc(const char* name);
 

@@ -11,7 +11,7 @@
 _Size load_image_init_canvas(char const *file_name,
                             uint8_t *pixel_data)
 {
-    DEBUG_IN;
+    
     _Size image_size;
     uint8_t *image_pixels;
     int image_width;
@@ -39,7 +39,7 @@ _Size load_image_init_canvas(char const *file_name,
     }
     
     free(image_pixels);
-    DEBUG_OUT;
+    
     return image_size;
 }
 
@@ -48,7 +48,7 @@ _Size load_image(char const *file_name,
                 int32_t point_x, int32_t point_y,
                 int32_t canvas_size_width, int32_t canvas_size_height)
 {
-    DEBUG_IN;
+    
     _Size image_size;
     uint8_t *image_pixels;
     int image_width;
@@ -90,6 +90,6 @@ _Size load_image(char const *file_name,
     }
     
     free(image_pixels);
-    DEBUG_OUT;
+    
     return image_size;
 }
