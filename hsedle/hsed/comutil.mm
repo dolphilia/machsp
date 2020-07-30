@@ -4,7 +4,7 @@
 //	onion software/onitama 2005/4
 //
 
-#include "hsp3config.h"
+#import "hsp3config.h"
 
 #ifdef HSPWIN
 #define USE_WINDOWS_COM		// WindowsCOM APIを使用する
@@ -16,11 +16,11 @@
 #include <objbase.h>
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#import <stdio.h>
+#import <stdlib.h>
+#import <string.h>
 
-#include "comutil.h"
+#import "comutil.h"
 
 #ifdef USE_WINDOWS_COM
 /*------------------------------------------------------------*/

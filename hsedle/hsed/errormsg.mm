@@ -4,13 +4,13 @@
 //	(エラーメッセージ)
 //	onion software/onitama 2004/6
 //
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#import <stdio.h>
+#import <stdlib.h>
+#import <string.h>
 
-#include "hsp3config.h"
-#include "hsc3.h"
-#include "errormsg.h"
+#import "hsp3config.h"
+#import "hsc3.h"
+#import "errormsg.h"
 
 /*------------------------------------------------------------*/
 /*

@@ -3,14 +3,14 @@
 //		AHT manager class
 //			onion software/onitama 2006/3
 //
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
+#import <stdio.h>
+#import <stdlib.h>
+#import <string.h>
+#import <stdarg.h>
 
-#include "supio_linux.h"
-#include "strnote.h"
-#include "ahtobj.h"
+#import "supio_linux.h"
+#import "strnote.h"
+#import "ahtobj.h"
 
 //-------------------------------------------------------------
 //		Routines

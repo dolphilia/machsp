@@ -9,7 +9,7 @@
 #ifndef runCompiler_h
 #define runCompiler_h
 
-#include <stdio.h>
+#import <stdio.h>
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 #import "MyWindow.h"

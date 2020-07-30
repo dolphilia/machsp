@@ -159,10 +159,10 @@
     
     [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
         while(YES) {
-            if ([title isEqual:@"Window"]) {
+            if ([self->title isEqual:@"Window"]) {
             }
             else {
-                [global.globalTexts replaceObjectAtIndex:[title intValue]-1 withObject:[zNSAttributedStringObj string]];
+                [self->global.globalTexts replaceObjectAtIndex:[self->title intValue]-1 withObject:[zNSAttributedStringObj string]];
                 break;
             }
             usleep(100000);

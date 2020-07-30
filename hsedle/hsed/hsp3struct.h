@@ -5,14 +5,14 @@
 #ifndef __hsp3struct_h
 #define __hsp3struct_h
 
-#include "hspvar_core.h"
+#import "hspvar_core.h"
 
 /*
 	rev 43
 	mingw : error : HSPERROR が未定義
 	に対処
  */
-#include "hsp3debug.h"
+#import "hsp3debug.h"
 
 #ifdef _WIN64
 #define PTR64BIT        //  ポインタは64bit

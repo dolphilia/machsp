@@ -3,22 +3,22 @@
 //		Token analysis class
 //			onion software/onitama 2002/2
 //
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-#include <ctype.h>
-#include <math.h>
-#include <assert.h>
+#import <stdio.h>
+#import <stdlib.h>
+#import <string.h>
+#import <stdarg.h>
+#import <ctype.h>
+#import <math.h>
+#import <assert.h>
 
-#include "hsp3config.h"
-#include "supio_linux.h"
-#include "token.h"
-#include "label.h"
-#include "tagstack.h"
-#include "membuf.h"
-#include "strnote.h"
-#include "ahtobj.h"
+#import "hsp3config.h"
+#import "supio_linux.h"
+#import "token.h"
+#import "label.h"
+#import "tagstack.h"
+#import "membuf.h"
+#import "strnote.h"
+#import "ahtobj.h"
 
 #import "AppDelegate.h"
 
@@ -292,13 +292,11 @@ void CToken::Pickstr( void )
             }
         }
         if (a1==0) { wp=NULL;break; }
-#ifdef HSPLINUX
         if (a1==10) {
             wp++;
             line++;
             break;
         }
-#endif
         if (a1==13) {
             wp++;if ( *wp==10 ) wp++;
             line++;
@@ -325,10 +323,7 @@ char *CToken::Pickstr2( char *str )
     int skip,i;
     vs = (unsigned char *)str;
     pp = s3;
-    
-    
 
-    
     while(1) {
         a1=*vs;
         if (a1==0) break;
@@ -416,24 +411,9 @@ int CToken::GetToken( void )
     a = 0;
     minmode = 0;
     rval=TK_OBJ;
-    
-    
-    
-    
-    
+
     while(1) {
         a1=*wp;
-        
-#ifdef HSPWIN
-        if ( a1 == 0x81 ) {
-            if ( wp[1] == 0x40 ) {	// 全角スペースは無視
-                if ( hed_cmpmode & CMPMODE_SKIPJPSPC ) {
-                    wp+=2; continue;
-                }
-            }
-        }
-#endif
-        
         if ((a1!=32)&&(a1!=9)) break;	// Skip Space & Tab
         wp++;
     }
@@ -635,15 +615,6 @@ int CToken::GetToken( void )
         //if (a1>=129) {						// 全角文字チェック
         skip = SkipMultiByte( a1 ); // 全角文字チェック
         if ( skip ) {
-#ifdef HSPWIN
-            if ( hed_cmpmode & CMPMODE_SKIPJPSPC ) {
-                if ( a1 == 0x81 ) {
-                    if ( wp[1] == 0x40 ) {	// 全角スペースは終端として処理
-                        break;
-                    }
-                }
-            }
-#endif
             //if (a1<=159) { s3[a++]=a1;wp++;a1=*wp; }
             //else if (a1>=224) { s3[a++]=a1;wp++;a1=*wp; }
             for(i=0;i<skip;i++) {
@@ -975,13 +946,11 @@ char *CToken::ExpandStrEx( char *str )
             if (*vs==10) { vs++; }
             continue;
         }
-#ifdef HSPLINUX
         if (a1==10) {
             s3[a++]=0x5c; s3[a++]='n';
             vs++;
             continue;
         }
-#endif
         //		if ((a1<32)&&(a1!=9)) break;
         if (a1==0x22) {
             if (vs[1]=='}') {
@@ -1202,20 +1171,7 @@ char *CToken::ExpandToken( char *str, int *type, int ppmode )
         if (wrtbuf!=NULL) wrtbuf->Put( (char)a1 );
         return (char *)vs;
     }
-    
-#ifdef HSPWIN
-    if ( hed_cmpmode & CMPMODE_SKIPJPSPC ) {
-        if ( a1 == 0x81 && vs[1] == 0x40 ) {	// 全角スペースを半角スペースに変換する
-            *type = TK_CODE;
-            vs+=2;
-            if (wrtbuf!=NULL) {
-                wrtbuf->Put( (char)0x20 );
-            }
-            return (char *)vs;
-        }
-    }
-#endif
-    
+
     chk=0;
     if ((a1>=0x3a)&&(a1<=0x3f)) chk++;
     if ((a1>=0x5b)&&(a1<=0x5e)) chk++;
@@ -1268,19 +1224,7 @@ char *CToken::ExpandToken( char *str, int *type, int ppmode )
      s2[a++]='#';
      }
      */
-    
-    //		半角スペースの検出
-    //
-#ifdef HSPWIN
-    if (( hed_cmpmode & CMPMODE_SKIPJPSPC ) == 0 ) {
-        if ( strncmp( (char *)s2,"　",2 )==0 ) {
-            SetError("SJIS space code error");
-            *type = TK_ERROR; return (char *)vs;
-        }
-    }
-#endif
-    
-    
+
     //	 シンボル取り出し
     //
     while(1) {
@@ -1291,13 +1235,6 @@ char *CToken::ExpandToken( char *str, int *type, int ppmode )
         //if (a1>=129) {				// 全角文字チェック＊
         skip = SkipMultiByte( a1 );                 // 全角文字チェック
         if ( skip ) {
-#ifdef HSPWIN
-            if ( hed_cmpmode & CMPMODE_SKIPJPSPC ) {
-                if ( a1 == 0x81 && vs[1] == 0x40 ) {	// 全角スペースは終端と判断
-                    break;
-                }
-            }
-#endif
             //if ((a1<=159)||(a1>=224)) {
             for(i=0;i<(skip+1);i++) {
                 NSLog(@"E:%s",str);
@@ -1358,17 +1295,9 @@ char *CToken::ExpandToken( char *str, int *type, int ppmode )
                 char *ptr_dval;
                 ptr_dval = lb->GetData2( id );
                 if ( ptr_dval == NULL ) {
-#ifdef HSPWIN
-                    _itoa( lb->GetOpt(id), cnvstr, 10 );
-#else
                     sprintf( cnvstr, "%d", lb->GetOpt(id) );
-#endif
                 } else {
-#ifdef HSPWIN
-                    _gcvt( *(CALCVAR *)ptr_dval, 64, cnvstr );
-#else
                     sprintf( cnvstr, "%f", *(CALCVAR *)ptr_dval );
-#endif
                 }
                 chk = ReplaceLineBuf( str, (char *)vs, cnvstr, 0, NULL );
                 break;
@@ -2262,11 +2191,7 @@ ppresult_t CToken::PP_Define( void )
                 type = GetToken();
                 switch(type) {
                     case TK_NUM:
-#ifdef HSPWIN
-                        _itoa( val, word, 10 );
-#else
                         sprintf( word, "%d", val );
-#endif
                         break;
                     case TK_DNUM:
                         strcpy( word, (char *)s3 );
@@ -3396,13 +3321,6 @@ int CToken::ExpandLine( CMemBuf *buf, CMemBuf *src, char *refname )
             if ( a1 == ' ' || a1 == '\t' ) {
                 p++; continue;
             }
-#ifdef HSPWIN
-            if ( hed_cmpmode & CMPMODE_SKIPJPSPC ) {
-                if ( a1 == 0x81 && p[1] == 0x40 ) {		// 全角スペースチェック
-                    p+=2; continue;
-                }
-            }
-#endif
             break;
         }
         
@@ -3990,11 +3908,7 @@ char *CToken::ExecSCNV( char *srcbuf, int opt )
             strcpy( scnvbuf, srcbuf );
             break;
         case SCNV_OPT_SJISUTF8:
-#ifdef HSPWIN
-            ConvSJis2Utf8( srcbuf, scnvbuf, scnvsize );
-#else
             strcpy( scnvbuf, srcbuf );
-#endif
             break;
         default:
             *scnvbuf = 0;

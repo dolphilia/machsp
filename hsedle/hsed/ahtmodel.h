@@ -5,7 +5,7 @@
 #ifndef __ahtmodel_h
 #define __ahtmodel_h
 
-#include "membuf.h"
+#import "membuf.h"
 
 #define AHTMODEL_FLAG_NONE 0
 #define AHTMODEL_FLAG_READY 1

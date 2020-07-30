@@ -6,15 +6,15 @@
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
 
-#include "runCompiler.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include "hsp3config.h"
-#include "supio_linux.h"
-#include "hsc3.h"
-#include "token.h"
+#import "runCompiler.h"
+#import <stdio.h>
+#import <stdlib.h>
+#import <string.h>
+#import <ctype.h>
+#import "hsp3config.h"
+#import "supio_linux.h"
+#import "hsc3.h"
+#import "token.h"
 #import "runCompiler.h"
 #import <Foundation/Foundation.h>
 #import "MyWindow.h"
@@ -60,8 +60,10 @@ static void usage1( void )
     CHsc3 *hsc3=NULL;
     
     //	check switch and prm
-    
-    if (argc<2) { usage1();return -1; }
+    if (argc<2) {
+        usage1();
+        return -1;
+    }
     
     st = 0; ppopt = 0; cmpopt = 0;
     fname[0]=0;
@@ -135,15 +137,18 @@ static void usage1( void )
         
         
         if (oname[0]==0) {
-            strcpy( oname,fname ); cutext( oname ); addext( oname,"ax" );
+            strcpy( oname,fname );
+            cutext( oname );
+            addext( oname,"ax" );
         }
-        strcpy( fname2, fname ); cutext( fname2 ); addext( fname2,"i" );
+        strcpy( fname2, fname );
+        cutext( fname2 );
+        addext( fname2,"i" );
         addext( fname,"hsp" );			// 拡張子がなければ追加する
         
         //		call main
         
         hsc3 = new CHsc3;
-        
         hsc3->SetCommonPath( compath );
         
         st = hsc3->PreProcess( fname, fname2, ppopt, fname );
@@ -152,8 +157,10 @@ static void usage1( void )
         }
         puts( hsc3->GetError() );
         hsc3->PreProcessEnd();
-        if ( hsc3 != NULL ) { delete hsc3; hsc3=NULL; }
+        if ( hsc3 != NULL ) {
+            delete hsc3;
+            hsc3=NULL;
+        }
         return st;
     }
-    
 @end

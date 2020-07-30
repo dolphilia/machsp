@@ -7,24 +7,24 @@
 //	http://hspdev-wiki.net/?OpenHSP%2FLinux%2Fhsp3
 //
 //
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-#include <ctype.h>
+#import <stdio.h>
+#import <stdlib.h>
+#import <string.h>
+#import <stdarg.h>
+#import <ctype.h>
 
 // gettime
-#include <sys/time.h>
-#include <time.h>
+#import <sys/time.h>
+#import <time.h>
 // mkdir stat
-#include <sys/stat.h>
-#include <sys/types.h>
+#import <sys/stat.h>
+#import <sys/types.h>
 // changedir delfile get_current_dir_name stat
-#include <unistd.h>
+#import <unistd.h>
 // dirlist
-#include <dirent.h>
+#import <dirent.h>
 
-#include "supio_linux.h"
+#import "supio_linux.h"
 
 #ifndef _MAX_PATH
 #define _MAX_PATH	256

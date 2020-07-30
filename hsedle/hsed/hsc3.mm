@@ -141,7 +141,7 @@ int CHsc3::PreProcess( char *fname, char *outname, int option, char *rname, void
     //					 bit5=UTF8(on)
     //
     int res;
-    char mm[512];
+    //char mm[512];
     CToken tk;
     CMemBuf *packbuf = NULL;
     
@@ -265,7 +265,7 @@ int CHsc3::Compile( char *fname, char *outname, int mode )
     //res = tcomp_main( fname, outname, errbuf, mode, "" );
     
     int res;
-    char mm[512];
+    //char mm[512];
     CToken tk;
     if ( lb_info != NULL ) tk.SetLabelInfo( lb_info );		// プリプロセッサのラベル情報
     

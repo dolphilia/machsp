@@ -5,10 +5,10 @@
 #ifndef __token_h
 #define __token_h
 
-#include <vector>
-#include <string>
-#include <map>
-#include <memory>
+#import <vector>
+#import <string>
+#import <map>
+#import <memory>
 
 // token type
 #define TK_NONE 0

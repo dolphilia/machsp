@@ -15,7 +15,7 @@ char *hsp_prestr[] = {
     //	"$000 8 goto",
     //
     s_rec,
-    
+
     //	program control commands (ver3.0)
     
     (char *)"$000 15 goto",

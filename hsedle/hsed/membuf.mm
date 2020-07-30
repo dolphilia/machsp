@@ -3,12 +3,12 @@
 //		Memory buffer class
 //			onion software/onitama 2002/2
 //
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-#include <assert.h>
-#include "membuf.h"
+#import <stdio.h>
+#import <stdlib.h>
+#import <string.h>
+#import <stdarg.h>
+#import <assert.h>
+#import "membuf.h"
 
 //-------------------------------------------------------------
 //		Routines

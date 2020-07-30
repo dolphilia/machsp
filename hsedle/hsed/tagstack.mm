@@ -3,10 +3,10 @@
 //		stack buffer with tag class
 //			onion software/onitama 2002/10
 //
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "tagstack.h"
+#import <stdio.h>
+#import <stdlib.h>
+#import <string.h>
+#import "tagstack.h"
 
 //-------------------------------------------------------------
 //		Routines

@@ -3,12 +3,12 @@
 //		Label Manager class
 //			onion software/onitama 2002/2
 //
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#import <stdio.h>
+#import <stdlib.h>
+#import <string.h>
+#import <ctype.h>
 
-#include "label.h"
+#import "label.h"
 
 //-------------------------------------------------------------
 //		Routines

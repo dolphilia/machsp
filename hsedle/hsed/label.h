@@ -5,9 +5,9 @@
 #ifndef __label_h
 #define __label_h
 
-#include <string>
-#include <map>
-#include <set>
+#import <string>
+#import <map>
+#import <set>
 
 #define	maxname	256				// label name max
 #define def_maxsymbol 0x10000	// Symbol Table Size (default)

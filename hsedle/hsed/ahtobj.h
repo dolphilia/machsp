@@ -5,8 +5,8 @@
 #ifndef __ahtobj_h
 #define __ahtobj_h
 
-#include "membuf.h"
-#include "ahtmodel.h"
+#import "membuf.h"
+#import "ahtmodel.h"
 
 #define AHTOBJ_FLAG_NONE 0
 #define AHTOBJ_FLAG_ENABLE 1

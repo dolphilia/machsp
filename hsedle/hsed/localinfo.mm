@@ -3,23 +3,11 @@
 //		local info related routines
 /*----------------------------------------------------------------*/
 
-#ifdef HSPWIN
-#define USE_WINDOWS_API		// WINDOWS APIを使用する
-#endif
-
-
-#ifdef USE_WINDOWS_API
-#include <windows.h>
-#endif
-
-#ifdef HSPLINUX
-#include <sys/time.h>
-#include <time.h>
-#endif
-
-#include <stdio.h>
-#include <string.h>
-#include "localinfo.h"
+#import <sys/time.h>
+#import <time.h>
+#import <stdio.h>
+#import <string.h>
+#import "localinfo.h"
 
 //-------------------------------------------------------------
 //		Interfaces
@@ -53,14 +41,6 @@ int CLocalInfo::GetTime( int index )
 	    6 wSecond
 	    7 wMilliseconds
      */
-#ifdef USE_WINDOWS_API
-    SYSTEMTIME st;
-    short *a;
-    GetLocalTime( &st );
-    a=(short *)&st;
-    return (int)(a[index]);
-#endif
-#ifdef HSPLINUX
     struct timeval tv;
     struct tm *lt;
     
@@ -88,7 +68,6 @@ int CLocalInfo::GetTime( int index )
             /*	一応マイクロ秒まで取れる	*/
             return (int)tv.tv_usec%10000;
     }
-#endif
     return 0;
 }
 
