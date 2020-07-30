@@ -2,8 +2,8 @@
 //		settings for HSP
 //
 
-char 	s_rec[1]= "", *hsp_prestr[] =
-{
+char s_rec[1]= "";
+char *hsp_prestr[] = {
     //
     //	label check
     //	  | opt value
