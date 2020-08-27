@@ -59,10 +59,7 @@
 - (PVal *)code_getpval;
 - (char *)code_getvptr:(PVal **)pval size:(int *)size;
 - (APTR)code_getva:(PVal **)pval;
-- (void)code_setva:(PVal *)pval
-              aptr:(APTR)aptr
-              type:(int)type
-               ptr:(const void *)ptr;
+- (void)code_setva:(PVal *)pval aptr:(APTR)aptr type:(int)type ptr:(const void *)ptr;
 - (unsigned short *)code_getlb;
 - (unsigned short *)code_getlb2;
 - (STRUCTDAT *)code_getstruct;
@@ -71,11 +68,7 @@
 - (char *)code_get_proxyvar:(char *)ptr mptype:(int *)mptype;
 - (APTR)code_getv_proxy:(PVal **)pval var:(MPVarData *)var mptype:(int)mptype;
 - (void)code_expandstruct:(char *)p st:(STRUCTDAT *)st option:(int)option;
-- (FlexValue *)code_setvs:(PVal *)pval
-                     aptr:(APTR)aptr
-                      ptr:(void *)ptr
-                     size:(int)size
-                    subid:(int)subid;
+- (FlexValue *)code_setvs:(PVal *)pval aptr:(APTR)aptr ptr:(void *)ptr size:(int)size subid:(int)subid;
 - (char *)code_stmpstr:(char *)src;
 - (char *)code_stmp:(int)size;
 - (char *)code_getsptr:(int *)type;
@@ -92,19 +85,10 @@
 - (IRQDAT *)code_addirq;
 - (int)code_isirq:(int)id;
 - (int)code_isuserirq;
-- (int)code_sendirq:(int)id
-iparam:(int)iparam
-wparam:(int)wparam
-lparam:(int)lparam;
-- (int)code_checkirq:(int)id
-message:(int)message
-wparam:(int)wparam
-lparam:(int)lparam;
+- (int)code_sendirq:(int)id iparam:(int)iparam wparam:(int)wparam lparam:(int)lparam;
+- (int)code_checkirq:(int)id message:(int)message wparam:(int)wparam lparam:(int)lparam;
 - (void)code_execirq:(IRQDAT *)irq wparam:(int)wparam lparam:(int)lparam;
-- (void)code_setirq:(int)id
-opt:(int)opt
-custom:(int)custom
-ptr:(unsigned short *)ptr;
+- (void)code_setirq:(int)id opt:(int)opt custom:(int)custom ptr:(unsigned short *)ptr;
 - (int)code_irqresult:(int *)value;
 - (void)code_enableirq:(int)id sw:(int)sw;
 - (HSP3TYPEINFO *)code_gettypeinfo:(int)type;

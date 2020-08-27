@@ -548,7 +548,7 @@ CAutoSbFree::~CAutoSbFree() {
     if (vc_hspctx->note_pval == NULL) {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
-    p = (char *)HspVarCorePtrAPTR(vc_hspctx->note_pval, vc_hspctx->note_aptr);
+    p = (char *)[self HspVarCorePtrAPTR:vc_hspctx->note_pval ofs:vc_hspctx->note_aptr];
     [self Select:p];
     
     return p;
@@ -655,7 +655,7 @@ CAutoSbFree::~CAutoSbFree() {
             case 'u':
             case 'p':
                 val_type = HSPVAR_FLAG_INT;
-                val_ptr = HspVarCoreCnvPtr(mpval, HSPVAR_FLAG_INT);
+                val_ptr = [self HspVarCoreCnvPtr:mpval flag:HSPVAR_FLAG_INT];
                 break;
             case 'f':
             case 'e':
@@ -663,11 +663,11 @@ CAutoSbFree::~CAutoSbFree() {
             case 'g':
             case 'G':
                 val_type = HSPVAR_FLAG_DOUBLE;
-                val_ptr = HspVarCoreCnvPtr(mpval, HSPVAR_FLAG_DOUBLE);
+                val_ptr = [self HspVarCoreCnvPtr:mpval flag:HSPVAR_FLAG_DOUBLE];
                 break;
             case 's':
                 val_type = HSPVAR_FLAG_STR;
-                val_ptr = HspVarCoreCnvPtr(mpval, HSPVAR_FLAG_STR);
+                val_ptr = [self HspVarCoreCnvPtr:mpval flag:HSPVAR_FLAG_STR];
                 break;
             default: {
                  @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
@@ -719,7 +719,7 @@ CAutoSbFree::~CAutoSbFree() {
         if (aptr != 0) {
              @throw [self make_nsexception:HSPERR_INVALID_ARRAYSTORE];
         }
-        HspVarCoreClear(pval, HSPVAR_FLAG_STR);
+        [self HspVarCoreClear:pval flag:HSPVAR_FLAG_STR];
     }
     pval->offset = aptr;
     
@@ -729,7 +729,7 @@ CAutoSbFree::~CAutoSbFree() {
     } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のGetPtr
         dst = HspVarDouble_GetPtr(pval);
     } else if (strcmp(proc->vartype_name, "str") == 0) {  //文字列のGetPtr
-        dst = HspVarStr_GetPtr(pval);
+        dst = [self HspVarStr_GetPtr:pval];
     } else if (strcmp(proc->vartype_name, "label") == 0) {  //ラベルのGetPtr
         dst = HspVarLabel_GetPtr(pval);
     } else if (strcmp(proc->vartype_name, "struct") == 0) {  // structのGetPtr
@@ -747,7 +747,7 @@ CAutoSbFree::~CAutoSbFree() {
         HspVarDouble_AllocBlock(pval, dst, len + 1);
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") ==
                0) {  //文字列のAllocBlock
-        HspVarStr_AllocBlock(pval, dst, len + 1);
+        [self HspVarStr_AllocBlock:pval pdat:dst size:len + 1];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
                0) {  //ラベルのAllocBlock
         HspVarLabel_AllocBlock(pval, dst, len + 1);
@@ -764,7 +764,7 @@ CAutoSbFree::~CAutoSbFree() {
     } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のGetPtr
         ptr = (char *)HspVarDouble_GetPtr(pval);
     } else if (strcmp(proc->vartype_name, "str") == 0) {  //文字列のGetPtr
-        ptr = (char *)HspVarStr_GetPtr(pval);
+        ptr = (char *)[self HspVarStr_GetPtr:pval];
     } else if (strcmp(proc->vartype_name, "label") == 0) {  //ラベルのGetPtr
         ptr = (char *)HspVarLabel_GetPtr(pval);
     } else if (strcmp(proc->vartype_name, "struct") == 0) {  // structのGetPtr
@@ -1189,7 +1189,7 @@ CAutoSbFree::~CAutoSbFree() {
     APTR aptr;
     PDAT *ptr;
     aptr = [self code_getva:&pval];
-    ptr = HspVarCorePtrAPTR(pval, aptr);
+    ptr = [self HspVarCorePtrAPTR:pval ofs:aptr];
     if ((pval->support & HSPVAR_SUPPORT_FLEXSTORAGE) == 0) {
          @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
@@ -1205,7 +1205,7 @@ CAutoSbFree::~CAutoSbFree() {
         HspVarDouble_AllocBlock(pval, ptr, p1);
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") ==
                0) {  //文字列のAllocBlock
-        HspVarStr_AllocBlock(pval, ptr, p1);
+        [self HspVarStr_AllocBlock:pval pdat:ptr size:p1];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
                0) {  //ラベルのAllocBlock
         HspVarLabel_AllocBlock(pval, ptr, p1);
@@ -1502,7 +1502,7 @@ CAutoSbFree::~CAutoSbFree() {
                 if (pval->len[2] != 0) {
                      @throw [self make_nsexception:HSPVAR_ERROR_ARRAYOVER];
                 }
-                HspVarCoreReDim(pval, 1, aptr + 1);
+                [self HspVarCoreReDim:pval lenid:1 len:aptr + 1];
             }
         } else {
             aptr = [self code_getva:&pval];
@@ -1545,7 +1545,7 @@ CAutoSbFree::~CAutoSbFree() {
     if (pval->flag != HSPVAR_FLAG_STR) {
          @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
-    s_buffer = (char *)HspVarCorePtrAPTR(pval, aptr);
+    s_buffer = (char *)[self HspVarCorePtrAPTR:pval ofs:aptr];
     
     ss = [self code_gets];
     if (*ss == 0) {
@@ -1656,7 +1656,7 @@ CAutoSbFree::~CAutoSbFree() {
     [self DataIni:len];
     
     for (i = 0; i < len; i++) {
-        p = (char *)HspVarCorePtrAPTR(pv, i);
+        p = (char *)[self HspVarCorePtrAPTR:pv ofs:i];
         hsp3int_data_temp[i].as.skey = p;
         hsp3int_data_temp[i].info = i;
     }
@@ -1693,7 +1693,7 @@ CAutoSbFree::~CAutoSbFree() {
     ap = [self code_getva:&pv];   // パラメータ1:変数
     sflag = [self code_getdi:0];  // パラメータ2:数値
     
-    p = (char *)HspVarCorePtrAPTR(pv, ap);
+    p = (char *)[self HspVarCorePtrAPTR:pv ofs:ap];
     i = [self GetNoteLines:p];
     if (i <= 0) {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
@@ -1792,7 +1792,7 @@ CAutoSbFree::~CAutoSbFree() {
             if (chk <= PARAM_END) {
                  @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
             }
-            ip = (int *)HspVarCoreCnvPtr(mpval, HSPVAR_FLAG_INT);
+            ip = (int *)[self HspVarCoreCnvPtr:mpval flag:HSPVAR_FLAG_INT];
             hsp3int_reffunc_intfunc_ivalue = *ip;
             break;
         }
@@ -1832,7 +1832,7 @@ CAutoSbFree::~CAutoSbFree() {
             HspVarProc *proc;
             if (*hsp3int_type == TYPE_STRING) {
                 sval = [self code_gets];
-                proc = HspVarCoreSeekProc(sval);
+                proc = [self HspVarCoreSeekProc:sval];
                 if (proc == NULL) {
                      @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
                 }
@@ -1893,7 +1893,7 @@ CAutoSbFree::~CAutoSbFree() {
                 break;
             }
             aptr = [self code_getva:&pval];
-            pdat = HspVarCorePtrAPTR(pval, aptr);
+            pdat = [self HspVarCorePtrAPTR:pval ofs:aptr];
             hsp3int_reffunc_intfunc_ivalue = (int)(size_t)(pdat);
             break;
         }
@@ -1904,7 +1904,7 @@ CAutoSbFree::~CAutoSbFree() {
             PDAT *pdat;
             aptr = [self code_getva:&pval];
             if (pval->support & HSPVAR_SUPPORT_VARUSE) {
-                pdat = HspVarCorePtrAPTR(pval, aptr);
+                pdat = [self HspVarCorePtrAPTR:pval ofs:aptr];
                 // hsp3int_reffunc_intfunc_ivalue = HspVarCoreGetUsing( pval, pdat );
                 
                 if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
@@ -2180,7 +2180,7 @@ CAutoSbFree::~CAutoSbFree() {
             if (chk <= PARAM_END) {
                  @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
             }
-            sp = (char *)HspVarCoreCnvPtr(mpval, HSPVAR_FLAG_STR);
+            sp = (char *)[self HspVarCoreCnvPtr:mpval flag:HSPVAR_FLAG_STR];
             ptr = (void *)sp;
             break;
         }
@@ -2304,7 +2304,7 @@ CAutoSbFree::~CAutoSbFree() {
             if (chk <= PARAM_END) {
                  @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
             }
-            dp = (double *)HspVarCoreCnvPtr(mpval, HSPVAR_FLAG_DOUBLE);
+            dp = (double *)[self HspVarCoreCnvPtr:mpval flag:HSPVAR_FLAG_DOUBLE];
             hsp3int_reffunc_intfunc_value = *dp;
             break;
         }

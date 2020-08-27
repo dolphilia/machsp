@@ -135,7 +135,7 @@
             }
         }
     }
-    HspVarCoreDupPtr(pval, t, ptr, size);
+    [self HspVarCoreDupPtr:pval flag:t ptr:ptr size:size];
     
 }
 
@@ -744,7 +744,7 @@
         dst = HspVarDouble_GetPtr(mpval);
     } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "str") ==
                0) {  //文字列のFree
-        dst = HspVarStr_GetPtr(mpval);
+        dst = [self HspVarStr_GetPtr:mpval];
     } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "label") ==
                0) {  //ラベルのFree
         dst = HspVarLabel_GetPtr(mpval);
@@ -764,7 +764,7 @@
             ptr = (char *)HspVarDouble_Cnv(ptr, mpval->flag);
         } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "str") ==
                    0) {  //文字列のCnv
-            ptr = (char *)HspVarStr_Cnv(ptr, mpval->flag);
+            ptr = (char *)[self HspVarStr_Cnv:ptr flag:mpval->flag];
         } else {
              @throw [self make_nsexception:HSPERR_SYNTAX];
         }

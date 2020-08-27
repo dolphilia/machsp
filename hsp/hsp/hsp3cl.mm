@@ -290,7 +290,7 @@ rerun:
                 HspVarDouble_Free(&abc_hspctx.mem_var[i]);
             } else if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
                               "str") == 0) {  //文字列のFree
-                HspVarStr_Free(&abc_hspctx.mem_var[i]);
+                [self HspVarStr_Free:&abc_hspctx.mem_var[i]];
             } else if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
                               "label") == 0) {  //ラベルのFree
                 HspVarLabel_Free(&abc_hspctx.mem_var[i]);
@@ -416,7 +416,7 @@ rerun:
                                   ptr:ptr + hsphed->pt_finfo
                                  size:hsphed->max_finfo];
     
-    HspVarCoreResetVartype(hsphed->max_varhpi);  // 型の初期化
+    [self HspVarCoreResetVartype:hsphed->max_varhpi];  // 型の初期化
     [self code_resetctx:&abc_hspctx];            // hsp3code setup
     
     //		HspVar setup
@@ -429,7 +429,7 @@ rerun:
             PVal *pval = &abc_hspctx.mem_var[i];
             pval->mode = HSPVAR_MODE_NONE;
             pval->flag = HSPVAR_FLAG_INT;            // 仮の型
-            HspVarCoreClear(pval, HSPVAR_FLAG_INT);  // グローバル変数を0にリセット
+            [self HspVarCoreClear:pval flag:HSPVAR_FLAG_INT];  // グローバル変数を0にリセット
         }
     }
     

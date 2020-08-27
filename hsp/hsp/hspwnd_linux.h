@@ -17,13 +17,13 @@ typedef struct BMSCR
     int flag;      // used flag
     int sx;        // X-size
     int sy;        // Y-size
-    int palmode;   // palmode
-    void* hdc;     // buffer HDC
-    void* pBit;    // bitmap pointer
+    int palette_mode;   // palmode
+    void* buffer_hdc_pointer;     // buffer HDC
+    void* bitmap_pointer;    // bitmap pointer
     void* pbi;     // infoheader
-    void* dib;     // bitmap handle(DIB)
+    void* bitmap_handle_dib;     // bitmap handle(DIB)
     void* old;     // bitmap handle(OLD)
-    void* pal;     // palette table
+    void* palette_table;     // palette table
     void* hpal;    // palette handle
     void* holdpal; // palette handle (old)
     int pals;      // palette entries
