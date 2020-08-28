@@ -555,7 +555,7 @@
     //		( 返値 : 汎用データのポインタ )
     //		( mptype : 汎用データのタイプを返す )
     //
-    char *ptr = nullptr;
+    char *ptr = NULL;
     HspVarProc *varproc;
     /*
      FlexValue *fv;
@@ -752,7 +752,7 @@
     FlexValue *fv;
     char *out;
     STRUCTPRM *prm;
-    char *ptr = nullptr;
+    char *ptr = NULL;
     int tflag = 0;
     int basesize;
     int tmpval;
@@ -2446,7 +2446,7 @@
             abc_hspctx.refdval = *(double *)mpval->pt;
             break;
         default:
-            throw HSPERR_TYPE_MISMATCH;
+            @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
     
 }
@@ -2926,7 +2926,7 @@
                     label = [self code_getlb2];
                     break;
                 default:
-                    throw HSPERR_TYPE_MISMATCH;
+                     @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
             }
             [self code_setva:pval aptr:aptr type:HSPVAR_FLAG_LABEL ptr:&label];
             break;
@@ -4291,7 +4291,7 @@ lparam:(int)lparam {
     while (adr < size) {
         sprintf(tline, "%04X", adr);
         for (int i = 0; i < 8 && adr < size; ++i, ++adr) {
-            sprintf(t, " %02X", static_cast<unsigned char>(mem[adr]));
+            //sprintf(t, " %02X", static_cast<unsigned char>(mem[adr]));
             strcat(tline, t);
         }
         strcat(tline, "\r\n");
@@ -4392,7 +4392,7 @@ lparam:(int)lparam {
     //			bit3 : dump
     //
     int i, id, max;
-    char *name = nullptr;
+    char *name = NULL;
     HspVarProc *proc;
     PVal *pv;
     PDAT *src;

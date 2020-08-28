@@ -421,7 +421,7 @@ static FILE *fp;
      mingw : warning : 仮引数:int 実引数:long
      に対処
      */
-    sprintf(inf, "%s,%d", dpm_file, static_cast<int>(a));
+    //sprintf(inf, "%s,%d", dpm_file, static_cast<int>(a));
     
 }
 

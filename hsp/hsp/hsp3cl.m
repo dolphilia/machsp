@@ -301,7 +301,8 @@ rerun:
                  @throw [self make_nsexception:HSPERR_SYNTAX];
             }
         }
-        delete[] abc_hspctx.mem_var;
+        free(abc_hspctx.mem_var);
+        //delete[] abc_hspctx.mem_var;
         abc_hspctx.mem_var = NULL;
     }
     
@@ -423,7 +424,8 @@ rerun:
     abc_hspctx.mem_var = NULL;
     if (hsp3cl_maxvar) {
         int i;
-        abc_hspctx.mem_var = new PVal[hsp3cl_maxvar];
+        abc_hspctx.mem_var = malloc(hsp3cl_maxvar * sizeof(PVal));
+        //new PVal[hsp3cl_maxvar];
         
         for (i = 0; i < hsp3cl_maxvar; i++) {
             PVal *pval = &abc_hspctx.mem_var[i];
