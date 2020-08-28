@@ -26,8 +26,7 @@
  */
 /*------------------------------------------------------------*/
 
-typedef struct
-{
+typedef struct {
     STRBUF* mem;
     int len;
 } SLOT;
@@ -50,10 +49,7 @@ static STRBUF* freelist;
  */
 /*------------------------------------------------------------*/
 
-static void
-BlockPtrPrepare(void)
-{
-    
+-(void)BlockPtrPrepare {
     STRBUF* sb;
     
     if (str_blockcur == 0) {
@@ -85,14 +81,11 @@ BlockPtrPrepare(void)
     
 }
 
-static STRBUF*
-BlockEntry(void)
-{
-    
+-(STRBUF*)BlockEntry {
     //		空きエントリーブロックを探す
     //
     if (freelist == NULL) {
-        BlockPtrPrepare();
+        [self BlockPtrPrepare];
     }
     STRBUF* buf = freelist;
     freelist = STRBUF_NEXT(freelist);
@@ -100,15 +93,12 @@ BlockEntry(void)
     return buf;
 }
 
-static char*
-BlockAlloc(int size)
-{
-    
+-(char*)BlockAlloc:(int)size {
     int* p;
     STRBUF* st;
     STRBUF* st2;
     STRINF* inf;
-    st = BlockEntry();
+    st = [self BlockEntry];
     inf = &(st->inf);
     if (size <= STRBUF_BLOCKSIZE) {
         inf->flag = STRINF_FLAG_USEINT;
@@ -130,61 +120,43 @@ BlockAlloc(int size)
     return (char*)p;
 }
 
-static void
-FreeExtPtr(STRINF* inf)
-{
-    
+-(void)FreeExtPtr:(STRINF*)inf {
     if (inf->flag == STRINF_FLAG_USEEXT) {
         FREE(inf->extptr);
     }
-    
 }
 
-static void
-BlockFree(STRINF* inf)
-{
-    
-    FreeExtPtr(inf);
+-(void)BlockFree:(STRINF*)inf {
+    [self FreeExtPtr:inf];
     STRINF_NEXT(*inf) = freelist;
     freelist = (STRBUF*)inf;
     inf->flag = STRINF_FLAG_NONE;
-    
 }
 
-static char*
-BlockRealloc(STRBUF* st, int size)
-{
-    
+-(char*)BlockRealloc:(STRBUF*)st size:(int)size {
     char* p;
     STRINF* inf;
     STRBUF* newst;
     inf = GET_INTINF(st);
     if (size <= inf->size)
         return inf->ptr;
-    
     newst = (STRBUF*)MALLOC(size + sizeof(STRINF));
     p = newst->data;
     memcpy(p, inf->ptr, inf->size);
-    FreeExtPtr(inf);
+    [self FreeExtPtr:inf];
     inf->size = size;
     inf->flag = STRINF_FLAG_USEEXT;
     inf->ptr = p;
     inf->extptr = newst;
-    
     newst->inf = *inf;
-    
     return p;
 }
 
-void
-BlockInfo(STRINF* inf)
-{
-    
+-(void)BlockInfo:(STRINF*)inf {
     STRBUF* newst;
     if (inf->flag == STRINF_FLAG_USEEXT) {
         newst = (STRBUF*)inf->extptr;
     }
-    
 }
 
 /*------------------------------------------------------------*/
@@ -193,71 +165,48 @@ BlockInfo(STRINF* inf)
  */
 /*------------------------------------------------------------*/
 
-void
-sbInit(void)
-{
-    
+-(void)sbInit {
     str_blockcur = 0;
     freelist = NULL;
     slot_len = STRBUF_BLOCK_DEFAULT;
-    BlockPtrPrepare();
-    
+    [self BlockPtrPrepare];
 }
 
-void
-sbBye(void)
-{
-    
+-(void)sbBye {
     int i;
     for (i = 0; i < str_blockcur; i++) {
         STRBUF* mem = mem_sb[i].mem;
         STRBUF* p = mem;
         STRBUF* pend = p + mem_sb[i].len;
         while (p < pend) {
-            FreeExtPtr(&p->inf);
+            [self FreeExtPtr:&p->inf];
             p++;
         }
         FREE(mem);
     }
     FREE(mem_sb);
-    
 }
 
-STRINF*
-sbGetSTRINF(char* ptr)
-{
-    
-    
+-(STRINF*)sbGetSTRINF:(char*)ptr {
     return (STRINF*)(ptr - sizeof(STRINF));
 }
 
-char*
-sbAlloc(int size)
-{
-    
+-(char*)sbAlloc:(int)size {
     int sz;
     sz = size;
     if (size < STRBUF_BLOCKSIZE)
         sz = STRBUF_BLOCKSIZE;
-    
-    return BlockAlloc(sz);
+    return [self BlockAlloc:sz];
 }
 
-char*
-sbAllocClear(int size)
-{
-    
+-(char*)sbAllocClear:(int)size {
     char* p;
-    p = sbAlloc(size);
+    p = [self sbAlloc:size];
     memset(p, 0, size);
-    
     return p;
 }
 
-void
-sbFree(void* ptr)
-{
-    
+-(void)sbFree:(void*)ptr {
     char* p;
     STRBUF* st;
     STRINF* inf;
@@ -265,27 +214,18 @@ sbFree(void* ptr)
     st = (STRBUF*)(p - sizeof(STRINF));
     inf = GET_INTINF(st);
     if (p != (inf->ptr)) {
-        
         return;
     }
-    BlockFree(inf);
-    
+    [self BlockFree:inf];
 }
 
-char*
-sbExpand(char* ptr, int size)
-{
-    
+-(char*)sbExpand:(char*)ptr size:(int)size {
     STRBUF* st;
     st = (STRBUF*)(ptr - sizeof(STRINF));
-    
-    return BlockRealloc(st, size);
+    return [self BlockRealloc:st size:size];
 }
 
-void
-sbCopy(char** pptr, char* data, int size)
-{
-    
+-(void)sbCopy:(char**)pptr data:(char*)data size:(int)size {
     int sz;
     char* ptr;
     char* p;
@@ -295,17 +235,13 @@ sbCopy(char** pptr, char* data, int size)
     sz = st->inf.size;
     p = st->inf.ptr;
     if (size > sz) {
-        p = BlockRealloc(st, size);
+        p = [self BlockRealloc:st size:size];
         *pptr = p;
     }
     memcpy(p, data, size);
-    
 }
 
-void
-sbAdd(char** pptr, char* data, int size, int mode)
-{
-    
+-(void)sbAdd:(char**)pptr data:(char*)data size:(int)size mode:(int)mode {
     //		mode:0=normal/1=string
     int sz, newsize;
     STRBUF* st;
@@ -323,50 +259,33 @@ sbAdd(char** pptr, char* data, int size, int mode)
     if (newsize > (st->inf.size)) {
         newsize = (newsize + 0xfff) & 0xfffff000; // 8K単位で確保
         // Alertf( "#Alloc%d",newsize );
-        p = BlockRealloc(st, newsize);
+        p = [self BlockRealloc:st size:newsize];
         *pptr = p;
     }
     memcpy(p + sz, data, size);
-    
 }
 
-void
-sbStrCopy(char** ptr, char* str)
-{
-    
-    sbCopy(ptr, str, (int)strlen(str) + 1);
-    
+-(void)sbStrCopy:(char**)ptr str:(char*)str {
+    [self sbCopy:ptr data:str size:(int)strlen(str) + 1];
 }
 
-void
-sbStrAdd(char** ptr, char* str)
-{
-    
-    sbAdd(ptr, str, (int)strlen(str) + 1, 1);
-    
+-(void)sbStrAdd:(char**)ptr str:(char*)str {
+    [self sbAdd:ptr data:str size:(int)strlen(str) + 1 mode:1];
 }
 
-void*
-sbGetOption(char* ptr)
-{
-    
+-(void*)sbGetOption:(char*)ptr {
     STRBUF* st;
     st = (STRBUF*)(ptr - sizeof(STRINF));
-    
     return st->inf.opt;
 }
 
-void
-sbSetOption(char* ptr, void* option)
-{
-    
+-(void)sbSetOption:(char*)ptr option:(void*)option {
     STRBUF* st;
     STRINF* inf;
     st = (STRBUF*)(ptr - sizeof(STRINF));
     st->inf.opt = option;
     inf = GET_INTINF(st);
     inf->opt = option;
-    
 }
 
 @end

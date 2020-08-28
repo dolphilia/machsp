@@ -119,7 +119,7 @@ static FILE *fp;
     memf_flag = 0;
     i = *(int *)fname;
     if ((i == 0x3a4d5044) || (i == 0x3a6d7064)) {  // 'DPM:'をチェックする
-        p = strchr2(fname + 4, ':');
+        p = [self strchr2:fname + 4 code:':'];
         [self dpm_bye];
         if (p != NULL) {
             *p = 0;
@@ -491,7 +491,7 @@ static FILE *fp;
         
         return NULL;
     }
-    p = mem_ini(len + 1);
+    p = [self mem_ini:len + 1];
     [self dpm_read:fname readmem:p rlen:len seekofs:0];
     p[len] = 0;
     

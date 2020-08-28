@@ -13,26 +13,26 @@ ViewController (hspvar_label) {
 }
 //=============================================================================>>>hspvar_label
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
     
     typedef unsigned short* HSPVAR_LABEL;
-    void HspVarLabel_Init(HspVarProc* p);
+    //-(void)HspVarLabel_Init:(HspVarProc*)p;
     
 #ifdef __cplusplus
-}
+//}
 #endif
 
-PDAT* HspVarLabel_GetPtr(PVal* pval);
-int HspVarLabel_GetVarSize(PVal* pval);
-void HspVarLabel_Free(PVal* pval);
-void HspVarLabel_Alloc(PVal* pval, const PVal* pval2);
-int HspVarLabel_GetSize(const PDAT* pval);
-int HspVarLabel_GetUsing(const PDAT* pdat);
-void HspVarLabel_Set(PVal* pval, PDAT* pdat, const void* in);
-void* HspVarLabel_GetBlockSize(PVal* pval, PDAT* pdat, int* size);
-void HspVarLabel_AllocBlock(PVal* pval, PDAT* pdat, int size);
-void HspVarLabel_Init(HspVarProc* p);
+-(PDAT*)HspVarLabel_GetPtr:(PVal*)pval;
+-(int)HspVarLabel_GetVarSize:(PVal*)pval;
+-(void)HspVarLabel_Free:(PVal*)pval;
+-(void)HspVarLabel_Alloc:(PVal*)pval pval2:(const PVal*)pval2;
+-(int)HspVarLabel_GetSize:(const PDAT*)pval;
+-(int)HspVarLabel_GetUsing:(const PDAT*)pdat;
+-(void)HspVarLabel_Set:(PVal*)pval pdat:(PDAT*)pdat in:(const void*)in;
+-(void*)HspVarLabel_GetBlockSize:(PVal*)pval pdat:(PDAT*)pdat size:(int*)size;
+-(void)HspVarLabel_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size;
+-(void)HspVarLabel_Init:(HspVarProc*)p;
 //=============================================================================<<<hspvar_label
 @end
 #endif

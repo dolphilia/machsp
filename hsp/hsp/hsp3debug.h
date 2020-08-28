@@ -11,8 +11,11 @@
 ViewController (hsp3debug) {
 }
 
-char* hspd_geterror(HSPERROR error);
-char* hspd_geterror(HSPERROR error);
+#ifdef FLAG_HSPDEBUG
+-(char*)hspd_geterror:(HSPERROR)error;
+#else
+-(char*)hspd_geterror:(HSPERROR)error;
+#endif
 
 @end
 

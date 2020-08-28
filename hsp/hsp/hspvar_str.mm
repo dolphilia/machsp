@@ -122,7 +122,7 @@ HspVarProc* hspvar_str_myproc;
         size = [self HspVarStr_GetVarSize:pval];
         for (i = 0; i < (int)(size / sizeof(char*)); i++) {
             pp = [self HspVarStr_GetFlexBufPtr:pval num:i];
-            sbFree(*pp);
+            [self sbFree:*pp];
         }
         free(pval->master);
     }
@@ -160,8 +160,8 @@ HspVarProc* hspvar_str_myproc;
             bsize = 64;
         for (i = 0; i < (int)(size / sizeof(char*)); i++) {
             pp = [self HspVarStr_GetFlexBufPtr:pval num:i];
-            *pp = sbAllocClear(bsize);
-            sbSetOption(*pp, (void*)pp);
+            *pp = [self sbAllocClear:bsize];
+            [self sbSetOption:*pp option:(void*)pp];
         }
         
         return;
@@ -171,11 +171,11 @@ HspVarProc* hspvar_str_myproc;
     for (i = 0; i < (int)(size / sizeof(char*)); i++) {
         pp = [self HspVarStr_GetFlexBufPtr:pval num:i];
         if (i >= i2) {
-            *pp = sbAllocClear(64); // 新規確保分
+            *pp = [self sbAllocClear:64]; // 新規確保分
         } else {
             *pp = *[self HspVarStr_GetFlexBufPtr:&oldvar num:i]; // 確保済みバッファ
         }
-        sbSetOption(*pp, (void*)pp);
+        [self sbSetOption:*pp option:(void*)pp];
     }
     free(oldvar.master);
     
@@ -204,17 +204,16 @@ HspVarProc* hspvar_str_myproc;
         strncpy((char*)pdat, (char*)in, pval->size);
         return;
     }
-    pp = (char**)sbGetOption((char*)pdat);
-    sbStrCopy(pp, (char*)in);
+    pp = (char**)[self sbGetOption:(char*)pdat];
+    [self sbStrCopy:pp str:(char*)in];
     // strcpy( hspvar_str_GetPtr(pval), (char *)in );
-    
 }
 
 // Add
 - (void) HspVarStr_AddI:(PDAT*)pval val:(const void*)val {
     char** pp;
-    pp = (char**)sbGetOption((char*)pval);
-    sbStrAdd(pp, (char*)val);
+    pp = (char**)[self sbGetOption:(char*)pval];
+    [self sbStrAdd:pp str:(char*)val];
     // strcat( hspvar_str_GetPtr(pval), (char *)val );
     hspvar_str_myproc->aftertype = HSPVAR_FLAG_STR;
 }
@@ -252,7 +251,7 @@ HspVarProc* hspvar_str_myproc;
         *size = pval->size;
         return pdat;
     }
-    inf = sbGetSTRINF((char*)pdat);
+    inf = [self sbGetSTRINF:(char*)pdat];
     *size = inf->size;
     return pdat;
 }
@@ -261,8 +260,8 @@ HspVarProc* hspvar_str_myproc;
     char** pp;
     if (pval->mode == HSPVAR_MODE_CLONE)
         return;
-    pp = (char**)sbGetOption((char*)pdat);
-    *pp = sbExpand(*pp, size);
+    pp = (char**)[self sbGetOption:(char*)pdat];
+    *pp = [self sbExpand:*pp size:size];
     
 }
 

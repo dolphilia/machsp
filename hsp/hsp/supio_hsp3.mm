@@ -42,9 +42,7 @@
 //
 //		Internal function support (without Windows API)
 //
-static void
-_splitpath(char* path, char* p_drive, char* dir, char* fname, char* ext)
-{
+-(void)_splitpath:(char*)path p_drive:(char*)p_drive dir:(char*)dir fname:(char*)fname ext:(char*)ext {
     
     //		Linux用ファイルパス切り出し
     //
@@ -54,14 +52,14 @@ _splitpath(char* path, char* p_drive, char* dir, char* fname, char* ext)
     p_drive[0] = 0;
     strcpy(pathtmp, path);
     
-    p = strchr2(pathtmp, '.');
+    p = [self strchr2:pathtmp code:'.'];
     if (p == NULL) {
         ext[0] = 0;
     } else {
         strcpy(ext, p);
         *p = 0;
     }
-    p = strchr2(pathtmp, '/');
+    p = [self strchr2:pathtmp code:'/'];
     if (p == NULL) {
         dir[0] = 0;
         strcpy(fname, pathtmp);
@@ -73,9 +71,7 @@ _splitpath(char* path, char* p_drive, char* dir, char* fname, char* ext)
     
 }
 
-static int
-wildcard(char* text, char* wc)
-{
+-(int)wildcard:(char*)text wc:(char*)wc {
     
     //		textに対してワイルドカード処理を適応
     //		return value: yes 1, no 0
@@ -90,16 +86,16 @@ wildcard(char* text, char* wc)
             return 0;
         }
         if (wc[1] == *text | wc[1] == '*') {
-            if (wildcard(text, wc + 1)) {
+            if ([self wildcard:text wc:wc + 1]) {
                 return 1;
             }
         }
         if (*text != '\0') {
-            return wildcard(text + 1, wc);
+            return [self wildcard:text + 1 wc:wc];
         }
     }
     if ((*text != '\0') && (wc[0] == *text)) {
-        return wildcard(text + 1, wc + 1);
+        return [self wildcard:text + 1 wc:wc + 1];
     }
     
     return 0;
@@ -110,26 +106,15 @@ wildcard(char* text, char* wc)
 //
 // static FILE *fp;
 
-char*
-mem_ini(int size)
-{
-    
-    
+-(char*)mem_ini:(int)size {
     return (char*)calloc(size, 1);
 }
 
-void
-mem_bye(void* ptr)
-{
-    
+-(void)mem_bye:(void*)ptr {
     free(ptr);
-    
 }
 
-int
-mem_save(char* fname, void* mem, int msize, int seekofs)
-{
-    
+-(int)mem_save:(char*)fname mem:(void*)mem msize:(int)msize seekofs:(int)seekofs {
     FILE* fp;
     int flen;
     
@@ -148,9 +133,7 @@ mem_save(char* fname, void* mem, int msize, int seekofs)
     return flen;
 }
 
-void
-strcase(char* target)
-{
+-(void)strcase:(char*)target {
     
     //		strをすべて小文字に(全角対応版)
     //		注意! : SJISのみ対応です
@@ -172,9 +155,7 @@ strcase(char* target)
     
 }
 
-int
-strcpy2(char* str1, char* str2)
-{
+-(int)strcpy2:(char*)str1 str2:(char*)str2 {
     
     //	string copy (ret:length)
     //
@@ -194,9 +175,7 @@ strcpy2(char* str1, char* str2)
     return (int)(p - str1);
 }
 
-int
-strcat2(char* str1, char* str2)
-{
+-(int)strcat2:(char*)str1 str2:(char*)str2 {
     
     //	string cat (ret:length)
     //
@@ -212,12 +191,10 @@ strcat2(char* str1, char* str2)
     }
     i = (int)(src - str1);
     
-    return (strcpy2(src, str2) + i);
+    return ([self strcpy2:src str2:str2] + i);
 }
 
-char*
-strstr2(char* target, char* src)
-{
+-(char*)strstr2:(char*)target src:(char*)src {
     
     //		strstr関数の全角対応版
     //		注意! : SJISのみ対応です
@@ -257,9 +234,7 @@ strstr2(char* target, char* src)
     return NULL;
 }
 
-char*
-strchr2(char* target, char code)
-{
+-(char*)strchr2:(char*)target code:(char)code {
     
     //		str中最後のcode位置を探す(全角対応版)
     //		注意! : SJISのみ対応です
@@ -285,9 +260,7 @@ strchr2(char* target, char code)
     return res;
 }
 
-void
-getpath(char* stmp, char* outbuf, int p2)
-{
+-(void)getpath:(char*)stmp outbuf:(char*)outbuf p2:(int)p2 {
     
     char* p;
     char tmp[_MAX_PATH];
@@ -298,8 +271,8 @@ getpath(char* stmp, char* outbuf, int p2)
     
     p = outbuf;
     if (p2 & 16)
-        strcase(stmp);
-    _splitpath(stmp, p_drive, p_dir, p_fname, p_ext);
+        [self strcase:stmp];
+    [self _splitpath:stmp p_drive:p_drive dir:p_dir fname:p_fname ext:p_ext];
     
     strcat(p_drive, p_dir);
     if (p2 & 8) {
@@ -325,34 +298,20 @@ getpath(char* stmp, char* outbuf, int p2)
     
 }
 
-int
-makedir(char* name)
-{
-    
-    
+-(int)makedir:(char*)name {
     return mkdir(name, 0755);
 }
 
-int
-changedir(char* name)
-{
-    
-    
+-(int)changedir:(char*)name {
     return chdir(name);
 }
 
-int
-delfile(char* name)
-{
-    
-    
+-(int)delfile:(char*)name {
     return unlink(name);
     // return remove( name );		// ディレクトリにもファイルにも対応
 }
 
-int
-dirlist(char* fname, char** target, int p3)
-{
+-(int)dirlist:(char*)fname target:(char**)target p3:(int)p3 {
     
     //		Linux System
     //
@@ -410,13 +369,13 @@ dirlist(char* fname, char** target, int p3)
         //		ワイルドカード処理
         //
         if (fl) {
-            fl = wildcard(p, fname);
+            fl = [self wildcard:p wc:fname];
         }
         
         if (fl) {
             stat_main++;
-            sbStrAdd(target, p);
-            sbStrAdd(target, (char*)"\n");
+            [self sbStrAdd:target str:p];
+            [self sbStrAdd:target str:(char*)"\n"];
         }
         fd = readdir(sh);
     }
@@ -425,9 +384,7 @@ dirlist(char* fname, char** target, int p3)
     return stat_main;
 }
 
-int
-gettime(int index)
-{
+-(int)gettime:(int)index {
     
     /*
      Get system time entries
@@ -475,26 +432,15 @@ gettime(int index)
 
 static int splc; // split pointer
 
-void
-strsp_ini(void)
-{
-    
+-(void)strsp_ini {
     splc = 0;
-    
 }
 
-int
-strsp_getptr(void)
-{
-    
-    
+-(int)strsp_getptr {
     return splc;
 }
 
-int
-strsp_get(char* srcstr, char* dststr, char splitchr, int len)
-{
-    
+-(int)strsp_get:(char*)srcstr dststr:(char*)dststr splitchr:(char)splitchr len:(int)len {
     //		split string with parameters
     //
     char a1;
@@ -535,9 +481,7 @@ strsp_get(char* srcstr, char* dststr, char splitchr, int len)
     return (int)a1;
 }
 
-char*
-strsp_cmds(char* srcstr)
-{
+-(char*)strsp_cmds:(char*)srcstr {
     
     //		Skip 1parameter from command line
     //
@@ -561,28 +505,22 @@ strsp_cmds(char* srcstr)
     return cmdchk;
 }
 
-int
-GetLimit(int num, int min, int max)
-{
-    
+-(int)GetLimit:(int)num min:(int)min max:(int)max {
     if (num > max)
         return max;
     if (num < min)
         return min;
-    
     return num;
 }
 
-void
-CutLastChr(char* p, char code)
-{
+-(void)CutLastChr:(char*)p code:(char)code {
     
     //		最後の'\\'を取り除く
     //
     char* ss;
     char* ss2;
     int i;
-    ss = strchr2(p, '\\');
+    ss = [self strchr2:p code:'\\'];
     if (ss != NULL) {
         i = (int)strlen(p);
         ss2 = p + i - 1;
@@ -608,9 +546,7 @@ htoi_sub(char hstr)
     return 0;
 }
 
-int
-htoi(char* str)
-{
+-(int)htoi:(char*)str {
     
     char a1;
     int d;
@@ -631,9 +567,7 @@ htoi(char* str)
 //					HSP string trim support
 /*----------------------------------------------------------*/
 
-char*
-strchr3(char* target, int code, int sw, char** findptr)
-{
+-(char*)strchr3:(char*)target code:(int)code sw:(int)sw findptr:(char**)findptr {
     
     //		文字列中のcode位置を探す(2バイトコード、全角対応版)
     //		sw = 0 : findptr = 最後に見つかったcode位置
@@ -698,10 +632,7 @@ strchr3(char* target, int code, int sw, char** findptr)
     return pres;
 }
 
-void
-TrimCodeR(char* p, int code)
-{
-    
+-(void)TrimCodeR:(char*)p code:(int)code {
     //		最後のcodeを取り除く
     //
     char* ss;
@@ -711,7 +642,7 @@ TrimCodeR(char* p, int code)
     while (1) {
         i = (int)strlen(p);
         sslast = p + i;
-        ss = strchr3(p, code, 0, &ss2);
+        ss = [self strchr3:p code:code sw:0 findptr:&ss2];
         if (ss2 == NULL)
             break;
         if (ss != sslast)
@@ -721,16 +652,13 @@ TrimCodeR(char* p, int code)
     
 }
 
-void
-TrimCode(char* p, int code)
-{
-    
+-(void)TrimCode:(char*)p code:(int)code {
     //		すべてのcodeを取り除く
     //
     char* ss;
     char* ss2;
     while (1) {
-        ss = strchr3(p, code, 1, &ss2);
+        ss = [self strchr3:p code:code sw:1 findptr:&ss2];
         if (ss2 == NULL)
             break;
         strcpy(ss2, ss);
@@ -738,16 +666,14 @@ TrimCode(char* p, int code)
     
 }
 
-void
-TrimCodeL(char* p, int code)
-{
+-(void)TrimCodeL:(char*)p code:(int)code {
     
     //		最初のcodeを取り除く
     //
     char* ss;
     char* ss2;
     while (1) {
-        ss = strchr3(p, code, 2, &ss2);
+        ss = [self strchr3:p code:code sw:2 findptr:&ss2];
         if (ss2 == NULL)
             break;
         strcpy(ss2, ss);

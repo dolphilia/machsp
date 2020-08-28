@@ -738,19 +738,19 @@
     PDAT *dst;
     if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "int") ==
         0) {  //整数のFree
-        dst = HspVarInt_GetPtr(mpval);
+        dst = [self HspVarInt_GetPtr:mpval];
     } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "double") ==
                0) {  //実数のFree
-        dst = HspVarDouble_GetPtr(mpval);
+        dst = [self HspVarDouble_GetPtr:mpval];
     } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "str") ==
                0) {  //文字列のFree
         dst = [self HspVarStr_GetPtr:mpval];
     } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "label") ==
                0) {  //ラベルのFree
-        dst = HspVarLabel_GetPtr(mpval);
+        dst = [self HspVarLabel_GetPtr:mpval];
     } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "struct") ==
                0) {  // structのFree
-        dst = HspVarLabel_GetPtr(mpval);
+        dst = [self HspVarLabel_GetPtr:mpval];
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
@@ -758,10 +758,10 @@
     if (mpval->flag != HSPVAR_FLAG_STR) {
         if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "int") ==
             0) {  //整数のCnv
-            ptr = (char *)HspVarInt_Cnv(ptr, mpval->flag);
+            ptr = (char *)[self HspVarInt_Cnv:ptr flag:mpval->flag];
         } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "double") ==
                    0) {  //実数のCnv
-            ptr = (char *)HspVarDouble_Cnv(ptr, mpval->flag);
+            ptr = (char *)[self HspVarDouble_Cnv:ptr flag:mpval->flag];
         } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "str") ==
                    0) {  //文字列のCnv
             ptr = (char *)[self HspVarStr_Cnv:ptr flag:mpval->flag];

@@ -137,7 +137,7 @@ rerun:
     
     //		コマンドライン関連
     ss = (char *)"";  // コマンドラインパラメーターを入れる
-    sbStrCopy(&vc_hspctx->cmdline, ss);  // コマンドラインパラメーターを保存
+    [self sbStrCopy:&vc_hspctx->cmdline str:ss];  // コマンドラインパラメーターを保存
     
     //		Register Type
     //
@@ -234,7 +234,7 @@ rerun:
     int ln;
     err = [self code_geterror];
     ln = [self code_getdebug_line];
-    msg = hspd_geterror(err);
+    msg = [self hspd_geterror:err];
     fname = [self code_getdebug_name];
     
     if (ln < 0) {
@@ -284,19 +284,19 @@ rerun:
             // HspVarCoreDispose( &abc_hspctx.mem_var[i] );
             if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
                        "int") == 0) {  //整数のFree
-                HspVarInt_Free(&abc_hspctx.mem_var[i]);
+                [self HspVarInt_Free:&abc_hspctx.mem_var[i]];
             } else if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
                               "double") == 0) {  //実数のFree
-                HspVarDouble_Free(&abc_hspctx.mem_var[i]);
+                [self HspVarDouble_Free:&abc_hspctx.mem_var[i]];
             } else if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
                               "str") == 0) {  //文字列のFree
                 [self HspVarStr_Free:&abc_hspctx.mem_var[i]];
             } else if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
                               "label") == 0) {  //ラベルのFree
-                HspVarLabel_Free(&abc_hspctx.mem_var[i]);
+                [self HspVarLabel_Free:&abc_hspctx.mem_var[i]];
             } else if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
                               "struct") == 0) {  // structのFree
-                HspVarLabel_Free(&abc_hspctx.mem_var[i]);
+                [self HspVarLabel_Free:&abc_hspctx.mem_var[i]];
             } else {
                  @throw [self make_nsexception:HSPERR_SYNTAX];
             }
@@ -307,7 +307,7 @@ rerun:
     
     abc_hspctx.mem_mcs = NULL;
     if (hsp3cl_axfile != NULL) {
-        mem_bye(hsp3cl_axfile);
+        [self mem_bye:hsp3cl_axfile];
         hsp3cl_axfile = NULL;
     }
     
@@ -391,7 +391,7 @@ rerun:
     
     if ((hsphed->h1 != 'H') || (hsphed->h2 != 'S') || (hsphed->h3 != 'P') ||
         (hsphed->h4 != '3')) {
-        mem_bye(hsp3cl_axfile);
+        [self mem_bye:hsp3cl_axfile];
         
         return -1;
     }

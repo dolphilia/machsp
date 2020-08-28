@@ -78,10 +78,7 @@ static char *error_message[] = {
 
 static char errmsg[256];
 
-char *
-hspd_geterror( HSPERROR error )
-{
-    
+-(char*)hspd_geterror:(HSPERROR)error {
     NSAlert *alert = [[NSAlert alloc] init];
     [alert setMessageText:@"内部エラーが発生しました"];
     NSString* nsstr_error_message = [NSString stringWithCString:error_message[(int)error] encoding:NSUTF8StringEncoding];
@@ -95,12 +92,8 @@ hspd_geterror( HSPERROR error )
 #else
 static char errmsg[256];
 
-char *
-hspd_geterror( HSPERROR error )
-{
-    
+-(char *)hspd_geterror:(HSPERROR) error{
     sprintf( errmsg, "内部エラーが発生しました(%d)", (int)error );
-    
     return errmsg;
 }
 #endif

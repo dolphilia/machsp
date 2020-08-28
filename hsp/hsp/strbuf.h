@@ -45,20 +45,20 @@ struct STRBUF
 @interface
 ViewController (strbuf) {
 }
-void sbInit(void);
-void sbBye(void);
-char* sbAlloc(int size);
-char* sbAllocClear(int size);
-void sbFree(void* ptr);
-char* sbExpand(char* ptr, int size);
-STRINF* sbGetSTRINF(char* ptr);
-void sbCopy(char** ptr, char* data, int size);
-void sbStrCopy(char** ptr, char* str);
-void sbAdd(char** ptr, char* data, int size, int offset);
-void sbStrAdd(char** ptr, char* str);
-void* sbGetOption(char* ptr);
-void sbSetOption(char* ptr, void* option);
-void sbInfo(char* ptr);
+-(void)sbInit;
+-(void)sbBye;
+-(char*)sbAlloc:(int)size;
+-(char*)sbAllocClear:(int)size;
+-(void)sbFree:(void*)ptr;
+-(char*)sbExpand:(char*)ptr size:(int)size;
+-(STRINF*)sbGetSTRINF:(char*)ptr;
+-(void)sbCopy:(char**)ptr data:(char*)data size:(int)size;
+-(void)sbStrCopy:(char**)ptr str:(char*)str;
+-(void)sbAdd:(char**)ptr data:(char*)data size:(int)size offset:(int)offset;
+-(void)sbStrAdd:(char**)ptr str:(char*)str;
+-(void*)sbGetOption:(char*)ptr;
+-(void)sbSetOption:(char*)ptr option:(void*)option;
+-(void)sbInfo:(char*)ptr;
 @end
 
 #endif

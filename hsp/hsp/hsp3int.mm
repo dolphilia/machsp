@@ -53,9 +53,7 @@ private:
 CAutoSbFree::CAutoSbFree(char **pptr) : pptr_(pptr) {}
 
 CAutoSbFree::~CAutoSbFree() {
-    
-    sbFree(*pptr_);
-    
+    //sbFree(*pptr_);
 }
 
 @implementation ViewController (hsp3int)
@@ -181,19 +179,15 @@ CAutoSbFree::~CAutoSbFree() {
 //----Sort Interface
 
 - (void)DataBye {
-    
     if (hsp3int_data_temp != NULL) {
-        mem_bye(hsp3int_data_temp);
+        [self mem_bye:hsp3int_data_temp];
     }
-    
 }
 
 - (void)DataIni:(int)size {
-    
     [self DataBye];
-    hsp3int_data_temp = (DATA *)mem_ini(sizeof(DATA) * size);
+    hsp3int_data_temp = (DATA *)[self mem_ini:sizeof(DATA) * size];
     hsp3int_data_tmp_size = size;
-    
 }
 
 // static void
@@ -565,10 +559,9 @@ CAutoSbFree::~CAutoSbFree() {
         while (needed_size > capa) {
             capa *= 2;
         }
-        *p = sbExpand(*p, capa);
+        *p = [self sbExpand:*p size:capa];
         *capacity = capa;
     }
-    
 }
 
 - (char *)cnvformat {
@@ -591,10 +584,11 @@ CAutoSbFree::~CAutoSbFree() {
     fstr[sizeof(fstr) - 1] = '\0';
     fp = fstr;
     capacity = 1024;
-    p = sbAlloc(capacity);
+    p = [self sbAlloc:capacity];
     len = 0;
     
-    CAutoSbFree autofree(&p);
+    //CAutoSbFree autofree(&p);
+    [self sbFree:&p];
     
     while (1) {
         char fmt[32];
@@ -725,15 +719,15 @@ CAutoSbFree::~CAutoSbFree() {
     
     PDAT *dst;
     if (strcmp(proc->vartype_name, "int") == 0) {  //整数のGetPtr
-        dst = HspVarInt_GetPtr(pval);
+        dst = [self HspVarInt_GetPtr:pval];
     } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のGetPtr
-        dst = HspVarDouble_GetPtr(pval);
+        dst = [self HspVarDouble_GetPtr:pval];
     } else if (strcmp(proc->vartype_name, "str") == 0) {  //文字列のGetPtr
         dst = [self HspVarStr_GetPtr:pval];
     } else if (strcmp(proc->vartype_name, "label") == 0) {  //ラベルのGetPtr
-        dst = HspVarLabel_GetPtr(pval);
+        dst = [self HspVarLabel_GetPtr:pval];
     } else if (strcmp(proc->vartype_name, "struct") == 0) {  // structのGetPtr
-        dst = HspVarLabel_GetPtr(pval);
+        dst = [self HspVarLabel_GetPtr:pval];
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
@@ -741,34 +735,34 @@ CAutoSbFree::~CAutoSbFree() {
     // HspVarCoreAllocBlock( pval, dst, len + 1 );
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") ==
         0) {  //整数のAllocBlock
-        HspVarInt_AllocBlock(pval, dst, len + 1);
+        [self HspVarInt_AllocBlock:pval pdat:dst size:len + 1];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") ==
                0) {  //実数のAllocBlock
-        HspVarDouble_AllocBlock(pval, dst, len + 1);
+        [self HspVarDouble_AllocBlock:pval pdat:dst size:len + 1];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") ==
                0) {  //文字列のAllocBlock
         [self HspVarStr_AllocBlock:pval pdat:dst size:len + 1];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
                0) {  //ラベルのAllocBlock
-        HspVarLabel_AllocBlock(pval, dst, len + 1);
+        [self HspVarLabel_AllocBlock:pval pdat:dst size:len + 1];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") ==
                0) {  // structのAllocBlock
-        HspVarLabel_AllocBlock(pval, dst, len + 1);
+        [self HspVarLabel_AllocBlock:pval pdat:dst size:len + 1];
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
     
     char *ptr;
     if (strcmp(proc->vartype_name, "int") == 0) {  //整数のGetPtr
-        ptr = (char *)HspVarInt_GetPtr(pval);
+        ptr = (char *)[self HspVarInt_GetPtr:pval];
     } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のGetPtr
-        ptr = (char *)HspVarDouble_GetPtr(pval);
+        ptr = (char *)[self HspVarDouble_GetPtr:pval];
     } else if (strcmp(proc->vartype_name, "str") == 0) {  //文字列のGetPtr
         ptr = (char *)[self HspVarStr_GetPtr:pval];
     } else if (strcmp(proc->vartype_name, "label") == 0) {  //ラベルのGetPtr
-        ptr = (char *)HspVarLabel_GetPtr(pval);
+        ptr = (char *)[self HspVarLabel_GetPtr:pval];
     } else if (strcmp(proc->vartype_name, "struct") == 0) {  // structのGetPtr
-        ptr = (char *)HspVarLabel_GetPtr(pval);
+        ptr = (char *)[self HspVarLabel_GetPtr:pval];
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
@@ -1164,9 +1158,9 @@ CAutoSbFree::~CAutoSbFree() {
     }
     ptr += p1;
     p = [self code_stmp:p3 + 1];
-    strsp_ini();
-    vc_hspctx->stat = strsp_get(ptr, p, p2, p3);
-    vc_hspctx->strsize = strsp_getptr();
+    [self strsp_ini];
+    vc_hspctx->stat = [self strsp_get:ptr dststr:p splitchr:p2 len:p3];
+    vc_hspctx->strsize = [self strsp_getptr];
     [self code_setva:pval aptr:aptr type:HSPVAR_FLAG_STR ptr:p];
     
 }
@@ -1199,19 +1193,19 @@ CAutoSbFree::~CAutoSbFree() {
     // HspVarCoreAllocBlock( pval, ptr, p1 );
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") ==
         0) {  //整数のAllocBlock
-        HspVarInt_AllocBlock(pval, ptr, p1);
+        [self HspVarInt_AllocBlock:pval pdat:ptr size:p1];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") ==
                0) {  //実数のAllocBlock
-        HspVarDouble_AllocBlock(pval, ptr, p1);
+        [self HspVarDouble_AllocBlock:pval pdat:ptr size:p1];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") ==
                0) {  //文字列のAllocBlock
         [self HspVarStr_AllocBlock:pval pdat:ptr size:p1];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
                0) {  //ラベルのAllocBlock
-        HspVarLabel_AllocBlock(pval, ptr, p1);
+        [self HspVarLabel_AllocBlock:pval pdat:ptr size:p1];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") ==
                0) {  // structのAllocBlock
-        HspVarLabel_AllocBlock(pval, ptr, p1);
+        [self HspVarLabel_AllocBlock:pval pdat:ptr size:p1];
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
@@ -1488,7 +1482,7 @@ CAutoSbFree::~CAutoSbFree() {
     sep_len = (int)strlen(sep);
     
     while (1) {
-        newsptr = strstr2(sptr, sep);
+        newsptr = [self strstr2:sptr src:sep];
         if (!is_last && *hsp3int_exinfo->npexflg & EXFLG_1) {
             // 分割結果の数が格納する変数より多ければ最後の変数に配列で格納していく
             // ただし最後の要素が a.2 のように要素指定があればそれ以降は全く格納しない
@@ -1673,10 +1667,10 @@ CAutoSbFree::~CAutoSbFree() {
     for (i = 0; i < len; i++) {
         if (i == 0) {
             pv->pt = hsp3int_data_temp[i].as.skey;
-            sbSetOption(pv->pt, &pv->pt);
+            [self sbSetOption:pv->pt option:&pv->pt];
         } else {
             pvstr[i] = hsp3int_data_temp[i].as.skey;
-            sbSetOption(pvstr[i], &pvstr[i]);
+            [self sbSetOption:pvstr[i] option:&pvstr[i]];
         }
     }
     
@@ -1846,7 +1840,7 @@ CAutoSbFree::~CAutoSbFree() {
             
         case 0x008:  // gettime
             ival = [self code_geti];
-            hsp3int_reffunc_intfunc_ivalue = gettime(ival);
+            hsp3int_reffunc_intfunc_ivalue = [self gettime:ival];
             break;
             
         case 0x009:  // peek
@@ -1909,10 +1903,10 @@ CAutoSbFree::~CAutoSbFree() {
                 
                 if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
                     0) {  //ラベルのAllocBlock
-                    hsp3int_reffunc_intfunc_ivalue = HspVarLabel_GetUsing(pdat);
+                    hsp3int_reffunc_intfunc_ivalue = [self HspVarLabel_GetUsing:pdat];
                 } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") ==
                            0) {  // structのAllocBlock
-                    hsp3int_reffunc_intfunc_ivalue = HspVarLabel_GetUsing(pdat);
+                    hsp3int_reffunc_intfunc_ivalue = [self HspVarLabel_GetUsing:pdat];
                 } else {
                      @throw [self make_nsexception:HSPERR_SYNTAX];
                 }
@@ -1957,7 +1951,7 @@ CAutoSbFree::~CAutoSbFree() {
             ps = [self code_gets];
             if (p1 >= 0) {
                 ptr += p1;
-                ps2 = strstr2(ptr, ps);
+                ps2 = [self strstr2:ptr src:ps];
             } else {
                 ps2 = NULL;
             }
@@ -1979,7 +1973,7 @@ CAutoSbFree::~CAutoSbFree() {
             p1 = [self code_geti];
             p2 = [self code_geti];
             p3 = [self code_geti];
-            hsp3int_reffunc_intfunc_ivalue = GetLimit(p1, p2, p3);
+            hsp3int_reffunc_intfunc_ivalue = [self GetLimit:p1 min:p2 max:p3];
             break;
             
         case 0x012:  // getease
@@ -2228,7 +2222,7 @@ CAutoSbFree::~CAutoSbFree() {
             p = vc_hspctx->stmp;
             strncpy(pathname, [self code_gets], HSP_MAX_PATH - 1);
             p1 = [self code_geti];
-            getpath(pathname, p, p1);
+            [self getpath:pathname outbuf:p p2:p1];
             ptr = p;
             break;
         }
@@ -2248,17 +2242,17 @@ CAutoSbFree::~CAutoSbFree() {
             strcpy(p, sptr);
             switch (p1) {
                 case 0:
-                    TrimCodeL(p, p2);
-                    TrimCodeR(p, p2);
+                    [self TrimCodeL:p code:p2];
+                    [self TrimCodeR:p code:p2];
                     break;
                 case 1:
-                    TrimCodeL(p, p2);
+                    [self TrimCodeL:p code:p2];
                     break;
                 case 2:
-                    TrimCodeR(p, p2);
+                    [self TrimCodeR:p code:p2];
                     break;
                 case 3:
-                    TrimCode(p, p2);
+                    [self TrimCode:p code:p2];
                     break;
             }
             break;
@@ -2824,7 +2818,7 @@ CAutoSbFree::~CAutoSbFree() {
             break;
         case STRNOTE_FIND_FIRST:  // 前方一致
         {
-            char *p = strstr2(hsp3int_baseline, nstr);
+            char *p = [self strstr2:hsp3int_baseline src:nstr];
             if (p != NULL) {
                 if (p == hsp3int_baseline) {
                     
@@ -2834,7 +2828,7 @@ CAutoSbFree::~CAutoSbFree() {
             break;
         }
         case STRNOTE_FIND_INSTR:  // 部分一致
-            if (strstr2(hsp3int_baseline, nstr) != NULL) {
+            if ([self strstr2:hsp3int_baseline src:nstr] != NULL) {
                 
                 return 1;
             }

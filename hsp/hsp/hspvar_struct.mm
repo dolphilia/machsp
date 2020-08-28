@@ -26,11 +26,7 @@
 /*------------------------------------------------------------*/
 
 // Core
-PDAT*
-HspVarStruct_GetPtr(PVal* pval)
-{
-    
-    
+-(PDAT*)HspVarStruct_GetPtr:(PVal*)pval {
     return (PDAT*)(((FlexValue*)(pval->pt)) + pval->offset);
 }
 
@@ -58,10 +54,7 @@ HspVarStruct_GetPtr(PVal* pval)
  }
  */
 
-void
-HspVarStruct_Free(PVal* pval)
-{
-    
+-(void)HspVarStruct_Free:(PVal*)pval {
     //		PVALポインタの変数メモリを解放する
     //
     int i;
@@ -74,19 +67,16 @@ HspVarStruct_Free(PVal* pval)
         fv = (FlexValue*)pval->pt;
         for (i = 0; i < pval->len[1]; i++) {
             if (fv->type == FLEXVAL_TYPE_ALLOC)
-                sbFree(fv->ptr);
+                [self sbFree:fv->ptr];
             fv++;
         }
-        sbFree(pval->pt);
+        [self sbFree:pval->pt];
     }
     pval->mode = HSPVAR_MODE_NONE;
     
 }
 
-void
-HspVarStruct_Alloc(PVal* pval, const PVal* pval2)
-{
-    
+-(void)HspVarStruct_Alloc:(PVal*)pval pval2:(const PVal*)pval2 {
     //		pval変数が必要とするサイズを確保する。
     //		(pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
     //		(pval2がNULLの場合は、新規データ)
@@ -99,7 +89,7 @@ HspVarStruct_Alloc(PVal* pval, const PVal* pval2)
         pval->len[1] = 1; // 配列を最低1は確保する
     pval->mode = HSPVAR_MODE_MALLOC;
     size = sizeof(FlexValue) * pval->len[1];
-    pt = sbAlloc(size);
+    pt = [self sbAlloc:size];
     fv = (FlexValue*)pt;
     for (i = 0; i < pval->len[1]; i++) {
         
@@ -115,7 +105,7 @@ HspVarStruct_Alloc(PVal* pval, const PVal* pval2)
     }
     if (pval2 != NULL) {
         memcpy(pt, pval->pt, pval->size);
-        sbFree(pval->pt);
+        [self sbFree:pval->pt];
     }
     pval->pt = pt;
     pval->size = size;
@@ -133,43 +123,31 @@ HspVarStruct_Alloc(PVal* pval, const PVal* pval2)
  */
 
 // Size
-int
-HspVarStruct_GetSize(const PDAT* pdat)
-{
-    
+-(int)HspVarStruct_GetSize:(const PDAT*)pdat {
     //		(実態のポインタが渡されます)
-    
     return sizeof(FlexValue);
 }
 
 // Using
-int
-HspVarStruct_GetUsing(const PDAT* pdat)
-{
-    
+-(int)HspVarStruct_GetUsing:(const PDAT*)pdat {
     //		(実態のポインタが渡されます)
     FlexValue* fv;
     fv = (FlexValue*)pdat;
-    
     return fv->type;
 }
 
 // Set
-void
-HspVarStruct_Set(PVal* pval, PDAT* pdat, const void* in)
-{
-    
+-(void)HspVarStruct_Set:(PVal*)pval pdat:(PDAT*)pdat in:(const void*)in {
     FlexValue* fv;
     FlexValue* fv_src;
     fv = (FlexValue*)in;
     fv->type = FLEXVAL_TYPE_CLONE;
     fv_src = (FlexValue*)pdat;
     if (fv_src->type == FLEXVAL_TYPE_ALLOC) {
-        sbFree(fv_src->ptr);
+        [self sbFree:fv_src->ptr];
     }
     memcpy(pdat, fv, sizeof(FlexValue));
     // sbCopy( (char **)pdat, (char *)fv->ptr, fv->size );
-    
 }
 
 /*
@@ -180,30 +158,20 @@ HspVarStruct_Set(PVal* pval, PDAT* pdat, const void* in)
  }
  */
 
-void*
-HspVarStruct_GetBlockSize(PVal* pval, PDAT* pdat, int* size)
-{
-    
+-(void*)HspVarStruct_GetBlockSize:(PVal*)pval pdat:(PDAT*)pdat size:(int*)size {
     FlexValue* fv;
     fv = (FlexValue*)pdat;
     *size = fv->size;
-    
     return (void*)(fv->ptr);
 }
 
-void
-HspVarStruct_AllocBlock(PVal* pval, PDAT* pdat, int size)
-{
-    
+-(void)HspVarStruct_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size {
     
 }
 
 /*------------------------------------------------------------*/
 
-void
-HspVarStruct_Init(HspVarProc* p)
-{
-    
+-(void)HspVarStruct_Init:(HspVarProc*)p {
     //    p->Set = HspVarStruct_Set;
     //    p->GetPtr = HspVarStruct_GetPtr;
     //    //	p->Cnv = HspVarStruct_Cnv;
@@ -243,7 +211,6 @@ HspVarStruct_Init(HspVarProc* p)
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize =
     sizeof(FlexValue); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
-    
 }
 
 /*------------------------------------------------------------*/
