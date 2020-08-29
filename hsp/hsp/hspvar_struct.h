@@ -8,15 +8,13 @@
 
 #ifndef hspvar_struct_h
 #define hspvar_struct_h
-//=============================================================================>>>hspvar_struct
+
 #import "ViewController.h"
 #import <Foundation/Foundation.h>
-//=============================================================================<<<hspvar_struct
 
 @interface
 ViewController (hspvar_struct) {
 }
-//=============================================================================>>>hspvar_struct
 -(PDAT*)HspVarStruct_GetPtr:(PVal*)pval;
 -(void)HspVarStruct_Free:(PVal*)pval;
 -(void)HspVarStruct_Alloc:(PVal*)pval pval2:(const PVal*)pval2;
@@ -26,7 +24,6 @@ ViewController (hspvar_struct) {
 -(void*)HspVarStruct_GetBlockSize:(PVal*)pval pdat:(PDAT*)pdat size:(int*)size;
 -(void)HspVarStruct_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size;
 -(void)HspVarStruct_Init:(HspVarProc*)p;
-//=============================================================================<<<hspvar_struct
 @end
 
 #endif /* hspvar_struct_h */

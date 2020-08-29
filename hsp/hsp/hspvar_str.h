@@ -8,14 +8,13 @@
 
 #ifndef hspvar_str_h
 #define hspvar_str_h
-//=============================================================================>>>hspvar_str
+
 #import "ViewController.h"
 #import <Foundation/Foundation.h>
-//=============================================================================<<<hspvar_str
+
 @interface
 ViewController (hspvar_str) {
 }
-//=============================================================================>>>hspvar_str
 -(char**) HspVarStr_GetFlexBufPtr:(PVal*)pval num:(int)num;
 -(PDAT*) HspVarStr_GetPtr:(PVal*)pval;
 -(void*) HspVarStr_Cnv:(const void*)buffer flag:(int)flag;
@@ -30,7 +29,6 @@ ViewController (hspvar_str) {
 -(void*) HspVarStr_GetBlockSize:(PVal*)pval pdat:(PDAT*)pdat size:(int*)size;
 -(void) HspVarStr_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size;
 -(void) HspVarStr_Init:(HspVarProc*)p;
-//=============================================================================<<<hspvar_str
 @end
 
 #endif /* hspvar_str_h */

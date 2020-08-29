@@ -12,7 +12,6 @@
 #import "hsp.h"
 #import "hsp3config.h"
 #import "hsp3struct_debug.h"
-//#import "hsp3ext.h"
 #import "hsp3gr.h"
 #import "hsp3struct.h"
 #import "strbuf.h"
@@ -35,13 +34,7 @@
 - (void)SetFileName:(char *)name;            // axファイル名を指定する
 - (void *)copy_DAT:(char *)ptr size:(size_t)size;
 - (LIBDAT *)copy_LIBDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size;
-- (STRUCTDAT *)copy_STRUCTDAT:(HSPHED *)hsphed
-                          ptr:(char *)ptr
-                         size:(size_t)size;
+- (STRUCTDAT *)copy_STRUCTDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size;
 @end
-
-// int hsp3cl_exec( void );
-// int hsp3cl_init( char *startfile );
-// void hsp3win_dialog( char *mes );
 
 #endif

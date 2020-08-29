@@ -588,7 +588,6 @@
     len = 0;
     
     //CAutoSbFree autofree(&p);
-    [self sbFree:&p];
     
     while (1) {
         char fmt[32];
@@ -697,6 +696,8 @@
     
     char *result = [self code_stmp:len + 1];
     strcpy(result, p);
+    
+    [self sbFree:&p];
     
     return result;
 }

@@ -32,7 +32,6 @@
 
 @interface ViewController (hsp3int) {
 }
-
 - (char *)note_update;
 - (void *)reffunc_intfunc:(int *)type_res arg:(int)arg;
 - (int)cmdfunc_intcmd:(int)cmd;
@@ -50,7 +49,6 @@
 - (int)FindLine:(char *)nstr mode:(int)mode;
 - (int)nnget:(char *)nbase line:(int)line;
 - (int)FindLineSub:(char *)nstr mode:(int)mode;
-
 @end
 
 #endif

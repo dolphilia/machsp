@@ -3,7 +3,6 @@
 //	supio.cpp functions (linux)
 //
 
-//#import "hsp.h"
 #import "ViewController.h"
 
 @interface
@@ -39,6 +38,5 @@ ViewController (supio_hsp3) {
 -(void) TrimCodeR:(char*)p code:(int)code;
 -(void) Alert:(char*)mes;
 -(void) AlertV:(char*)mes val:(int)val;
--(void) Alertf:(char*)format, ...; //
-
+-(void) Alertf:(char*)format, ...;
 @end

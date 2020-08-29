@@ -32,7 +32,6 @@
 
 @interface ViewController (hsp) {
 }
-//-(HSPContext *)code_getctx;
 - (void)code_init;
 - (void)code_bye;
 - (void)code_termfunc;

@@ -4,24 +4,14 @@
 //
 #ifndef __hspvar_label_h
 #define __hspvar_label_h
-//=============================================================================>>>hspvar_label
+
 #import "hsp3struct_var.h"
 #import "ViewController.h"
-//=============================================================================<<<hspvar_label
+
 @interface
 ViewController (hspvar_label) {
 }
-//=============================================================================>>>hspvar_label
-#ifdef __cplusplus
-//extern "C" {
-#endif
-    
-    typedef unsigned short* HSPVAR_LABEL;
-    //-(void)HspVarLabel_Init:(HspVarProc*)p;
-    
-#ifdef __cplusplus
-//}
-#endif
+typedef unsigned short* HSPVAR_LABEL;
 
 -(PDAT*)HspVarLabel_GetPtr:(PVal*)pval;
 -(int)HspVarLabel_GetVarSize:(PVal*)pval;
@@ -33,6 +23,6 @@ ViewController (hspvar_label) {
 -(void*)HspVarLabel_GetBlockSize:(PVal*)pval pdat:(PDAT*)pdat size:(int*)size;
 -(void)HspVarLabel_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size;
 -(void)HspVarLabel_Init:(HspVarProc*)p;
-//=============================================================================<<<hspvar_label
+
 @end
 #endif
