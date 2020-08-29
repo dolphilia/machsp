@@ -7,6 +7,7 @@
 //	http://hspdev-wiki.net/?OpenHSP%2FLinux%2Fhsp3
 //
 //
+
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>

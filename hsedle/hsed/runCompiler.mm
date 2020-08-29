@@ -24,8 +24,7 @@
 
 /*----------------------------------------------------------*/
 
-static void usage1( void )
-{
+-(void)usage1 {
     static 	char *p[] = {
         (char *)"usage: hspcmp [options] [filename]",
         (char *)"       -o??? set output file to ???",
@@ -61,7 +60,7 @@ static void usage1( void )
     
     //	check switch and prm
     if (argc<2) {
-        usage1();
+        [self usage1];
         return -1;
     }
     

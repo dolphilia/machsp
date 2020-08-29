@@ -171,18 +171,18 @@ extern PVal *mem_pval;
 
 //	flex value define
 //
-#define FLEXVAL_TYPE_NONE 0
-#define FLEXVAL_TYPE_ALLOC 1
-#define FLEXVAL_TYPE_CLONE 2
-typedef struct
-{
-    short type;			// typeID
-    short myid;			// 固有ID(未使用)
-    short customid;		// structure ID
-    short clonetype;	// typeID for clone
-    int size;			// data size
-    void *ptr;			// data ptr
-} FlexValue;
+//#define FLEXVAL_TYPE_NONE 0
+//#define FLEXVAL_TYPE_ALLOC 1
+//#define FLEXVAL_TYPE_CLONE 2
+//typedef struct
+//{
+//    short type;			// typeID
+//    short myid;			// 固有ID(未使用)
+//    short customid;		// structure ID
+//    short clonetype;	// typeID for clone
+//    int size;			// data size
+//    void *ptr;			// data ptr
+//} FlexValue;
 
 
 /*
@@ -197,54 +197,54 @@ typedef struct
 
 //		Core System Main Function
 //
-void HspVarCoreInit( void );
-void HspVarCoreBye( void );
-void HspVarCoreResetVartype( int expand );
-int HspVarCoreAddType();
-void HspVarCoreRegisterType( int flag, HSPVAR_COREFUNC func );
-HspVarProc *HspVarCoreSeekProc( const char *name );
-
-//		low level support functions
+//void HspVarCoreInit( void );
+//void HspVarCoreBye( void );
+//void HspVarCoreResetVartype( int expand );
+//int HspVarCoreAddType();
+//void HspVarCoreRegisterType( int flag, HSPVAR_COREFUNC func );
+//HspVarProc *HspVarCoreSeekProc( const char *name );
 //
-void HspVarCoreDup( PVal *pval, PVal *arg, APTR aptr );
-void HspVarCoreDupPtr( PVal *pval, int flag, void *ptr, int size );
-void HspVarCoreClear( PVal *pval, int flag );
-void HspVarCoreClearTemp( PVal *pval, int flag );
-void HspVarCoreDim( PVal *pval, int flag, int len1, int len2, int len3, int len4 );
-void HspVarCoreDimFlex( PVal *pval, int flag, int len0, int len1, int len2, int len3, int len4 );
-void HspVarCoreReDim( PVal *pval, int lenid, int len );
-void *HspVarCoreCnvPtr( PVal *pval, int flag );
-PDAT *HspVarCorePtrAPTR( PVal *pv, APTR ofs );
-void HspVarCoreArray( PVal *pval, int offset );
+////		low level support functions
+////
+//void HspVarCoreDup( PVal *pval, PVal *arg, APTR aptr );
+//void HspVarCoreDupPtr( PVal *pval, int flag, void *ptr, int size );
+//void HspVarCoreClear( PVal *pval, int flag );
+//void HspVarCoreClearTemp( PVal *pval, int flag );
+//void HspVarCoreDim( PVal *pval, int flag, int len1, int len2, int len3, int len4 );
+//void HspVarCoreDimFlex( PVal *pval, int flag, int len0, int len1, int len2, int len3, int len4 );
+//void HspVarCoreReDim( PVal *pval, int lenid, int len );
+//void *HspVarCoreCnvPtr( PVal *pval, int flag );
+//PDAT *HspVarCorePtrAPTR( PVal *pv, APTR ofs );
+//void HspVarCoreArray( PVal *pval, int offset );
 
 //		macro for PVal
 //
-#define HspVarCoreGetProc( flag ) (&hspvarproc[flag])
-#define HspVarCoreDispose( pv ) hspvarproc[(pv)->flag].Free(pv)
-#define HspVarCoreReset( pv ) ((pv)->offset=0,(pv)->arraycnt=0)
-#define HspVarCorePtr( pv ) (hspvarproc[(pv)->flag].GetPtr(pv))
-#define HspVarCoreArrayObject( pv,in ) (hspvarproc[(pv)->flag].ArrayObject(pv,in))	//	配列の要素を指定する(最初にResetを呼んでおくこと)
+//#define HspVarCoreGetProc( flag ) (&hspvarproc[flag])
+//#define HspVarCoreDispose( pv ) hspvarproc[(pv)->flag].Free(pv)
+//#define HspVarCoreReset( pv ) ((pv)->offset=0,(pv)->arraycnt=0)
+//#define HspVarCorePtr( pv ) (hspvarproc[(pv)->flag].GetPtr(pv))
+//#define HspVarCoreArrayObject( pv,in ) (hspvarproc[(pv)->flag].ArrayObject(pv,in))	//	配列の要素を指定する(最初にResetを呼んでおくこと)
+//
+//#define HspVarCoreSet( pv,in ) hspvarproc[(pv)->flag].Set( pv, in )
+//#define HspVarCoreCnv( in1,in2,in3 ) hspvarproc[in2].Cnv( in3,in1 )		// in1->in2の型にin3ポインタを変換する
+//
+//#define HspVarCoreGetBlockSize( pv,in1,out ) hspvarproc[(pv)->flag].GetBlockSize( pv,in1,out )
+//#define HspVarCoreAllocBlock( pv,in1,in2 ) hspvarproc[(pv)->flag].AllocBlock( pv,in1,in2 )
+//#define HspVarCoreGetUsing( pv,in1 ) hspvarproc[(pv)->flag].GetUsing( in1 )
+//
+//#define HspVarCoreGetAPTR( pv ) ((pv)->offset)
+//
+//#define HspVarCoreCopyArrayInfo( pv, src ) (pv)->arraycnt = (src)->arraycnt;(pv)->offset = (src)->offset;(pv)->arraymul = (src)->arraymul;
 
-#define HspVarCoreSet( pv,in ) hspvarproc[(pv)->flag].Set( pv, in )
-#define HspVarCoreCnv( in1,in2,in3 ) hspvarproc[in2].Cnv( in3,in1 )		// in1->in2の型にin3ポインタを変換する
 
-#define HspVarCoreGetBlockSize( pv,in1,out ) hspvarproc[(pv)->flag].GetBlockSize( pv,in1,out )
-#define HspVarCoreAllocBlock( pv,in1,in2 ) hspvarproc[(pv)->flag].AllocBlock( pv,in1,in2 )
-#define HspVarCoreGetUsing( pv,in1 ) hspvarproc[(pv)->flag].GetUsing( in1 )
-
-#define HspVarCoreGetAPTR( pv ) ((pv)->offset)
-
-#define HspVarCoreCopyArrayInfo( pv, src ) (pv)->arraycnt = (src)->arraycnt;(pv)->offset = (src)->offset;(pv)->arraymul = (src)->arraymul;
-
-
-inline PDAT *HspVarCorePtrAPTR( PVal *pv, APTR ofs )
-{
-    //		変数データの実態ポインタを得る
-    //		(APTRとpvalから実態を求める)
-    //
-    pv->offset=ofs;
-    return hspvarproc[(pv)->flag].GetPtr(pv);
-}
+//inline PDAT *HspVarCorePtrAPTR( PVal *pv, APTR ofs )
+//{
+//    //		変数データの実態ポインタを得る
+//    //		(APTRとpvalから実態を求める)
+//    //
+//    pv->offset=ofs;
+//    return hspvarproc[(pv)->flag].GetPtr(pv);
+//}
 
 
 

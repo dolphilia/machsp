@@ -17,7 +17,8 @@
 @interface MyWindow(run) {
 }
 
-static void usage1( void );
+//static void usage1( void );
+-(void)usage1;
 -(int)runCompiler:(int)argc argv:(char **)argv;
 
 @end
