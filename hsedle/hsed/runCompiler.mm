@@ -47,8 +47,7 @@
 
 /*----------------------------------------------------------*/
 
--(int)runCompiler:(int)argc argv:(char **)argv
-{
+-(int)runCompiler:(int)argc argv:(char **)argv {
     char a1,a2;
     int b,st;
     int cmpopt,ppopt,utfopt,pponly;
