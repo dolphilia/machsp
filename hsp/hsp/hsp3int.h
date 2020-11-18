@@ -11,7 +11,7 @@
 #import "SineWave.h"
 #import "ViewController.h"
 #import "hsp3dpmread.h"
-#import "hsp.h"
+#import "hsp3_code.h"
 #import "hsp3config.h"
 #import "hsp3struct.h"
 #import "hspvar_core.h"

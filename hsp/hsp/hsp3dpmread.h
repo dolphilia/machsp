@@ -2,7 +2,7 @@
 //	dpmread.c functions
 //
 #import "ViewController.h"
-#import "hsp.h"
+#import "hsp3_code.h"
 @interface ViewController (dpmread) {
 }
 - (int)dpmchk:(char *)fname;

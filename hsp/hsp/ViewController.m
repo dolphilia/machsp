@@ -2,7 +2,7 @@
 //  ViewController.m
 //
 #import "ViewController.h"
-#import "hsp.h"
+#import "hsp3_code.h"
 #import "hsp3_main.h"
 #import <Foundation/Foundation.h>
 @implementation ViewController

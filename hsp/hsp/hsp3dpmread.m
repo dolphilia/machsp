@@ -12,7 +12,7 @@
 #import <stdlib.h>
 #import <string.h>
 #import "ViewController.h"
-#import "hsp.h"
+#import "hsp3_code.h"
 #import "hsp3config.h"
 #import "supio_hsp3.h"
 typedef struct MEMFILE {

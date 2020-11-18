@@ -1,7 +1,7 @@
 //
 //  hsp.m
 //
-#import "hsp.h"
+#import "hsp3_code.h"
 #import "hspvar_core.h"
 #import "hspvar_double.h"
 #import "hspvar_int.h"
