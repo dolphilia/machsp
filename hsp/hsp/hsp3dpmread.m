@@ -6,7 +6,7 @@
 //			Modified for HSP2.6 in 2000/7
 //			Modified for HSP3.0 in 2004/11
 //
-#import "dpmread.h"
+#import "hsp3dpmread.h"
 #import <ctype.h>
 #import <stdio.h>
 #import <stdlib.h>
