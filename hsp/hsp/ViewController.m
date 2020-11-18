@@ -220,7 +220,6 @@
 }
 - (void)onTimerMidiEvent:(NSTimer*)timer
 {
-    DEBUG_TIMER_IN;
     @autoreleasepool {
         if (global.midi_events != nil && global.is_start_midi_event == YES) {
             if (global.midi_events.count > 0 && global.midi_events.count % 4 == 0) {
@@ -275,17 +274,14 @@
             }
         }
     }
-    DEBUG_TIMER_OUT;
 }
 - (void)onTimer:(NSTimer*)timer //タイトルバーの変更を監視
 {
-    DEBUG_TIMER_IN;
     if (myWindow == NULL) {
         myWindow = self.view.window;
         return;
     }
     if (isInitialized == NO) {
-        DEBUG_TIMER_OUT;
         return;
     }
     //タイトルを監視
@@ -328,7 +324,6 @@
         }
         global.old_window_border = global.now_window_border;
     }
-    DEBUG_TIMER_OUT;
 }
 //テキストフィールドのイベント　関連
 - (void)controlTextDidEndEditing:

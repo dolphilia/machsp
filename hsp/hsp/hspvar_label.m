@@ -4,7 +4,6 @@
 //
 //=============================================================================>>>hspvar_label
 #import "hspvar_label.h"
-#import "debug_message.h"
 #import "hsp3struct_debug.h"
 #import "hsp3struct_var.h"
 #import "strbuf.h"

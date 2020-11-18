@@ -7,7 +7,6 @@
 //->Cnv
 //=============================================================================>>>hspvar_core
 #import "hspvar_core.h"
-#import "debug_message.h"
 #import "hsp3struct_debug.h"
 #import "hsp3struct_var.h"
 #import "hspvar_label.h"

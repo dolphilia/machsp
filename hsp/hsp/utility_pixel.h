@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "debug_message.h"
 typedef struct {
     uint8_t red;
     uint8_t green;

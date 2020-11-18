@@ -5,7 +5,6 @@
 #define MyView_h
 #import <Cocoa/Cocoa.h>
 #import "MyCALayer.h"
-#include "debug_message.h"
 @interface MyView : NSView {
     NSImage* image;
     MyCALayer* mylayer;

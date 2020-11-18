@@ -5,7 +5,6 @@
 #define MyCALayer_h
 #import "AppDelegate.h"
 #import "d3module.h"
-#include "debug_message.h"
 #import "utility_picture.h"
 #import "utility_pixel.h"
 #import <Accelerate/Accelerate.h>

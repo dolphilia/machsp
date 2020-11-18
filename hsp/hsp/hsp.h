@@ -5,7 +5,6 @@
 #define hsp_h
 #import <Foundation/Foundation.h>
 #import "ViewController.h"
-#import "debug_message.h"
 #import "dpmread.h"
 #import "hsp3config.h"
 #import "hsp3struct_debug.h"

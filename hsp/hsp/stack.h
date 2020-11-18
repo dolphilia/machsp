@@ -9,7 +9,6 @@
 #import <stdlib.h>
 #import <string.h>
 #import "ViewController.h"
-#import "debug_message.h"
 #import "hsp3config.h"
 #import "hsp3struct_debug.h"
 #import "hsp3struct_var.h"

@@ -138,7 +138,6 @@
 		8B719A9B1D86524A00F35EC5 /* hspwnd_linux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hspwnd_linux.h; sourceTree = "<group>"; };
 		8B719A9C1D86524A00F35EC5 /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
 		8B719A9D1D86524A00F35EC5 /* stack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = stack.m; sourceTree = "<group>"; };
-		8B719AB01D86525600F35EC5 /* debug_message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debug_message.h; sourceTree = "<group>"; };
 		8B739AA21DC1EB4F00B0EA30 /* hsp3struct_debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hsp3struct_debug.h; sourceTree = "<group>"; };
 		8B7B03121DA78DCD004F4B68 /* utility_string.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utility_string.c; sourceTree = "<group>"; };
 		8B7B03131DA78DCD004F4B68 /* utility_string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utility_string.h; sourceTree = "<group>"; };
@@ -192,7 +191,6 @@
 		8B719A111D8650A300F35EC5 /* hsp */ = {
 			isa = PBXGroup;
 			children = (
-				8B719AB01D86525600F35EC5 /* debug_message.h */,
 				8B719A121D8650A300F35EC5 /* AppDelegate.h */,
 				8B719A131D8650A300F35EC5 /* AppDelegate.m */,
 				8B719A181D8650A300F35EC5 /* ViewController.h */,
@@ -255,10 +253,10 @@
 			isa = PBXGroup;
 			children = (
 				8B719A7B1D86523500F35EC5 /* hsp3cl.h */,
-				8B719A7E1D86523500F35EC5 /* hsp3gr.h */,
+				8B719A7C1D86523500F35EC5 /* hsp3cl.m */,
 				8B719A791D86523500F35EC5 /* hsp.h */,
 				8B719A7A1D86523500F35EC5 /* hsp.m */,
-				8B719A7C1D86523500F35EC5 /* hsp3cl.m */,
+				8B719A7E1D86523500F35EC5 /* hsp3gr.h */,
 				8B719A7F1D86523500F35EC5 /* hsp3gr.m */,
 				8B719A801D86523500F35EC5 /* hsp3int.h */,
 				8B719A811D86523500F35EC5 /* hsp3int.m */,

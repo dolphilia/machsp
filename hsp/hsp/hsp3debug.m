@@ -8,7 +8,6 @@
 #import <string.h>
 #import "hsp3config.h"
 #import "hsp3debug.h"
-#import "debug_message.h"
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 @implementation ViewController (hsp3debug)

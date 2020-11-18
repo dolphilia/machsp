@@ -7,7 +7,6 @@
 #import <AppKit/AppKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "AppDelegate.h"
-#include "debug_message.h"
 @interface MyAudio : NSObject {
     AppDelegate* global;
 }

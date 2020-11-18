@@ -10,7 +10,6 @@
 #include <stdbool.h>
 #include "stb_image.h"
 #include "stb_image_write.h"
-#include "debug_message.h"
 typedef struct{
     int32_t width;
     int32_t height;

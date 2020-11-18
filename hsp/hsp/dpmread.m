@@ -12,7 +12,6 @@
 #import <stdlib.h>
 #import <string.h>
 #import "ViewController.h"
-#import "debug_message.h"
 #import "hsp.h"
 #import "hsp3config.h"
 #import "supio_hsp3.h"

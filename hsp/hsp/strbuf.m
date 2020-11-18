@@ -6,7 +6,6 @@
 //	onion software/onitama 2004/6
 //
 #include "strbuf.h"
-#include "debug_message.h"
 #include "hsp3struct_debug.h"
 #include "supio_hsp3.h"
 #import <Cocoa/Cocoa.h>

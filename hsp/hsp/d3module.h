@@ -5,7 +5,6 @@
 #define d3module_h
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
-#include "debug_message.h"
 #import <math.h>
 @interface d3module : NSObject {
     //

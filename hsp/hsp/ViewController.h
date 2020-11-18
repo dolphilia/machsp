@@ -8,7 +8,6 @@
 #import "MyView.h"
 #import "MyWindow.h"
 #import "SineWave.h"
-#import "debug_message.h"
 #import "hsp3config.h"
 #import "hsp3struct_debug.h"
 #import "hsp3struct.h"

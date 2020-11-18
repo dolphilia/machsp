@@ -7,7 +7,6 @@
 #import <AudioUnit/AudioUnit.h>
 #import "SineWaveData.h"
 #import "AppDelegate.h"
-#include "debug_message.h"
 @interface SineWave : NSObject {
 @public
     AppDelegate*    global;
