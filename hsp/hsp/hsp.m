@@ -1,19 +1,5 @@
 //
 //  hsp.m
-//  hsp3cl
-//
-//  Created by dolphilia on 2016/01/18.
-//  Copyright © 2016年 dolphilia. All rights reserved.
-//  2375,2565,2978,3717,3975,4200,4736 ::
-//  474,663,683,779,1045,1555,1557,1714,1747,1753,... \-\>[a-zA-Z_0-9]+\(
-//
-// 例外の置き換え
-//
-//Find:
-//NSString\s*\*\s*error\_str\s*\=\s*\[NSString\s*stringWithFormat\s*\:\s*\@\"\%d\"\,\s*(.*)\]\;\s*@throw \[NSException\s+exceptionWithName\:\@\"\"\s+reason\:error\_str\s+userInfo\:nil\]\;
-//
-//Replace:
-//@throw \[self make_nsexception:$1\];
 //
 #import "hsp.h"
 #import "hspvar_core.h"

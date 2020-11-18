@@ -1,9 +1,5 @@
 //
 //  hsp3struct_debug.h
-//  hsp
-//
-//  Created by dolphilia on 2016/10/27.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 #ifndef hsp3struct_debug_h
 #define hsp3struct_debug_h

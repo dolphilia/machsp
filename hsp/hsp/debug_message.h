@@ -1,9 +1,5 @@
 //
 //  debug_message.h
-//  crowbar-xcode
-//
-//  Created by dolphilia on 2016/06/16.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 #ifndef debug_message_h
 #define debug_message_h

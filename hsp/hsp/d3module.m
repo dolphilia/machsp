@@ -1,12 +1,6 @@
 //
 //  d3module.m
-//  objc-calayer-example
 //
-//  Created by dolphilia on 2016/02/12.
-//  Copyright © 2016年 dolphilia. All rights reserved.
-//
-// d3moduleを改変して利用しています
-// http://sprocket.babyblue.jp/html/hsp_d3m.htm
 #import "d3module.h"
 #import <Foundation/Foundation.h>
 @implementation d3module

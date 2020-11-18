@@ -1,15 +1,10 @@
 //
 //  AppDelegate.h
-//  hsp
-//
-//  Created by 半澤 聡 on 2016/09/12.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 #import "debug_message.h"
 #import <Cocoa/Cocoa.h>
 @interface AppDelegate : NSObject<NSApplicationDelegate> {
 }
-//
 @property (nonatomic, readwrite) BOOL is_app_run; //アプリが実行開始可能かどうか
 @property (nonatomic, readwrite) int now_window_border; // 0=標準、1=枠無し
 @property (nonatomic, readwrite)

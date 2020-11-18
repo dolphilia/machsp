@@ -1,9 +1,5 @@
 //
 //  PictureUtility.c
-//  hsp
-//
-//  Created by dolphilia on 2016/09/04.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 #include "utility_picture.h"
 _Size load_image_init_canvas(char const *file_name,

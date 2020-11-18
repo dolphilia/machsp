@@ -1,9 +1,5 @@
 //
 //  PixelUtility.c
-//  hsp
-//
-//  Created by dolphilia on 2016/09/02.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 #include "utility_pixel.h"
 Color get_pixel_color(uint8_t *pixel_data,

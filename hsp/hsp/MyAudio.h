@@ -1,13 +1,6 @@
 //
 //  MyAudio.h
-//  avaudioenginetest
 //
-//  Created by dolphilia on 2016/02/13.
-//  Copyright © 2016年 dolphilia. All rights reserved.
-//
-// 参考
-// http://dev.classmethod.jp/smartphone/ios-8-avaudioplayernode/
-// http://objective-audio.jp/2014/09/avaudioengine.html
 #ifndef MyAudio_h
 #define MyAudio_h
 #import <Cocoa/Cocoa.h>

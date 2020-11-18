@@ -1,9 +1,5 @@
 //
 //  SineWaveData.h
-//  SineWaveExample
-//
-//  Created by dolphilia on 2016/02/14.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 #ifndef SineWaveData_h
 #define SineWaveData_h

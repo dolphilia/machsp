@@ -1,7 +1,6 @@
-/*--------------------------------------------------------
- HSP3 main (Console Version)
- 2004/8  onitama
- --------------------------------------------------------*/
+//
+// HSP3 main (Console Version)
+//
 #import "hsp3cl.h"
 #import "hspvar_double.h"
 #import "hspvar_int.h"

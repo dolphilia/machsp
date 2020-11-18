@@ -1,12 +1,6 @@
 //
 //  SineWave.m
-//  SineWaveExample
 //
-//  Created by dolphilia on 2016/02/14.
-//  Copyright © 2016年 dolphilia. All rights reserved.
-//
-// 参考
-// http://web.dormousesf.com/prog/SinWave/page.html
 #import <Foundation/Foundation.h>
 #import "SineWave.h"
 // コールバック関数

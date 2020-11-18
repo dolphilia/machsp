@@ -1,4 +1,3 @@
-
 //
 //	HSPVAR core module
 //	onion software/onitama 2003/4

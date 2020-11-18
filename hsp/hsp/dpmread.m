@@ -1,11 +1,11 @@
-//-----------------------------------------------------
+//
 //	Datafile Pack Manager service
 //	( No encryption for OpenHSP )
 //			onion software 1996/6
 //			Modified for win32 in 1997/8
 //			Modified for HSP2.6 in 2000/7
 //			Modified for HSP3.0 in 2004/11
-//-----------------------------------------------------
+//
 #import "dpmread.h"
 #import <ctype.h>
 #import <stdio.h>

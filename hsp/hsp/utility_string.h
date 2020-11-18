@@ -1,9 +1,5 @@
 //
 //  string_utility.h
-//  hsp
-//
-//  Created by 半澤 聡 on 2016/10/07.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 #ifndef string_utility_h
 #define string_utility_h

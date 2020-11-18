@@ -1,9 +1,5 @@
 //
 //  hspvar_core.h
-//  hsp
-//
-//  Created by 半澤 聡 on 2016/10/07.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 #ifndef hspvar_core_h
 #define hspvar_core_h

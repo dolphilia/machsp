@@ -1,9 +1,5 @@
 //
 //  MathUtility.h
-//  hsp
-//
-//  Created by dolphilia on 2016/09/06.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 #ifndef MathUtility_h
 #define MathUtility_h

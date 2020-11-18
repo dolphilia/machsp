@@ -1,9 +1,5 @@
 //
 //  MyCALayer.h
-//  objc-calayer-example
-//
-//  Created by dolphilia on 2016/02/01.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 #ifndef MyCALayer_h
 #define MyCALayer_h
