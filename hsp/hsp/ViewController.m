@@ -3,7 +3,7 @@
 //
 #import "ViewController.h"
 #import "hsp.h"
-#import "hsp3cl.h"
+#import "hsp3_main.h"
 #import <Foundation/Foundation.h>
 @implementation ViewController
 - (void)show_alert_dialog:(NSString*)message

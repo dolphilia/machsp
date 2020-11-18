@@ -1,7 +1,7 @@
 //
 // HSP3 main (Console Version)
 //
-#import "hsp3cl.h"
+#import "hsp3_main.h"
 #import "hspvar_double.h"
 #import "hspvar_int.h"
 #import "hspvar_label.h"

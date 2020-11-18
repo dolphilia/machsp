@@ -1,5 +1,5 @@
 //
-//	HSP3 graphics command
+//	HSP3 graphics commands
 //	(GUI関連コマンド・関数処理)
 //	onion software/onitama 2004/6
 //
