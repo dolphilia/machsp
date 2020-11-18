@@ -30,7 +30,7 @@
 		8B719A851D86523500F35EC5 /* hsp3cl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A7C1D86523500F35EC5 /* hsp3cl.m */; };
 		8B719A861D86523500F35EC5 /* hsp3gr.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A7F1D86523500F35EC5 /* hsp3gr.m */; };
 		8B719A871D86523500F35EC5 /* hsp3int.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A811D86523500F35EC5 /* hsp3int.m */; };
-		8B719A881D86523500F35EC5 /* dpmread.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A831D86523500F35EC5 /* dpmread.m */; };
+		8B719A881D86523500F35EC5 /* hsp3dpmread.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A831D86523500F35EC5 /* hsp3dpmread.m */; };
 		8B719AA31D86524A00F35EC5 /* hsp3debug.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A8C1D86524A00F35EC5 /* hsp3debug.m */; };
 		8B719AA51D86524A00F35EC5 /* supio_hsp3.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A901D86524A00F35EC5 /* supio_hsp3.m */; };
 		8B719AA61D86524A00F35EC5 /* strbuf.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A921D86524A00F35EC5 /* strbuf.m */; };
@@ -118,8 +118,8 @@
 		8B719A7F1D86523500F35EC5 /* hsp3gr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = hsp3gr.m; sourceTree = "<group>"; };
 		8B719A801D86523500F35EC5 /* hsp3int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3int.h; sourceTree = "<group>"; };
 		8B719A811D86523500F35EC5 /* hsp3int.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = hsp3int.m; sourceTree = "<group>"; };
-		8B719A821D86523500F35EC5 /* dpmread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dpmread.h; sourceTree = "<group>"; };
-		8B719A831D86523500F35EC5 /* dpmread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = dpmread.m; sourceTree = "<group>"; };
+		8B719A821D86523500F35EC5 /* hsp3dpmread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3dpmread.h; sourceTree = "<group>"; };
+		8B719A831D86523500F35EC5 /* hsp3dpmread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = hsp3dpmread.m; sourceTree = "<group>"; };
 		8B719A891D86524A00F35EC5 /* hsp3config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3config.h; sourceTree = "<group>"; };
 		8B719A8A1D86524A00F35EC5 /* hsp3struct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3struct.h; sourceTree = "<group>"; };
 		8B719A8B1D86524A00F35EC5 /* hsp3debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3debug.h; sourceTree = "<group>"; };
@@ -252,31 +252,31 @@
 		8B719A431D8650EE00F35EC5 /* view_controller */ = {
 			isa = PBXGroup;
 			children = (
-				8B719A7B1D86523500F35EC5 /* hsp3cl.h */,
-				8B719A7C1D86523500F35EC5 /* hsp3cl.m */,
-				8B719A791D86523500F35EC5 /* hsp.h */,
-				8B719A7A1D86523500F35EC5 /* hsp.m */,
-				8B719A7E1D86523500F35EC5 /* hsp3gr.h */,
-				8B719A7F1D86523500F35EC5 /* hsp3gr.m */,
-				8B719A801D86523500F35EC5 /* hsp3int.h */,
-				8B719A811D86523500F35EC5 /* hsp3int.m */,
 				8B719A9C1D86524A00F35EC5 /* stack.h */,
 				8B719A9D1D86524A00F35EC5 /* stack.m */,
-				8B719A821D86523500F35EC5 /* dpmread.h */,
-				8B719A831D86523500F35EC5 /* dpmread.m */,
-				8B719A8B1D86524A00F35EC5 /* hsp3debug.h */,
-				8B719A8C1D86524A00F35EC5 /* hsp3debug.m */,
 				8B719A8F1D86524A00F35EC5 /* supio_hsp3.h */,
 				8B719A901D86524A00F35EC5 /* supio_hsp3.m */,
 				8B719A911D86524A00F35EC5 /* strbuf.h */,
 				8B719A921D86524A00F35EC5 /* strbuf.m */,
+				8B719A8B1D86524A00F35EC5 /* hsp3debug.h */,
+				8B719A8C1D86524A00F35EC5 /* hsp3debug.m */,
+				8B719A821D86523500F35EC5 /* hsp3dpmread.h */,
+				8B719A831D86523500F35EC5 /* hsp3dpmread.m */,
+				8B719A7B1D86523500F35EC5 /* hsp3cl.h */,
+				8B719A7C1D86523500F35EC5 /* hsp3cl.m */,
+				8B719A791D86523500F35EC5 /* hsp.h */,
+				8B719A7A1D86523500F35EC5 /* hsp.m */,
+				8B719A801D86523500F35EC5 /* hsp3int.h */,
+				8B719A811D86523500F35EC5 /* hsp3int.m */,
+				8B719A7E1D86523500F35EC5 /* hsp3gr.h */,
+				8B719A7F1D86523500F35EC5 /* hsp3gr.m */,
 				8B6ABFD31DA742D9004064B3 /* hspvar_core.h */,
 				8B719A941D86524A00F35EC5 /* hspvar_core.m */,
-				8B6ABFD11DA740EC004064B3 /* hspvar_str.h */,
-				8B6ABFCF1DA740D4004064B3 /* hspvar_double.h */,
-				8B719A951D86524A00F35EC5 /* hspvar_double.m */,
 				8B6ABFD01DA740E2004064B3 /* hspvar_int.h */,
 				8B719A961D86524A00F35EC5 /* hspvar_int.m */,
+				8B6ABFCF1DA740D4004064B3 /* hspvar_double.h */,
+				8B719A951D86524A00F35EC5 /* hspvar_double.m */,
+				8B6ABFD11DA740EC004064B3 /* hspvar_str.h */,
 				8B719A991D86524A00F35EC5 /* hspvar_str.m */,
 				8B6ABFD21DA740F6004064B3 /* hspvar_struct.h */,
 				8B719A9A1D86524A00F35EC5 /* hspvar_struct.m */,
@@ -501,7 +501,7 @@
 				8B719A861D86523500F35EC5 /* hsp3gr.m in Sources */,
 				8B719AAA1D86524A00F35EC5 /* hspvar_label.m in Sources */,
 				8B719A841D86523500F35EC5 /* hsp.m in Sources */,
-				8B719A881D86523500F35EC5 /* dpmread.m in Sources */,
+				8B719A881D86523500F35EC5 /* hsp3dpmread.m in Sources */,
 				8B719AA71D86524A00F35EC5 /* hspvar_core.m in Sources */,
 				8B719A6B1D86521B00F35EC5 /* utility_pixel.c in Sources */,
 				8B719A6A1D86521B00F35EC5 /* utility_math.c in Sources */,

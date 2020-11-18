@@ -5,7 +5,7 @@
 //関数ポインタの使用箇所あり
 //->LrI
 //->Cnv
-//=============================================================================>>>hspvar_core
+//
 #import "hspvar_core.h"
 #import "hsp3struct_debug.h"
 #import "hsp3struct_var.h"
@@ -23,14 +23,8 @@
 #import "hspvar_str.h"
 #import "hspvar_struct.h"
 #import "utility_string.h"
-//=============================================================================<<<hspvar_core
 @implementation ViewController (hspvar_core)
-//=============================================================================>>>hspvar_core
-/*------------------------------------------------------------*/
-/*
- master pointer
- */
-/*------------------------------------------------------------*/
+//master pointer
 PVal* mem_pval;
 HspVarProc* hspvarproc;
 int hspvartype_max;
@@ -537,5 +531,4 @@ int hspvartype_limit;
     }
     pval->offset += offset * pval->arraymul;
 }
-//=============================================================================<<<hspvar_core
 @end

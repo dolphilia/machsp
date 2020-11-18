@@ -10,7 +10,7 @@
 #import <time.h>
 #import "SineWave.h"
 #import "ViewController.h"
-#import "dpmread.h"
+#import "hsp3dpmread.h"
 #import "hsp.h"
 #import "hsp3config.h"
 #import "hsp3struct.h"

@@ -6,7 +6,7 @@
 //	http://hspdev-wiki.net/?OpenHSP%2FLinux%2Fhsp3
 //
 #include "supio_hsp3.h"
-#include "dpmread.h"
+#include "hsp3dpmread.h"
 #include "hsp3config.h"
 #include "strbuf.h"
 #include <ctype.h>

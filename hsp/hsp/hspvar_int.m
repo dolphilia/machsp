@@ -1,7 +1,7 @@
 //
 //	HSPVAR core module
 //	onion software/onitama 2003/4
-//=============================================================================>>>hspvar_int
+//
 #import "hspvar_int.h"
 #import "hsp3config.h"
 #import "hsp3struct_debug.h"
@@ -13,14 +13,8 @@
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
-//=============================================================================<<<hspvar_int
 @implementation ViewController (hspvar_int)
-//=============================================================================>>>hspvar_int
-/*------------------------------------------------------------*/
-/*
- HSPVAR core interface (int)
- */
-/*------------------------------------------------------------*/
+//HSPVAR core interface (int)
 #define hspvar_int_GetPtr(pval) ((int*)pval)
 int hspvar_int_conv;
 // Core
@@ -212,7 +206,6 @@ int hspvar_int_conv;
 }
 -(void)HspVarInt_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size {
 }
-/*------------------------------------------------------------*/
 -(void)HspVarInt_Init:(HspVarProc*)p {
     //    p->Set = HspVarInt_Set;
     //    p->Cnv = HspVarInt_Cnv;
@@ -252,6 +245,4 @@ int hspvar_int_conv;
     p->basesize =
     sizeof(int); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
-/*------------------------------------------------------------*/
-//=============================================================================<<<hspvar_int
 @end

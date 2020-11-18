@@ -2,7 +2,6 @@
 //	HSPVAR core module
 //	onion software/onitama 2003/4
 //
-//=============================================================================>>>hspvar_double
 #import "hspvar_double.h"
 #import "hsp3struct_debug.h"
 #import "hsp3struct_var.h"
@@ -13,14 +12,8 @@
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
-//=============================================================================<<<hspvar_double
 @implementation ViewController (hspvar_double)
-//=============================================================================>>>hspvar_double
-/*------------------------------------------------------------*/
-/*
- HSPVAR core interface (double)
- */
-/*------------------------------------------------------------*/
+//HSPVAR core interface (double)
 #define hspvar_double_GetPtr(pval) ((double*)pval)
 double hspvar_double_conv;
 short* hspvar_double_aftertype;
@@ -211,7 +204,6 @@ short* hspvar_double_aftertype;
 }
 -(void)HspVarDouble_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size {
 }
-/*------------------------------------------------------------*/
 -(void)HspVarDouble_Init:(HspVarProc*)p {
     hspvar_double_aftertype = &p->aftertype;
     //    p->Set = HspVarDouble_Set;
@@ -251,6 +243,4 @@ short* hspvar_double_aftertype;
     p->basesize =
     sizeof(double); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
-/*------------------------------------------------------------*/
-//=============================================================================<<<hspvar_double
 @end

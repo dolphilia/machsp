@@ -2,7 +2,6 @@
 //	HSPVAR core module
 //	onion software/onitama 2003/4
 //
-//=============================================================================>>>hspvar_struct
 #import "hspvar_struct.h"
 #import "hsp3struct_debug.h"
 #import "hsp3struct_var.h"
@@ -13,14 +12,8 @@
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
-//=============================================================================<<<hspvar_struct
 @implementation ViewController (hspvar_struct)
-//=============================================================================>>>hspvar_struct
-/*------------------------------------------------------------*/
-/*
- HSPVAR core interface (struct)
- */
-/*------------------------------------------------------------*/
+//HSPVAR core interface (struct)
 // Core
 -(PDAT*)HspVarStruct_GetPtr:(PVal*)pval {
     return (PDAT*)(((FlexValue*)(pval->pt)) + pval->offset);
@@ -145,7 +138,6 @@
 }
 -(void)HspVarStruct_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size {
 }
-/*------------------------------------------------------------*/
 -(void)HspVarStruct_Init:(HspVarProc*)p {
     //    p->Set = HspVarStruct_Set;
     //    p->GetPtr = HspVarStruct_GetPtr;
@@ -187,6 +179,4 @@
     p->basesize =
     sizeof(FlexValue); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
-/*------------------------------------------------------------*/
-//=============================================================================<<<hspvar_struct
 @end

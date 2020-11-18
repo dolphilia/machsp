@@ -2,7 +2,6 @@
 //	HSPVAR core module
 //	onion software/onitama 2007/1
 //
-//=============================================================================>>>hspvar_label
 #import "hspvar_label.h"
 #import "hsp3struct_debug.h"
 #import "hsp3struct_var.h"
@@ -11,14 +10,8 @@
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
-//=============================================================================<<<hspvar_label
 @implementation ViewController (hspvar_label)
-//=============================================================================>>>hspvar_label
-/*------------------------------------------------------------*/
-/*
- HSPVAR core interface (label)
- */
-/*------------------------------------------------------------*/
+//HSPVAR core interface (label)
 #define hspvar_label_GetPtr(pval) ((HSPVAR_LABEL*)pval)
 // Core
 -(PDAT*)HspVarLabel_GetPtr:(PVal*)pval {
@@ -93,7 +86,6 @@
 }
 -(void)HspVarLabel_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size {
 }
-/*------------------------------------------------------------*/
 -(void)HspVarLabel_Init:(HspVarProc*)p {
     //    p->Set = HspVarLabel_Set;
     //    p->GetPtr = HspVarLabel_GetPtr;
@@ -111,6 +103,4 @@
     p->basesize =
     sizeof(HSPVAR_LABEL); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
-/*------------------------------------------------------------*/
-//=============================================================================<<<hspvar_label
 @end
