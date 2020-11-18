@@ -1,18 +1,14 @@
-
 //
 //	hspvar_label.cpp header
 //
 #ifndef __hspvar_label_h
 #define __hspvar_label_h
-
 #import "hsp3struct_var.h"
 #import "ViewController.h"
-
 @interface
 ViewController (hspvar_label) {
 }
 typedef unsigned short* HSPVAR_LABEL;
-
 -(PDAT*)HspVarLabel_GetPtr:(PVal*)pval;
 -(int)HspVarLabel_GetVarSize:(PVal*)pval;
 -(void)HspVarLabel_Free:(PVal*)pval;
@@ -23,6 +19,5 @@ typedef unsigned short* HSPVAR_LABEL;
 -(void*)HspVarLabel_GetBlockSize:(PVal*)pval pdat:(PDAT*)pdat size:(int*)size;
 -(void)HspVarLabel_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size;
 -(void)HspVarLabel_Init:(HspVarProc*)p;
-
 @end
 #endif

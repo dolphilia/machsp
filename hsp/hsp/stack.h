@@ -1,10 +1,8 @@
-
 //
 //	stack.cpp header
 //
 #ifndef __stack_h
 #define __stack_h
-
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 #import <stdio.h>
@@ -15,7 +13,6 @@
 #import "hsp3config.h"
 #import "hsp3struct_debug.h"
 #import "hsp3struct_var.h"
-
 #define STM_MAX_DEFAULT 512
 #define STM_STRSIZE_DEFAULT 64
 #define STMMODE_SELF 0
@@ -26,7 +23,6 @@
 #define PeekPtr ((void *)(stack_stm_cur - 1)->ptr)
 #define StackGetLevel (stack_stm_cur - stack_mem_stm)
 #define StackDecLevel stack_stm_cur--
-
 @interface ViewController (stack) {
 }
 - (void)StackInit;
@@ -44,5 +40,4 @@
 - (void)StackPop;
 - (void *)StackPushSize:(int)type size:(int)size;
 @end
-
 #endif

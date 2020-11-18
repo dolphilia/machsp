@@ -2,13 +2,11 @@
 //  PictureUtility.h
 //  hsp
 //
-//  Created by 半澤 聡 on 2016/09/04.
+//  Created by dolphilia on 2016/09/04.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #ifndef PictureUtility_h
 #define PictureUtility_h
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,18 +15,14 @@
 #include "stb_image.h"
 #include "stb_image_write.h"
 #include "debug_message.h"
-
 typedef struct{
     int32_t width;
     int32_t height;
 } _Size;
-
 _Size load_image_init_canvas(char const *file_name,
                             uint8_t *pixel_data);
-
 _Size load_image(char const *file_ename,
                 uint8_t *pixel_data,
                 int32_t point_x, int32_t point_y,
                 int32_t canvas_size_width, int32_t canvas_size_height);
-
 #endif /* PictureUtility_h */

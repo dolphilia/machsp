@@ -1,20 +1,16 @@
-
 //
 //		Structure for HSP
 //
 #ifndef __hsp3struct_h
 #define __hsp3struct_h
-
 #include "hsp3struct_var.h"
 //#include "hspvar_core.h"
 #include "hsp3struct_debug.h"
-
 #ifdef _WIN64
 #define PTR64BIT //  ポインタは64bit
 #else
 #define PTR32BIT //  ポインタは32bit
 #endif
-
 // command type
 #define TYPE_MARK 0
 #define TYPE_VAR 1
@@ -49,12 +45,10 @@
 #define EXFLG_2 0x4000
 #define EXFLG_3 0x8000
 #define CSTYPE 0x0fff
-
 typedef struct HSPHED
 {
     //		HSP3.0 header structure
     //
-    
     char h1;     // magic code1
     char h2;     // magic code2
     char h3;     // magic code3
@@ -62,42 +56,34 @@ typedef struct HSPHED
     int version; // version number info
     int max_val; // max count of VAL Object
     int allsize; // total file size
-    
     int pt_cs;  // ptr to Code Segment
     int max_cs; // size of CS
     int pt_ds;  // ptr to Data Segment
     int max_ds; // size of DS
-    
     int pt_ot;     // ptr to Object Temp
     int max_ot;    // size of OT
     int pt_dinfo;  // ptr to Debug Info
     int max_dinfo; // size of DI
-    
     int pt_linfo;  // ptr to LibInfo(2.3)
     int max_linfo; // size of LibInfo(2.3)
     int pt_finfo;  // ptr to FuncInfo(2.3)
     int max_finfo; // size of FuncInfo(2.3)
-    
     int pt_minfo;   // ptr to ModInfo(2.5)
     int max_minfo;  // size of ModInfo(2.5)
     int pt_finfo2;  // ptr to FuncInfo2(2.5)
     int max_finfo2; // size of FuncInfo2(2.5)
-    
     int pt_hpidat;    // ptr to HPIDAT(3.0)
     short max_hpi;    // size of HPIDAT(3.0)
     short max_varhpi; // Num of Vartype Plugins(3.0)
     int bootoption;   // bootup options
     int runtime;      // ptr to runtime name
-    
     //		HSP3.5 extra header structure
     //
     int pt_sr;  // ptr to Option Segment
     int max_sr; // size of Option Segment
     int opt1;   // option (reserved)
     int opt2;   // option (reserved)
-    
 } HSPHED;
-
 #define HSPHED_BOOTOPT_DEBUGWIN 1 // 起動時デバッグウインドゥ表示
 #define HSPHED_BOOTOPT_WINHIDE 2  // 起動時ウインドゥ非表示
 #define HSPHED_BOOTOPT_DIRSAVE 4 // 起動時カレントディレクトリ変更なし
@@ -111,65 +97,51 @@ typedef struct HSPHED
 #define HPIDAT_FLAG_SELFFUNC -1
 #define HPIDAT_FLAG_VARFUNC 1
 #define HPIDAT_FLAG_DLLFUNC 2
-
 typedef struct MEM_HPIDAT
 { // native HPIDAT
-    
     short flag; // flag info
     short option;
     int libname;  // lib name index (DS)
     int funcname; // function name index (DS)
     void* libptr; // lib handle
-    
 } MEM_HPIDAT;
-
 #ifdef PTR64BIT
 typedef struct HPIDAT
 {
-    
     short flag; // flag info
     short option;
     int libname;  // lib name index (DS)
     int funcname; // function name index (DS)
     int p_libptr; // lib handle
-    
 } HPIDAT;
 #else
 typedef MEM_HPIDAT HPIDAT;
 #endif
-
 #define LIBDAT_FLAG_NONE 0
 #define LIBDAT_FLAG_DLL 1
 #define LIBDAT_FLAG_DLLINIT 2
 #define LIBDAT_FLAG_MODULE 3
 #define LIBDAT_FLAG_COMOBJ 4
-
 typedef struct LIBDAT
 {
-    
     int flag;    // initalize flag
     int nameidx; // function name index (DS)
     // Interface IID ( Com Object )
     void* hlib; // Lib handle
     int clsid;  // CLSID (DS) ( Com Object )
-    
 } LIBDAT;
-
 #ifdef PTR64BIT
 typedef struct HED_LIBDAT
 {
-    
     int flag;    // initalize flag
     int nameidx; // function name index (DS)
     // Interface IID ( Com Object )
     int p_hlib; // Lib handle
     int clsid;  // CLSID (DS) ( Com Object )
-    
 } HED_LIBDAT;
 #else
 typedef LIBDAT HED_LIBDAT;
 #endif
-
 // multi parameter type
 #define MPTYPE_NONE 0
 #define MPTYPE_VAR 1
@@ -210,28 +182,23 @@ typedef LIBDAT HED_LIBDAT;
 #define STRUCTPRM_SUBID_COMOBJ -7
 #define STRUCTCODE_THISMOD -1
 #define TYPE_OFFSET_COMOBJ 0x1000
-
 typedef struct STRUCTPRM
 {
     short mptype; // Parameter type
     short subid;  // struct index
     int offset;   // offset from top
 } STRUCTPRM;
-
 //	DLL function flags
 #define STRUCTDAT_OT_NONE 0
 #define STRUCTDAT_OT_CLEANUP 1
 #define STRUCTDAT_OT_STATEMENT 2
 #define STRUCTDAT_OT_FUNCTION 4
-
 //	Module function flags
 #define STRUCTDAT_INDEX_FUNC -1
 #define STRUCTDAT_INDEX_CFUNC -2
 #define STRUCTDAT_INDEX_STRUCT -3
 #define STRUCTDAT_FUNCFLAG_CLEANUP 0x10000
-
 // function,module specific data
-
 #ifdef PTR64BIT
 typedef struct STRUCTDAT
 {
@@ -245,7 +212,6 @@ typedef struct STRUCTDAT
     void* proc;   // proc address
     int funcflag; // function flags(Module)
 } STRUCTDAT;
-
 typedef struct HED_STRUCTDAT
 {
     short index;  // base LIBDAT index
@@ -257,7 +223,6 @@ typedef struct HED_STRUCTDAT
     int otindex;  // OT index(Module) / cleanup flag(Dll)
     int funcflag; // function flags(Module)
 } HED_STRUCTDAT;
-
 #else
 typedef struct STRUCTDAT
 {
@@ -276,14 +241,12 @@ typedef struct STRUCTDAT
 } STRUCTDAT;
 typedef STRUCTDAT HED_STRUCTDAT;
 #endif
-
 //	Var Data for Multi Parameter
 typedef struct MPVarData
 {
     PVal* pval;
     APTR aptr;
 } MPVarData;
-
 //	Var Data for Module Function
 typedef struct MPModVarData
 {
@@ -292,7 +255,6 @@ typedef struct MPModVarData
     PVal* pval;
     APTR aptr;
 } MPModVarData;
-
 #define MODVAR_MAGICCODE 0x55aa
 #define IRQ_FLAG_NONE 0
 #define IRQ_FLAG_DISABLE 1
@@ -300,7 +262,6 @@ typedef struct MPModVarData
 #define IRQ_OPT_GOTO 0
 #define IRQ_OPT_GOSUB 1
 #define IRQ_OPT_CALLBACK 2
-
 typedef struct IRQDAT
 {
     short flag;                                 // flag
@@ -311,9 +272,7 @@ typedef struct IRQDAT
     unsigned short* ptr;                        // jump ptr
     void (*callback)(struct IRQDAT*, int, int); // IRQ callback function
 } IRQDAT;
-
 typedef struct HSPContext HSPContext;
-
 //	Plugin info data (3.0 compatible)
 typedef struct HSP_ExtraInfomation_30
 {
@@ -344,19 +303,16 @@ typedef struct HSP_ExtraInfomation_30
     void* (*HspFunc_getbmscr)(int wid);
     int (*HspFunc_getobj)(int wid, int id, void* inf);
     int (*HspFunc_setobj)(int wid, int id, const void* inf);
-    
     //		HSP internal info data (3.0)
     //
     int* npexflg;       // Next Parameter ExFlg
     HSPContext* hspctx; // HSP context ptr
-    
     //		Enhanced data (3.0)
     //
     int (*HspFunc_addobj)(int wid);
     void (*HspFunc_puterror)(HSPERROR error);
     HspVarProc* (*HspFunc_getproc)(int type);
     HspVarProc* (*HspFunc_seekproc)(const char* name);
-    
     void (*HspFunc_prm_next)(void);
     int (*HspFunc_prm_get)(void);
     double (*HspFunc_prm_getd)(void);
@@ -374,14 +330,11 @@ typedef struct HSP_ExtraInfomation_30
     void (*HspFunc_setpc)(const unsigned short* pc);
     void (*HspFunc_call)(const unsigned short* pc);
     void (*HspFunc_mref)(PVal* pval, int prm);
-    
     void (*HspFunc_dim)(PVal* pval, int flag, int len0, int len1, int len2,
                         int len3, int len4);
     void (*HspFunc_redim)(PVal* pval, int lenid, int len);
     void (*HspFunc_array)(PVal* pval, int offset);
-    
 } HSP_ExtraInfomation_30;
-
 //	Plugin info data (3.1 or later)
 typedef struct HSP_ExtraInfomation //追加情報
 {
@@ -412,19 +365,16 @@ typedef struct HSP_ExtraInfomation //追加情報
     void* (*HspFunc_getbmscr)(int wid);
     int (*HspFunc_getobj)(int wid, int id, void* inf);
     int (*HspFunc_setobj)(int wid, int id, const void* inf);
-    
     //		HSP internal info data (3.0)
     //
     int* npexflg;       // Next Parameter ExFlg
     HSPContext* hspctx; // HSP context ptr
-    
     //		Enhanced data (3.0)
     //
     int (*HspFunc_addobj)(int wid);
     void (*HspFunc_puterror)(HSPERROR error);
     HspVarProc* (*HspFunc_getproc)(int type);
     HspVarProc* (*HspFunc_seekproc)(const char* name);
-    
     void (*HspFunc_prm_next)(void);
     int (*HspFunc_prm_get)(void);
     double (*HspFunc_prm_getd)(void);
@@ -442,21 +392,16 @@ typedef struct HSP_ExtraInfomation //追加情報
     void (*HspFunc_setpc)(const unsigned short* pc);
     void (*HspFunc_call)(const unsigned short* pc);
     void (*HspFunc_mref)(PVal* pval, int prm);
-    
     void (*HspFunc_dim)(PVal* pval, int flag, int len0, int len1, int len2,
                         int len3, int len4);
     void (*HspFunc_redim)(PVal* pval, int lenid, int len);
     void (*HspFunc_array)(PVal* pval, int offset);
-    
     //		Enhanced data (3.1)
     //
     char* (*HspFunc_varname)(int id);
     int (*HspFunc_seekvar)(const char* name);
-    
 } HSP_ExtraInfomation;
-
 #define HSP3_REPEAT_MAX 32
-
 typedef struct LOOPDAT
 {
     int time;           // loop times left
@@ -464,7 +409,6 @@ typedef struct LOOPDAT
     int step;           // count add value
     unsigned short* pt; // loop start ptr
 } LOOPDAT;
-
 // 実行モード
 enum
 {
@@ -481,7 +425,6 @@ enum
     RUNMODE_EXITRUN,
     RUNMODE_MAX
 };
-
 struct HSPContext
 {
     //	HSP Context
@@ -492,13 +435,11 @@ struct HSPContext
     char* mem_mds;           // data segment ptr
     unsigned char* mem_di;   // Debug info ptr
     int* mem_ot;             // object temp segment ptr
-    
     IRQDAT* mem_irq; // IRQ data ptr
     int irqmax;      // IRQ data count
     int iparam;      // IRQ Info data1
     int wparam;      // IRQ Info data2
     int lparam;      // IRQ Info data3
-    
     PVal* mem_var;                     // var storage index
     HSP_ExtraInfomation_30 exinfo;     // HSP function data(3.0)
     int runmode;                       // HSP execute mode
@@ -522,7 +463,6 @@ struct HSPContext
     PVal* notep_pval;                  // MemNote pval (previous)
     APTR notep_aptr;                   // MemNote aptr (previous)
     char* stmp;                        // String temporary buffer
-    
     void* prmstack;               // Current parameter stack area
     LIBDAT* mem_linfo;            // Library info
     STRUCTPRM* mem_minfo;         // Parameter info
@@ -533,12 +473,9 @@ struct HSPContext
     void* wnd_parent;             // Parent Window Handle
     double refdval;               // sysvar 'refdval'
     char* cmdline;                // Command Line Parameters
-    
     HSP_ExtraInfomation* exinfo2; // HSP function data(3.1)
-    
     int prmstack_max; // Parameter Stack Max(hsp3cnv) (3.3)
 };
-
 #define HSPCTX_REFSTR_MAX 4096
 #define HSPCTX_CMDLINE_MAX 1024
 #define HSPSTAT_NORMAL 0
@@ -549,7 +486,6 @@ struct HSPContext
 #define TYPE_EX_ENDOFPARAM 0x200 // パラメーター終端(HSPtoC)
 #define TYPE_EX_ARRAY_VARS 0x201 // 配列要素付き変数用スタックタイプ(HSPtoC)
 #define TYPE_EX_LOCAL_VARS 0x202 // ローカル変数用スタックタイプ(HSPtoC)
-
 typedef struct
 {
     //	Subroutine Context
@@ -559,9 +495,7 @@ typedef struct
     STRUCTDAT* param;       // 引数パラメーターリスト
     void* oldtack;          // 以前のスタックアドレス
     int oldlev;             // 以前のスタックレベル
-    
 } HSPROUTINE;
-
 //		コールバックのオプション
 //
 #define HSPEVENT_ENABLE_COMMAND 1  // １ステップ実行時
@@ -570,7 +504,6 @@ typedef struct
 #define HSPEVENT_ENABLE_FILE 8     // ファイル入出力時
 #define HSPEVENT_ENABLE_MEDIA 16   // メディア入出力時
 #define HSPEVENT_ENABLE_PICLOAD 32 // picload命令実行時
-
 //		ファンクション型
 //
 // typedef int (* HSP3_CMDFUNC) (int);
@@ -578,7 +511,6 @@ typedef struct
 // typedef int (* HSP3_TERMFUNC) (int);
 // typedef int (* HSP3_MSGFUNC) (int,int,int);
 // typedef int (* HSP3_EVENTFUNC) (int,int,int,void *);
-
 typedef struct
 {
     //	型ごとの情報
@@ -588,24 +520,19 @@ typedef struct
     short option;                   // *オプション情報
     HSPContext* hspctx;             // *HSP Context構造体へのポインタ
     HSP_ExtraInfomation* hspexinfo; // *HSP_ExtraInfomation構造体へのポインタ
-    
     //	ファンクション情報
     //
     int (*cmdfunc)(int);         // コマンド受け取りファンクション
     void* (*reffunc)(int*, int); // 参照受け取りファンクション
     int (*termfunc)(int);        // 終了受け取りファンクション
-    
     int cmdfuncNumber;  //コマンド受け取りファンクション番号
     int reffuncNumber;  //参照受け取りファンクション番号
     int termfuncNumber; //終了受け取りファンクション番号
-    
     // イベントコールバックファンクション
     //
     int (*msgfunc)(int, int, int); // Windowメッセージコールバック
     int (*eventfunc)(int, int, int, void*); // HSPイベントコールバック
-    
 } HSP3TYPEINFO;
-
 // HSP割り込みID
 enum
 {
@@ -616,7 +543,6 @@ enum
     HSPIRQ_USERDEF,
     HSPIRQ_MAX
 };
-
 // HSPイベントID
 enum
 {
@@ -639,5 +565,4 @@ enum
     HSPEVENT_PICLOAD,
     HSPEVENT_MAX
 };
-
 #endif

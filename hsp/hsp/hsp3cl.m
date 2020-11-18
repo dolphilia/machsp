@@ -2,7 +2,6 @@
  HSP3 main (Console Version)
  2004/8  onitama
  --------------------------------------------------------*/
-
 #import "hsp3cl.h"
 #import "hspvar_double.h"
 #import "hspvar_int.h"
@@ -11,30 +10,20 @@
 #import "hspvar_struct.h"
 #import "hsp3debug.h"
 #import "utility_string.h"
-
 #define GetPRM(id) (&hspctx.mem_finfo[id])
 #define strp(dsptr) &hspctx.mem_mds[dsptr]
-
 @implementation ViewController (hsp3cl)
-
 - (void)dealloc {
-    
-    //		すべて破棄
-    //
     [self code_termfunc];
     [self Dispose];
     [self code_bye];
-    
 }
-
 - (int)hsp3cl_exec {
-    
     //		実行メインを呼び出す
     //
     int runmode;
     int endcode;
 rerun:
-    
     //		実行の開始
     //
     runmode = [self code_execcmd];
@@ -43,7 +32,6 @@ rerun:
             [self hsp3cl_error];
         } @catch (NSException *error) {
         }
-        
         return -1;
     }
     if (runmode == RUNMODE_EXITRUN) {
@@ -52,26 +40,20 @@ rerun:
         int res;
         strncpy(fname, vc_hspctx->refstr, HSP_MAX_PATH - 1);
         strncpy(cmd, vc_hspctx->stmp, 1023);
-        
         [self hsp3cl_bye];
         res = [self hsp3cl_init:fname];
         if (res) {
-            
             return res;
         }
-        
         strncpy(vc_hspctx->cmdline, cmd, 1023);
         vc_hspctx->runmode = RUNMODE_RUN;
         goto rerun;
     }
     endcode = vc_hspctx->endcode;
     [self hsp3cl_bye];
-    
     return endcode;
 }
-
 - (int)hsp3cl_init:(char *)startfile {
-    
     //		システム関連の初期化
     //		( mode:0=debug/1=release )
     //
@@ -83,7 +65,6 @@ rerun:
         'E' - 48, 'D' - 48, ' ' - 48, ' ' - 48};
     char optmes[] = "HSPHED‾‾\0_1_________2_________3______";
     int hsp_wd;
-    
     //		HSP関連の初期化
     //
     // hsp = [[Hsp3 alloc] init];
@@ -95,12 +76,9 @@ rerun:
     hsp3cl_axfile = NULL;
     hsp3cl_axname = NULL;
     //<<<
-    
 #ifdef FLAG_HSPDEBUG
-    
     if (*startfile == 0) {
         printf("OpenHSP CL ver%s / onion software 1997-2009\n", HSP_VERSION);
-        
         return -1;
     }
     [self SetFileName:startfile];
@@ -109,7 +87,6 @@ rerun:
         [self SetFileName:startfile];
     }
 #endif
-    
     //		実行ファイルかデバッグ中かを調べる
     //
     mode = 0;
@@ -126,52 +103,35 @@ rerun:
         _hsp_dec = *(int *)(optmes + 32);
         [self SetPackValue:_hsp_sum dec:_hsp_dec];
     }
-    
     if ([self Reset:mode]) {
         [self hsp3win_dialog:(char *)"Startup failed."];
-        
         return -1;
     }
-    
     vc_hspctx = &self->abc_hspctx;
-    
     //		コマンドライン関連
     ss = (char *)"";  // コマンドラインパラメーターを入れる
     [self sbStrCopy:&vc_hspctx->cmdline str:ss];  // コマンドラインパラメーターを保存
-    
     //		Register Type
     //
     //注意
     // ctx->msgfunc = [self hsp3cl_msgfunc];
     [self hsp3cl_msgfunc:vc_hspctx];
     vc_hspctx->hspstat |= 16;
-    
     // hsp3typeinit_dllcmd( code_gettypeinfo( TYPE_DLLFUNC ) );
     // hsp3typeinit_dllctrl( code_gettypeinfo( TYPE_DLLCTRL ) );
-    
     [self hsp3typeinit_cl_extcmd:[self code_gettypeinfo:TYPE_EXTCMD]];
     [self hsp3typeinit_cl_extfunc:[self code_gettypeinfo:TYPE_EXTSYSVAR]];
-    
-    
     return 0;
 }
-
 - (void)hsp3win_dialog:(char *)mes {
-    
     printf("%s\n", mes);
-    
 }
-
 - (void)hsp3cl_bye {
-    
     //		HSP関連の解放
     //
     // delete hsp;
-    
 }
-
 - (void)hsp3cl_msgfunc:(HSPContext *)_hspctx {
-    
     while (1) {
         switch (_hspctx->runmode) {
             case RUNMODE_STOP: {
@@ -188,14 +148,12 @@ rerun:
                 _hspctx->runmode = RUNMODE_RUN;
                 // hspctx->runmode = code_exec_wait( tick );
                 break;
-                
             case RUNMODE_AWAIT:
                 //		await命令による時間待ち
                 //		(実際はcode_exec_awaitにtick countを渡す)
                 _hspctx->runmode = RUNMODE_RUN;
                 // hspctx->runmode = code_exec_await( tick );
                 break;
-                
             case RUNMODE_END: {
                 //		end命令
 #if 0
@@ -211,22 +169,16 @@ rerun:
                 //		assertで中断
                 _hspctx->runmode = RUNMODE_STOP;
                 break;
-                
             case RUNMODE_LOGMES:
                 //		logmes命令
                 _hspctx->runmode = RUNMODE_RUN;
                 break;
-                
             default:
                 return;
-                
         }
     }
-    
 }
-
 - (void)hsp3cl_error {
-    
     char errmsg[1024];
     char *msg;
     char *fname;
@@ -236,7 +188,6 @@ rerun:
     ln = [self code_getdebug_line];
     msg = [self hspd_geterror:err];
     fname = [self code_getdebug_name];
-    
     if (ln < 0) {
         sprintf(errmsg, "#Error %d\n-->%s\n", (int)err, msg);
         fname = NULL;
@@ -244,38 +195,27 @@ rerun:
         sprintf(errmsg, "#Error %d in line %d (%s)\n-->%s\n", (int)err, ln, fname,
                 msg);
     }
-    
     [self hsp3win_dialog:errmsg];
     [self hsp3win_dialog:(char *)"[ERROR] Press any key..."];
     getchar();
-    
 }
-
 //================================================================================>>>HSP3
-
 /*------------------------------------------------------------*/
 /*
  interface
  */
 /*------------------------------------------------------------*/
-
 - (void)SetFileName:(char *)name {
-    
     if (*name == 0) {
         hsp3cl_axname = NULL;
-        
         return;
     }
     hsp3cl_axname = name;
-    
 }
-
 - (void)Dispose {
-    
     //		axを破棄
     //
     if (abc_hspctx.mem_mcs == NULL) {
-        
         return;
     }
     if (abc_hspctx.mem_var != NULL) {
@@ -305,17 +245,13 @@ rerun:
         //delete[] abc_hspctx.mem_var;
         abc_hspctx.mem_var = NULL;
     }
-    
     abc_hspctx.mem_mcs = NULL;
     if (hsp3cl_axfile != NULL) {
         [self mem_bye:hsp3cl_axfile];
         hsp3cl_axfile = NULL;
     }
-    
 }
-
 - (int)Reset:(int)mode {
-    
     //		axを初期化
     //		mode: 0 = normal(debug) mode
     //		      other = packfile PTR
@@ -326,11 +262,9 @@ rerun:
     HSPHED *hsphed;
     char startax[] = {'S' - 40, 'T' - 40, 'A' - 40, 'R' - 40, 'T' - 40,
         '.' - 40, 'A' - 40, 'X' - 40, 0};
-    
     if (abc_hspctx.mem_mcs != NULL) {
         [self Dispose];
     }
-    
     //		load HSP execute object
     //
     hsp3cl_axtype = HSP3_AXTYPE_NONE;
@@ -346,7 +280,6 @@ rerun:
                chksum:-1
                deckey:-1];  // original EXE mode
     }
-    
     //		start.ax読み込み
     if (hsp3cl_axname == NULL) {
         unsigned char *p;
@@ -365,38 +298,29 @@ rerun:
         }
         *p = 0;
         if (sum != 0x6cced385) {
-            
             return -1;
         }
         if (mode) {
             if ([self dpm_filebase:fname] != 1) {
-                
                 return -1;  // DPM,packfileからのみstart.axを読み込む
             }
         }
     } else {
         strcpy(fname, hsp3cl_axname);
     }
-    
     ptr = [self dpm_readalloc:fname];
     if (ptr == NULL) {
-        
         return -1;
     }
-    
     hsp3cl_axfile = ptr;
-    
     //		memory location set
     //
     hsphed = (HSPHED *)ptr;
-    
     if ((hsphed->h1 != 'H') || (hsphed->h2 != 'S') || (hsphed->h3 != 'P') ||
         (hsphed->h4 != '3')) {
         [self mem_bye:hsp3cl_axfile];
-        
         return -1;
     }
-    
     hsp3cl_maxvar = hsphed->max_val;
     abc_hspctx.hsphed = hsphed;
     abc_hspctx.mem_mcs =
@@ -406,7 +330,6 @@ rerun:
     (int *)[self copy_DAT:ptr + hsphed->pt_ot size:hsphed->max_ot];
     abc_hspctx.mem_di = (unsigned char *)[self copy_DAT:ptr + hsphed->pt_dinfo
                                                    size:hsphed->max_dinfo];
-    
     abc_hspctx.mem_linfo = (LIBDAT *)[self copy_LIBDAT:hsphed
                                                    ptr:ptr + hsphed->pt_linfo
                                                   size:hsphed->max_linfo];
@@ -416,17 +339,14 @@ rerun:
     (STRUCTDAT *)[self copy_STRUCTDAT:hsphed
                                   ptr:ptr + hsphed->pt_finfo
                                  size:hsphed->max_finfo];
-    
     [self HspVarCoreResetVartype:hsphed->max_varhpi];  // 型の初期化
     [self code_resetctx:&abc_hspctx];            // hsp3code setup
-    
     //		HspVar setup
     abc_hspctx.mem_var = NULL;
     if (hsp3cl_maxvar) {
         int i;
         abc_hspctx.mem_var = malloc(hsp3cl_maxvar * sizeof(PVal));
         //new PVal[hsp3cl_maxvar];
-        
         for (i = 0; i < hsp3cl_maxvar; i++) {
             PVal *pval = &abc_hspctx.mem_var[i];
             pval->mode = HSPVAR_MODE_NONE;
@@ -434,52 +354,38 @@ rerun:
             [self HspVarCoreClear:pval flag:HSPVAR_FLAG_INT];  // グローバル変数を0にリセット
         }
     }
-    
     //		debug
     // Alertf( "#HSP objcode
     // initalized.(CS=%d/DS=%d/OT=%d/VAR=%d)\n",hsphed->max_cs, hsphed->max_ds,
     // hsphed->max_ot, hsphed->max_val );
     [self code_setpc:abc_hspctx.mem_mcs];
     [self code_debug_init];
-    
     return 0;
 }
-
 - (void)SetPackValue:(int)sum dec:(int)dec {
-    
     hsp3cl_hsp_sum = sum;
     hsp3cl_hsp_dec = dec;
-    
 }
-
 /*------------------------------------------------------------*/
 /*
  util
  */
 /*------------------------------------------------------------*/
-
 - (void *)copy_DAT:(char *)ptr size:(size_t)size {
-    
     if (size <= 0) {
-        
         return ptr;
     }
-    
     void *dst = malloc(size);
     memcpy(dst, ptr, size);
-    
     return dst;
 }
-
 - (LIBDAT *)copy_LIBDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size {
-    
     //	libdatの準備
     int i, max;
     int newsize;
     LIBDAT *mem_dst;
     LIBDAT *dst;
     HED_LIBDAT org_dat;
-    
     max = (int)(size / sizeof(HED_LIBDAT));
     if (max <= 0) return (LIBDAT *)ptr;
     newsize = sizeof(LIBDAT) * max;
@@ -487,24 +393,19 @@ rerun:
     dst = mem_dst;
     for (i = 0; i < max; i++) {
         memcpy(&org_dat, ptr, sizeof(HED_LIBDAT));
-        
         dst->flag = org_dat.flag;
         dst->nameidx = org_dat.nameidx;
         dst->clsid = org_dat.clsid;
         dst->hlib = NULL;
-        
         dst++;
         ptr += sizeof(HED_LIBDAT);
     }
     hsphed->max_linfo = newsize;
-    
     return mem_dst;
 }
-
 - (STRUCTDAT *)copy_STRUCTDAT:(HSPHED *)hsphed
                           ptr:(char *)ptr
                          size:(size_t)size {
-    
     //	structdatの準備
     int i, max;
     int newsize;
@@ -518,7 +419,6 @@ rerun:
     dst = mem_dst;
     for (i = 0; i < max; i++) {
         memcpy(&org_dat, ptr, sizeof(HED_STRUCTDAT));
-        
         dst->index = org_dat.index;
         dst->subid = org_dat.subid;
         dst->prmindex = org_dat.prmindex;
@@ -530,12 +430,10 @@ rerun:
 #ifdef PTR64BIT
         dst->proc = NULL;
 #endif
-        
         dst++;
         ptr += sizeof(HED_STRUCTDAT);
     }
     hsphed->max_finfo = newsize;
-    
     return mem_dst;
 }
 //================================================================================<<<HSP3

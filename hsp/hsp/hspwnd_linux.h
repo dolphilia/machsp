@@ -1,12 +1,9 @@
-
 //
 //	hspwnd.cpp header
 //
 #ifndef __hspwnd_linux_h
 #define __hspwnd_linux_h
-
 //#include "hsp3code.h"
-
 //	Bmscr structure (same as Bmscr)
 //
 typedef struct BMSCR
@@ -31,7 +28,6 @@ typedef struct BMSCR
     void* hInst;   // Instance of program
     int infsize;   // *pbi alloc memory size
     int bmpsize;   // *pBit alloc memory size
-    
     //		Window object setting
     //
     int type;          // setting type
@@ -62,7 +58,6 @@ typedef struct BMSCR
     int tabmove; // object TAB move mode
     int sx2;     // actual bitmap X size
     //	SIZE	printsize;			// print,mes extent size
-    
     //		Class depend data
     //
     int objstyle; // objects style
@@ -71,5 +66,4 @@ typedef struct BMSCR
     int objlimit; // Limit number of obj
     //	void *master_hspwnd;		// Parent hspwnd class
 } BMSCR;
-
 #endif

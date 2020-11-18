@@ -5,17 +5,13 @@
 //  Created by 半澤 聡 on 2016/10/07.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #ifndef hspvar_double_h
 #define hspvar_double_h
-
 #import "ViewController.h"
 #import <Foundation/Foundation.h>
-
 @interface
 ViewController (hspvar_double) {
 }
-
 -(PDAT*)HspVarDouble_GetPtr:(PVal*)pval;
 -(void*)HspVarDouble_Cnv:(const void*)buffer flag:(int)flag;
 -(int)HspVarDouble_GetVarSize:(PVal*)pval;
@@ -37,7 +33,5 @@ ViewController (hspvar_double) {
 -(void*)HspVarDouble_GetBlockSize:(PVal*)pval pdat:(PDAT*)pdat size:(int*)size;
 -(void)HspVarDouble_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size;
 -(void)HspVarDouble_Init:(HspVarProc*)p;
-
 @end
-
 #endif /* hspvar_double_h */

@@ -1,5 +1,3 @@
-
-
 //
 //	HSPVAR manager
 //	onion software/onitama 2003/4
@@ -29,24 +27,20 @@
 //=============================================================================<<<hspvar_core
 @implementation ViewController (hspvar_core)
 //=============================================================================>>>hspvar_core
-
 /*------------------------------------------------------------*/
 /*
  master pointer
  */
 /*------------------------------------------------------------*/
-
 PVal* mem_pval;
 HspVarProc* hspvarproc;
 int hspvartype_max;
 int hspvartype_limit;
-
 -(PDAT*)HspVarCorePtrAPTR:(PVal*)pv ofs:(APTR)ofs {
     //		変数データの実態ポインタを得る
     //		(APTRとpvalから実態を求める)
     //
     pv->offset = ofs;
-    
     PDAT* dst;
     if (strcmp(hspvarproc[(pv)->flag].vartype_name, "int") == 0) { //整数のFree
         dst = [self HspVarInt_GetPtr:pv];
@@ -66,19 +60,15 @@ int hspvartype_limit;
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
     return dst; // hspvarproc[(pv)->flag].GetPtr(pv);
 }
-
 -(void)HspVarCoreInit {
-    
     int i;
     hspvarproc = (HspVarProc*)[self sbAlloc:sizeof(HspVarProc) * HSPVAR_FLAG_MAX];
     hspvartype_max = HSPVAR_FLAG_MAX;
     for (i = 0; i < HSPVAR_FLAG_MAX; i++) {
         hspvarproc[i].flag = 0;
     }
-    
     //		mpval(テンポラリ変数)を初期化します
     //		(実態の初期化は、変数使用時に行なわれます)
     PVal* pval;
@@ -88,11 +78,8 @@ int hspvartype_limit;
         pval->mode = HSPVAR_MODE_NONE;
         pval->flag = HSPVAR_FLAG_INT; // 仮の型
     }
-    
 }
-
 -(void)HspVarCoreBye {
-    
     int i;
     for (i = 0; i < hspvartype_max; i++) {
         if (mem_pval[i].mode == HSPVAR_MODE_MALLOC) {
@@ -120,11 +107,8 @@ int hspvartype_limit;
     }
     [self sbFree:mem_pval];
     [self sbFree:hspvarproc];
-    
 }
-
 -(void)HspVarCoreResetVartype:(int)expand {
-    
     //		VARTYPEを初期化する(HspVarCoreInitの後で呼ぶ)
     //		(expandに拡張するVARTYPEの数を指定する)
     //
@@ -135,7 +119,6 @@ int hspvartype_limit;
         mem_pval =
         (PVal*)[self sbExpand:(char*)mem_pval size:sizeof(PVal) * hspvartype_limit];
     }
-    
     //		標準の型を登録する
     //
     [self HspVarCoreRegisterType:(HSPVAR_FLAG_INT) vartype_name:(char*)"int"];
@@ -144,9 +127,7 @@ int hspvartype_limit;
     [self HspVarCoreRegisterType:(HSPVAR_FLAG_STRUCT) vartype_name:(char*)"struct"];
     [self HspVarCoreRegisterType:(HSPVAR_FLAG_LABEL) vartype_name:(char*)"label"]; // ラベル型(3.1)
 }
-
 -(int)HspVarCoreAddType {
-    
     int id;
     PVal* pval;
     if (hspvartype_max >= hspvartype_limit)
@@ -160,10 +141,8 @@ int hspvartype_limit;
     pval = &mem_pval[id];
     pval->mode = HSPVAR_MODE_NONE;
     pval->flag = HSPVAR_FLAG_INT; // 仮の型
-    
     return id;
 }
-
 //static void
 //PutInvalid(void)
 //{
@@ -173,24 +152,19 @@ int hspvartype_limit;
 //    @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
 //
 //}
-
 -(void)HspVarCoreRegisterType:(int)flag vartype_name:(char*)vartype_name {
-    
     int id;
     //void** procs;
     HspVarProc* p;
-    
     id = flag;
     if (id < 0) {
         id = [self HspVarCoreAddType];
         if (id < 0) {
-            
             return;
         }
     }
     p = &hspvarproc[id];
     p->flag = p->aftertype = id;
-    
     // procs = (void **)(&p->Cnv);
     // while(1) {
     //    *procs = (void *)(PutInvalid);
@@ -198,7 +172,6 @@ int hspvartype_limit;
     //        break;
     //    procs++;
     //}
-    
     //	初期化関数の呼び出し
     if (strcmp(vartype_name, "int") == 0) {
         [self HspVarInt_Init:p];
@@ -216,22 +189,16 @@ int hspvartype_limit;
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     // func( p );
-    
 }
-
 /*------------------------------------------------------------*/
-
 -(void)HspVarCoreDupPtr:(PVal*)pval flag:(int)flag ptr:(void*)ptr size:(int)size {
-    
     //		指定されたポインタからのクローンになる
     //
     PDAT* buf;
     HspVarProc* p;
     p = &hspvarproc[flag];
     buf = (PDAT*)ptr;
-    
     // HspVarCoreDispose( pval );
-    
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
         [self HspVarInt_Free:pval];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") ==
@@ -250,13 +217,11 @@ int hspvartype_limit;
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
     pval->pt = (char*)buf;
     pval->flag = flag;
     pval->size = size;
     pval->mode = HSPVAR_MODE_CLONE;
     pval->len[0] = 1;
-    
     if (p->basesize < 0) {
         pval->len[1] = 1;
     } else {
@@ -268,11 +233,8 @@ int hspvartype_limit;
     pval->offset = 0;
     pval->arraycnt = 0;
     pval->support = HSPVAR_SUPPORT_STORAGE;
-    
 }
-
 -(void)HspVarCoreDup:(PVal*)pval arg:(PVal*)arg aptr:(APTR)aptr {
-    
     //		指定された変数のクローンになる
     //
     int size;
@@ -280,7 +242,6 @@ int hspvartype_limit;
     HspVarProc* p;
     p = &hspvarproc[arg->flag];
     buf = [self HspVarCorePtrAPTR:arg ofs:aptr];
-    
     // HspVarCoreGetBlockSize( arg, buf, &size );
     void* dst;
     if (strcmp(hspvarproc[(arg)->flag].vartype_name, "int") ==
@@ -302,13 +263,9 @@ int hspvartype_limit;
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
     [self HspVarCoreDupPtr:pval flag:arg->flag ptr:buf size:size];
-    
 }
-
 -(void)HspVarCoreDim:(PVal*)pval flag:(int)flag len1:(int)len1 len2:(int)len2 len3:(int) len3 len4:(int)len4 {
-    
     //		配列を確保する
     //		(len1〜len4は、4byte単位なので注意)
     //
@@ -319,7 +276,6 @@ int hspvartype_limit;
         [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ILLEGALPRM];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
     // HspVarCoreDispose( pval );
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
         [self HspVarInt_Free:pval];
@@ -339,7 +295,6 @@ int hspvartype_limit;
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
     pval->flag = flag;
     pval->len[0] = 1;
     pval->offset = 0;
@@ -349,7 +304,6 @@ int hspvartype_limit;
     pval->len[2] = len2;
     pval->len[3] = len3;
     pval->len[4] = len4;
-    
     if (strcmp(p->vartype_name, "int") == 0) { //整数のAlloc
         [self HspVarInt_Alloc:pval pval2:NULL];
     } else if (strcmp(p->vartype_name, "double") == 0) { //実数のAlloc
@@ -364,12 +318,8 @@ int hspvartype_limit;
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
-    
 }
-
 -(void)HspVarCoreDimFlex:(PVal*)pval flag:(int)flag len0:(int)len0 len1:(int)len1 len2:(int) len2 len3:(int)len3 len4:(int)len4 {
-    
     //		配列を確保する(可変長配列用)
     //		(len1〜len4は、4byte単位なので注意)
     //
@@ -381,7 +331,6 @@ int hspvartype_limit;
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     // HspVarCoreDispose( pval );
-    
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
         [self HspVarInt_Free:pval];
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") ==
@@ -400,7 +349,6 @@ int hspvartype_limit;
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
     pval->flag = flag;
     pval->len[0] = len0;
     pval->offset = 0;
@@ -410,7 +358,6 @@ int hspvartype_limit;
     pval->len[2] = len2;
     pval->len[3] = len3;
     pval->len[4] = len4;
-    
     if (strcmp(p->vartype_name, "int") == 0) { //整数のAlloc
         [self HspVarInt_Alloc:pval pval2:NULL];
     } else if (strcmp(p->vartype_name, "double") == 0) { //実数のAlloc
@@ -425,12 +372,8 @@ int hspvartype_limit;
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
     pval->len[0] = 1;
-    
-    
 }
-
 - (void)HspVarCoreReDim:(PVal*)pval lenid:(int)lenid len:(int)len {
     //		配列を拡張する
     //
@@ -451,26 +394,19 @@ int hspvartype_limit;
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
 }
-
 -(void) HspVarCoreClear:(PVal*)pval flag:(int)flag {
-    
     //		指定タイプの変数を最小メモリで初期化する
     //
     [self HspVarCoreDim:pval flag:flag len1:1 len2:0 len3:0 len4:0]; // 最小サイズのメモリを確保
 }
-
 - (void) HspVarCoreClearTemp:(PVal*)pval flag:(int)flag {
     //		指定タイプの変数を最小メモリで初期化する(テンポラリ用)
     //
     [self HspVarCoreDim:pval flag:flag len1:1 len2:0 len3:0 len4:0]; // 最小サイズのメモリを確保
     pval->support |= HSPVAR_SUPPORT_TEMPVAR;
-    
 }
-
 -(void*)HspVarCoreCnvPtr:(PVal*)pval flag:(int)flag {
-    
     //		指定されたtypeフラグに変換された値のポインタを得る
     //
     PDAT* dst;
@@ -497,7 +433,6 @@ int hspvartype_limit;
     }
     //		型変換をする
     void* buf;
-    
     // buf = hspvarproc[ pval->flag ].GetPtr( pval );
     if (strcmp(hspvarproc[pval->flag].vartype_name, "int") == 0) { //整数のFree
         dst = [self HspVarInt_GetPtr:pval];
@@ -517,14 +452,11 @@ int hspvartype_limit;
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
     buf = (void*)dst;
-    
     if (pval->flag >= HSPVAR_FLAG_USERDEF) {
         //$使用できるCnvCustom関数は存在しない
         return NULL; //( hspvarproc[ pval->flag ].CnvCustom( buf, flag ) );
     }
-    
     if (strcmp(hspvarproc[flag].vartype_name, "int") == 0) { //整数のCnv
         buf = [self HspVarInt_Cnv:buf flag:pval->flag];
     } else if (strcmp(hspvarproc[flag].vartype_name, "double") == 0) { //実数のCnv
@@ -536,17 +468,13 @@ int hspvartype_limit;
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     return (void*)dst; //( hspvarproc[flag].Cnv( buf, pval->flag ) );
-    
 }
-
 #if 0
 -(PDAT *)HspVarCorePtrAPTR:(PVal*)pv ofs:(APTR)ofs {
-    
     //		変数データの実態ポインタを得る
     //		(APTRとpvalから実態を求める)
     //
     pv->offset=ofs;
-    
     PDAT * dst;
     if(strcmp(hspvarproc[(pv)->flag].vartype_name, "int") == 0) { //整数のGetPtr
         dst = HspVarInt_GetPtr(pv);
@@ -567,31 +495,23 @@ int hspvartype_limit;
         NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
-    
     return dst;//[(pv)->flag].GetPtr(pv);
 }
 #endif
-
 -(HspVarProc*) HspVarCoreSeekProc:(const char*)name {
-    
     int i;
     HspVarProc* p;
     for (i = 0; i < hspvartype_max; i++) {
         p = &hspvarproc[i];
         if (p->flag) {
             if (strcmp(p->vartype_name, name) == 0) {
-                
                 return p;
             }
         }
     }
-    
     return NULL;
 }
-
 -(void)HspVarCoreArray:(PVal*)pval offset:(int)offset {
-    
     //		配列要素の指定 (index)
     //		( Reset後に次元数だけ連続で呼ばれます )
     //
@@ -617,8 +537,6 @@ int hspvartype_limit;
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     pval->offset += offset * pval->arraymul;
-    
 }
-
 //=============================================================================<<<hspvar_core
 @end

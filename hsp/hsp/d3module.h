@@ -7,15 +7,12 @@
 //
 // d3moduleを改変して利用しています
 // http://sprocket.babyblue.jp/html/hsp_d3m.htm
-
 #ifndef d3module_h
 #define d3module_h
-
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 #include "debug_message.h"
 #import <math.h>
-
 @interface d3module : NSObject {
     //
     double ginfo_winx;
@@ -77,21 +74,17 @@
 }
 - (void)set_winx:(double)x;
 - (void)set_winy:(double)y;
-
 - (double)getdx;
 - (double)getdy;
 - (double)getdz;
 - (double)getex;
 - (double)getey;
 - (double)getez;
-
 - (double)d3dist:(double)p1 p2:(double)p2 p3:(double)p3;
 - (double)d3dist:(double)p1 p2:(double)p2;
 - (double)d3dist:(double)p1;
-
 - (double)d3rotateX:(double)x0 y0:(double)y0 va:(double)va; // getX
 - (double)d3rotateY:(double)x0 y0:(double)y0 va:(double)va; // getY
-
 - (double)d3vrotateX:(double)x0
                   y0:(double)y0
                   z0:(double)z0
@@ -113,7 +106,6 @@
                   vy:(double)vy
                   vz:(double)vz
                   va:(double)va; // getZ
-
 - (void)d3setlocalmx:(double)LGmpx
                LGmpy:(double)LGmpy
                LGmpz:(double)LGmpz
@@ -156,7 +148,6 @@
 - (void)d3setcam:(double)cpx cpy:(double)cpy;
 - (void)d3setcam:(double)cpx;
 - (void)d3setcam;
-
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
                 p3:(double)p3
@@ -230,15 +221,10 @@
 - (void)d3setlocal:(double)p1 p2:(double)p2;
 - (void)d3setlocal:(double)p1;
 - (void)d3setlocal;
-
 - (void)d3trans:(double)inx iny:(double)iny inz:(double)inz;      // dx,dy,dz,ef
 - (void)d3transTypeE:(double)inx iny:(double)iny inz:(double)inz; // ex,ey,ez,ef
-
 - (void)d3vpos:(double)v01 v02:(double)v02 v03:(double)v03;
-
 - (double)d3getposX:(double)x y:(double)y z:(double)z;
 - (double)d3getposY:(double)x y:(double)y z:(double)z;
-
 @end
-
 #endif /* d3module_h */

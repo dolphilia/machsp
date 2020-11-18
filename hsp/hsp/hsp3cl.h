@@ -1,10 +1,8 @@
-
 //
 //	hsp3cl.cpp header
 //
 #ifndef __hsp3cl_h
 #define __hsp3cl_h
-
 #import <Foundation/Foundation.h>
 #import "ViewController.h"
 #import "debug_message.h"
@@ -16,10 +14,8 @@
 #import "hsp3struct.h"
 #import "strbuf.h"
 #import "supio_hsp3.h"
-
 #define HSP3_AXTYPE_NONE 0
 #define HSP3_AXTYPE_ENCRYPT 1
-
 @interface ViewController (hsp3cl) {
 }
 - (int)hsp3cl_exec;
@@ -36,5 +32,4 @@
 - (LIBDAT *)copy_LIBDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size;
 - (STRUCTDAT *)copy_STRUCTDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size;
 @end
-
 #endif

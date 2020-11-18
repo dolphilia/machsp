@@ -5,10 +5,8 @@
 //  Created by dolphilia on 2016/02/01.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #ifndef MyCALayer_h
 #define MyCALayer_h
-
 #import "AppDelegate.h"
 #import "d3module.h"
 #include "debug_message.h"
@@ -17,22 +15,18 @@
 #import <Accelerate/Accelerate.h>
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
-
 @interface MyCALayer : CALayer {
-    
 @private
     AppDelegate* g; //"g"lobal
     int window_id;  //対応するウィンドウID
     int samplesPerPixel;
     BOOL is_redraw_just_now;
     d3module* d3m;
-    
 @public
     uint8_t** pixel_data;
     int32_t buf_index;
     int32_t* buf_width;
     int32_t* buf_height;
-    
     Color current_color;
     _Point current_point;
     int32_t current_blend_mode;    // gmodeのp1
@@ -43,11 +37,9 @@
     int font_size;
     int font_style;
 }
-
 //
 - (void)update_contents_with_cgimage:(CGImageRef)image;
 - (void)redraw;
-
 //
 - (void)get_pixel_color:(int)point_x point_y:(int)point_y;
 - (int)get_current_point_x;
@@ -56,7 +48,6 @@
 - (UInt8)get_current_color_g;
 - (UInt8)get_current_color_b;
 - (UInt8)get_current_color_a;
-
 //
 - (void)set_current_blend_mode:(int32_t)blend_mode;
 - (void)set_current_blend_opacity:(int32_t)blend_opacity;
@@ -73,10 +64,8 @@
            saturation:(int)saturation
            brightness:(int)brightness;
 - (void)set_current_point:(int)point_x point_y:(int)point_y;
-
 //
 - (void)clear_canvas:(int)color_number;
-
 //
 - (void)set_pixel_rgba:(int)point_x point_y:(int)point_y;
 - (void)set_line_rgba:(int)start_point_x
@@ -93,7 +82,6 @@
 - (void)fill_rect_rgba_slow:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2;
 - (void)set_circle_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2;
 - (void)fill_circle_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2;
-
 //
 - (void)fillGradation:(int)pos_x
                 pos_y:(int)pos_y
@@ -106,7 +94,6 @@
           color_red_b:(int)color_red_b
         color_green_b:(int)color_green_b
          color_blue_b:(int)color_blue_b;
-
 //
 - (void)gcopy:(int)index px:(int)px py:(int)py sx:(int)sx sy:(int)sy;
 - (void)d3setcam:(double)x1
@@ -144,7 +131,6 @@
 - (void)mes:(NSString*)text;
 - (NSSize)picload:(NSString*)filename;
 - (NSSize)picload:(NSString*)filename mode:(int)mode;
-
 //
 - (void)cifilter:(int)type;
 - (void)vcopy:(int)index;
@@ -160,7 +146,5 @@
 - (void)verticalReflect;
 - (void)horizontalReflect;
 - (void)gaussianblur;
-
 @end
-
 #endif /* MyCALayer_h */

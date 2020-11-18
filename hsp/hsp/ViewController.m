@@ -2,56 +2,43 @@
 //  ViewController.m
 //  hsp
 //
-//  Created by 半澤 聡 on 2016/09/12.
+//  Created by dolphilia on 2016/09/12.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #import "ViewController.h"
 #import "hsp.h"
 #import "hsp3cl.h"
 #import <Foundation/Foundation.h>
-
 @implementation ViewController
-
 - (void)show_alert_dialog:(NSString*)message
 {
-    
     NSAlert* alert = [[NSAlert alloc] init];
     [alert setMessageText:@"エラー"];
     [alert setInformativeText:message];
     [alert addButtonWithTitle:@"OK"];
     [alert runModal];
-    
 }
-
 - (NSException*)make_nsexception:(int)hsp_error_type
 {
     NSString *error_str = [NSString stringWithFormat:@"%d", hsp_error_type];
     return [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
 }
-
 - (void)viewDidLoad
 {
-    
     [super viewDidLoad];
-    
     // Do any additional setup after loading the view.
     isInitialized = NO;
-    
     global = (AppDelegate*)[[NSApplication sharedApplication] delegate];
-    
     //主要なオブジェクト集の初期化
     // NSStoryboard *storyBoard = [NSStoryboard storyboardWithName:@"Main"
     // bundle:nil]; // get a reference to the storyboard
     // NSWindowController *myWindowController = [storyBoard
     // instantiateControllerWithIdentifier:@"MyWindowController"]; // instantiate
     // your window controller
-    
     myWindow = self.view.window; // NULLの可能性がある
     myViewController = self;
     myView = (MyView*)self.view;
     myLayer = (MyCALayer*)self.view.layer;
-    
     //その他のグローバル変数の初期化
     if (global.title_text == nil) {
         global.title_text = @"Window";
@@ -61,10 +48,8 @@
     global.q_audio_buffer = [global.q_audio_source mutableCopy];
     global.q_audio_count = 0;
     global.is_startax_in_resource = NO;
-    
     //
     global.is_start_midi_event = NO;
-    
     //現在のパスをpath.txtから取得する
     //もしリソースにstart.axがあったら
     BOOL isDir = NO;
@@ -106,7 +91,6 @@
             }
         }
     }
-    
     //カレントディレクトリを設定
     if ([global.current_script_path isEqual:@""]) {
         global.current_directory_path = NSHomeDirectory();
@@ -114,15 +98,12 @@
         global.current_directory_path = global.current_script_path;
     }
     chdir([global.current_directory_path UTF8String]);
-    
     // start.axを読み込んで実行（並列処理）
     [self runStartax];
-    
     qAudio =
     [[SineWave alloc] initWithFrequency:440 volume:0.1]; // QueAudioの初期化
     myAudio = [[MyAudio alloc] init];                      // AVAudioの初期化
     myMidi = [[MyMidi alloc] init];
-    
     //オブジェクトの初期化
     myButtons = [[NSMutableArray alloc] initWithCapacity:0];
     for (int i = 0; i < 64; i++) {
@@ -140,7 +121,6 @@
         [myButton setTitle:@"button"];
         [myView addSubview:myButton];
     }
-    
     mySliders = [[NSMutableArray alloc] initWithCapacity:0];
     for (int i = 0; i < 64; i++) {
         [mySliders
@@ -154,7 +134,6 @@
         [mySlider setAction:@selector(sliderEvent:)];
         [myView addSubview:mySlider];
     }
-    
     myCheckBoxs = [[NSMutableArray alloc] initWithCapacity:0];
     for (int i = 0; i < 64; i++) {
         [myCheckBoxs
@@ -168,17 +147,14 @@
         [myCheckBox setAction:@selector(checkEvent:)];
         [myView addSubview:myCheckBox];
     }
-    
     //リストボックス（テーブルビュー）
     // NSTableView* tableView = [[NSTableView alloc] initWithFrame:NSMakeRect(0,
     // 0, 200, 200)];
     //[myView addSubview:tableView];
-    
     //テキストエリア（テキストビュー）
     // NSTextView* textView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, 0,
     // 200, 200)];
     //[myView addSubview:textView];
-    
     //コンボボックス
     //        //
     //        NSComboBox* comboBox = [[NSComboBox alloc]
@@ -197,7 +173,6 @@
     //        [comboBox setTarget:self];
     //        [comboBox setAction:@selector(comboEvent:)];
     //        [myView addSubview:comboBox];
-    
     myTextFields = [[NSMutableArray alloc] initWithCapacity:0];
     for (int i = 0; i < 64; i++) {
         [myTextFields addObject:[[NSTextField alloc]
@@ -213,7 +188,6 @@
         [myTextField setEditable:NO];
         [myView addSubview:myTextField];
     }
-    
     // NSTextField* textField = [[NSTextField alloc] initWithFrame:NSMakeRect(0,
     // 0, 96, 22)];
     // textField.focusRingType = NSFocusRingTypeNone;
@@ -222,7 +196,6 @@
     //[textField setIdentifier:@"TextField"];//識別番号
     //[textField setTag:0];
     //[myView addSubview:textField];
-    
     //タイトルバーの変更を監視
     NSTimer* myTimer = [NSTimer scheduledTimerWithTimeInterval:0.001
                                                         target:self
@@ -230,7 +203,6 @@
                                                       userInfo:nil
                                                        repeats:YES];
     [myTimer fire];
-    
     // MIDIの変更を監視
     NSTimer* myTimerMidiEvent =
     [NSTimer scheduledTimerWithTimeInterval:0.001
@@ -239,27 +211,17 @@
                                    userInfo:nil
                                     repeats:YES];
     [myTimerMidiEvent fire];
-    
     global.is_app_run = YES;
     isInitialized = YES;
-    
 }
-
 - (void)setRepresentedObject:(id)representedObject
 {
-    
     [super setRepresentedObject:representedObject];
-    
     // Update the view, if already loaded.
-    
 }
-
 - (void)awakeFromNib
 {
-    
-    
 }
-
 - (void)onTimerMidiEvent:(NSTimer*)timer
 {
     DEBUG_TIMER_IN;
@@ -271,7 +233,6 @@
                     int number = [global.midi_events[1] intValue];
                     int velocity = [global.midi_events[2] intValue];
                     int channel = [global.midi_events[3] intValue];
-                    
                     [self code_setva:myMidiEventNumberPval
                                 aptr:myMidiEventNumberAptr
                                 type:TYPE_INUM
@@ -284,7 +245,6 @@
                                 aptr:myMidiEventChannelAptr
                                 type:TYPE_INUM
                                  ptr:&channel];
-                    
                     if ([global.midi_events[0] isEqual:@"noteon"]) {
                         int type = 1;
                         [self code_setva:myMidiEventTypePval
@@ -310,7 +270,6 @@
                                     type:TYPE_INUM
                                      ptr:&type];
                     }
-                    
                     [global.midi_events removeObjectAtIndex:0];
                     [global.midi_events removeObjectAtIndex:0];
                     [global.midi_events removeObjectAtIndex:0];
@@ -322,7 +281,6 @@
     }
     DEBUG_TIMER_OUT;
 }
-
 - (void)onTimer:(NSTimer*)timer //タイトルバーの変更を監視
 {
     DEBUG_TIMER_IN;
@@ -376,18 +334,13 @@
     }
     DEBUG_TIMER_OUT;
 }
-
 //テキストフィールドのイベント　関連
 - (void)controlTextDidEndEditing:
 (NSNotification*)notification // Enterが押された時
 {
-    
-    
 }
-
 - (void)controlTextDidChange:(NSNotification*)notification //内容が変更された時
 {
-    
     NSTextField* textField = [notification object];
     NSString* identifier = [textField identifier];
     if ([identifier isEqualToString:@"TextField"]) {
@@ -399,12 +352,9 @@
                      ptr:state];
         // NSLog(@"%d",(int)textField.tag);
     }
-    
 }
-
 - (void)checkEvent:(id)sender
 {
-    
     int state;
     if ([sender state] == NSOnState) {
         state = 1;
@@ -419,28 +369,19 @@
                     type:TYPE_INUM
                      ptr:&state];
     }
-    
 }
-
 - (void)sliderEvent:(id)sender
 {
-    
     vc_hspctx->iparam = (int)[sender tag];
     vc_hspctx->refdval = [[mySliders objectAtIndex:[sender tag]] doubleValue];
     [self cmdfunc_gosub:mySliderLabel[[sender tag]]];
-    
 }
-
 - (void)buttonEvent:(id)sender
 {
-    
     [self cmdfunc_gosub:myButtonLabel[[sender tag]]];
-    
 }
-
 - (void)runStartax
 {
-    
     NSString* path; // = NSHomeDirectory();
     //ファイルの有無の確認 順序 -> resourcePath/start.ax ->
     //Documents/hsptmp/start.ax -> Home/start.ax -> Desktop/start.ax
@@ -481,7 +422,6 @@
             }
         }
     }
-    
     [self hsp3cl_init:(char*)path.UTF8String];
     [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
         while (1) { //実行できる状態になるまで待つ
@@ -492,8 +432,5 @@
         }
         [self hsp3cl_exec];
     }];
-    
-    
 }
-
 @end

@@ -5,24 +5,18 @@
 //  Created by dolphilia on 2016/02/01.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #import "MyCALayer.h"
 #import <Foundation/Foundation.h>
-
 #define BUFFER_MAX_WIDTH 2500
 #define BUFFER_MAX_HEIGHT 2500
 #define BUFFER_HAS_ALPHA YES
-
 @implementation MyCALayer
-
 - (instancetype)init
 {
     self = [super init];
     if (self) {
         g = (AppDelegate*)[[NSApplication sharedApplication] delegate];
-        
         samplesPerPixel = 4; //ピクセル数(3 = RGB, 4 = RGBA)
-        
         int bufferCount = 24; //バッファーの数
         if (pixel_data == nil) {
             pixel_data = calloc(bufferCount, sizeof(UInt8*));
@@ -46,23 +40,18 @@
         }
         current_copy_width = 32;
         current_copy_height = 32;
-        
         font_name = @"";
         font_size = 12;
         font_style = 0;
-        
         is_redraw_just_now = YES;
         d3m = [[d3module alloc] init];
         [d3m set_winx:buf_width[buf_index]];
         [d3m set_winy:buf_height[buf_index]];
-        
         [d3m d3setcam:500 cpy:500 cpz:500 tx:0 ty:0 tz:0];
-        
         //設定の初期化
         [self clear_canvas:0];
         [self set_color_rgba:0 green:0 blue:0 alpha:255];
         [self redraw];
-        
         ////タイマー
         // NSTimer* myTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
         // arget:self selector:@selector(onTimer:) userInfo:nil repeats:YES];
@@ -70,7 +59,6 @@
     }
     return self;
 }
-
 - (void)update_contents_with_cgimage:(CGImageRef)image
 {
     [CATransaction begin];
@@ -79,11 +67,9 @@
     self.contents = (__bridge id _Nullable)image;
     [CATransaction commit];
 }
-
 - (void)redraw
 {
     @autoreleasepool {
-        
         if (g.backing_scale_factor == 0.0) {
             return;
         }
@@ -93,7 +79,6 @@
             int width = buf_width[0];
             int height = buf_height[0];
             int h_mul = width * 2 * samplesPerPixel;
-            
             unsigned char* retina_pixel_data = calloc(
                                                       width * 2 * height * 2 * samplesPerPixel * 4, sizeof(unsigned char));
             int i = 0;
@@ -110,7 +95,6 @@
                     i += 4;
                 }
             }
-            
             bip = [[NSBitmapImageRep alloc]
                    initWithBitmapDataPlanes:&retina_pixel_data
                    pixelsWide:buf_width[buf_index] * 2
@@ -136,43 +120,34 @@
                    bytesPerRow:buf_width[buf_index] * samplesPerPixel
                    bitsPerPixel:samplesPerPixel * 8];
         }
-        
         [self update_contents_with_cgimage:[bip CGImage]];
     }
 }
-
 //----
-
 - (int)get_current_point_x
 {
     return current_point.x;
 }
-
 - (int)get_current_point_y
 {
     return current_point.y;
 }
-
 - (UInt8)get_current_color_r
 {
     return current_color.red;
 }
-
 - (UInt8)get_current_color_g
 {
     return current_color.green;
 }
-
 - (UInt8)get_current_color_b
 {
     return current_color.blue;
 }
-
 - (UInt8)get_current_color_a
 {
     return current_color.alpha;
 }
-
 - (void)get_pixel_color:(int)point_x point_y:(int)point_y
 {
     Color color = get_pixel_color(pixel_data[buf_index], point_x, point_y,
@@ -182,52 +157,42 @@
                     blue:color.blue
                    alpha:color.alpha];
 }
-
 //----
-
 - (void)set_current_blend_mode:(int32_t)blend_mode
 {
     current_blend_mode = blend_mode;
 }
-
 - (void)set_current_blend_opacity:(int32_t)blend_opacity
 {
     current_blend_opacity = blend_opacity;
 }
-
 - (void)set_current_copy_width:(int32_t)width
 {
     current_copy_width = width;
 }
-
 - (void)set_current_copy_height:(int32_t)height
 {
     current_copy_height = height;
 }
-
 - (void)set_redraw_flag:(BOOL)flag
 {
     is_redraw_just_now = flag;
 }
-
 - (void)set_window_id:(int)p1
 {
     window_id = p1;
 }
-
 - (void)set_current_point:(int)point_x point_y:(int)point_y
 {
     current_point.x = point_x;
     current_point.y = point_y;
 }
-
 - (void)set_font:(NSString*)name size:(int)size style:(int)style
 {
     font_name = name;
     font_size = size;
     font_style = style;
 }
-
 - (void)set_color_rgba:(int)red green:(int)green blue:(int)blue alpha:(int)alpha
 {
     current_color.red = red;
@@ -235,7 +200,6 @@
     current_color.blue = blue;
     current_color.alpha = alpha;
 }
-
 - (void)set_color_hsv:(int)hue
            saturation:(int)saturation
            brightness:(int)brightness
@@ -243,7 +207,6 @@
     Color color = get_color_hsv(hue, saturation, brightness);
     [self set_color_rgba:color.red green:color.green blue:color.blue alpha:255];
 }
-
 - (void)clear_canvas:(int)color_number
 {
     clear_canvas_rgba(pixel_data[buf_index], buf_width[buf_index],
@@ -252,7 +215,6 @@
         [self redraw];
     }
 }
-
 - (void)set_pixel_rgba:(int)point_x point_y:(int)point_y
 {
     set_pixel_rgba(pixel_data[buf_index], point_x, point_y, current_color.red,
@@ -262,7 +224,6 @@
         [self redraw];
     }
 }
-
 - (void)set_line_rgba:(int)start_point_x
         start_point_y:(int)start_point_y
           end_point_x:(int)end_point_x
@@ -276,7 +237,6 @@
         [self redraw];
     }
 }
-
 - (void)set_line_rgba_smooth:(int)start_point_x
                start_point_y:(int)start_point_y
                  end_point_x:(int)end_point_x
@@ -290,7 +250,6 @@
         [self redraw];
     }
 }
-
 //-(void)set_line_rgba_smooth_b:(int)start_point_x
 //start_point_y:(int)start_point_y end_point_x:(int)end_point_x
 //end_point_y:(int)end_point_y
@@ -362,7 +321,6 @@
 //        }
 //    }
 //}
-
 - (void)set_rect_line_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
 {
     [self set_line_rgba:x1 start_point_y:y1 end_point_x:x1 end_point_y:y2];
@@ -370,7 +328,6 @@
     [self set_line_rgba:x2 start_point_y:y2 end_point_x:x2 end_point_y:y1];
     [self set_line_rgba:x2 start_point_y:y1 end_point_x:x1 end_point_y:y1];
 }
-
 - (void)set_rect_line_rgba_smooth:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
 {
     [self set_line_rgba_smooth:x1 start_point_y:y1 end_point_x:x1 end_point_y:y2];
@@ -378,7 +335,6 @@
     [self set_line_rgba_smooth:x2 start_point_y:y2 end_point_x:x2 end_point_y:y1];
     [self set_line_rgba_smooth:x2 start_point_y:y1 end_point_x:x1 end_point_y:y1];
 }
-
 - (void)fill_rect_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
 {
     fill_rect_rgba(pixel_data[buf_index], x1, y1, x2, y2, current_color.red,
@@ -388,7 +344,6 @@
         [self redraw];
     }
 }
-
 - (void)fill_rect_rgba_slow:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
 {
     fill_rect_rgba_slow(pixel_data[buf_index], x1, y1, x2, y2, current_color.red,
@@ -399,7 +354,6 @@
         [self redraw];
     }
 }
-
 - (void)set_circle_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
 {
     set_circle_rgba(pixel_data[buf_index], x1, y1, x2, y2, current_color.red,
@@ -409,7 +363,6 @@
         [self redraw];
     }
 }
-
 - (void)fill_circle_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
 {
     fill_circle_rgba(pixel_data[buf_index], x1, y1, x2, y2, current_color.red,
@@ -419,7 +372,6 @@
         [self redraw];
     }
 }
-
 - (void)set_circle_rgba_smooth:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
 {
     //    int r=80;
@@ -448,7 +400,6 @@
     //        }
     //    }
 }
-
 - (void)fill_circle_rgba_smooth:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
 {
     //単純な楕円塗りつぶし
@@ -467,9 +418,7 @@
     //        }
     //    }
 }
-
 //
-
 - (void)d3setcam:(double)x1
               y1:(double)y1
               z1:(double)z1
@@ -479,21 +428,18 @@
 {
     [d3m d3setcam:x1 cpy:y1 cpz:z1 tx:x2 ty:y2 tz:z2];
 }
-
 - (void)d3pos:(double)x y:(double)y z:(double)z
 {
     int px = (int)[d3m d3getposX:x y:y z:z];
     int py = (int)[d3m d3getposY:x y:y z:z];
     [self set_current_point:px point_y:py];
 }
-
 - (void)d3pset:(double)x y:(double)y z:(double)z
 {
     int px = (int)[d3m d3getposX:x y:y z:z];
     int py = (int)[d3m d3getposY:x y:y z:z];
     [self set_pixel_rgba:px point_y:py];
 }
-
 - (void)d3line:(double)sx
             sy:(double)sy
             sz:(double)sz
@@ -507,7 +453,6 @@
     int y2 = (int)[d3m d3getposY:ex y:ey z:ez];
     [self set_line_rgba:x1 start_point_y:y1 end_point_x:x2 end_point_y:y2];
 }
-
 - (void)d3lineSmooth:(double)sx
                   sy:(double)sy
                   sz:(double)sz
@@ -521,7 +466,6 @@
     int y2 = (int)[d3m d3getposY:ex y:ey z:ez];
     [self set_line_rgba_smooth:x1 start_point_y:y1 end_point_x:x2 end_point_y:y2];
 }
-
 - (void)d3box:(double)sx
            sy:(double)sy
            sz:(double)sz
@@ -542,7 +486,6 @@
     [self d3line:sx sy:ey sz:ez ex:ex ey:ey ez:ez];
     [self d3line:sx sy:ey sz:sz ex:ex ey:ey ez:sz];
 }
-
 - (void)d3boxSmooth:(double)sx
                  sy:(double)sy
                  sz:(double)sz
@@ -563,7 +506,6 @@
     [self d3lineSmooth:sx sy:ey sz:ez ex:ex ey:ey ez:ez];
     [self d3lineSmooth:sx sy:ey sz:sz ex:ex ey:ey ez:sz];
 }
-
 - (void)fillGradation:(int)pos_x
                 pos_y:(int)pos_y
                size_w:(int)size_w
@@ -582,32 +524,25 @@
     memcpy(plane_pixeldata, pixel_data[window_id],
            sizeof(unsigned char) * buf_width[buf_index] * buf_height[buf_index] *
            samplesPerPixel);
-    
     CGContextRef context = CGBitmapContextCreate(
                                                  plane_pixeldata, buf_width[buf_index], buf_height[buf_index], 8,
                                                  buf_width[buf_index] * 4, CGColorSpaceCreateDeviceRGB(),
                                                  kCGImageAlphaPremultipliedLast);
     CGContextSaveGState(context);
-    
     NSRect rect = NSMakeRect(0, 0, buf_width[buf_index], buf_height[buf_index]);
     CGContextAddRect(context, rect);
-    
     CGFloat ra = ((float)color_red_a) / 255.0;
     CGFloat ga = ((float)color_green_a) / 255.0;
     CGFloat ba = ((float)color_blue_a) / 255.0;
     CGFloat rb = ((float)color_red_b) / 255.0;
     CGFloat gb = ((float)color_green_b) / 255.0;
     CGFloat bb = ((float)color_blue_b) / 255.0;
-    
     CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
     CGFloat components[] = {
         rb, gb, bb, 1.0f, ra, ga, ba, 1.0f // R, G, B, Alpha
-        
     };
     CGFloat locations[] = { 0.0f, 1.0f };
-    
     size_t count = sizeof(components) / (sizeof(CGFloat) * 4);
-    
     // CGRect frame = self.bounds;
     CGPoint startPoint = rect.origin;
     CGPoint endPoint = rect.origin;
@@ -616,13 +551,10 @@
     } else {
         endPoint.y = rect.origin.y + rect.size.height;
     }
-    
     CGGradientRef gradientRef = CGGradientCreateWithColorComponents(
                                                                     colorSpaceRef, components, locations, count);
-    
     CGContextDrawLinearGradient(context, gradientRef, startPoint, endPoint,
                                 kCGGradientDrawsAfterEndLocation);
-    
     // 画像出力
     unsigned char* bitmap = CGBitmapContextGetData(context);
     CGDataProviderRef dataProviderRef = CGDataProviderCreateWithData(
@@ -639,19 +571,15 @@
                                       buf_height[buf_index])]; //[ initWithCGImage:result]
     NSBitmapImageRep* bip =
     [[NSBitmapImageRep alloc] initWithData:[image TIFFRepresentation]];
-    
     CGGradientRelease(gradientRef);
     CGColorSpaceRelease(colorSpaceRef);
     CGContextRestoreGState(context);
     CFRelease(dataProviderRef);
     CGImageRelease(result);
-    
     NSUInteger color_now[samplesPerPixel];
-    
     int i = 0;
     int height = buf_height[buf_index];
     int width = buf_width[buf_index];
-    
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             [bip getPixel:color_now atX:x y:y];
@@ -659,16 +587,13 @@
             pixel_data[buf_index][i + 1] = color_now[1];
             pixel_data[buf_index][i + 2] = color_now[2];
             pixel_data[buf_index][i + 3] = color_now[3];
-            
             i += samplesPerPixel;
         }
     }
-    
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
-
 - (void)gcopy:(int)index px:(int)px py:(int)py sx:(int)sx sy:(int)sy
 {
     copy_pixel_data(pixel_data[buf_index], pixel_data[index], current_point.x,
@@ -681,7 +606,6 @@
         [self redraw];
     }
 }
-
 - (void)mes:(NSString*)text
 {
     @autoreleasepool {
@@ -689,17 +613,14 @@
         NSString* str = text;
         CGFloat scale = 1.0;
         BOOL is_font_smooth = NO;
-        
         if (font_style & 16) { //アンチエイリアシングありの時だけRetina対応をする
             is_font_smooth = YES;
             scale = g.backing_scale_factor;
         }
-        
         NSFont* font;
         CFStringRef ct_font_name; // = CFStringCreateWithCString(NULL, "Helvetica",
         // kCFStringEncodingMacRoman);
         CTFontRef ct_font;        // = CTFontCreateWithName(font_name, 12.0, NULL);
-        
         if ([font_name isEqual:@""]) { //フォント名が未指定だったら
             font = [NSFont fontWithName:@"Helvetica" size:((float)font_size) / scale];
             ct_font_name =
@@ -713,14 +634,12 @@
             ct_font =
             CTFontCreateWithName(ct_font_name, ((float)font_size) / scale, NULL);
         }
-        
         CGSize strSize = [str sizeWithAttributes:@{
                                                    NSForegroundColorAttributeName : [NSColor whiteColor],
                                                    NSFontAttributeName : font
                                                    }]; //現在の属性からサイズを取得する
         int h = 0;
         int w = 0;
-        
         if (scale > 1.0) { // Retina環境
             h = (int)strSize.height * scale;
             w = (int)strSize.width * scale + 20;
@@ -728,10 +647,8 @@
             h = (int)strSize.height;
             w = (int)strSize.width + 10;
         }
-        
         NSImage* img = [[NSImage alloc]
                         initWithSize:NSMakeSize((int)strSize.width + 10, (int)strSize.height)];
-        
         //プレーンデータからNSImageを生成
         unsigned char* plane = malloc(sizeof(unsigned char) * buf_width[buf_index] *
                                       buf_height[buf_index] * samplesPerPixel);
@@ -750,15 +667,12 @@
                                  bytesPerRow:buf_width[buf_index] * samplesPerPixel
                                  bitsPerPixel:samplesPerPixel * 8];
         free(plane);
-        
         NSColor* color =
         [NSColor colorWithCalibratedRed:((float)current_color.red) / 255.0
                                   green:((float)current_color.green) / 255.0
                                    blue:((float)current_color.blue) / 255.0
                                   alpha:1.0];
-        
         // NSMutableDictionary* font_styleAttributes;
-        
         if (is_font_smooth) { //アンチエリアシングあり
             NSDictionary* stringAttributes;
             if (font_style & 4 && font_style & 8) { //下線＋打ち消し線
@@ -808,43 +722,35 @@
                    samplesPerPixel);
             memset(plane_text_image, 0, sizeof(unsigned char) * img.size.width *
                    img.size.height * samplesPerPixel);
-            
             CGContextRef context = CGBitmapContextCreate(
                                                          plane_text_image, img.size.width, img.size.height, 8,
                                                          img.size.width * 4, CGColorSpaceCreateDeviceRGB(),
                                                          kCGImageAlphaPremultipliedLast);
             CGContextSaveGState(context);
-            
             CGColorRef fontColor = [color CGColor];
-            
             // Paragraph
             //- kCTTextAlignmentLeft
             //- kCTTextAlignmentCenter
             //- kCTTextAlignmentRight
             //- kCTTextAlignmentNatural
             CTTextAlignment alignment = kCTTextAlignmentLeft;
-            
             CTParagraphStyleSetting settings[] = {
                 { kCTParagraphStyleSpecifierAlignment, sizeof(alignment), &alignment }
             };
-            
             CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(
                                                                         settings, sizeof(settings) / sizeof(settings[0]));
-            
             CFTypeRef underline_style;
             if (font_style & 4) {
                 underline_style = (__bridge CFTypeRef)(@(kCTUnderlineStyleSingle));
             } else {
                 underline_style = (__bridge CFTypeRef)(@(kCTUnderlineStyleNone));
             }
-            
             CFStringRef keys[] = { kCTFontAttributeName,
                 kCTParagraphStyleAttributeName,
                 kCTForegroundColorAttributeName,
                 kCTUnderlineStyleAttributeName };
             CFTypeRef values[] = { ct_font, paragraphStyle, fontColor,
                 underline_style };
-            
             //メモリ解放必要
             CFDictionaryRef font_attributes = CFDictionaryCreate(
                                                                  kCFAllocatorDefault, (const void**)&keys, (const void**)&values,
@@ -852,7 +758,6 @@
                                                                  &kCFTypeDictionaryValueCallBacks);
             int x = 0;
             int y = 3;
-            
             CFStringRef string = CFStringCreateWithCString(NULL, [str UTF8String],
                                                            kCFStringEncodingUTF8);
             CFAttributedStringRef attr_string =
@@ -862,11 +767,8 @@
             CGContextSetAllowsAntialiasing(context, NO);
             CGContextSetShouldAntialias(context, NO);
             CGContextSetShouldSmoothFonts(context, NO);
-            
             CTLineDraw(line, context);
-            
             unsigned char* bitmap = CGBitmapContextGetData(context);
-            
             // 画像出力
             CGDataProviderRef dataProviderRef = CGDataProviderCreateWithData(
                                                                              NULL, bitmap, img.size.width * img.size.height * 4, bufferFree);
@@ -876,11 +778,9 @@
                                               dataProviderRef, NULL, 0, kCGRenderingIntentDefault);
             NSImage* image = [[NSImage alloc] initWithCGImage:result size:img.size];
             bip = [[NSBitmapImageRep alloc] initWithData:[image TIFFRepresentation]];
-            
             // 解放処理
             CFRelease(dataProviderRef);
             CGImageRelease(result);
-            
             CFRelease(underline_style);
             CFRelease(paragraphStyle);
             CFRelease(line);
@@ -890,7 +790,6 @@
             CGContextRelease(context);
             free(plane_text_image);
         }
-        
         //描画した画像からプレーンデータを生成する
         NSUInteger color_now[samplesPerPixel];
         NSUInteger color_compare[samplesPerPixel];
@@ -898,7 +797,6 @@
         color_compare[1] = current_color.green;
         color_compare[2] = current_color.blue;
         color_compare[3] = current_color.alpha;
-        
         int i = 0;
         int height = h; //(int)strSize.height;
         int width = w;  //(int)strSize.width + 10;
@@ -913,7 +811,6 @@
         }
         i = current_point.x * samplesPerPixel +
         current_point.y * buf_width[buf_index] * samplesPerPixel;
-        
         if (font_style & 16) {
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
@@ -922,7 +819,6 @@
                     pixel_data[buf_index][i + 1] = color_now[1];
                     pixel_data[buf_index][i + 2] = color_now[2];
                     pixel_data[buf_index][i + 3] = color_now[3];
-                    
                     i += samplesPerPixel;
                 }
                 i += buf_width[buf_index] * samplesPerPixel - width * samplesPerPixel;
@@ -940,35 +836,28 @@
                         pixel_data[buf_index][i + 2] = color_now[2];
                         pixel_data[buf_index][i + 3] = color_now[3];
                     }
-                    
                     i += samplesPerPixel;
                 }
                 i += buf_width[buf_index] * samplesPerPixel - width * samplesPerPixel;
             }
         }
-        
         CFRelease(ct_font_name);
         CFRelease(ct_font);
-        
         current_point.y += h;
-        
         if (is_redraw_just_now && buf_index == 0) {
             [self redraw];
         }
     }
 }
-
 static void
 bufferFree(void* info, const void* data, size_t size)
 {
     // free((unsigned char *)data);
 }
-
 - (NSSize)picload:(NSString*)filename
 {
     return [self picload:filename mode:0];
 }
-
 - (NSSize)picload:(NSString*)filename mode:(int)mode
 {
     NSSize pictureSize;
@@ -986,7 +875,6 @@ bufferFree(void* info, const void* data, size_t size)
         }
         path = [path stringByAppendingString:@"/"];
         path = [path stringByAppendingString:filename];
-        
         _Size image_size;
         if (mode == 0) {
             //画像サイズに合わせて画面をリサイズ
@@ -1002,16 +890,13 @@ bufferFree(void* info, const void* data, size_t size)
         }
         pictureSize.width = image_size.width;
         pictureSize.height = image_size.height;
-        
         if (is_redraw_just_now && buf_index == 0) {
             [self redraw];
         }
     }
     return pictureSize;
 }
-
 //-------------------------------------->> フィルター
-
 - (void)vcopy:(int)index
 {
     //    CGAffineTransform t = CGAffineTransformMakeTranslation(200, 200);
@@ -1021,7 +906,6 @@ bufferFree(void* info, const void* data, size_t size)
     //    NSLog(@"%f",at.d);
     //    NSLog(@"%f",at.tx);
     //    NSLog(@"%f",at.ty);
-    
     //    vImage_AffineTransform affine_transform = {1.0,0.0,0.0,1.0,200.0,0.0};
     //    Pixel_8888 bgColor = {0, 0, 0, 255};
     //
@@ -1036,14 +920,12 @@ bufferFree(void* info, const void* data, size_t size)
     //    affine_transform.tx = 0;
     //    vImageAffineWarp_ARGB8888(&source, &dest, NULL, &affine_transform,
     //    bgColor, kvImageHighQualityResampling);
-    
     //    vImageScale_ARGB8888(&source, &dest, NULL,
     //    kvImageHighQualityResampling);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
-
 - (void)scale
 {
     //拡大縮小する：倍率はdestのサイズで変わる
@@ -1053,7 +935,6 @@ bufferFree(void* info, const void* data, size_t size)
         buf_width[buf_index] * 4 };
     vImageScale_ARGB8888(&source, &dest, NULL, kvImageHighQualityResampling);
 }
-
 - (void)rotate
 {
     //回転する
@@ -1067,7 +948,6 @@ bufferFree(void* info, const void* data, size_t size)
         [self redraw];
     }
 }
-
 - (void)edgedetect
 {
     //エッジ検出
@@ -1081,7 +961,6 @@ bufferFree(void* info, const void* data, size_t size)
         [self redraw];
     }
 }
-
 - (void)sharpen
 {
     //先鋭化
@@ -1094,7 +973,6 @@ bufferFree(void* info, const void* data, size_t size)
         [self redraw];
     }
 }
-
 - (void)unsharpen
 {
     static int16_t unsharpen_kernel[9] = { -1, -1, -1, -1, 17, -1, -1, -1, -1 };
@@ -1106,7 +984,6 @@ bufferFree(void* info, const void* data, size_t size)
         [self redraw];
     }
 }
-
 - (void)dilate
 {
     //膨張
@@ -1123,7 +1000,6 @@ bufferFree(void* info, const void* data, size_t size)
         [self redraw];
     }
 }
-
 - (void)erode
 {
     //収縮
@@ -1138,7 +1014,6 @@ bufferFree(void* info, const void* data, size_t size)
         [self redraw];
     }
 }
-
 - (void)equalization
 {
     //ヒストグラム均一化
@@ -1149,7 +1024,6 @@ bufferFree(void* info, const void* data, size_t size)
         [self redraw];
     }
 }
-
 - (void)emboss
 {
     //エンボス
@@ -1162,7 +1036,6 @@ bufferFree(void* info, const void* data, size_t size)
         [self redraw];
     }
 }
-
 - (void)verticalReflect
 {
     //上下反転する
@@ -1170,7 +1043,6 @@ bufferFree(void* info, const void* data, size_t size)
     vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
         buf_width[buf_index], buf_width[buf_index] * 4 };
     vImageVerticalReflect_ARGB8888(&source, &source, kvImageNoFlags);
-    
     //別な方法
     // vImage_Buffer source = {pixel_data[buf_index], buf_height[buf_index],
     // buf_width[buf_index], buf_width[buf_index]*4};
@@ -1183,12 +1055,10 @@ bufferFree(void* info, const void* data, size_t size)
     // memcpy(pixel_data[buf_index],destData,sizeof(UInt8) * buf_width[buf_index]
     // * buf_height[buf_index] * 4);
     // free(destData);
-    
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
-
 - (void)horizontalReflect
 {
     //左右反転する
@@ -1196,7 +1066,6 @@ bufferFree(void* info, const void* data, size_t size)
     vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
         buf_width[buf_index], buf_width[buf_index] * 4 };
     vImageHorizontalReflect_ARGB8888(&source, &source, kvImageNoFlags);
-    
     //別な方法
     // vImage_Buffer source = {pixel_data[buf_index], buf_height[buf_index],
     // buf_width[buf_index], buf_width[buf_index]*4};
@@ -1209,12 +1078,10 @@ bufferFree(void* info, const void* data, size_t size)
     // memcpy(pixel_data[buf_index],destData,sizeof(UInt8) * buf_width[buf_index]
     // * buf_height[buf_index] * 4);
     // free(destData);
-    
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
-
 - (void)gaussianblur
 {
     //ぼかし
@@ -1251,7 +1118,6 @@ bufferFree(void* info, const void* data, size_t size)
         buf_width[buf_index], buf_width[buf_index] * 4 };
     vImageConvolve_ARGB8888(&source, &source, NULL, 0, 0, gaussKernel, m, m,
                             divisor, NULL, kvImageBackgroundColorFill);
-    
     //別な方法
     // vImage_Buffer source = {pixel_data[buf_index], buf_height[buf_index],
     // buf_width[buf_index], buf_width[buf_index]*4};
@@ -1264,12 +1130,10 @@ bufferFree(void* info, const void* data, size_t size)
     // memcpy(pixel_data[buf_index],destData,sizeof(UInt8) * buf_width[buf_index]
     // * buf_height[buf_index] * 4);
     // free(destData);
-    
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
-
 - (void)cifilter:(int)type
 {
     //プレーンデータからNSImageを生成
@@ -1289,12 +1153,9 @@ bufferFree(void* info, const void* data, size_t size)
                              colorSpaceName:NSDeviceRGBColorSpace
                              bytesPerRow:buf_width[buf_index] * samplesPerPixel
                              bitsPerPixel:samplesPerPixel * 8];
-    
     free(plane);
-    
     CIImage* ciImage = [[CIImage alloc]
                         initWithCGImage:bip.CGImage]; // NSBitmapImageRepをCIImageに変換
-    
     CIFilter* filter;
     switch (type) {
         case 0:
@@ -1418,10 +1279,8 @@ bufferFree(void* info, const void* data, size_t size)
         default:
             break;
     }
-    
     // フィルタ後の画像を取得
     ciImage = filter.outputImage;
-    
     //描画した画像からプレーンデータを生成する
     bip = [[NSBitmapImageRep alloc]
            initWithCIImage:ciImage]; // CIImageからNSBitmapImageRepを生成する
@@ -1444,5 +1303,4 @@ bufferFree(void* info, const void* data, size_t size)
         [self redraw];
     }
 }
-
 @end

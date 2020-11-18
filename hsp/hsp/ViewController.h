@@ -5,7 +5,6 @@
 //  Created by 半澤 聡 on 2016/09/12.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #import "AppDelegate.h"
 #import "MyAudio.h"
 #import "MyCALayer.h"
@@ -18,10 +17,8 @@
 #import "hsp3struct_debug.h"
 #import "hsp3struct.h"
 #import <Cocoa/Cocoa.h>
-
 #define HSP3_AXTYPE_NONE 0
 #define HSP3_AXTYPE_ENCRYPT 1
-
 typedef struct
 {
     union
@@ -32,9 +29,7 @@ typedef struct
     } as;
     int info; // ソートの前にこの要素があった位置
 } DATA;
-
 #define STM_STRSIZE_DEFAULT 64
-
 //	StackManagerData structure
 //
 typedef struct
@@ -48,41 +43,35 @@ typedef struct
     int ival;
     char itemp[STM_STRSIZE_DEFAULT - 4]; // data area padding
 } StackManagerData;
-
 @interface ViewController
 : NSViewController<NSTextFieldDelegate> { // NSTextFieldのデリゲートのため
 @public
     AppDelegate* global;
     BOOL isInitialized;
     BOOL isSmooth; //アンチエイリアシングは有効か（初期値：無効=NO）
-    
     //----オブジェクト関連
     //ボタン
     int myButtonIndex;                 //現在のボタンのインデックス
     unsigned short* myButtonLabel[64]; //ボタンを押した時のラベル
     NSMutableArray* myButtons;         //ボタンを格納する可変配列
     NSButton* myButton;                //ボタン
-    
     //スライダー
     int mySliderIndex;
     unsigned short* mySliderLabel[64];
     NSMutableArray* mySliders;
     NSSlider* mySlider;
-    
     //チェックボックス
     int myCheckBoxIndex;
     PVal* myCheckBoxPval[64];
     APTR myCheckBoxAptr[64];
     NSMutableArray* myCheckBoxs;
     NSButton* myCheckBox; //チェックボックス
-    
     //テキストフィールド（インプット）
     int myTextFieldIndex;
     PVal* myTextFieldPval[64];
     APTR myTextFieldAptr[64];
     NSMutableArray* myTextFields;
     NSTextField* myTextField; //チェックボックス
-    
     // MIDIのデータ受け渡し用変数
     unsigned short* myMidiEventLabel;
     PVal* myMidiEventTypePval;
@@ -93,7 +82,6 @@ typedef struct
     APTR myMidiEventNumberAptr;
     APTR myMidiEventVelocityAptr;
     APTR myMidiEventChannelAptr;
-    
     // UI関連
     NSWindow* myWindow;
     NSViewController* myViewController;
@@ -102,7 +90,6 @@ typedef struct
     SineWave* qAudio;
     MyAudio* myAudio;
     MyMidi* myMidi;
-    
     //----view_controller
     //共有
     PVal* mpval; // code_getで使用されたテンポラリ変 //hsp.mm hsp3gr.mm hsp3int.mm
@@ -110,7 +97,6 @@ typedef struct
     vc_hspctx; // vcに意味はない //ViewController.m hsp3cl.mm hsp3int.mm
     HSPContext
     abc_hspctx; // abcに意味はない //hsp.mm(111) hsp3cl.mm(24) hsp3int.mm(3)
-    
     // hsp.mm
     int hsp_current_type_info_id; // Current type info ID
     int hsp_hspevent_opt;         // Event enable flag
@@ -140,7 +126,6 @@ typedef struct
     char* hsp_dbgbuf;
     HSP3DEBUG hsp_dbginfo;
 #endif
-    
     // hsp3cl.mm
     int hsp3cl_hsp_sum;
     int hsp3cl_hsp_dec;
@@ -148,14 +133,12 @@ typedef struct
     int hsp3cl_axtype; // axファイルの設定(hsp3imp用)
     char* hsp3cl_axname;
     char* hsp3cl_axfile;
-    
     // hsp3gr.mm
     int hsp3gr_cur_window;
     int hsp3gr_reffunc_intfunc_ivalue;
     int* hsp3gr_type;
     int* hsp3gr_val;
     HSPContext* hsp3gr_ctx;
-    
     // hsp3int.mm
     int hsp3int_lastcr; // CR/LFで終了している
     int hsp3int_data_tmp_size;
@@ -179,16 +162,13 @@ typedef struct
     double hsp3int_ease_4096;
     double hsp3int_ease_org_start;
     double hsp3int_ease_org_diff; //<----easing
-    
     // stack.mm
     int stack_stm_max;
     StackManagerData* stack_mem_stm;
     StackManagerData* stack_stm_cur;
     StackManagerData* stack_stm_maxptr;
 }
-
 - (void)show_alert_dialog:(NSString*)message;
 - (NSException*)make_nsexception:(int)hsp_error_type;
 - (void)sliderEvent:(id)sender;
-
 @end

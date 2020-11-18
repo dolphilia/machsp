@@ -1,10 +1,8 @@
-
 //
 //	HSP3 internal command
 //	(内蔵コマンド・関数処理)
 //	onion software/onitama 2004/6
 //
-
 #import "hsp3int.h"
 //#import <algorithm> //sortを使用
 #import "hspvar_double.h"
@@ -13,7 +11,6 @@
 #import "hspvar_str.h"
 #import "hspvar_struct.h"
 #import "utility_string.h"
-
 // LFを改行として扱う
 #define MATCH_LF
 #define CRSTR "\n"
@@ -34,7 +31,6 @@
 #define EASE_SHAKE_OUT 14
 #define EASE_SHAKE_INOUT 15
 #define EASE_LOOP 4096
-
 // デストラクタで自動的に sbFree を呼ぶ
 //class CAutoSbFree {
 //public:
@@ -55,56 +51,35 @@
 //CAutoSbFree::~CAutoSbFree() {
 //    //sbFree(*pptr_);
 //}
-
 @implementation ViewController (hsp3int)
-
 //----Sort Routines
 - (bool)less_int_1:(const DATA)lhs rhs:(const DATA)rhs {
-    
     int cmp = (lhs.as.ikey - rhs.as.ikey);
-    
     return (cmp < 0) || (cmp == 0 && lhs.info < rhs.info);
 }
-
 - (bool)less_int_0:(const DATA)lhs rhs:(const DATA)rhs {
-    
     int cmp = (lhs.as.ikey - rhs.as.ikey);
-    
     return (cmp > 0) || (cmp == 0 && lhs.info < rhs.info);
 }
-
 - (bool)less_double_1:(const DATA)lhs rhs:(const DATA)rhs {
-    
     int cmp =
     (lhs.as.dkey < rhs.as.dkey ? -1 : (lhs.as.dkey > rhs.as.dkey ? 1 : 0));
-    
     return (cmp < 0) || (cmp == 0 && lhs.info < rhs.info);
 }
-
 - (bool)less_double_0:(const DATA)lhs rhs:(const DATA)rhs {
-    
     int cmp =
     (lhs.as.dkey < rhs.as.dkey ? -1 : (lhs.as.dkey > rhs.as.dkey ? 1 : 0));
-    
     return (cmp > 0) || (cmp == 0 && lhs.info < rhs.info);
 }
-
 - (bool)less_str_1:(const DATA)lhs rhs:(const DATA)rhs {
-    
     int cmp = (strcmp(lhs.as.skey, rhs.as.skey));
-    
     return (cmp < 0) || (cmp == 0 && lhs.info < rhs.info);
 }
-
 - (bool)less_str_0:(const DATA)lhs rhs:(const DATA)rhs {
-    
     int cmp = (strcmp(lhs.as.skey, rhs.as.skey));
-    
     return (cmp > 0) || (cmp == 0 && lhs.info < rhs.info);
 }
-
 - (int)NoteToData:(char *)adr data:(DATA *)data {
-    
     char *p = adr;
     int line = 0;
     while (*p != '\0') {
@@ -124,12 +99,9 @@
         }
         line++;
     }
-    
     return line;
 }
-
 - (int)GetNoteLines:(char *)adr {
-    
     int line = 0;
     char *p = adr;
     while (*p != '\0') {
@@ -143,24 +115,18 @@
         }
         line++;
     }
-    
     return line;
 }
-
 - (size_t)DataToNoteLen:(DATA *)data num:(int)num {
-    
     size_t len = 0;
     int i;
     for (i = 0; i < num; i++) {
         char *s = data[i].as.skey;
         len += strlen(s) + 2;  // strlen("¥r¥n")
     }
-    
     return len;
 }
-
 - (void)DataToNote:(DATA *)data adr:(char *)adr num:(int)num {
-    
     int a;
     char *p;
     char *s;
@@ -173,23 +139,18 @@
         *p++ = 10;  // Add CR/LF
     }
     *p = 0;
-    
 }
-
 //----Sort Interface
-
 - (void)DataBye {
     if (hsp3int_data_temp != NULL) {
         [self mem_bye:hsp3int_data_temp];
     }
 }
-
 - (void)DataIni:(int)size {
     [self DataBye];
     hsp3int_data_temp = (DATA *)[self mem_ini:sizeof(DATA) * size];
     hsp3int_data_tmp_size = size;
 }
-
 // static void
 // DataExpand( int size )
 //{
@@ -207,7 +168,6 @@
 //    hsp3int_data_tmp_size = new_size;
 //
 //}
-
 // static void
 // DataInc( int n )
 //{
@@ -216,213 +176,140 @@
 //    hsp3int_data_temp[n].info ++;
 //
 //}
-
 /*------------------------------------------------------------*/
 /*
  Easing Function
  */
 /*------------------------------------------------------------*/
-
 /*------------------------------------------------------------*/
-
 - (double)_ease_linear:(double)t {
-    
-    
     return hsp3int_ease_diff * t + hsp3int_ease_start;
 }
-
 - (double)_ease_quad_in:(double)t {
-    
-    
     return hsp3int_ease_diff * t * t + hsp3int_ease_start;
 }
-
 - (double)_ease_quad_out:(double)t {
-    
-    
     return -hsp3int_ease_diff * t * (t - 2) + hsp3int_ease_start;
 }
-
 - (double)_ease_quad_inout:(double)t {
-    
     double tt;
     tt = t * 2;
     if (tt < 1) {
-        
         return hsp3int_ease_diff * 0.5 * tt * tt + hsp3int_ease_start;
     }
     tt = tt - 1;
-    
     return -hsp3int_ease_diff * 0.5 * (tt * (tt - 2) - 1) + hsp3int_ease_start;
 }
-
 - (double)_ease_cubic_in:(double)t {
-    
-    
     return hsp3int_ease_diff * t * t * t + hsp3int_ease_start;
 }
-
 - (double)_ease_cubic_out:(double)t {
-    
     double tt;
     tt = t - 1;
-    
     return hsp3int_ease_diff * (tt * tt * tt + 1) + hsp3int_ease_start;
 }
-
 - (double)_ease_cubic_inout:(double)t {
-    
     double tt;
     tt = t * 2;
     if (tt < 1) {
         return hsp3int_ease_diff * 0.5 * tt * tt * tt + hsp3int_ease_start;
     }
     tt = tt - 2;
-    
     return hsp3int_ease_diff * 0.5 * (tt * tt * tt + 2) + hsp3int_ease_start;
 }
-
 - (double)_ease_quartic_in:(double)t {
-    
-    
     return hsp3int_ease_diff * t * t * t * t + hsp3int_ease_start;
 }
-
 - (double)_ease_quartic_out:(double)t {
-    
     double tt;
     tt = t - 1;
-    
     return -hsp3int_ease_diff * (tt * tt * tt * tt - 1) + hsp3int_ease_start;
 }
-
 - (double)_ease_quartic_inout:(double)t {
-    
     double tt;
     tt = t * 2;
     if (tt < 1) {
-        
         return hsp3int_ease_diff * 0.5 * tt * tt * tt * tt + hsp3int_ease_start;
     }
     tt = tt - 2;
-    
     return -hsp3int_ease_diff * 0.5 * (tt * tt * tt * tt - 2) +
     hsp3int_ease_start;
 }
-
 - (double)_ease_bounce:(double)t {
-    
     if (t < (1 / 2.75)) {
-        
         return hsp3int_ease_diff * (7.5625 * t * t);
     } else if (t < (2 / 2.75)) {
-        
         double tmp = t - 1.5 / 2.75;
         return hsp3int_ease_diff * (7.5625 * tmp * t + .75);
     } else if (t < (2.5 / 2.75)) {
-        
         double tmp = t - 2.25 / 2.75;
         return hsp3int_ease_diff * (7.5625 * tmp * t + .9375);
     } else {
-        
         double tmp = t - 2.625 / 2.75;
         return hsp3int_ease_diff * (7.5625 * tmp * t + .984375);
     }
 }
-
 - (double)_ease_bounce_in:(double)t {
-    
     double tt;
     tt = (double)1 - t;
-    
     return hsp3int_ease_diff - [self _ease_bounce:tt] + hsp3int_ease_start;
 }
-
 - (double)_ease_bounce_out:(double)t {
-    
-    
     return [self _ease_bounce:t] + hsp3int_ease_start;
 }
-
 - (double)_ease_bounce_inout:(double)t {
-    
     double tt;
     if (t < 0.5) {
         tt = (double)1 - (t * 2);
-        
         return (hsp3int_ease_diff - [self _ease_bounce:tt]) * 0.5 +
         hsp3int_ease_start;
     }
-    
     return [self _ease_bounce:t * 2 - 1] * 0.5 + hsp3int_ease_diff * 0.5 +
     hsp3int_ease_start;
 }
-
 - (double)_ease_shake:(double)t {
-    
     int pulse;
     double tt;
     tt = t * t * 8;
     pulse = (int)tt;
     tt -= (double)pulse;
     if (pulse & 1) {
-        
         return ((double)1 - tt);
     }
-    
     return tt;
 }
-
 - (double)_ease_shake_in:(double)t {
-    
     double tt;
     tt = (double)1 - t;
-    
     return (hsp3int_ease_diff * [self _ease_shake:tt]) * tt -
     hsp3int_ease_diff * 0.5 * tt + hsp3int_ease_start;
 }
-
 - (double)_ease_shake_out:(double)t {
-    
-    
     return (hsp3int_ease_diff * [self _ease_shake:t]) * t -
     hsp3int_ease_diff * 0.5 * t + hsp3int_ease_start;
 }
-
 - (double)_ease_shake_inout:(double)t {
-    
     double tt;
     tt = t * 2;
     if (tt < 1) {
-        
         return [self _ease_shake_in:tt];
     }
     tt = tt - 1;
-    
     return [self _ease_shake_out:tt];
 }
-
 /*------------------------------------------------------------*/
-
 - (void)initEase {
-    
     hsp3int_ease_4096 = (double)1.0 / (double)4096.0;
-    
 }
-
 - (void)setEase:(int)type
     value_start:(double)value_start
       value_end:(double)value_end {
-    
     hsp3int_ease_type = type;
     hsp3int_ease_reverse = 0;
     hsp3int_ease_org_start = hsp3int_ease_start = value_start;
     hsp3int_ease_org_diff = hsp3int_ease_diff = value_end - value_start;
-    
 }
-
 - (double)getEase:(double)value {
-    
     int type;
     int reverse;
     double t;
@@ -439,7 +326,6 @@
         if (t < 0) t = (double)0;
         if (t > 1) t = (double)1;
     }
-    
     if (hsp3int_ease_reverse != reverse) {
         hsp3int_ease_reverse = reverse;  // リバース時の動作
         if (hsp3int_ease_reverse) {
@@ -450,74 +336,50 @@
             hsp3int_ease_diff = hsp3int_ease_org_diff;
         }
     }
-    
     switch (type) {
         case EASE_QUAD_IN:
-            
             return [self _ease_quad_in:t];
         case EASE_QUAD_OUT:
-            
             return [self _ease_quad_out:t];
         case EASE_QUAD_INOUT:
-            
             return [self _ease_quad_inout:t];
         case EASE_CUBIC_IN:
-            
             return [self _ease_cubic_in:t];
         case EASE_CUBIC_OUT:
-            
             return [self _ease_cubic_out:t];
         case EASE_CUBIC_INOUT:
-            
             return [self _ease_cubic_inout:t];
         case EASE_QUARTIC_IN:
-            
             return [self _ease_quartic_in:t];
         case EASE_QUARTIC_OUT:
-            
             return [self _ease_quartic_out:t];
         case EASE_QUARTIC_INOUT:
-            
             return [self _ease_quartic_inout:t];
         case EASE_BOUNCE_IN:
-            
             return [self _ease_bounce_in:t];
         case EASE_BOUNCE_OUT:
-            
             return [self _ease_bounce_out:t];
         case EASE_BOUNCE_INOUT:
-            
             return [self _ease_bounce_inout:t];
         case EASE_SHAKE_IN:
-            
             return [self _ease_shake_in:t];
         case EASE_SHAKE_OUT:
-            
             return [self _ease_shake_out:t];
         case EASE_SHAKE_INOUT:
-            
             return [self _ease_shake_inout:t];
-            
         case EASE_LINEAR:
         default:
             break;
     }
-    
     return [self _ease_linear:t];
 }
-
 - (double)getEase:(double)value maxvalue:(double)maxvalue {
-    
     if (maxvalue == 0) {
-        
         return (double)0;
     }
-    
     return [self getEase:value / maxvalue];
 }
-
 - (int)getEaseInt:(int)i_value i_maxvalue:(int)i_maxvalue {
-    
     int i;
     double value;
     if (i_maxvalue > 0) {
@@ -526,33 +388,26 @@
         value = hsp3int_ease_4096 * i_value;
     }
     i = (int)[self getEase:value];
-    
     return i;
 }
-
 /*------------------------------------------------------------*/
 /*
  interface
  */
 /*------------------------------------------------------------*/
-
 - (char *)note_update {
-    
     char *p;
     if (vc_hspctx->note_pval == NULL) {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
     p = (char *)[self HspVarCorePtrAPTR:vc_hspctx->note_pval ofs:vc_hspctx->note_aptr];
     [self Select:p];
-    
     return p;
 }
-
 - (void)cnvformat_expand:(char **)p
                 capacity:(int *)capacity
                      len:(int)len
                        n:(int)n {
-    
     int needed_size = len + n + 1;
     int capa = *capacity;
     if (needed_size > capa) {
@@ -563,9 +418,7 @@
         *capacity = capa;
     }
 }
-
 - (char *)cnvformat {
-    
     //		フォーマット付き文字列を作成する
     //
 #if (WIN32 || _WIN32) && !__CYGWIN__
@@ -573,28 +426,23 @@
 #else
 #define SNPRINTF snprintf
 #endif
-    
     char fstr[1024];
     char *fp;
     int capacity;
     int len;
     char *p;
-    
     strncpy(fstr, [self code_gets], sizeof fstr);
     fstr[sizeof(fstr) - 1] = '\0';
     fp = fstr;
     capacity = 1024;
     p = [self sbAlloc:capacity];
     len = 0;
-    
     //CAutoSbFree autofree(&p);
-    
     while (1) {
         char fmt[32];
         int i;
         int val_type;
         void *val_ptr;
-        
         // '%' までをコピー
         i = 0;
         while (fp[i] != '\0' && fp[i] != '%') {
@@ -605,17 +453,14 @@
         len += i;
         fp += i;
         if (*fp == '\0') break;
-        
         // 変換指定を読み fmt にコピー
         i = (int)strspn(fp + 1, " #+-.0123456789") + 1;
         strncpy(fmt, fp, sizeof fmt);
         fmt[sizeof(fmt) - 1] = '\0';
         if (i + 1 < (int)(sizeof fmt)) fmt[i + 1] = '\0';
         fp += i;
-        
         char specifier = *fp;
         fp++;
-        
 #if (WIN32 || _WIN32) && !__CYGWIN__
         if (specifier == 'I') {  // I64 prefix対応(VC++のみ)
             if ((fp[0] == '6') && (fp[1] = '4')) {
@@ -626,14 +471,12 @@
             }
         }
 #endif
-        
         if (specifier == '\0') break;
         if (specifier == '%') {
             [self cnvformat_expand:&p capacity:&capacity len:len n:1];
             p[len++] = '%';
             continue;
         }
-        
         // 引数を取得
         if ([self code_get] <= PARAM_END) {
              @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
@@ -666,7 +509,6 @@
                  @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
             }
         }
-        
         // snprintf が成功するまでバッファを広げていき、変換を行う
         while (1) {
             int n;
@@ -678,7 +520,6 @@
             } else {
                 n = SNPRINTF(p + len, space, fmt, (char *)val_ptr);
             }
-            
             if (n >= 0 && n < space) {
                 len += n;
                 break;
@@ -693,20 +534,15 @@
         }
     }
     p[len] = '\0';
-    
     char *result = [self code_stmp:len + 1];
     strcpy(result, p);
-    
     [self sbFree:&p];
-    
     return result;
 }
-
 - (void)var_set_str_len:(PVal *)pval
                    aptr:(APTR)aptr
                     str:(char *)str
                     len:(int)len {
-    
     //		変数にstrからlenバイトの文字列を代入する
     //
     HspVarProc *proc = HspVarCoreGetProc(HSPVAR_FLAG_STR);
@@ -717,7 +553,6 @@
         [self HspVarCoreClear:pval flag:HSPVAR_FLAG_STR];
     }
     pval->offset = aptr;
-    
     PDAT *dst;
     if (strcmp(proc->vartype_name, "int") == 0) {  //整数のGetPtr
         dst = [self HspVarInt_GetPtr:pval];
@@ -732,7 +567,6 @@
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
     // HspVarCoreAllocBlock( pval, dst, len + 1 );
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") ==
         0) {  //整数のAllocBlock
@@ -752,7 +586,6 @@
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
     char *ptr;
     if (strcmp(proc->vartype_name, "int") == 0) {  //整数のGetPtr
         ptr = (char *)[self HspVarInt_GetPtr:pval];
@@ -767,21 +600,15 @@
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
     memcpy(ptr, str, len);
     ptr[len] = '\0';
-    
 }
-
 - (int)cmdfunc_intcmd:(int)cmd {
-    
     //		cmdfunc : TYPE_INTCMD
     //		(内蔵コマンド)
     //
     [self code_next];  // 次のコードを取得(最初に必ず必要です)
-    
     switch (cmd) {  // サブコマンドごとの分岐
-            
         case 0x00:  // onexit
         case 0x01:  // onerror
         case 0x02:  // onkey
@@ -883,36 +710,29 @@
              @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
-    
     return RUNMODE_RUN;
 }
-
 - (void)cmdfunc_on:(int)cmd {
-    
     /*
      rev 45
      不具合 : (onxxx系命令) (ラベル型変数)  形式の書式でエラー
      に対処
      */
-    
     int tval = *hsp3int_type;
     int opt = IRQ_OPT_GOTO;
     int cust;
     int actid;
     IRQDAT *irq;
     unsigned short *sbr;
-    
     if (tval == TYPE_VAR) {
         if ((vc_hspctx->mem_var + *hsp3int_val)->flag == HSPVAR_FLAG_LABEL)
             tval = TYPE_LABEL;
     }
-    
     if ((tval != TYPE_PROGCMD) && (tval != TYPE_LABEL)) {  // ON/OFF切り替え
         int i = [self code_geti];
         [self code_enableirq:cmd sw:i];
         return;
     }
-    
     if (tval == TYPE_PROGCMD) {  // ジャンプ方法指定
         opt = *hsp3int_val;
         if (opt >= 2) {
@@ -920,7 +740,6 @@
         }
         [self code_next];
     }
-    
     sbr = [self code_getlb2];
     if (cmd != 0x04) {
         [self code_setirq:cmd opt:opt custom:-1 ptr:sbr];
@@ -935,21 +754,16 @@
     irq->ptr = sbr;
     irq->custom = cust;
     irq->custom2 = actid;
-    
 }
-
 - (void)cmdfunc_exist {
-    
     //カレントディレクトリ+パラメータ
     char *ps = [self code_gets];
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     nPs = [global.current_directory_path stringByAppendingPathComponent:nPs];
-    
     //ファイルの有無をチェック
     BOOL isDir = NO;
     BOOL isExists = NO;
     NSFileManager *filemanager = [NSFileManager defaultManager];
-    
     // 0.エディタと同じディレクトリ
     // path = [[[[NSBundle mainBundle] bundlePath]
     // stringByDeletingLastPathComponent] stringByAppendingString:@"/hsp.app"];
@@ -967,27 +781,19 @@
     } else {
         abc_hspctx.strsize = -1;
     }
-    
 }
-
 - (void)cmdfunc_delete {
-    
     //カレントディレクトリ+パラメータ
     char *ps = [self code_gets];
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     nPs = [global.current_directory_path stringByAppendingPathComponent:nPs];
-    
     NSError *error = nil;
     NSFileManager *filemanager = [NSFileManager defaultManager];
-    
     [filemanager removeItemAtPath:nPs error:&error];
     //[self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:[self code_gets]];
     //[self code_event:HSPEVENT_FEXIST + (cmd - 0x11) prm1:0 prm2:0 prm3:NULL];
-    
 }
-
 - (void)cmdfunc_mkdir {
-    
     char *ps = [self code_gets];
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     nPs = [global.current_directory_path stringByAppendingPathComponent:nPs];
@@ -997,11 +803,8 @@
                               withIntermediateDirectories:YES
                                                attributes:nil
                                                     error:&error];
-    
 }
-
 - (void)cmdfunc_chdir {
-    
     char *ps = [self code_gets];
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     NSArray *paths = [nPs pathComponents];
@@ -1017,11 +820,8 @@
         }
     }
     chdir([global.current_directory_path UTF8String]);
-    
 }
-
 - (void)cmdfunc_dirlist {
-    
     PVal *pval;
     APTR aptr;
     char *ptr;
@@ -1031,11 +831,8 @@
     [self code_event:HSPEVENT_FDIRLIST1 prm1:p1 prm2:0 prm3:&ptr];
     [self code_setva:pval aptr:aptr type:TYPE_STRING ptr:ptr];
     [self code_event:HSPEVENT_FDIRLIST2 prm1:0 prm2:0 prm3:NULL];
-    
 }
-
 - (void)cmdfunc_bload_bsave:(int)cmd {
-    
     PVal *pval;
     char *ptr;
     int size;
@@ -1052,18 +849,12 @@
     } else {
         [self code_event:HSPEVENT_FWRITE prm1:p2 prm2:p1 prm3:ptr];
     }
-    
 }
-
 - (void)cmdfunc_bcopy {
-    
     [self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:[self code_gets]];
     [self code_event:HSPEVENT_FCOPY prm1:0 prm2:0 prm3:[self code_gets]];
-    
 }
-
 - (void)cmdfunc_memfile {
-    
     PVal *pval;
     char *ptr;
     int size;
@@ -1072,11 +863,8 @@
     int p2 = [self code_getdi:0];
     if (p2 == 0) p2 = size - p1;
     [self dpm_memfile:ptr + p1 size:p2];
-    
 }
-
 - (void)cmdfunc_poke_wpoke_lpoke:(int)cmd {
-    
     PVal *pval;
     char *ptr;
     int size;
@@ -1090,7 +878,6 @@
          @throw [self make_nsexception:HSPERR_BUFFER_OVERFLOW];
     }
     ptr += p1;
-    
     if ([self code_get] <= PARAM_END) {
         fl = HSPVAR_FLAG_INT;
         bp = (char *)&p2;
@@ -1099,7 +886,6 @@
         fl = mpval->flag;
         bp = mpval->pt;
     }
-    
     if (cmd == 0x1a) {
         switch (fl) {
             case HSPVAR_FLAG_INT:
@@ -1123,7 +909,6 @@
         }
         return;
     }
-    
     if (fl != HSPVAR_FLAG_INT) {
          @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
@@ -1138,11 +923,8 @@
         }
         *(int *)ptr = (*(int *)bp);
     }
-    
 }
-
 - (void)cmdfunc_getstr {
-    
     PVal *pval2;
     PVal *pval;
     APTR aptr;
@@ -1163,11 +945,8 @@
     vc_hspctx->stat = [self strsp_get:ptr dststr:p splitchr:p2 len:p3];
     vc_hspctx->strsize = [self strsp_getptr];
     [self code_setva:pval aptr:aptr type:HSPVAR_FLAG_STR ptr:p];
-    
 }
-
 - (void)cmdfunc_chdpm {
-    
     [self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:[self code_gets]];
     int p1 = [self code_getdi:-1];
     [self dpm_bye];
@@ -1175,11 +954,8 @@
     if (p2) {
          @throw [self make_nsexception:HSPERR_FILE_IO];
     }
-    
 }
-
 - (void)cmdfunc_memexpand {
-    
     PVal *pval;
     APTR aptr;
     PDAT *ptr;
@@ -1190,7 +966,6 @@
     }
     int p1 = [self code_getdi:0];
     if (p1 < 64) p1 = 64;
-    
     // HspVarCoreAllocBlock( pval, ptr, p1 );
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") ==
         0) {  //整数のAllocBlock
@@ -1210,16 +985,12 @@
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
 }
-
 - (void)cmdfunc_memcpy {
-    
     PVal *pval;
     char *sptr;
     char *tptr;
     int bufsize_t, bufsize_s;
-    
     tptr = [self code_getvptr:&pval size:&bufsize_t];
     sptr = [self code_getvptr:&pval size:&bufsize_s];
     int p1 = [self code_getdi:0];
@@ -1228,7 +999,6 @@
     if (p2 < 0 || p3 < 0) {
          @throw [self make_nsexception:HSPERR_BUFFER_OVERFLOW];
     }
-    
     tptr += p2;
     sptr += p3;
     if ((p1 + p2) > bufsize_t) {
@@ -1240,11 +1010,8 @@
     if (p1 > 0) {
         memmove(tptr, sptr, p1);
     }
-    
 }
-
 - (void)cmdfunc_memset {
-    
     PVal *pval;
     char *ptr;
     int size;
@@ -1262,11 +1029,8 @@
     if (p2 > 0) {
         memset(ptr, p1, p2);
     }
-    
 }
-
 - (void)cmdfunc_notesel {
-    
     vc_hspctx->notep_aptr = vc_hspctx->note_aptr;
     vc_hspctx->notep_pval = vc_hspctx->note_pval;
     vc_hspctx->note_aptr = [self code_getva:&vc_hspctx->note_pval];
@@ -1276,25 +1040,18 @@
                     type:TYPE_STRING
                      ptr:""];
     }
-    
 }
-
 - (void)cmdfunc_noteadd {
-    
     char *ps = [self code_gets];
     int p1 = [self code_getdi:-1];
     int p2 = [self code_getdi:0];
-    
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
-    
     char *cStr = vc_hspctx->note_pval->pt;
     NSString *nStr =
     [NSString stringWithCString:cStr encoding:NSUTF8StringEncoding];
-    
     __block NSString *nRet = @"";
     __block NSUInteger lineCount = 0;
     __block NSUInteger lineCount2 = 0;
-    
     if (p2 == 0) {     //追加モード
         if (p1 == -1) {  //末尾に追加
             nRet = nStr;
@@ -1339,23 +1096,17 @@
             }];
         }
     }
-    
     char *ret = (char *)[nRet UTF8String];  // NSString -> char
     vc_hspctx->note_pval->pt = ret;  // noteselで指定されている変数に情報を書き込む
     vc_hspctx->note_pval->size = (int)strlen(ret) + 1;  //サイズを書き込む
-    
-    
 }
-
 - (void)cmdfunc_notedel {
-    
     int p1 = [self code_getdi:0];
     char *cStr = vc_hspctx->note_pval->pt;
     NSString *nStr =
     [NSString stringWithCString:cStr encoding:NSUTF8StringEncoding];
     __block NSString *nRet = @"";
     __block NSUInteger lineCount = 0;
-    
     [nStr enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
         if (lineCount == p1) {
         } else {
@@ -1364,19 +1115,14 @@
         }
         lineCount++;
     }];
-    
     char *ret = (char *)[nRet UTF8String];  // NSString -> char
     vc_hspctx->note_pval->pt = ret;  // noteselで指定されている変数に情報を書き込む
     vc_hspctx->note_pval->size = (int)strlen(ret) + 1;  //サイズを書き込む
-    
 }
-
 - (void)cmdfunc_noteload {
-    
     char *ps = [self code_gets];
     NSString *filename =
     [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
-    
     NSString *path;
     if (global.is_startax_in_resource) {  //リソース内にstart.axがある場合
         path = [NSBundle mainBundle].resourcePath;  //リソースディレクトリ
@@ -1390,7 +1136,6 @@
     }
     path = [path stringByAppendingString:@"/"];
     path = [path stringByAppendingString:filename];
-    
     //ファイルを読み込む
     NSData *data = [[NSData alloc] initWithContentsOfFile:path];
     NSString *str = [[NSString alloc]
@@ -1399,16 +1144,12 @@
     char *ret = (char *)[str UTF8String];    // NSString -> char
     vc_hspctx->note_pval->pt = ret;  // noteselで指定されている変数に情報を書き込む
     vc_hspctx->note_pval->size = (int)strlen(ret) + 1;  //サイズを書き込む
-    
 }
-
 - (void)cmdfunc_notesave {
-    
     char *ps = [self code_gets];
     NSString *filename =
     [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     NSString *path;
-    
     if (![global.current_script_path
           isEqual:@""]) {  //ソースコードのあるディレクトリ
         path = global.current_script_path;
@@ -1426,11 +1167,8 @@
            atomically:YES
              encoding:NSUTF8StringEncoding
                 error:nil];
-    
 }
-
 - (void)cmdfunc_randomize {
-    
     int p2 = (int)time(0);  // Windows以外のランダムシード値
     int p1 = [self code_getdi:p2];
 #ifdef HSPRANDMT
@@ -1438,18 +1176,12 @@
 #else
     srand(p1);
 #endif
-    
 }
-
 - (void)cmdfunc_noteunsel {
-    
     vc_hspctx->note_aptr = vc_hspctx->notep_aptr;
     vc_hspctx->note_pval = vc_hspctx->notep_pval;
-    
 }
-
 - (void)cmdfunc_noteget {
-    
     PVal *pval;
     APTR aptr;
     char *p;
@@ -1459,11 +1191,8 @@
     p = [self GetLineDirect:p1];
     [self code_setva:pval aptr:aptr type:TYPE_STRING ptr:p];
     [self ResumeLineDirect];
-    
 }
-
 - (void)cmdfunc_split {
-    
     //	指定した文字列で分割された要素を代入する(fujidig)
     PVal *pval = NULL;
     int aptr = 0;
@@ -1474,14 +1203,12 @@
     int sep_len;
     int n = 0;
     int is_last = 0;
-    
     sptr = [self code_getvptr:&pval size:&size];
     if (pval->flag != HSPVAR_FLAG_STR) {
          @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
     sep = [self code_gets];
     sep_len = (int)strlen(sep);
-    
     while (1) {
         newsptr = [self strstr2:sptr src:sep];
         if (!is_last && *hsp3int_exinfo->npexflg & EXFLG_1) {
@@ -1524,53 +1251,39 @@
         sptr = newsptr + sep_len;
     }
     vc_hspctx->stat = n;
-    
 }
-
 - (void)cmdfunc_strrep {
-    
     PVal *pval;
     APTR aptr;
     char *ss;
     // char *s_rep;
     char *s_buffer;
     // char *s_result;
-    
     aptr = [self code_getva:&pval];
     if (pval->flag != HSPVAR_FLAG_STR) {
          @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
     s_buffer = (char *)[self HspVarCorePtrAPTR:pval ofs:aptr];
-    
     ss = [self code_gets];
     if (*ss == 0) {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
-    
-    
 }
-
 - (void)cmdfunc_setease {
-    
     double dval;
     double dval2;
     dval = [self code_getd];
     dval2 = [self code_getd];
     int p1 = [self code_getdi:hsp3int_ease_type];
     [self setEase:p1 value_start:dval value_end:dval2];
-    
 }
-
 - (void)cmdfunc_sortval {
-    
     int a, i;
     PVal *p1;
     APTR ap;
     int order;
-    
     ap = [self code_getva:&p1];   // パラメータ1:変数
     order = [self code_getdi:0];  // パラメータ2:数値
-    
     i = p1->len[1];
     if (i <= 0) {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
@@ -1623,39 +1336,30 @@
              @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
         }
     }
-    
 }
-
 - (void)cmdfunc_sortstr {
-    
     int i, len, order;
     char *p;
     PVal *pv;
     APTR ap;
     HspVarProc *proc;
     char **pvstr;
-    
     ap = [self code_getva:&pv];   // パラメータ1:変数
     order = [self code_getdi:0];  // パラメータ2:数値
-    
     if (pv->flag != 2) {
          @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
     if ((pv->len[2] != 0) || (ap != 0)) {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
-    
     proc = HspVarCoreGetProc(pv->flag);
-    
     len = pv->len[1];
     [self DataIni:len];
-    
     for (i = 0; i < len; i++) {
         p = (char *)[self HspVarCorePtrAPTR:pv ofs:i];
         hsp3int_data_temp[i].as.skey = p;
         hsp3int_data_temp[i].info = i;
     }
-    
     if (order == 0) {
         //$
         // std::sort(hsp3int_data_temp, hsp3int_data_temp + i, less_str_1);
@@ -1663,7 +1367,6 @@
         //$
         // std::sort(hsp3int_data_temp, hsp3int_data_temp + i, less_str_0);
     }
-    
     pvstr = (char **)(pv->master);  // 変数に直接sbポインタを書き戻す
     for (i = 0; i < len; i++) {
         if (i == 0) {
@@ -1674,28 +1377,21 @@
             [self sbSetOption:pvstr[i] option:&pvstr[i]];
         }
     }
-    
 }
-
 - (void)cmdfunc_sortnote {
-    
     int i, sflag;
     char *p;
     char *stmp;
     PVal *pv;
     APTR ap;
-    
     ap = [self code_getva:&pv];   // パラメータ1:変数
     sflag = [self code_getdi:0];  // パラメータ2:数値
-    
     p = (char *)[self HspVarCorePtrAPTR:pv ofs:ap];
     i = [self GetNoteLines:p];
     if (i <= 0) {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
-    
     [self DataIni:i];
-    
     [self NoteToData:p data:hsp3int_data_temp];
     if (sflag == 0) {
         //$
@@ -1704,25 +1400,17 @@
         //$
         // std::sort(hsp3int_data_temp, hsp3int_data_temp + i, less_str_0);
     }
-    
     stmp = [self code_stmp:(int)[self DataToNoteLen:hsp3int_data_temp num:i] + 1];
     [self DataToNote:hsp3int_data_temp adr:stmp num:i];
-    
     [self code_setva:pv aptr:ap type:HSPVAR_FLAG_STR ptr:stmp];  // 変数に値を代入
-    
-    
 }
-
 - (void)cmdfunc_sortget {
-    
     PVal *pv;
     APTR ap;
     int result;
     int n;
-    
     ap = [self code_getva:&pv];
     n = [self code_getdi:0];
-    
     if (hsp3int_data_temp == NULL) {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
@@ -1732,11 +1420,8 @@
         result = 0;
     }
     [self code_setva:pv aptr:ap type:HSPVAR_FLAG_INT ptr:&result];
-    
 }
-
 - (void *)reffunc_intfunc:(int *)type_res arg:(int)arg {
-    
     //		reffunc : TYPE_INTFUNC
     //		(内蔵関数)
     //
@@ -1747,7 +1432,6 @@
     int ival;
     char *sval;
     int p1, p2, p3;
-    
     //			'('で始まるかを調べる
     //
     if (*hsp3int_type != TYPE_MARK) {
@@ -1757,7 +1441,6 @@
          @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
     }
     [self code_next];
-    
     //		返値のタイプをargをもとに設定する
     //		0〜255   : int
     //		256〜383 : string
@@ -1777,7 +1460,6 @@
             ptr = &hsp3int_reffunc_intfunc_ivalue;  // 返値のポインタ
             break;
     }
-    
     switch (arg) {
             //	int function
         case 0x000:  // int
@@ -1809,7 +1491,6 @@
             sval = [self code_gets];
             hsp3int_reffunc_intfunc_ivalue = (int)strlen(sval);
             break;
-            
         case 0x003:  // length(3.0)
         case 0x004:  // length2(3.0)
         case 0x005:  // length3(3.0)
@@ -1820,7 +1501,6 @@
             hsp3int_reffunc_intfunc_ivalue = pv->len[arg - 0x002];
             break;
         }
-            
         case 0x007:  // vartype(3.0)
         {
             PVal *pv;
@@ -1838,12 +1518,10 @@
             }
             break;
         }
-            
         case 0x008:  // gettime
             ival = [self code_geti];
             hsp3int_reffunc_intfunc_ivalue = [self gettime:ival];
             break;
-            
         case 0x009:  // peek
         case 0x00a:  // wpeek
         case 0x00b:  // lpeek
@@ -1901,7 +1579,6 @@
             if (pval->support & HSPVAR_SUPPORT_VARUSE) {
                 pdat = [self HspVarCorePtrAPTR:pval ofs:aptr];
                 // hsp3int_reffunc_intfunc_ivalue = HspVarCoreGetUsing( pval, pdat );
-                
                 if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
                     0) {  //ラベルのAllocBlock
                     hsp3int_reffunc_intfunc_ivalue = [self HspVarLabel_GetUsing:pdat];
@@ -1911,7 +1588,6 @@
                 } else {
                      @throw [self make_nsexception:HSPERR_SYNTAX];
                 }
-                
             } else {
                  @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
             }
@@ -1932,7 +1608,6 @@
                 }
             }
             break;
-            
         case 0x00f:  // instr
         {
             PVal *pval;
@@ -1963,26 +1638,22 @@
             }
             break;
         }
-            
         case 0x010:  // abs
             hsp3int_reffunc_intfunc_ivalue = [self code_geti];
             if (hsp3int_reffunc_intfunc_ivalue < 0)
                 hsp3int_reffunc_intfunc_ivalue = -hsp3int_reffunc_intfunc_ivalue;
             break;
-            
         case 0x011:  // limit
             p1 = [self code_geti];
             p2 = [self code_geti];
             p3 = [self code_geti];
             hsp3int_reffunc_intfunc_ivalue = [self GetLimit:p1 min:p2 max:p3];
             break;
-            
         case 0x012:  // getease
             p1 = [self code_geti];
             p2 = [self code_getdi:-1];
             hsp3int_reffunc_intfunc_ivalue = [self getEaseInt:p1 i_maxvalue:p2];
             break;
-            
         case 0x013:  // notefind
         {
             char *ps;
@@ -1992,10 +1663,8 @@
             p = [self code_stmpstr:ps];
             findopt = [self code_getdi:0];
             [self note_update];
-            
             break;
         }
-            
             //================================================================================>>>MacOSX
         case 0x020:  // qframe
         {
@@ -2011,7 +1680,6 @@
                     break;
                 }
             }
-            
             break;
         }
         case 0x021:  // qcount
@@ -2019,7 +1687,6 @@
             hsp3int_reffunc_intfunc_ivalue = (int)global.q_audio_buffer.count;
             break;
         }
-            
         case 0x030:  // clock
         {
             hsp3int_reffunc_intfunc_ivalue = (int)clock();
@@ -2162,11 +1829,9 @@
                 default:
                     break;
             }
-            
             break;
         }
             //================================================================================<<<MacOSX
-            
             // str function
         case 0x100:  // str
         {
@@ -2194,7 +1859,6 @@
             }
             p1 = [self code_geti];
             p2 = [self code_geti];
-            
             slen = (int)strlen(sptr);
             if (p1 < 0) {
                 p1 = slen - p2;
@@ -2212,7 +1876,6 @@
             *p = 0;
             break;
         }
-            
         case 0x103:  // strf
             ptr = [self cnvformat];
             break;
@@ -2269,7 +1932,6 @@
             ptr = sp;
             break;
         }
-            
             //	double function
         case 0x180:  // sin
             dval = [self code_getd];
@@ -2388,7 +2050,6 @@
              @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
-    
     //			')'で終わるかを調べる
     //
     if (*hsp3int_type != TYPE_MARK) {
@@ -2398,76 +2059,49 @@
          @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
     }
     [self code_next];
-    
-    
     return ptr;
 }
-
 /*------------------------------------------------------------*/
 /*
  controller
  */
 /*------------------------------------------------------------*/
-
 - (int)termfunc_intcmd:(int)option {
-    
     //		termfunc : TYPE_INTCMD
     //		(内蔵)
     //
-    
     return 0;
 }
-
 - (void)hsp3typeinit_intcmd:(HSP3TYPEINFO *)info {
-    
     hsp3int_ctx = info->hspctx;
     hsp3int_exinfo = info->hspexinfo;
     hsp3int_type = hsp3int_exinfo->nptype;
     hsp3int_val = hsp3int_exinfo->npval;
     [self initEase];
-    
     // info->cmdfunc = cmdfunc_intcmd;
     info->cmdfuncNumber = 8;  //内臓コマンド memo.md
     // info->termfunc = termfunc_intcmd;
-    
 }
-
 - (void)hsp3typeinit_intfunc:(HSP3TYPEINFO *)info {
-    
     info->reffuncNumber = 5;  // reffunc_intfunc;
-    
 }
-
 //================================================================================>>>CStrNote
-
 //-------------------------------------------------------------
 //		Interfaces
 //-------------------------------------------------------------
-
 - (void)Select:(char *)str {
-    
     hsp3int_base = str;
-    
 }
-
 - (int)GetSize {
-    
-    
     return (int)strlen(hsp3int_base);
 }
-
 - (char *)GetStr {
-    
-    
     return (char *)"";
 }
-
 //-------------------------------------------------------------
 //		Routines
 //-------------------------------------------------------------
-
 - (int)nnget:(char *)nbase line:(int)line {
-    
     //	指定した行の先頭ポインタを求める
     //		hsp3int_nn = 先頭ポインタ
     //		hsp3int_lastcr : CR/LFで終了している
@@ -2482,7 +2116,6 @@
     if (line < 0) {
         i = (int)strlen(nbase);
         if (i == 0) {
-            
             return 0;
         }
         hsp3int_nn += i;
@@ -2494,7 +2127,6 @@
         while (1) {
             a1 = *hsp3int_nn;
             if (a1 == 0) {
-                
                 return 1;
             }
             hsp3int_nn++;
@@ -2512,12 +2144,9 @@
         }
     }
     hsp3int_lastcr++;
-    
     return 0;
 }
-
 - (int)GetLine:(char *)nres line:(int)line {
-    
     //		Get specified line from note
     //				result:0=ok/1=no line
     //
@@ -2525,7 +2154,6 @@
     char *pp;
     pp = nres;
     if ([self nnget:hsp3int_base line:line]) {
-        
         return 1;
     }
     if (*hsp3int_nn == 0) return 1;
@@ -2538,12 +2166,9 @@
         *pp++ = a1;
     }
     *pp = 0;
-    
     return 0;
 }
-
 - (int)GetLine:(char *)nres line:(int)line max:(int)max {
-    
     //		Get specified line from note
     //				result:0=ok/1=no line
     //
@@ -2553,11 +2178,9 @@
     pp = nres;
     cnt = 0;
     if ([self nnget:hsp3int_base line:line]) {
-        
         return 1;
     }
     if (*hsp3int_nn == 0) {
-        
         return 1;
     }
     while (1) {
@@ -2571,12 +2194,9 @@
         cnt++;
     }
     *pp = 0;
-    
     return 0;
 }
-
 - (char *)GetLineDirect:(int)line {
-    
     //		Get specified line from note
     //
     char a1;
@@ -2592,20 +2212,14 @@
     }
     hsp3int_lastcode = a1;
     *hsp3int_lastnn = 0;
-    
     return hsp3int_nn;
 }
-
 - (void)ResumeLineDirect {
-    
     //		Resume last GetLineDirect function
     //
     *hsp3int_lastnn = hsp3int_lastcode;
-    
 }
-
 - (int)GetMaxLine {
-    
     //		Get total lines
     //
     int a, b;
@@ -2638,15 +2252,11 @@
         if (b == 0) {
             a--;
         }
-        
         return a;
     }
-    
     return 0;
 }
-
 - (int)PutLine:(char *)nstr line:(int)line ovr:(int)ovr {
-    
     //		Pet specified line to note
     //				result:0=ok/1=no line
     //
@@ -2657,7 +2267,6 @@
     char *p2;
     char *nstr2 = NULL;
     if ([self nnget:hsp3int_base line:line]) {
-        
         return 1;
     }
     if (hsp3int_lastcr == 0) {
@@ -2670,7 +2279,6 @@
     if (nstr == NULL) {
         nstr = (char *)"";
     }
-    
     pp = nstr;
     if (nstr2 != NULL) strcat(nstr, CRSTR);
     ln = (int)strlen(nstr);  // hsp3int_base new str + cr/lf
@@ -2724,15 +2332,11 @@
             if (a1 == 0) break;
             *hsp3int_nn++ = a1;
         }
-        
         return 0;
     }
-    
     return 0;
 }
-
 - (int)FindLine:(char *)nstr mode:(int)mode {
-    
     //		Search string from note
     //				nstr:search string
     //				mode:STRNOTE_FIND_*
@@ -2740,13 +2344,10 @@
     //
     char a1;
     int curline, len, res;
-    
     hsp3int_nn = hsp3int_base;
     curline = 0;
     len = 0;
-    
     hsp3int_baseline = hsp3int_nn;  // 行の先頭ポインタ
-    
     while (1) {
         a1 = *hsp3int_nn;
         if (a1 == 0) break;
@@ -2758,7 +2359,6 @@
                 res = [self FindLineSub:nstr mode:mode];
                 *hsp3int_nn = hsp3int_lastcode;
                 if (res) {
-                    
                     return curline;
                 }
             }
@@ -2776,7 +2376,6 @@
                 res = [self FindLineSub:nstr mode:mode];
                 *hsp3int_nn = hsp3int_lastcode;
                 if (res) {
-                    
                     return curline;
                 }
             }
@@ -2790,21 +2389,15 @@
         hsp3int_nn++;
         len++;
     }
-    
     //	最終行に文字列があればサーチ
     if (len) {
         if ([self FindLineSub:nstr mode:mode]) {
-            
             return curline;
         }
     }
-    
-    
     return -1;
 }
-
 - (int)FindLineSub:(char *)nstr mode:(int)mode {
-    
     //		全体サーチ用文字列比較
     //		mode : STRNOTE_FIND_MATCH = 完全一致
     //		       STRNOTE_FIND_FIRST = 前方一致
@@ -2813,7 +2406,6 @@
     switch (mode) {
         case STRNOTE_FIND_MATCH:  // 完全一致
             if (strcmp(hsp3int_baseline, nstr) == 0) {
-                
                 return 1;
             }
             break;
@@ -2822,7 +2414,6 @@
             char *p = [self strstr2:hsp3int_baseline src:nstr];
             if (p != NULL) {
                 if (p == hsp3int_baseline) {
-                    
                     return 1;
                 }
             }
@@ -2830,16 +2421,13 @@
         }
         case STRNOTE_FIND_INSTR:  // 部分一致
             if ([self strstr2:hsp3int_baseline src:nstr] != NULL) {
-                
                 return 1;
             }
             break;
         default:
             break;
     }
-    
     return 0;
 }
 //================================================================================<<<CStrNote
-
 @end

@@ -5,14 +5,11 @@
 //  Created by dolphilia on 2016/02/01.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #ifndef MyView_h
 #define MyView_h
-
 #import <Cocoa/Cocoa.h>
 #import "MyCALayer.h"
 #include "debug_message.h"
-
 @interface MyView : NSView {
     NSImage* image;
     MyCALayer* mylayer;
@@ -197,5 +194,4 @@
 -(BOOL)getIsKeyDown_Y;
 -(BOOL)getIsKeyDown_Z;
 @end
-
 #endif /* MyView_h */

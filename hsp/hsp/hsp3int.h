@@ -1,10 +1,8 @@
-
 //
 //	hsp3int.cpp header
 //
 #ifndef __hsp3int_h
 #define __hsp3int_h
-
 #import <math.h>
 #import <stdio.h>
 #import <stdlib.h>
@@ -21,15 +19,12 @@
 #import "hspwnd_linux.h"
 #import "strbuf.h"
 #import "supio_hsp3.h"
-
 #ifdef HSPRANDMT
 #include <random>
 #endif
-
 #define STRNOTE_FIND_MATCH 0  // 完全一致
 #define STRNOTE_FIND_FIRST 1  // 前方一致
 #define STRNOTE_FIND_INSTR 2  // 部分一致
-
 @interface ViewController (hsp3int) {
 }
 - (char *)note_update;
@@ -50,5 +45,4 @@
 - (int)nnget:(char *)nbase line:(int)line;
 - (int)FindLineSub:(char *)nstr mode:(int)mode;
 @end
-
 #endif

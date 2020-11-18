@@ -1,4 +1,3 @@
-
 //
 //	HSPVAR core module
 //	onion software/onitama 2003/4
@@ -16,7 +15,6 @@
 #import <stdlib.h>
 #import <string.h>
 //=============================================================================<<<hspvar_str
-
 @implementation ViewController (hspvar_str)
 //=============================================================================>>>hspvar_str
 /*------------------------------------------------------------*/
@@ -24,52 +22,38 @@
  HSPVAR core interface (str)
  */
 /*------------------------------------------------------------*/
-
 #define hspvar_str_GetPtr(pval) ((char*)pval)
-
 char hspvar_str_conv[400];
 HspVarProc* hspvar_str_myproc;
-
 - (char**)HspVarStr_GetFlexBufPtr:(PVal*)pval num:(int)num {
-    
     //		可変長バッファのポインタを得る
     //
     char** pp;
     if (num == 0)
         return &(pval->pt); // ID#0は、ptがポインタとなる
     pp = (char**)(pval->master);
-    
     return &pp[num];
 }
-
 // Core
 - (PDAT*)HspVarStr_GetPtr:(PVal*)pval {
-    
     char** pp;
     pp = [self HspVarStr_GetFlexBufPtr:pval num:pval->offset];
-    
     return (PDAT*)(*pp);
 }
-
 -(void*)HspVarStr_Cnv:(const void*)buffer flag:(int)flag{
-    
     //		リクエストされた型 -> 自分の型への変換を行なう
     //		(組み込み型にのみ対応でOK)
     //		(参照元のデータを破壊しないこと)
     //
     switch (flag) {
         case HSPVAR_FLAG_INT:
-            
             sprintf(hspvar_str_conv, "%d", *(int*)buffer);
-            
-            
             return hspvar_str_conv;
         case HSPVAR_FLAG_STR:
             break;
         case HSPVAR_FLAG_DOUBLE:
             //_gcvt( *(double *)buffer, 32, hspvar_str_conv );
             sprintf(hspvar_str_conv, "%f", *(double*)buffer);
-            
             return hspvar_str_conv;
         default: {
             NSString* error_str =
@@ -77,10 +61,8 @@ HspVarProc* hspvar_str_myproc;
             @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
         }
     }
-    
     return (void*)buffer;
 }
-
 /*
  static void *HspVarStr_CnvCustom( const void *buffer, int flag )
  {
@@ -92,9 +74,7 @@ HspVarProc* hspvar_str_myproc;
  return buffer;
  }
  */
-
 -(int)HspVarStr_GetVarSize:(PVal*)pval {
-    
     //		PVALポインタの変数が必要とするサイズを取得する
     //		(sizeフィールドに設定される)
     //
@@ -108,12 +88,9 @@ HspVarProc* hspvar_str_myproc;
         size *= pval->len[4];
     size *= sizeof(char*);
     pval->size = size;
-    
     return size;
 }
-
 -(void)HspVarStr_Free:(PVal*)pval {
-    
     //		PVALポインタの変数メモリを解放する
     //
     char** pp;
@@ -127,11 +104,8 @@ HspVarProc* hspvar_str_myproc;
         free(pval->master);
     }
     pval->mode = HSPVAR_MODE_NONE;
-    
 }
-
 - (void) HspVarStr_Alloc:(PVal*)pval pval2:(const PVal*)pval2 {
-    
     //		pval変数が必要とするサイズを確保する。
     //		(pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
     //		(pval2がNULLの場合は、新規データ。len[0]に確保バイト数が代入される)
@@ -144,7 +118,6 @@ HspVarProc* hspvar_str_myproc;
         pval->len[1] = 1; // 配列を最低1は確保する
     if (pval2 != NULL)
         oldvar = *pval2; // 拡張時は以前の情報を保存する
-    
     size = [self HspVarStr_GetVarSize:pval];
     pval->mode = HSPVAR_MODE_MALLOC;
     pval->master = (char*)calloc(size, 1);
@@ -153,7 +126,6 @@ HspVarProc* hspvar_str_myproc;
         [NSString stringWithFormat:@"%d", HSPERR_OUT_OF_MEMORY];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
     if (pval2 == NULL) { // 配列拡張なし
         bsize = pval->len[0];
         if (bsize < 64)
@@ -163,10 +135,8 @@ HspVarProc* hspvar_str_myproc;
             *pp = [self sbAllocClear:bsize];
             [self sbSetOption:*pp option:(void*)pp];
         }
-        
         return;
     }
-    
     i2 = oldvar.size / sizeof(char*);
     for (i = 0; i < (int)(size / sizeof(char*)); i++) {
         pp = [self HspVarStr_GetFlexBufPtr:pval num:i];
@@ -178,9 +148,7 @@ HspVarProc* hspvar_str_myproc;
         [self sbSetOption:*pp option:(void*)pp];
     }
     free(oldvar.master);
-    
 }
-
 /*
  static void *HspVarStr_ArrayObject( PVal *pval, int *arg )
  {
@@ -190,15 +158,12 @@ HspVarProc* hspvar_str_myproc;
  throw HSPERR_UNSUPPORTED_FUNCTION;
  }
  */
-
 // Size
 - (int) HspVarStr_GetSize:(const PDAT*)pval {
     return (int)(strlen((char*)pval) + 1);
 }
-
 // Set
 - (void) HspVarStr_Set:(PVal*) pval pdat:(PDAT*)pdat in:(const void*)in {
-    
     char** pp;
     if (pval->mode == HSPVAR_MODE_CLONE) {
         strncpy((char*)pdat, (char*)in, pval->size);
@@ -208,7 +173,6 @@ HspVarProc* hspvar_str_myproc;
     [self sbStrCopy:pp str:(char*)in];
     // strcpy( hspvar_str_GetPtr(pval), (char *)in );
 }
-
 // Add
 - (void) HspVarStr_AddI:(PDAT*)pval val:(const void*)val {
     char** pp;
@@ -217,7 +181,6 @@ HspVarProc* hspvar_str_myproc;
     // strcat( hspvar_str_GetPtr(pval), (char *)val );
     hspvar_str_myproc->aftertype = HSPVAR_FLAG_STR;
 }
-
 // Eq
 - (void) HspVarStr_EqI:(PDAT*)pdat val:(const void*)val {
     if (strcmp((char*)pdat, (char*)val)) {
@@ -227,16 +190,13 @@ HspVarProc* hspvar_str_myproc;
     }
     hspvar_str_myproc->aftertype = HSPVAR_FLAG_INT;
 }
-
 // Ne
 - (void)HspVarStr_NeI:(PDAT*)pdat val:(const void*)val {
     int i;
     i = strcmp((char*)pdat, (char*)val);
     *(int*)pdat = i;
     hspvar_str_myproc->aftertype = HSPVAR_FLAG_INT;
-    
 }
-
 /*
  // INVALID
  static void HspVarStr_Invalid( PDAT *pval, const void *val )
@@ -244,7 +204,6 @@ HspVarProc* hspvar_str_myproc;
  throw( HSPERR_UNSUPPORTED_FUNCTION );
  }
  */
-
 - (void*) HspVarStr_GetBlockSize:(PVal*)pval pdat:(PDAT*)pdat size:(int*)size {
     STRINF* inf;
     if (pval->mode == HSPVAR_MODE_CLONE) {
@@ -255,22 +214,16 @@ HspVarProc* hspvar_str_myproc;
     *size = inf->size;
     return pdat;
 }
-
 - (void)HspVarStr_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size {
     char** pp;
     if (pval->mode == HSPVAR_MODE_CLONE)
         return;
     pp = (char**)[self sbGetOption:(char*)pdat];
     *pp = [self sbExpand:*pp size:size];
-    
 }
-
 /*------------------------------------------------------------*/
-
 - (void)HspVarStr_Init:(HspVarProc*)p {
-    
     hspvar_str_myproc = p;
-    
     //    p->Set = HspVarStr_Set;
     //    p->Cnv = HspVarStr_Cnv;
     //    p->GetPtr = HspVarStr_GetPtr;
@@ -302,15 +255,12 @@ HspVarProc* hspvar_str_myproc;
     //
     //    //	p->RrI = HspVarStr_Invalid;
     //    //	p->LrI = HspVarStr_Invalid;
-    
     p->vartype_name = (char*)"str"; // タイプ名
     p->version = 0x001; // 型タイプランタイムバージョン(0x100 = 1.0)
     p->support = HSPVAR_SUPPORT_FLEXSTORAGE | HSPVAR_SUPPORT_FLEXARRAY;
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize = -1; // １つのデータが使用するサイズ(byte) / 可変長の時は-1
-    
 }
-
 /*------------------------------------------------------------*/
 //=============================================================================<<<hspvar_str
 @end

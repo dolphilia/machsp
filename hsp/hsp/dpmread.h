@@ -1,8 +1,6 @@
 //	dpmread.c functions
-
 #import "ViewController.h"
 #import "hsp.h"
-
 @interface ViewController (dpmread) {
 }
 - (int)dpmchk:(char *)fname;

@@ -5,22 +5,17 @@
 //  Created by 半澤 聡 on 2016/10/07.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #ifndef hspvar_core_h
 #define hspvar_core_h
-
 #import "hsp3struct_var.h"
 #import "ViewController.h"
-
 @interface
 ViewController (hspvar_core) {
 }
-
 //	typefunc
 //	基本タイプ HSPVAR_FLAG_STR 〜 HSPVAR_FLAG_DOUBLE
 //	拡張タイプ HSPVAR_FLAG_USERDEF 以降
 //	式の評価でpval->ptを参照するため、常に配列0のポイントはpval->ptが指し示す必要がある。
-
 // コアシステムメイン関数
 -(void)HspVarCoreInit;
 -(void)HspVarCoreBye;
@@ -28,7 +23,6 @@ ViewController (hspvar_core) {
 -(int)HspVarCoreAddType;
 -(void)HspVarCoreRegisterType:(int)flag vartype_name:(char*)vartype_name;
 -(HspVarProc*)HspVarCoreSeekProc:(const char*)name;
-
 // 低レベルサポート関数
 -(void)HspVarCoreDup:(PVal*)pval arg:(PVal*)arg aptr:(APTR)aptr;
 -(void)HspVarCoreDupPtr:(PVal*)pval flag:(int)flag ptr:(void*)ptr size:(int)size;
@@ -42,7 +36,6 @@ ViewController (hspvar_core) {
 -(PDAT*)HspVarCorePtrAPTR:(PVal*)pv ofs:(APTR)ofs;
 -(void)HspVarCoreArray:(PVal*)pval offset:(int)offset;
 //-(PDAT*)HspVarCorePtrAPTR:(PVal*)pv ofs:(APTR)ofs;
-
 // PVal用マクロ
 #define HspVarCoreGetProc(flag) (&hspvarproc[flag])
 #define HspVarCoreReset(pv) ((pv)->offset = 0, (pv)->arraycnt = 0)
@@ -64,6 +57,5 @@ ViewController (hspvar_core) {
 //#define HspVarCoreAllocBlock( pv,in1,in2 ) hspvarproc[(pv)->flag].AllocBlock(
 //pv,in1,in2 )
 //#define HspVarCoreGetUsing( pv,in1 ) hspvarproc[(pv)->flag].GetUsing( in1 )
-
 @end
 #endif /* hspvar_core_h */

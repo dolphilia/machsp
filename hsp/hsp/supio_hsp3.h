@@ -1,10 +1,7 @@
-
 //
 //	supio.cpp functions (linux)
 //
-
 #import "ViewController.h"
-
 @interface
 ViewController (supio_hsp3) {
 }
@@ -31,12 +28,12 @@ ViewController (supio_hsp3) {
 -(void) CutLastChr:(char*)p code:(char)code;
 -(char*) strsp_cmds:(char*) srcstr;
 -(int) htoi:(char*)str; //
--(int) SecurityCheck:(char*) name;
+//-(int) SecurityCheck:(char*) name;
 -(char*) strchr3:(char*)target code:(int)code sw:(int)sw findptr:(char**)findptr;
 -(void) TrimCode:(char*)p code:(int)code;
 -(void) TrimCodeL:(char*)p code:(int)code;
 -(void) TrimCodeR:(char*)p code:(int)code;
--(void) Alert:(char*)mes;
--(void) AlertV:(char*)mes val:(int)val;
--(void) Alertf:(char*)format, ...;
+//-(void) Alert:(char*)mes;
+//-(void) AlertV:(char*)mes val:(int)val;
+//-(void) Alertf:(char*)format, ...;
 @end

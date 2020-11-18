@@ -5,12 +5,9 @@
 //  Created by dolphilia on 2016/02/01.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #import <Foundation/Foundation.h>
 #import "MyView.h"
-
 @implementation MyView
-
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
@@ -22,40 +19,32 @@
     }
     return self;
 }
-
 //keyDown keyUpを受け取れるようにする
 - (BOOL)acceptsFirstResponder
 {
     [[self window] makeFirstResponder:self];
     return YES;
 }
-
 - (BOOL)becomeFirstResponder
 {
     return YES;
 }
-
 -(void)awakeFromNib
 {
-    
 }
-
 -(MyCALayer*)getMyCALayer {
     return mylayer;
 }
-
 -(int)getScreenWidth
 {
     NSScreen *mainScreen = [NSScreen mainScreen];
     return (int)mainScreen.frame.size.width;
 }
-
 -(int)getScreenHeight
 {
     NSScreen *mainScreen = [NSScreen mainScreen];
     return (int)mainScreen.frame.size.height;
 }
-
 -(int)getMouseX
 {
     NSPoint screenPoint = [NSEvent mouseLocation];
@@ -64,7 +53,6 @@
     NSPoint point = [self convertPoint:windowPoint fromView:nil];
     return (int)point.x;
 }
-
 -(int)getMouseY
 {
     NSPoint screenPoint = [NSEvent mouseLocation];
@@ -73,7 +61,6 @@
     NSPoint point = [self convertPoint:windowPoint fromView:nil];
     return (int)((point.y-self.frame.size.height) * -1.0);
 }
-
 -(BOOL)getIsMouseDown {return isMouseDown;}
 -(BOOL)getIsRightMouseDown {return isRightMouseDown;}
 //
@@ -242,7 +229,6 @@
         case 6:isKeyDown_Z=YES;break;
     }
 }
-
 -(void)keyUp:(NSEvent *)theEvent
 {
     switch([theEvent keyCode]) {
@@ -353,7 +339,6 @@
     isRightMouseUp = YES;
     isRightMouseDown = NO;
     isRightMouseDragged = NO;
-    
     if([theEvent clickCount] == 2) {
         // Double click
     }

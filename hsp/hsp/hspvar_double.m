@@ -1,4 +1,3 @@
-
 //
 //	HSPVAR core module
 //	onion software/onitama 2003/4
@@ -16,7 +15,6 @@
 #import <stdlib.h>
 #import <string.h>
 //=============================================================================<<<hspvar_double
-
 @implementation ViewController (hspvar_double)
 //=============================================================================>>>hspvar_double
 /*------------------------------------------------------------*/
@@ -24,17 +22,13 @@
  HSPVAR core interface (double)
  */
 /*------------------------------------------------------------*/
-
 #define hspvar_double_GetPtr(pval) ((double*)pval)
-
 double hspvar_double_conv;
 short* hspvar_double_aftertype;
-
 // Core
 -(PDAT*)HspVarDouble_GetPtr:(PVal*)pval {
     return (PDAT*)(((double*)(pval->pt)) + pval->offset);
 }
-
 -(void*)HspVarDouble_Cnv:(const void*)buffer flag:(int)flag {
     //		リクエストされた型 -> 自分の型への変換を行なう
     //		(組み込み型にのみ対応でOK)
@@ -46,7 +40,6 @@ short* hspvar_double_aftertype;
             return &hspvar_double_conv;
         case HSPVAR_FLAG_INT:
             hspvar_double_conv = (double)(*(int*)buffer);
-            
             return &hspvar_double_conv;
         case HSPVAR_FLAG_DOUBLE:
             break;
@@ -58,7 +51,6 @@ short* hspvar_double_aftertype;
     }
     return (void*)buffer;
 }
-
 /*
  static void *HspVarDouble_CnvCustom( const void *buffer, int flag )
  {
@@ -70,7 +62,6 @@ short* hspvar_double_aftertype;
  return buffer;
  }
  */
-
 -(int)HspVarDouble_GetVarSize:(PVal*)pval {
     //		PVALポインタの変数が必要とするサイズを取得する
     //		(sizeフィールドに設定される)
@@ -86,7 +77,6 @@ short* hspvar_double_aftertype;
     size *= sizeof(double);
     return size;
 }
-
 -(void)HspVarDouble_Free:(PVal*)pval {
     //		PVALポインタの変数メモリを解放する
     //
@@ -96,7 +86,6 @@ short* hspvar_double_aftertype;
     pval->pt = NULL;
     pval->mode = HSPVAR_MODE_NONE;
 }
-
 -(void)HspVarDouble_Alloc:(PVal*)pval pval2:(const PVal*)pval2 {
     //		pval変数が必要とするサイズを確保する。
     //		(pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
@@ -122,9 +111,7 @@ short* hspvar_double_aftertype;
     }
     pval->pt = pt;
     pval->size = size;
-    
 }
-
 /*
  static void *HspVarDouble_ArrayObject( PVal *pval, int *mptype )
  {
@@ -134,36 +121,30 @@ short* hspvar_double_aftertype;
  return NULL;
  }
  */
-
 // Size
 -(int)HspVarDouble_GetSize:(const PDAT*)pval {
     return sizeof(double);
 }
-
 // Set
 -(void)HspVarDouble_Set:(PVal*)pval pdat:(PDAT*)pdat in:(const void*)in {
     //*hspvar_double_GetPtr(pdat) = *((double *)(in));
     memcpy(pdat, in, sizeof(double));
 }
-
 // Add
 -(void)HspVarDouble_AddI:(PDAT*)pval val:(const void*)val {
     *hspvar_double_GetPtr(pval) += *((double*)(val));
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
-
 // Sub
 -(void)HspVarDouble_SubI:(PDAT*)pval val:(const void*)val {
     *hspvar_double_GetPtr(pval) -= *((double*)(val));
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
-
 // Mul
 -(void)HspVarDouble_MulI:(PDAT*)pval val:(const void*)val {
     *hspvar_double_GetPtr(pval) *= *((double*)(val));
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
-
 // Div
 -(void)HspVarDouble_DivI:(PDAT*)pval val:(const void*)val {
     double p = *((double*)(val));
@@ -175,7 +156,6 @@ short* hspvar_double_aftertype;
     *hspvar_double_GetPtr(pval) /= p;
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
-
 // Mod
 -(void)HspVarDouble_ModI:(PDAT*)pval val:(const void*)val {
     double p = *((double*)(val));
@@ -189,43 +169,36 @@ short* hspvar_double_aftertype;
     *hspvar_double_GetPtr(pval) = fmod(dval, p);
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
-
 // Eq
 -(void)HspVarDouble_EqI:(PDAT*)pval val:(const void*)val {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) == *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
-
 // Ne
 -(void)HspVarDouble_NeI:(PDAT*)pval val:(const void*)val {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) != *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
-
 // Gt
 -(void)HspVarDouble_GtI:(PDAT*)pval val:(const void*)val {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) > *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
-
 // Lt
 -(void)HspVarDouble_LtI:(PDAT*)pval val:(const void*)val {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) < *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
-
 // GtEq
 -(void)HspVarDouble_GtEqI:(PDAT*)pval val:(const void*)val {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) >= *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
-
 // LtEq
 -(void)HspVarDouble_LtEqI:(PDAT*)pval val:(const void*)val {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) <= *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
-
 /*
  // INVALID
  static void HspVarDouble_Invalid( PDAT *pval, const void *val )
@@ -233,21 +206,15 @@ short* hspvar_double_aftertype;
  throw( HSPVAR_ERROR_INVALID );
  }
  */
-
 -(void*)HspVarDouble_GetBlockSize:(PVal*)pval pdat:(PDAT*)pdat size:(int*)size {
     *size = pval->size - (int)(((char*)pdat) - pval->pt);
     return (pdat);
 }
-
 -(void)HspVarDouble_AllocBlock:(PVal*)pval pdat:(PDAT*)pdat size:(int)size {
-    
 }
-
 /*------------------------------------------------------------*/
-
 -(void)HspVarDouble_Init:(HspVarProc*)p {
     hspvar_double_aftertype = &p->aftertype;
-    
     //    p->Set = HspVarDouble_Set;
     //    p->Cnv = HspVarDouble_Cnv;
     //    p->GetPtr = HspVarDouble_GetPtr;
@@ -276,10 +243,8 @@ short* hspvar_double_aftertype;
     //    p->LtI = HspVarDouble_LtI;
     //    p->GtEqI = HspVarDouble_GtEqI;
     //    p->LtEqI = HspVarDouble_LtEqI;
-    
     //	p->RrI = HspVarDouble_Invalid;
     //	p->LrI = HspVarDouble_Invalid;
-    
     p->vartype_name = (char*)"double"; // タイプ名
     p->version = 0x001; // 型タイプランタイムバージョン(0x100 = 1.0)
     p->support = HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY;
@@ -287,7 +252,6 @@ short* hspvar_double_aftertype;
     p->basesize =
     sizeof(double); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
-
 /*------------------------------------------------------------*/
 //=============================================================================<<<hspvar_double
 @end

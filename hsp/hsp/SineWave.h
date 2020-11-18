@@ -7,16 +7,13 @@
 //
 // 参考
 // http://web.dormousesf.com/prog/SinWave/page.html
-
 #ifndef SineWave_h
 #define SineWave_h
-
 #import <Cocoa/Cocoa.h>
 #import <AudioUnit/AudioUnit.h>
 #import "SineWaveData.h"
 #import "AppDelegate.h"
 #include "debug_message.h"
-
 @interface SineWave : NSObject {
 @public
     AppDelegate*    global;
@@ -36,7 +33,5 @@
 - (void)play;
 - (void)stop;
 - (void)dealloc;
-
 @end
-
 #endif /* SineWave_h */

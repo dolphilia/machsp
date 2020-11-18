@@ -6,7 +6,6 @@
 //	http://hspdev-wiki.net/?OpenHSP%2FLinux%2Fhsp3
 //
 //
-
 #include "supio_hsp3.h"
 #include "debug_message.h"
 #include "dpmread.h"
@@ -23,7 +22,6 @@
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h> // changedir delfile get_current_dir_name stat
-
 #ifndef _MAX_PATH
 #define _MAX_PATH 256
 #endif
@@ -36,22 +34,17 @@
 #ifndef _MAX_FNAME
 #define _MAX_FNAME 256
 #endif
-
 @implementation ViewController (supio_hsp3)
-
 //
 //		Internal function support (without Windows API)
 //
 -(void)_splitpath:(char*)path p_drive:(char*)p_drive dir:(char*)dir fname:(char*)fname ext:(char*)ext {
-    
     //		Linux用ファイルパス切り出し
     //
     char* p;
     char pathtmp[256];
-    
     p_drive[0] = 0;
     strcpy(pathtmp, path);
-    
     p = [self strchr2:pathtmp code:'.'];
     if (p == NULL) {
         ext[0] = 0;
@@ -68,11 +61,8 @@
         p[1] = 0;
         strcpy(dir, pathtmp);
     }
-    
 }
-
 -(int)wildcard:(char*)text wc:(char*)wc {
-    
     //		textに対してワイルドカード処理を適応
     //		return value: yes 1, no 0
     //
@@ -97,27 +87,21 @@
     if ((*text != '\0') && (wc[0] == *text)) {
         return [self wildcard:text + 1 wc:wc + 1];
     }
-    
     return 0;
 }
-
 //
 //		basic C I/O support
 //
 // static FILE *fp;
-
 -(char*)mem_ini:(int)size {
     return (char*)calloc(size, 1);
 }
-
 -(void)mem_bye:(void*)ptr {
     free(ptr);
 }
-
 -(int)mem_save:(char*)fname mem:(void*)mem msize:(int)msize seekofs:(int)seekofs {
     FILE* fp;
     int flen;
-    
     if (seekofs < 0) {
         fp = fopen(fname, "wb");
     } else {
@@ -129,12 +113,9 @@
         fseek(fp, seekofs, SEEK_SET);
     flen = (int)fwrite(mem, 1, msize, fp);
     fclose(fp);
-    
     return flen;
 }
-
 -(void)strcase:(char*)target {
-    
     //		strをすべて小文字に(全角対応版)
     //		注意! : SJISのみ対応です
     //
@@ -152,11 +133,8 @@
                 p++;
         }
     }
-    
 }
-
 -(int)strcpy2:(char*)str1 str2:(char*)str2 {
-    
     //	string copy (ret:length)
     //
     char* p;
@@ -171,12 +149,9 @@
         *p++ = a1;
     }
     *p++ = 0;
-    
     return (int)(p - str1);
 }
-
 -(int)strcat2:(char*)str1 str2:(char*)str2 {
-    
     //	string cat (ret:length)
     //
     char* src;
@@ -190,12 +165,9 @@
         src++;
     }
     i = (int)(src - str1);
-    
     return ([self strcpy2:src str2:str2] + i);
 }
-
 -(char*)strstr2:(char*)target src:(char*)src {
-    
     //		strstr関数の全角対応版
     //		注意! : SJISのみ対応です
     //
@@ -230,12 +202,9 @@
                 p++;
         }
     }
-    
     return NULL;
 }
-
 -(char*)strchr2:(char*)target code:(char)code {
-    
     //		str中最後のcode位置を探す(全角対応版)
     //		注意! : SJISのみ対応です
     //
@@ -256,24 +225,19 @@
                 p++;
         }
     }
-    
     return res;
 }
-
 -(void)getpath:(char*)stmp outbuf:(char*)outbuf p2:(int)p2 {
-    
     char* p;
     char tmp[_MAX_PATH];
     char p_drive[_MAX_PATH];
     char p_dir[_MAX_DIR];
     char p_fname[_MAX_FNAME];
     char p_ext[_MAX_EXT];
-    
     p = outbuf;
     if (p2 & 16)
         [self strcase:stmp];
     [self _splitpath:stmp p_drive:p_drive dir:p_dir fname:p_fname ext:p_ext];
-    
     strcat(p_drive, p_dir);
     if (p2 & 8) {
         strcpy(tmp, p_fname);
@@ -295,24 +259,18 @@
             strcpy(p, tmp);
             break;
     }
-    
 }
-
 -(int)makedir:(char*)name {
     return mkdir(name, 0755);
 }
-
 -(int)changedir:(char*)name {
     return chdir(name);
 }
-
 -(int)delfile:(char*)name {
     return unlink(name);
     // return remove( name );		// ディレクトリにもファイルにも対応
 }
-
 -(int)dirlist:(char*)fname target:(char**)target p3:(int)p3 {
-    
     //		Linux System
     //
     enum
@@ -327,14 +285,11 @@
     struct dirent* fd;
     struct stat st;
     char curdir[_MAX_PATH + 1];
-    
     stat_main = 0;
-    
     // sh = opendir( get_current_dir_name() );
     getcwd(curdir, _MAX_PATH);
     sh =
     opendir(curdir); // get_current_dir_nameはMinGWで通らなかったのでとりあえず
-    
     fd = readdir(sh);
     while (fd != NULL) {
         p = fd->d_name;
@@ -371,7 +326,6 @@
         if (fl) {
             fl = [self wildcard:p wc:fname];
         }
-        
         if (fl) {
             stat_main++;
             [self sbStrAdd:target str:p];
@@ -380,12 +334,9 @@
         fd = readdir(sh);
     }
     closedir(sh);
-    
     return stat_main;
 }
-
 -(int)gettime:(int)index {
-    
     /*
      Get system time entries
      index :
@@ -401,10 +352,8 @@
      */
     struct timeval tv;
     struct tm* lt;
-    
     gettimeofday(&tv, NULL); // MinGWだとVerによって通りません
     lt = localtime(&tv.tv_sec);
-    
     switch (index) {
         case 0:
             return lt->tm_year + 1900;
@@ -426,20 +375,15 @@
             /*	一応マイクロ秒まで取れる	*/
             return (int)tv.tv_usec % 10000;
     }
-    
     return 0;
 }
-
 static int splc; // split pointer
-
 -(void)strsp_ini {
     splc = 0;
 }
-
 -(int)strsp_getptr {
     return splc;
 }
-
 -(int)strsp_get:(char*)srcstr dststr:(char*)dststr splitchr:(char)splitchr len:(int)len {
     //		split string with parameters
     //
@@ -460,7 +404,6 @@ static int splc; // split pointer
                 sjflg++;
         if ((uint8_t)a1 >= 0xe0)
             sjflg++;
-        
         if (a1 == splitchr)
             break;
         if (a1 == 13) {
@@ -477,12 +420,9 @@ static int splc; // split pointer
             break;
     }
     dststr[a] = 0;
-    
     return (int)a1;
 }
-
 -(char*)strsp_cmds:(char*)srcstr {
-    
     //		Skip 1parameter from command line
     //
     int spmode;
@@ -501,10 +441,8 @@ static int splc; // split pointer
         if (a1 == 0x22)
             spmode ^= 1;
     }
-    
     return cmdchk;
 }
-
 -(int)GetLimit:(int)num min:(int)min max:(int)max {
     if (num > max)
         return max;
@@ -512,9 +450,7 @@ static int splc; // split pointer
         return min;
     return num;
 }
-
 -(void)CutLastChr:(char*)p code:(char)code {
-    
     //		最後の'\\'を取り除く
     //
     char* ss;
@@ -527,27 +463,20 @@ static int splc; // split pointer
         if ((i > 3) && (ss == ss2))
             *ss = 0;
     }
-    
 }
-
 static int
 htoi_sub(char hstr)
 {
-    
     //	exchange hex to int
-    
     char a1;
     a1 = tolower(hstr);
     if ((a1 >= '0') && (a1 <= '9'))
         return a1 - '0';
     if ((a1 >= 'a') && (a1 <= 'f'))
         return a1 - 'a' + 10;
-    
     return 0;
 }
-
 -(int)htoi:(char*)str {
-    
     char a1;
     int d;
     int conv;
@@ -559,16 +488,12 @@ htoi_sub(char hstr)
             break;
         conv = (conv << 4) + htoi_sub(a1);
     }
-    
     return conv;
 }
-
 /*----------------------------------------------------------*/
 //					HSP string trim support
 /*----------------------------------------------------------*/
-
 -(char*)strchr3:(char*)target code:(int)code sw:(int)sw findptr:(char**)findptr {
-    
     //		文字列中のcode位置を探す(2バイトコード、全角対応版)
     //		sw = 0 : findptr = 最後に見つかったcode位置
     //		sw = 1 : findptr = 最初に見つかったcode位置
@@ -581,15 +506,12 @@ htoi_sub(char hstr)
     unsigned char code2;
     char* res;
     char* pres;
-    
     p = (unsigned char*)target;
     code1 = (unsigned char)(code & 0xff);
     code2 = (unsigned char)(code >> 8);
-    
     res = NULL;
     pres = NULL;
     *findptr = NULL;
-    
     while (1) {
         a1 = *p;
         if (a1 == 0)
@@ -617,21 +539,17 @@ htoi_sub(char hstr)
             pres = (char*)p;
             res = NULL;
         }
-        
         switch (sw) {
             case 1:
                 if (*findptr != NULL)
                     return (char*)p;
                 break;
             case 2:
-                
                 return (char*)p;
         }
     }
-    
     return pres;
 }
-
 -(void)TrimCodeR:(char*)p code:(int)code {
     //		最後のcodeを取り除く
     //
@@ -649,9 +567,7 @@ htoi_sub(char hstr)
             break;
         *ss2 = 0;
     }
-    
 }
-
 -(void)TrimCode:(char*)p code:(int)code {
     //		すべてのcodeを取り除く
     //
@@ -663,11 +579,8 @@ htoi_sub(char hstr)
             break;
         strcpy(ss2, ss);
     }
-    
 }
-
 -(void)TrimCodeL:(char*)p code:(int)code {
-    
     //		最初のcodeを取り除く
     //
     char* ss;
@@ -678,7 +591,5 @@ htoi_sub(char hstr)
             break;
         strcpy(ss2, ss);
     }
-    
 }
-
 @end

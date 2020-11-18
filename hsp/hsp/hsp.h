@@ -5,10 +5,8 @@
 //  Created by dolphilia on 2016/01/18.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #ifndef hsp_h
 #define hsp_h
-
 #import <Foundation/Foundation.h>
 #import "ViewController.h"
 #import "debug_message.h"
@@ -23,13 +21,11 @@
 #import "stack.h"
 #import "strbuf.h"
 #import "supio_hsp3.h"
-
 #define HSP3_AXTYPE_NONE 0
 #define HSP3_AXTYPE_ENCRYPT 1
 #define CODE_EXPANDSTRUCT_OPT_NONE 0
 #define CODE_EXPANDSTRUCT_OPT_LOCALVAR 1
 #define fpconv(fp) (reinterpret_cast<void *>(reinterpret_cast<long>(fp)))
-
 @interface ViewController (hsp) {
 }
 - (void)code_init;
@@ -117,5 +113,4 @@
 - (int)cmdfunc_gosub:(unsigned short *)subr;
 - (void *)reffunc_sysvar:(int *)type_res arg:(int)arg;
 @end
-
 #endif /* hsp_h */
