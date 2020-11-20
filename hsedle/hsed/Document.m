@@ -1,9 +1,5 @@
 //
 //  Document.m
-//  hsed
-//
-//  Created by dolphilia on 2016/03/12.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 
 #import "Document.h"
@@ -23,7 +19,6 @@
     accessNumber=0;
     if (self) {
         // Add your subclass-specific initialization here.
-        
         aController = [[NSStoryboard storyboardWithName:@"Main" bundle:nil] instantiateControllerWithIdentifier:@"Document Window Controller"];
         title = @"Window";
         global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
@@ -90,57 +85,17 @@
     }
 }
 
-- (NSDocument *)duplicateAndReturnError:(NSError * _Nullable __autoreleasing *)outError {
-    return self;
-}
-- (void)duplicateDocument:(id)sender {}
-- (void)duplicateDocumentWithDelegate:(id)delegate didDuplicateSelector:(SEL)didDuplicateSelector contextInfo:(void *)contextInfo {}
-- (void)lockDocument:(id)sender {}
-- (void)lockDocumentWithCompletionHandler:(void (^)(BOOL))completionHandler {}
-- (void)lockWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {}
-
-//-(void)autosaveDocumentWithDelegate:(id)delegate didAutosaveSelector:(SEL)didAutosaveSelector contextInfo:(void *)contextInfo {
-//    //ファイルを自動保存する
-//}
-
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
-    //ファイルを保存する
-    
-    //    if (outError != NULL) {
-    //    }
-    
     NSDictionary * dic;
-    //if ([typeName compare:@"public.plain-text"] == NSOrderedSame || [typeName compare:@"com.hsp-source"] == NSOrderedSame ) {
     dic = [NSDictionary dictionaryWithObjectsAndKeys:NSPlainTextDocumentType, NSDocumentTypeDocumentAttribute,nil];
-    //} else {
-    //    NSLog(@"ERROR: dataOfType pTypeName=%@",typeName);
-    //    *outError = [NSError errorWithDomain:NSOSStatusErrorDomain
-    //                                     code:unimpErr
-    //                                 userInfo:NULL];
-    //    return NULL;
-    //}
-    
-    
     NSString * str = [global.globalTexts objectAtIndex:accessNumber];
     NSData* data = [str dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-
     return data;
 }
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
-    //ファイルを開く
-    
-    //[]
-    //NSLog(@"%@",self.fileURL);
-    
     if (outError != NULL) {
     }
-    
-    //    if ([typeName compare:@"public.plain-text"] != NSOrderedSame || [typeName compare:@"com.hsp-source"] != NSOrderedSame) {
-    //        NSLog(@"エラーが発生しました:%@",typeName);
-    //        return NO;
-    //    }
-    
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:
                          NSPlainTextDocumentType,
                          NSDocumentTypeDocumentAttribute,
@@ -168,8 +123,17 @@
             usleep(100000);
         }
     }];
-
     return YES;
 }
+
+- (NSDocument *)duplicateAndReturnError:(NSError * _Nullable __autoreleasing *)outError {
+    return self;
+}
+
+- (void)duplicateDocument:(id)sender {}
+- (void)duplicateDocumentWithDelegate:(id)delegate didDuplicateSelector:(SEL)didDuplicateSelector contextInfo:(void *)contextInfo {}
+- (void)lockDocument:(id)sender {}
+- (void)lockDocumentWithCompletionHandler:(void (^)(BOOL))completionHandler {}
+- (void)lockWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {}
 
 @end

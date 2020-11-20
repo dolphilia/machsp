@@ -16,11 +16,7 @@
 #define REALLOC realloc
 #define MALLOC malloc
 #define FREE free
-/*------------------------------------------------------------*/
-/*
- system data
- */
-/*------------------------------------------------------------*/
+//system data
 typedef struct {
     STRBUF* mem;
     int len;
@@ -34,11 +30,7 @@ static STRBUF* freelist;
 #define STRBUF_NEXT(buf) STRINF_NEXT((buf)->inf)
 #define GET_INTINF(buf) (&((buf)->inf.intptr->inf))
 @implementation ViewController (strbuf)
-/*------------------------------------------------------------*/
-/*
- internal function
- */
-/*------------------------------------------------------------*/
+//internal function
 -(void)BlockPtrPrepare {
     STRBUF* sb;
     if (str_blockcur == 0) {
@@ -136,11 +128,7 @@ static STRBUF* freelist;
         newst = (STRBUF*)inf->extptr;
     }
 }
-/*------------------------------------------------------------*/
-/*
- interface
- */
-/*------------------------------------------------------------*/
+//interface
 -(void)sbInit {
     str_blockcur = 0;
     freelist = NULL;

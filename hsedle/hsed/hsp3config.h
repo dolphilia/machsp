@@ -2,6 +2,7 @@
 //
 //		Configure for HSP3
 //
+
 #ifndef __hsp3config_h
 #define __hsp3config_h
 

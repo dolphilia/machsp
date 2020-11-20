@@ -30,13 +30,12 @@
 		74EF0C391C9409CA0085B93F /* label.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0C281C9409CA0085B93F /* label.mm */; };
 		74EF0C3A1C9409CA0085B93F /* token.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0C2A1C9409CA0085B93F /* token.mm */; };
 		74EF0C3B1C9409CA0085B93F /* codegen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0C2B1C9409CA0085B93F /* codegen.mm */; };
-		74EF0C591C9409ED0085B93F /* MyWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0C431C9409ED0085B93F /* MyWindow.mm */; };
+		74EF0C591C9409ED0085B93F /* MyWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0C431C9409ED0085B93F /* MyWindow.m */; };
 		74EF0C5C1C9409ED0085B93F /* MyTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0C491C9409ED0085B93F /* MyTextView.m */; };
 		74EF0C671C9409FE0085B93F /* on_toggle_splitview.png in Resources */ = {isa = PBXBuildFile; fileRef = 74EF0C631C9409FE0085B93F /* on_toggle_splitview.png */; };
 		74EF0C681C9409FE0085B93F /* off_toggle_splitview_side.png in Resources */ = {isa = PBXBuildFile; fileRef = 74EF0C641C9409FE0085B93F /* off_toggle_splitview_side.png */; };
 		74EF0C691C9409FE0085B93F /* on_toggle_splitview_side.png in Resources */ = {isa = PBXBuildFile; fileRef = 74EF0C651C9409FE0085B93F /* on_toggle_splitview_side.png */; };
 		74EF0C6A1C9409FE0085B93F /* off_toggle_splitview.png in Resources */ = {isa = PBXBuildFile; fileRef = 74EF0C661C9409FE0085B93F /* off_toggle_splitview.png */; };
-		8B9F82231DAE1BFD00A91F5C /* hsp.app in Resources */ = {isa = PBXBuildFile; fileRef = 8B9F82221DAE1BFD00A91F5C /* hsp.app */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,14 +85,13 @@
 		74EF0C2B1C9409CA0085B93F /* codegen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = codegen.mm; sourceTree = "<group>"; };
 		74EF0C2C1C9409CA0085B93F /* localinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = localinfo.h; sourceTree = "<group>"; };
 		74EF0C421C9409ED0085B93F /* MyWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyWindow.h; sourceTree = "<group>"; };
-		74EF0C431C9409ED0085B93F /* MyWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyWindow.mm; sourceTree = "<group>"; };
+		74EF0C431C9409ED0085B93F /* MyWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyWindow.m; sourceTree = "<group>"; };
 		74EF0C481C9409ED0085B93F /* MyTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTextView.h; sourceTree = "<group>"; };
 		74EF0C491C9409ED0085B93F /* MyTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTextView.m; sourceTree = "<group>"; };
 		74EF0C631C9409FE0085B93F /* on_toggle_splitview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = on_toggle_splitview.png; sourceTree = "<group>"; };
 		74EF0C641C9409FE0085B93F /* off_toggle_splitview_side.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = off_toggle_splitview_side.png; sourceTree = "<group>"; };
 		74EF0C651C9409FE0085B93F /* on_toggle_splitview_side.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = on_toggle_splitview_side.png; sourceTree = "<group>"; };
 		74EF0C661C9409FE0085B93F /* off_toggle_splitview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = off_toggle_splitview.png; sourceTree = "<group>"; };
-		8B9F82221DAE1BFD00A91F5C /* hsp.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = hsp.app; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,8 +131,8 @@
 				74EF0BFB1C94093D0085B93F /* ViewController.m */,
 				74EF0BFD1C94093D0085B93F /* Document.h */,
 				74EF0BFE1C94093D0085B93F /* Document.m */,
-				74EF0C0C1C9409BC0085B93F /* Compiler */,
 				74EF0C0B1C9409B20085B93F /* ScriptEditor */,
+				74EF0C0C1C9409BC0085B93F /* Compiler */,
 				74EF0C001C94093D0085B93F /* Assets.xcassets */,
 				74EF0C021C94093D0085B93F /* Main.storyboard */,
 				74EF0C051C94093D0085B93F /* Info.plist */,
@@ -146,7 +144,6 @@
 		74EF0BF71C94093D0085B93F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8B9F82221DAE1BFD00A91F5C /* hsp.app */,
 				74EF0C631C9409FE0085B93F /* on_toggle_splitview.png */,
 				74EF0C641C9409FE0085B93F /* off_toggle_splitview_side.png */,
 				74EF0C651C9409FE0085B93F /* on_toggle_splitview_side.png */,
@@ -161,7 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				74EF0C421C9409ED0085B93F /* MyWindow.h */,
-				74EF0C431C9409ED0085B93F /* MyWindow.mm */,
+				74EF0C431C9409ED0085B93F /* MyWindow.m */,
 				74EF0C481C9409ED0085B93F /* MyTextView.h */,
 				74EF0C491C9409ED0085B93F /* MyTextView.m */,
 			);
@@ -171,15 +168,16 @@
 		74EF0C0C1C9409BC0085B93F /* Compiler */ = {
 			isa = PBXGroup;
 			children = (
-				74EF0C0D1C9409CA0085B93F /* runCompiler.h */,
-				74EF0C0E1C9409CA0085B93F /* runCompiler.mm */,
 				74EF0C101C9409CA0085B93F /* hsp3config.h */,
 				74EF0C111C9409CA0085B93F /* hsp3struct.h */,
 				74EF0C241C9409CA0085B93F /* hsp3debug.h */,
+				74EF0C0D1C9409CA0085B93F /* runCompiler.h */,
+				74EF0C0E1C9409CA0085B93F /* runCompiler.mm */,
 				74EF0C1E1C9409CA0085B93F /* hspvar_core.h */,
-				74EF0C0F1C9409CA0085B93F /* hspcmd.m */,
 				74EF0C171C9409CA0085B93F /* supio_linux.h */,
 				74EF0C181C9409CA0085B93F /* supio_linux.mm */,
+				74EF0C0F1C9409CA0085B93F /* hspcmd.m */,
+				74EF0C2B1C9409CA0085B93F /* codegen.mm */,
 				74EF0C131C9409CA0085B93F /* hsc3.h */,
 				74EF0C141C9409CA0085B93F /* hsc3.mm */,
 				74EF0C151C9409CA0085B93F /* membuf.h */,
@@ -200,7 +198,6 @@
 				74EF0C281C9409CA0085B93F /* label.mm */,
 				74EF0C291C9409CA0085B93F /* token.h */,
 				74EF0C2A1C9409CA0085B93F /* token.mm */,
-				74EF0C2B1C9409CA0085B93F /* codegen.mm */,
 				74EF0C2C1C9409CA0085B93F /* localinfo.h */,
 				74EF0C121C9409CA0085B93F /* localinfo.mm */,
 			);
@@ -277,7 +274,6 @@
 				74EF0C041C94093D0085B93F /* Main.storyboard in Resources */,
 				7411A7D91C9FADAF00A27734 /* stop_button.png in Resources */,
 				74EF0C681C9409FE0085B93F /* off_toggle_splitview_side.png in Resources */,
-				8B9F82231DAE1BFD00A91F5C /* hsp.app in Resources */,
 				7411A7D71C9FAD1700A27734 /* run_button.png in Resources */,
 				74EF0C671C9409FE0085B93F /* on_toggle_splitview.png in Resources */,
 			);
@@ -297,7 +293,7 @@
 				74EF0C351C9409CA0085B93F /* ahtobj.mm in Sources */,
 				74EF0C3A1C9409CA0085B93F /* token.mm in Sources */,
 				74EF0BFF1C94093D0085B93F /* Document.m in Sources */,
-				74EF0C591C9409ED0085B93F /* MyWindow.mm in Sources */,
+				74EF0C591C9409ED0085B93F /* MyWindow.m in Sources */,
 				74EF0BFC1C94093D0085B93F /* ViewController.m in Sources */,
 				74EF0C2F1C9409CA0085B93F /* localinfo.mm in Sources */,
 				74EF0BF91C94093D0085B93F /* main.m in Sources */,

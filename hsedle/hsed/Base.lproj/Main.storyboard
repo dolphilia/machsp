@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11201"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="11201"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="17506"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -679,7 +680,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController storyboardIdentifier="Document Window Controller" id="jGA-0Y-lOj" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="Ckk-yw-fiv" customClass="MyWindow">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="Ckk-yw-fiv" customClass="MyWindow">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="596" height="270"/>
@@ -752,6 +753,9 @@
                                 <toolbarItem reference="gWP-Wp-e2q"/>
                             </defaultToolbarItems>
                         </toolbar>
+                        <connections>
+                            <outlet property="delegate" destination="jGA-0Y-lOj" id="YqT-je-My4"/>
+                        </connections>
                     </window>
                     <connections>
                         <segue destination="5gI-5U-AMq" kind="relationship" relationship="window.shadowedContentViewController" id="nsd-lR-9xd"/>
@@ -772,15 +776,15 @@
                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IOq-SU-tPZ">
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                                 <clipView key="contentView" id="rwe-0c-aBf">
-                                    <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="465" height="270"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textView drawsBackground="NO" importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" allowsNonContiguousLayout="YES" id="tH9-3b-mRd" customClass="MyTextView">
-                                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                                        <textView drawsBackground="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" allowsNonContiguousLayout="YES" id="tH9-3b-mRd" customClass="MyTextView">
+                                            <rect key="frame" x="0.0" y="0.0" width="465" height="270"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <size key="minSize" width="480" height="270"/>
+                                            <size key="minSize" width="465" height="270"/>
                                             <size key="maxSize" width="486" height="10000000"/>
                                             <color key="insertionPointColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </textView>
@@ -792,7 +796,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="LjZ-Cb-LEc">
-                                    <rect key="frame" x="464" y="0.0" width="16" height="270"/>
+                                    <rect key="frame" x="465" y="0.0" width="15" height="270"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>

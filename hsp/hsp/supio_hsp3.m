@@ -1,9 +1,5 @@
 //
 //	supio.cpp functions (for Linux)
-//	Linux用のsupio.cppを別ファイルとして作成しました。
-//
-//	Special thanks to Charlotte at HSP開発wiki
-//	http://hspdev-wiki.net/?OpenHSP%2FLinux%2Fhsp3
 //
 #include "supio_hsp3.h"
 #include "hsp3dpmread.h"
