@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8B422B8C256ACC44008A363C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B422B8B256ACC44008A363C /* main.m */; };
+		8B422B8C256ACC44008A363C /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422B8B256ACC44008A363C /* main.mm */; };
 		8B422BB6256ACCDC008A363C /* hspcmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B422B9B256ACCDB008A363C /* hspcmd.m */; };
 		8B422BB7256ACCDC008A363C /* tagstack.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422B9D256ACCDB008A363C /* tagstack.mm */; };
 		8B422BB8256ACCDC008A363C /* label.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422B9F256ACCDB008A363C /* label.mm */; };
@@ -39,7 +39,7 @@
 
 /* Begin PBXFileReference section */
 		8B422B88256ACC44008A363C /* hsp3compiler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hsp3compiler; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B422B8B256ACC44008A363C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8B422B8B256ACC44008A363C /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		8B422B96256ACCCA008A363C /* hsp3debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = hsp3debug.h; path = ../../hsedle/hsed/hsp3debug.h; sourceTree = "<group>"; };
 		8B422B97256ACCCA008A363C /* hsp3struct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = hsp3struct.h; path = ../../hsedle/hsed/hsp3struct.h; sourceTree = "<group>"; };
 		8B422B98256ACCCA008A363C /* hsp3config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = hsp3config.h; path = ../../hsedle/hsed/hsp3config.h; sourceTree = "<group>"; };
@@ -104,7 +104,7 @@
 		8B422B8A256ACC44008A363C /* hsp3compiler */ = {
 			isa = PBXGroup;
 			children = (
-				8B422B8B256ACC44008A363C /* main.m */,
+				8B422B8B256ACC44008A363C /* main.mm */,
 				8B422B98256ACCCA008A363C /* hsp3config.h */,
 				8B422B96256ACCCA008A363C /* hsp3debug.h */,
 				8B422B97256ACCCA008A363C /* hsp3struct.h */,
@@ -210,7 +210,7 @@
 				8B422BBD256ACCDC008A363C /* runCompiler.mm in Sources */,
 				8B422BBA256ACCDC008A363C /* errormsg.mm in Sources */,
 				8B422BC3256ACCDC008A363C /* ahtobj.mm in Sources */,
-				8B422B8C256ACC44008A363C /* main.m in Sources */,
+				8B422B8C256ACC44008A363C /* main.mm in Sources */,
 				8B422BBC256ACCDC008A363C /* codegen.mm in Sources */,
 				8B422BBE256ACCDC008A363C /* localinfo.mm in Sources */,
 			);
