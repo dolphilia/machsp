@@ -17,10 +17,8 @@
 #import "token.h"
 #import "runCompiler.h"
 #import <Foundation/Foundation.h>
-#import "MyWindow.h"
-#import "AppDelegate.h"
 
-@implementation MyWindow(run)
+@implementation runCompiler
 
 /*----------------------------------------------------------*/
 
@@ -39,8 +37,7 @@
     int i;
     for(i=0; p[i]; i++) {
         @autoreleasepool {
-            AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-            global.logString = [global.logString stringByAppendingFormat:@"%s\n", p[i]];
+            NSLog(@"%s\n", p[i]);
         }
     }
 }
@@ -118,18 +115,14 @@
         
         if (st) {
             @autoreleasepool {
-                //AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-                global.logString = [global.logString stringByAppendingString:@"Illegal switch selected.\n"];
+                NSLog(@"Illegal switch selected.\n");
             }
-            //printf("Illegal switch selected.¥n");
             return 1;
         }
         if (fname[0]==0) {
             @autoreleasepool {
-                //AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-                global.logString = [global.logString stringByAppendingString:@"No file name selected.\n"];
+                NSLog(@"No file name selected.\n");
             }
-            //printf("No file name selected.¥n");
             return 1;
         }
         

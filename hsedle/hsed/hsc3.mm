@@ -111,8 +111,7 @@ int CHsc3::PreProcessAht( char *fname, void *ahtoption, int mode )
     }
     
     @autoreleasepool {
-        AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        global.logString = [global.logString stringByAppendingFormat:@"#AHT processor ver%s / onion software 1997-2015(c)\n", hspver];
+        NSLog(@"#AHT processor ver%s / onion software 1997-2015(c)\n", hspver);
     }
     
     //sprintf( mm,"#AHT processor ver%s / onion software 1997-2015(c)", hspver );
@@ -167,8 +166,7 @@ int CHsc3::PreProcess( char *fname, char *outname, int option, char *rname, void
     }
     
     @autoreleasepool {
-        AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        global.logString = [global.logString stringByAppendingFormat:@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE, hspver];
+        NSLog(@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE, hspver);
     }
     //sprintf( mm,"#%s ver%s / onion software 1997-2015(c)", HSC3TITLE, hspver );
     //tk.Mes( mm );
@@ -187,8 +185,7 @@ int CHsc3::PreProcess( char *fname, char *outname, int option, char *rname, void
         if ( res<0 ) {
 #ifdef JPNMSG
             @autoreleasepool {
-                AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-                global.logString = [global.logString stringByAppendingString:@"#プリプロセッサファイルの出力に失敗しました\n"];
+                NSLog(@"#プリプロセッサファイルの出力に失敗しました\n");
             }
             //tk.Mes( (char *)"#プリプロセッサファイルの出力に失敗しました" );
 #else
@@ -216,8 +213,7 @@ int CHsc3::PreProcess( char *fname, char *outname, int option, char *rname, void
         if ( res<0 ) {
 #ifdef JPNMSG
             @autoreleasepool {
-                AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-                global.logString = [global.logString stringByAppendingString:@"#packfileの出力に失敗しました\n"];
+                NSLog(@"#packfileの出力に失敗しました\n");
             }
             //tk.Mes( (char *)"#packfileの出力に失敗しました" );
 #else
@@ -227,8 +223,7 @@ int CHsc3::PreProcess( char *fname, char *outname, int option, char *rname, void
         }
         //tk.Mes( (char *)"#packfile generated." );
         @autoreleasepool {
-            AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-            global.logString = [global.logString stringByAppendingString:@"#packfile generated.\n"];
+            NSLog(@"#packfile generated.\n");
         }
     }
     
@@ -280,8 +275,7 @@ int CHsc3::Compile( char *fname, char *outname, int mode )
     }
     
     @autoreleasepool {
-        AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        global.logString = [global.logString stringByAppendingFormat:@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE2, hspver];
+        NSLog(@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE2, hspver);
     }
     //sprintf( mm,"#%s ver%s / onion software 1997-2015(c)", HSC3TITLE2, hspver );
     //tk.Mes( mm );

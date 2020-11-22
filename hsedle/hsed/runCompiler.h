@@ -12,9 +12,8 @@
 #import <stdio.h>
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
-#import "MyWindow.h"
 
-@interface MyWindow(run) {
+@interface runCompiler : NSObject  {
 }
 
 //static void usage1( void );

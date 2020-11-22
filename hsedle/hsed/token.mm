@@ -3442,7 +3442,7 @@ int CToken::ExpandFile( CMemBuf *buf, char *fname, char *refname )
     }
     
     //-------
-    AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    //AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     
     
     
@@ -3454,12 +3454,12 @@ int CToken::ExpandFile( CMemBuf *buf, char *fname, char *refname )
     //    path = [path stringByAppendingString:filename];
     //}
     //else
-    if( ![[global.currentPaths objectAtIndex:global.runtimeAccessNumber] isEqual:@""] ) { //ソースコードのあるディレクトリ
-        ns_search_path = [global.currentPaths objectAtIndex:global.runtimeAccessNumber];
-    }
-    else { //hsptmp
+    //if( ![[global.currentPaths objectAtIndex:global.runtimeAccessNumber] isEqual:@""] ) { //ソースコードのあるディレクトリ
+       // ns_search_path = [global.currentPaths objectAtIndex:global.runtimeAccessNumber];
+    //}
+    //else { //hsptmp
         ns_search_path = [NSHomeDirectory() stringByAppendingString:@"/Documents/hsptmp"];
-    }
+    //}
     ns_search_path = [ns_search_path stringByAppendingString:@"/"];
     
     //パスに%記号が入っていたらエラーにする
@@ -3473,14 +3473,7 @@ int CToken::ExpandFile( CMemBuf *buf, char *fname, char *refname )
         //}
         //printf("%hu",[ns_search_path characterAtIndex:n]);
         if([[ns_search_path substringWithRange:NSMakeRange(n, 1)] isEqual:@"%"]) {
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:@"コンパイルエラー"];
-            NSString* infoText = @"ソースコードのパスに非ASCII文字が含まれています。処理を中断します。\n>> ";
-            ns_search_path = [ns_search_path stringByRemovingPercentEncoding];
-            infoText = [infoText stringByAppendingString:ns_search_path];
-            [alert setInformativeText:infoText];
-            [alert addButtonWithTitle:@"OK"];
-            [alert runModal];
+            NSLog(@"ソースコードのパスに非ASCII文字が含まれています。処理を中断します。\n>> ");
             return 0;
         }
         //NSLog(@"%@",);
@@ -3552,8 +3545,7 @@ int CToken::ExpandFile( CMemBuf *buf, char *fname, char *refname )
 #ifdef JPNMSG
                         //Mesf( (char *)"#スクリプトファイルが見つかりません [%s]", purename );
                         @autoreleasepool {
-                            AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-                            global.logString = [global.logString stringByAppendingFormat:@"#スクリプトファイルが見つかりません [%s]\n", purename];
+                            NSLog(@"#スクリプトファイルが見つかりません [%s]\n", purename);
                         }
 #else
                         Mesf( "#Source file not found.[%s]", purename );
@@ -3570,8 +3562,7 @@ int CToken::ExpandFile( CMemBuf *buf, char *fname, char *refname )
     if ( fileadd ) {
         //Mesf( (char *)"#Use file [%s]",purename );
         @autoreleasepool {
-            AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-            global.logString = [global.logString stringByAppendingFormat:@"#Use file [%s]\n",purename];
+            NSLog(@"#Use file [%s]\n",purename);
         }
     }
     
@@ -3592,15 +3583,13 @@ int CToken::ExpandFile( CMemBuf *buf, char *fname, char *refname )
 #ifdef JPNMSG
             //Mesf( (char *)"#スタックが空になっていないマクロタグが%d個あります [%s]", res, refname_copy );
             @autoreleasepool {
-                AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-                global.logString = [global.logString stringByAppendingFormat:@"#スタックが空になっていないマクロタグが%d個あります [%s]\n", res, refname_copy];
+                NSLog(@"#スタックが空になっていないマクロタグが%d個あります [%s]\n", res, refname_copy);
             }
 #else
             Mesf( "#%d unresolved macro(s).[%s]", res, refname_copy );
 #endif
             @autoreleasepool {
-                AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-                global.logString = [global.logString stringByAppendingFormat:@"%s\n", linebuf];
+                NSLog(@"%s\n", linebuf);
             }
             //Mes( linebuf );
         }
@@ -3611,8 +3600,7 @@ int CToken::ExpandFile( CMemBuf *buf, char *fname, char *refname )
 #ifdef JPNMSG
         //Mes((char *)"#重大なエラーが検出されています");
         @autoreleasepool {
-            AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-            global.logString = [global.logString stringByAppendingString:@"#重大なエラーが検出されています\n"];
+            NSLog(@"#重大なエラーが検出されています\n");
         }
 #else
         Mes( "#Fatal error reported." );

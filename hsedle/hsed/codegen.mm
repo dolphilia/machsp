@@ -169,11 +169,7 @@ CToken::CalcCG_factor(void)
                     
                     // Mesf( (char *)"#未初期化の変数があります(%s)", cg_str );
                     @autoreleasepool {
-                        AppDelegate* global =
-                        (AppDelegate*)[[NSApplication sharedApplication] delegate];
-                        global.logString = [global.logString
-                                            stringByAppendingFormat:@"#未初期化の変数があります(%s)\n",
-                                            cg_str];
+                        NSLog(@"#未初期化の変数があります(%s)\n",cg_str);
                     }
 #else
                     Mesf("#Uninitalized variable (%s).", cg_str);
@@ -1860,11 +1856,7 @@ CToken::GenerateCodePP_func(int deftype)
         if (hed_cmpmode & CMPMODE_OPTINFO) {
 #ifdef JPNMSG
             @autoreleasepool {
-                AppDelegate* global =
-                (AppDelegate*)[[NSApplication sharedApplication] delegate];
-                global.logString = [global.logString
-                                    stringByAppendingFormat:
-                                    @"#未使用の外部DLL関数の登録を削除しました %s\n", fbase];
+                NSLog(@"#未使用の外部DLL関数の登録を削除しました %s\n", fbase);
             }
             // Mesf( (char *)"#未使用の外部DLL関数の登録を削除しました %s", fbase );
 #else
@@ -2049,12 +2041,8 @@ CToken::GetParameterTypeCG(char* name)
     if (!strcmp(cg_str, "val")) {
 #ifdef JPNMSG
         @autoreleasepool {
-            AppDelegate* global =
-            (AppDelegate*)[[NSApplication sharedApplication] delegate];
-            global.logString = [global.logString
-                                stringByAppendingFormat:
-                                @"警告:古いdeffunc表記があります 行%d.[%s]\n", cg_orgline,
-                                name];
+            NSLog(@"警告:古いdeffunc表記があります 行%d.[%s]\n", cg_orgline,
+                                name);
         }
         // Mesf( (char *)"警告:古いdeffunc表記があります 行%d.[%s]", cg_orgline, name );
 #else
@@ -2341,11 +2329,7 @@ CToken::GenerateCodePP_module(void)
 #ifdef JPNMSG
                     // Mesf( (char *)"#未使用のモジュールを削除しました %s", modname );
                     @autoreleasepool {
-                        AppDelegate* global =
-                        (AppDelegate*)[[NSApplication sharedApplication] delegate];
-                        global.logString = [global.logString
-                                            stringByAppendingFormat:@"#未使用のモジュールを削除しました %s\n",
-                                            modname];
+                        NSLog(@"#未使用のモジュールを削除しました %s\n", modname);
                     }
 #else
                     Mesf("#Delete module %s", modname);
@@ -2888,11 +2872,7 @@ CToken::GenerateCodeMain(CMemBuf* buf)
 #ifdef JPNMSG
                 // Mesf( (char *)"#ラベルの定義が存在しません [%s]", lb->GetName(a) );
                 @autoreleasepool {
-                    AppDelegate* global =
-                    (AppDelegate*)[[NSApplication sharedApplication] delegate];
-                    global.logString = [global.logString
-                                        stringByAppendingFormat:@"#ラベルの定義が存在しません [%s]\n",
-                                        lb->GetName(a)];
+                    NSLog(@"#ラベルの定義が存在しません [%s]\n",lb->GetName(a));
                 }
 #else
                 Mesf("#Label definition not found [%s]", lb->GetName(a));
@@ -2908,13 +2888,9 @@ CToken::GenerateCodeMain(CMemBuf* buf)
 #ifdef JPNMSG
                 // Mesf( (char *)"#関数が定義されていません [%s]",
                 // lb->GetName(GET_FI(a)->otindex) );
-                @autoreleasepool {
-                    AppDelegate* global =
-                    (AppDelegate*)[[NSApplication sharedApplication] delegate];
-                    global.logString = [global.logString
-                                        stringByAppendingFormat:@"#関数が定義されていません [%s]\n",
-                                        lb->GetName(GET_FI(a)->otindex)];
-                }
+                NSLog(@"#関数が定義されていません [%s]\n",
+                                        lb->GetName(GET_FI(a)->otindex));
+                
 #else
                 Mesf("#Function not found [%s]", lb->GetName(GET_FI(a)->otindex));
 #endif
@@ -2928,10 +2904,7 @@ CToken::GenerateCodeMain(CMemBuf* buf)
 #ifdef JPNMSG
             // Mesf( (char *)"#波括弧が閉じられていません" );
             @autoreleasepool {
-                AppDelegate* global =
-                (AppDelegate*)[[NSApplication sharedApplication] delegate];
-                global.logString = [global.logString
-                                    stringByAppendingString:@"#波括弧が閉じられていません\n"];
+                NSLog(@"#波括弧が閉じられていません\n");
             }
 #else
             Mesf("#Missing closing braces");
@@ -3487,10 +3460,7 @@ CToken::GenerateCode(char* fname, char* oname, int mode)
     if (srcbuf.PutFile(fname) < 0) {
         // Mes( (char *)"#No file." );
         @autoreleasepool {
-            AppDelegate* global =
-            (AppDelegate*)[[NSApplication sharedApplication] delegate];
-            global.logString =
-            [global.logString stringByAppendingString:@"#No file.\n"];
+            NSLog(@"#No file.\n");
         }
         return -1;
     }
@@ -3587,40 +3557,23 @@ CToken::GenerateCode(CMemBuf* srcbuf, char* oname, int mode)
                                encoding:NSUTF8StringEncoding];
             // NSLog(@"%@",nsstr_error_message);
             
-            AppDelegate* global =
-            (AppDelegate*)[[NSApplication sharedApplication] delegate];
-            global.logString = [global.logString
-                                stringByAppendingFormat:@"%s(%d) : error %d : %@ (%d行目)\n",
+            NSLog(@"%s(%d) : error %d : %@ (%d行目)\n",
                                 cg_orgfile, cg_orgline, res,
-                                nsstr_error_message, cg_orgline];
+                  nsstr_error_message, cg_orgline);
             
             if (cg_errline > 0) {
                 note.Select(bakbuf.GetBuffer());
                 note.GetLine(tmp, cg_errline - 1, 510);
-                global.logString =
-                [global.logString stringByAppendingFormat:@"--> %s\n", tmp];
-                
-                NSAlert* alert = [[NSAlert alloc] init];
-                [alert setMessageText:@"コンパイルエラー"];
-                [alert
-                 setInformativeText:
-                 [NSString stringWithFormat:@"error %d : %@ (%d行目)\n--> %s\n", res,
-                  nsstr_error_message, cg_orgline, tmp]];
-                [alert addButtonWithTitle:@"OK"];
-                [alert runModal];
+                NSLog(@"--> %s\n", tmp);
+                NSLog(@"error %d : %@ (%d行目)\n--> %s\n", res,
+                      nsstr_error_message, cg_orgline, tmp);
             } else {
-                NSAlert* alert = [[NSAlert alloc] init];
-                [alert setMessageText:@"コンパイルエラー"];
-                [alert
-                 setInformativeText:[NSString
-                                     stringWithFormat:@"error %d : %@ (%d行目)\n",
+                NSLog(@"error %d : %@ (%d行目)\n",
                                      res, nsstr_error_message,
-                                     cg_orgline]];
-                [alert addButtonWithTitle:@"OK"];
-                [alert runModal];
+                      cg_orgline);
             }
             
-            global.isError = YES;
+            //global.isError = YES;
         }
         
     } else {
@@ -3770,12 +3723,7 @@ CToken::GenerateCode(CMemBuf* srcbuf, char* oname, int mode)
         if (res < 0) {
 #ifdef JPNMSG
             // Mes( (char *)"#出力ファイルを書き込めません" );
-            @autoreleasepool {
-                AppDelegate* global =
-                (AppDelegate*)[[NSApplication sharedApplication] delegate];
-                global.logString = [global.logString
-                                    stringByAppendingString:@"#出力ファイルを書き込めません\n"];
-            }
+            NSLog(@"#出力ファイルを書き込めません\n");
 #else
             Mes("#Can't write output file.");
 #endif
@@ -3785,21 +3733,15 @@ CToken::GenerateCode(CMemBuf* srcbuf, char* oname, int mode)
             n_mod = fi_buf->GetSize() / sizeof(STRUCTDAT);
             
             @autoreleasepool {
-                AppDelegate* global =
-                (AppDelegate*)[[NSApplication sharedApplication] delegate];
-                global.logString = [global.logString
-                                    stringByAppendingFormat:
-                                    @"# Code size (%d) String data size (%d) param size (%d)\n",
-                                    cs_size, ds_size, mi_buf->GetSize()];
-                global.logString = [global.logString
-                                    stringByAppendingFormat:@"# Vars (%d) Labels (%d) Modules (%d) "
+                NSLog(@"# Code size (%d) String data size (%d) param size (%d)\n",
+                                    cs_size, ds_size, mi_buf->GetSize());
+                NSLog(@"# Vars (%d) Labels (%d) Modules (%d) "
                                     @"Libs (%d) Plugins (%d)\n",
                                     cg_valcnt, ot_size >> 2, n_mod, li_size,
-                                    n_hpi];
-                global.logString = [global.logString
-                                    stringByAppendingFormat:@"# No error detected. (total %d bytes)\n",
-                                    hsphed.allsize];
-                global.logString = [global.logString stringByAppendingString:@"\n"];
+                                    n_hpi);
+               NSLog(@"# No error detected. (total %d bytes)\n",
+                                    hsphed.allsize);
+               NSLog(@"\n");
             }
             
             // Mesf( (char *)"#Code size (%d) String data size (%d) param size
@@ -3837,12 +3779,9 @@ CToken::CG_MesLabelDefinition(int label_id)
         // Mesf((char *)"#識別子「%s」の定義位置: line %d in [%s]",
         // lb->GetName(label_id), labobj->def_line, labobj->def_file);
         @autoreleasepool {
-            AppDelegate* global =
-            (AppDelegate*)[[NSApplication sharedApplication] delegate];
-            global.logString = [global.logString
-                                stringByAppendingFormat:@"#識別子「%s」の定義位置: line %d in [%s]\n",
+            NSLog(@"#識別子「%s」の定義位置: line %d in [%s]\n",
                                 lb->GetName(label_id), labobj->def_line,
-                                labobj->def_file];
+                                labobj->def_file);
         }
 #else
         Mesf("#Identifier '%s' has already defined in line %d in [%s]",
