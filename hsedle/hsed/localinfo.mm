@@ -1,26 +1,16 @@
-
-/*----------------------------------------------------------------*/
+//
 //		local info related routines
-/*----------------------------------------------------------------*/
-#import <sys/time.h>
-#import <time.h>
-#import <stdio.h>
-#import <string.h>
-#import "localinfo.h"
-//-------------------------------------------------------------
-//		Interfaces
-//-------------------------------------------------------------
-CLocalInfo::CLocalInfo()
-{
-}
-CLocalInfo::~CLocalInfo()
-{
-}
-//-------------------------------------------------------------
-//		Routines
-//-------------------------------------------------------------
-int CLocalInfo::GetTime( int index )
-{
+//
+#include <sys/time.h>
+#include <time.h>
+#include <stdio.h>
+#include <string.h>
+#include "localinfo.h"
+
+char curtime[16];
+char curdate[16];
+
+int get_time(int index) {
     /*
      Get system time entries
      index :
@@ -35,8 +25,8 @@ int CLocalInfo::GetTime( int index )
      */
     struct timeval tv;
     struct tm *lt;
-    gettimeofday( &tv, NULL );	// MinGWだとVerによって通りません
-    lt = localtime( &tv.tv_sec );
+    gettimeofday(&tv, NULL);	// MinGWだとVerによって通りません
+    lt = localtime(&tv.tv_sec);
     switch( index ) {
         case 0:
             return lt->tm_year+1900;
@@ -60,15 +50,11 @@ int CLocalInfo::GetTime( int index )
     }
     return 0;
 }
-char *CLocalInfo::CurrentTime( void )
-{
-    sprintf(curtime, "\"%02d:%02d:%02d\"",
-            GetTime(4),GetTime(5),GetTime(6) );
+char* get_current_time() {
+    sprintf(curtime, "\"%02d:%02d:%02d\"", get_time(4), get_time(5), get_time(6));
     return curtime;
 }
-char *CLocalInfo::CurrentDate( void )
-{
-    sprintf( curdate, "\"%04d/%02d/%02d\"",
-            GetTime(0),GetTime(1),GetTime(3) );
+char* get_current_date(void) {
+    sprintf(curdate, "\"%04d/%02d/%02d\"", get_time(0), get_time(1), get_time(3));
     return curdate;
 }

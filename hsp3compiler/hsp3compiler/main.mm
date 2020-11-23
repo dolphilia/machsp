@@ -1,8 +1,5 @@
 //
 //  main.m
-//  hsp3compiler
-//
-//  Created by dolphilia on 2020/11/23.
 //
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
@@ -13,15 +10,8 @@
 #import "supio_linux.h"
 #import "hsc3.h"
 #import "token.h"
-//int main(int argc, const char * argv[]) {
-//    @autoreleasepool {
-//        // insert code here...
-//        NSLog(@"Hello, World!");
-//    }
-//    return 0;
-//}
 void usage1() {
-    static     char *p[] = {
+    static char *p[] = {
         (char *)"usage: hspcmp [options] [filename]",
         (char *)"       -o??? set output file to ???",
         (char *)"       -d    add debug information",
@@ -32,12 +22,10 @@ void usage1() {
         (char *)"       -w    force debug window on",
         (char *)"       --compath=??? set common path to ???",
         NULL };
-    int i;
-    for(i=0; p[i]; i++) {
+    for(int i=0; p[i]; i++) {
         NSLog(@"%s\n", p[i]);
     }
 }
-/*----------------------------------------------------------*/
 int main(int argc, const char * argv[]) {
     char a1,a2;
     int b,st;
@@ -52,7 +40,9 @@ int main(int argc, const char * argv[]) {
         usage1();
         return -1;
     }
-    st = 0; ppopt = 0; cmpopt = 0;
+    st = 0;
+    ppopt = 0;
+    cmpopt = 0;
     fname[0]=0;
     fname2[0]=0;
     oname[0]=0;
@@ -71,68 +61,64 @@ int main(int argc, const char * argv[]) {
 #ifdef HSPLINUX
         if (a1!='-') {
 #else
-            if ((a1!='/')&&(a1!='-')) {
+        if ((a1!='/')&&(a1!='-')) {
 #endif
-                strcpy(fname,argv[b]);
-            } else {
-                if (strncmp(argv[b], "--compath=", 10) == 0) {
-                    strcpy( compath, argv[b] + 10 );
-                    continue;
-                }
-                switch (a2) {
-                    case 'c':
-                        ppopt |= HSC3_OPT_NOHSPDEF; break;
-                    case 'p':
-                        pponly=1; break;
-                    case 'd':
-                        ppopt |= HSC3_OPT_DEBUGMODE; cmpopt|=HSC3_MODE_DEBUG; break;
-                    case 'i':
-                        ppopt |= HSC3_OPT_UTF8IN; utfopt=1; cmpopt|=HSC3_MODE_UTF8; break;
-                    case 'u':
-                        utfopt=1; cmpopt|=HSC3_MODE_UTF8; break;
-                    case 'w':
-                        cmpopt|=HSC3_MODE_DEBUGWIN; break;
-                    case 'o':
-                        strcpy( oname,argv[b]+2 );
-                        break;
-                    default:
-                        st=1;break;
-                }
+            strcpy(fname,argv[b]);
+        } else {
+            if (strncmp(argv[b], "--compath=", 10) == 0) {
+                strcpy( compath, argv[b] + 10 );
+                continue;
+            }
+            switch (a2) {
+                case 'c':
+                    ppopt |= HSC3_OPT_NOHSPDEF; break;
+                case 'p':
+                    pponly=1; break;
+                case 'd':
+                    ppopt |= HSC3_OPT_DEBUGMODE; cmpopt|=HSC3_MODE_DEBUG; break;
+                case 'i':
+                    ppopt |= HSC3_OPT_UTF8IN; utfopt=1; cmpopt|=HSC3_MODE_UTF8; break;
+                case 'u':
+                    utfopt=1; cmpopt|=HSC3_MODE_UTF8; break;
+                case 'w':
+                    cmpopt|=HSC3_MODE_DEBUGWIN; break;
+                case 'o':
+                    strcpy( oname,argv[b]+2 );
+                    break;
+                default:
+                    st=1;break;
             }
         }
-        if (st) {
-            @autoreleasepool {
-                NSLog(@"Illegal switch selected.\n");
-            }
-            return 1;
-        }
-        if (fname[0]==0) {
-            @autoreleasepool {
-                NSLog(@"No file name selected.\n");
-            }
-            return 1;
-        }
-        if (oname[0]==0) {
-            strcpy( oname,fname );
-            cutext( oname );
-            addext( oname,"ax" );
-        }
-        strcpy( fname2, fname );
-        cutext( fname2 );
-        addext( fname2,"i" );
-        addext( fname,"hsp" );            // 拡張子がなければ追加する
-        //        call main
-        hsc3 = new CHsc3;
-        hsc3->SetCommonPath( compath );
-        st = hsc3->PreProcess( fname, fname2, ppopt, fname );
-        if (( cmpopt < 2 )&&( st == 0 )) {
-            st = hsc3->Compile( fname2, oname, cmpopt );
-        }
-        puts( hsc3->GetError() );
-        hsc3->PreProcessEnd();
-        if ( hsc3 != NULL ) {
-            delete hsc3;
-            hsc3=NULL;
-        }
-        return st;
     }
+    if (st) {
+        NSLog(@"Illegal switch selected.\n");
+        return 1;
+    }
+    if (fname[0]==0) {
+        NSLog(@"No file name selected.\n");
+        return 1;
+    }
+    if (oname[0]==0) {
+        strcpy( oname,fname );
+        cutext( oname );
+        addext( oname,"ax" );
+    }
+    strcpy( fname2, fname );
+    cutext( fname2 );
+    addext( fname2,"i" );
+    addext( fname,"hsp" );            // 拡張子がなければ追加する
+    //        call main
+    hsc3 = new CHsc3;
+    hsc3->SetCommonPath( compath );
+    st = hsc3->PreProcess( fname, fname2, ppopt, fname );
+    if (( cmpopt < 2 )&&( st == 0 )) {
+        st = hsc3->Compile( fname2, oname, cmpopt );
+    }
+    puts( hsc3->GetError() );
+    hsc3->PreProcessEnd();
+    if ( hsc3 != NULL ) {
+        delete hsc3;
+        hsc3=NULL;
+    }
+    return st;
+}

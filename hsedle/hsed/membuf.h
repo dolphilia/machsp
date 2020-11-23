@@ -1,4 +1,3 @@
-
 //
 //	membuf.cpp structures
 //

@@ -32,7 +32,8 @@ int CTagStack::RegistTagID( char *tag ) {
     int i,len;
     if ( tagent>=TAGSTK_TAGMAX ) return -1;
     i = tagent; tagent++;
-    len = (int)strlen( tag );if ( len>=TAGSTK_TAGSIZE ) tag[TAGSTK_TAGSIZE-1]=0;
+    len = (int)strlen( tag );
+    if ( len>=TAGSTK_TAGSIZE ) tag[TAGSTK_TAGSIZE-1]=0;
     strcpy( mem_tag[i].name, tag );
     return i;
 }

@@ -14,7 +14,7 @@
 #import "strnote.h"
 #import "label.h"
 #import "token.h"
-#import "localinfo.h"
+#include "localinfo.h"
 #import "AppDelegate.h"
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
@@ -60,11 +60,11 @@ void CHsc3::AddSystemMacros( CToken *tk, int option )
 {
     process_option = option;
     if (( option & HSC3_OPT_NOHSPDEF )==0 ) {
-        CLocalInfo linfo;
+        //CLocalInfo linfo;
         tk->RegistExtMacro( (char *)"__hspver__", vercode );
         tk->RegistExtMacro( (char *)"__hsp30__",(char *)"" );
-        tk->RegistExtMacro( (char *)"__date__",linfo.CurrentDate() );
-        tk->RegistExtMacro( (char *)"__time__",linfo.CurrentTime() );
+        tk->RegistExtMacro( (char *)"__date__",get_current_date() );
+        tk->RegistExtMacro( (char *)"__time__",get_current_time() );
         tk->RegistExtMacro( (char *)"__line__", 0 );
         tk->RegistExtMacro( (char *)"__file__", (char *)"" );
         if ( option & HSC3_OPT_DEBUGMODE ) tk->RegistExtMacro( (char *)"_debug", (char *)"" );
