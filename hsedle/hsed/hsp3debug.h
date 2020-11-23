@@ -4,10 +4,8 @@
 //
 #ifndef __hsp3debug_h
 #define __hsp3debug_h
-
 // エラーコード
 typedef enum {
-    
     HSPERR_NONE = 0,				// スクリプト終了時
     HSPERR_UNKNOWN_CODE,
     HSPERR_SYNTAX,
@@ -50,16 +48,11 @@ typedef enum {
     HSPERR_COMDLL_ERROR,
     HSPERR_NORETVAL,
     HSPERR_FUNCTION_SYNTAX,
-    
     HSPERR_INTJUMP,					// 割り込みジャンプ時
     HSPERR_EXITRUN,					// 外部ファイル実行
     HSPERR_MAX
-    
 } HSPERROR;
-
 char *hspd_geterror( HSPERROR error );
-
-
 // Debug Info ID
 enum
 {
@@ -70,7 +63,6 @@ enum
     DEBUGINFO_MMINFO,
     DEBUGINFO_MAX
 };
-
 // Debug Flag ID
 enum
 {
@@ -81,7 +73,6 @@ enum
     HSPDEBUG_STEPOVER,
     HSPDEBUG_MAX
 };
-
 typedef struct HSP3DEBUG
 {
     //	[in/out] tranfer value
@@ -92,7 +83,6 @@ typedef struct HSP3DEBUG
     char *fname;			// ファイル名情報
     void *dbgwin;			// Debug WindowのHandle
     char *dbgval;			// debug情報取得バッファ
-    
     //	[in] system value
     //	(初期化後に設定されます)
     //
@@ -104,7 +94,5 @@ typedef struct HSP3DEBUG
     void	(* dbg_curinf)( void );			// 現在行・ファイル名の取得
     int		(* dbg_set) (int);				// debugモード設定
     char *  (* dbg_callstack) ( void );     // コールスタックの取得
-    
 } HSP3DEBUG;
-
 #endif

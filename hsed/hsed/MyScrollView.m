@@ -5,13 +5,10 @@
 //  Created by dolphilia on 2016/01/25.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #import <Foundation/Foundation.h>
 #import "MyScrollView.h"
 #import "MyTextView.h"
-
 @implementation MyScrollView
-
 - (instancetype)init
 {
     self = [super init];
@@ -19,7 +16,6 @@
     }
     return self;
 }
-
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
@@ -38,10 +34,8 @@
         //        usleep(10000);
         //    }
         //}];
-        
         [_contentView setPostsBoundsChangedNotifications:YES];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChange:) name:NSViewBoundsDidChangeNotification object:_contentView];
-
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrool1:) name:NSScrollViewWillStartLiveMagnifyNotification object:_contentView];
 //        
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrool2:) name:NSScrollViewDidEndLiveMagnifyNotification object:_contentView];
@@ -51,13 +45,11 @@
     }
     return self;
 }
-
 //-(void)scrool1:(NSNotification *)notification {NSLog(@"1");}
 //-(void)scrool2:(NSNotification *)notification {NSLog(@"2");}
 //-(void)scrool3:(NSNotification *)notification {NSLog(@"3");}
 //-(void)scrool4:(NSNotification *)notification {NSLog(@"4");}
 //-(void)scrool5:(NSNotification *)notification {NSLog(@"5");}
-
 -(void)boundsDidChange:(NSNotification *)notification { //スクロールした時
 //    MyTextView* myTextView = self.subviews[0].subviews[2];
 //    if (myTextView->isOperationChangeColor == NO) {
@@ -77,5 +69,4 @@
     }
     return self;
 }
-
 @end

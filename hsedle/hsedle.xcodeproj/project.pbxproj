@@ -15,7 +15,6 @@
 		74EF0BFF1C94093D0085B93F /* Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0BFE1C94093D0085B93F /* Document.m */; };
 		74EF0C011C94093D0085B93F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74EF0C001C94093D0085B93F /* Assets.xcassets */; };
 		74EF0C041C94093D0085B93F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74EF0C021C94093D0085B93F /* Main.storyboard */; };
-		74EF0C2D1C9409CA0085B93F /* runCompiler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0C0E1C9409CA0085B93F /* runCompiler.mm */; };
 		74EF0C2E1C9409CA0085B93F /* hspcmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0C0F1C9409CA0085B93F /* hspcmd.m */; };
 		74EF0C2F1C9409CA0085B93F /* localinfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0C121C9409CA0085B93F /* localinfo.mm */; };
 		74EF0C301C9409CA0085B93F /* hsc3.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74EF0C141C9409CA0085B93F /* hsc3.mm */; };
@@ -36,6 +35,7 @@
 		74EF0C681C9409FE0085B93F /* off_toggle_splitview_side.png in Resources */ = {isa = PBXBuildFile; fileRef = 74EF0C641C9409FE0085B93F /* off_toggle_splitview_side.png */; };
 		74EF0C691C9409FE0085B93F /* on_toggle_splitview_side.png in Resources */ = {isa = PBXBuildFile; fileRef = 74EF0C651C9409FE0085B93F /* on_toggle_splitview_side.png */; };
 		74EF0C6A1C9409FE0085B93F /* off_toggle_splitview.png in Resources */ = {isa = PBXBuildFile; fileRef = 74EF0C661C9409FE0085B93F /* off_toggle_splitview.png */; };
+		8B422BCC256B49A7008A363C /* runCompiler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422BCA256B49A6008A363C /* runCompiler.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,8 +52,6 @@
 		74EF0C001C94093D0085B93F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		74EF0C031C94093D0085B93F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		74EF0C051C94093D0085B93F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		74EF0C0D1C9409CA0085B93F /* runCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = runCompiler.h; sourceTree = "<group>"; };
-		74EF0C0E1C9409CA0085B93F /* runCompiler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = runCompiler.mm; sourceTree = "<group>"; };
 		74EF0C0F1C9409CA0085B93F /* hspcmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = hspcmd.m; sourceTree = "<group>"; };
 		74EF0C101C9409CA0085B93F /* hsp3config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3config.h; sourceTree = "<group>"; };
 		74EF0C111C9409CA0085B93F /* hsp3struct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3struct.h; sourceTree = "<group>"; };
@@ -92,6 +90,8 @@
 		74EF0C641C9409FE0085B93F /* off_toggle_splitview_side.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = off_toggle_splitview_side.png; sourceTree = "<group>"; };
 		74EF0C651C9409FE0085B93F /* on_toggle_splitview_side.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = on_toggle_splitview_side.png; sourceTree = "<group>"; };
 		74EF0C661C9409FE0085B93F /* off_toggle_splitview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = off_toggle_splitview.png; sourceTree = "<group>"; };
+		8B422BCA256B49A6008A363C /* runCompiler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = runCompiler.mm; sourceTree = "<group>"; };
+		8B422BCB256B49A7008A363C /* runCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = runCompiler.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,11 +168,11 @@
 		74EF0C0C1C9409BC0085B93F /* Compiler */ = {
 			isa = PBXGroup;
 			children = (
+				8B422BCB256B49A7008A363C /* runCompiler.h */,
+				8B422BCA256B49A6008A363C /* runCompiler.mm */,
 				74EF0C101C9409CA0085B93F /* hsp3config.h */,
 				74EF0C111C9409CA0085B93F /* hsp3struct.h */,
 				74EF0C241C9409CA0085B93F /* hsp3debug.h */,
-				74EF0C0D1C9409CA0085B93F /* runCompiler.h */,
-				74EF0C0E1C9409CA0085B93F /* runCompiler.mm */,
 				74EF0C1E1C9409CA0085B93F /* hspvar_core.h */,
 				74EF0C171C9409CA0085B93F /* supio_linux.h */,
 				74EF0C181C9409CA0085B93F /* supio_linux.mm */,
@@ -300,11 +300,11 @@
 				74EF0C5C1C9409ED0085B93F /* MyTextView.m in Sources */,
 				74EF0C361C9409CA0085B93F /* tagstack.mm in Sources */,
 				74EF0C3B1C9409CA0085B93F /* codegen.mm in Sources */,
+				8B422BCC256B49A7008A363C /* runCompiler.mm in Sources */,
 				74EF0BF61C94093D0085B93F /* AppDelegate.m in Sources */,
 				74EF0C341C9409CA0085B93F /* strnote.mm in Sources */,
 				74EF0C2E1C9409CA0085B93F /* hspcmd.m in Sources */,
 				74EF0C371C9409CA0085B93F /* errormsg.mm in Sources */,
-				74EF0C2D1C9409CA0085B93F /* runCompiler.mm in Sources */,
 				74EF0C381C9409CA0085B93F /* comutil.mm in Sources */,
 				74EF0C391C9409CA0085B93F /* label.mm in Sources */,
 			);

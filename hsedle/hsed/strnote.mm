@@ -1,44 +1,31 @@
-
 /*----------------------------------------------------------------*/
 //		notepad object related routines
 //		(Linux対応のためCR/LFだけでなくLFにも対応した版)
 /*----------------------------------------------------------------*/
-
 #import <string.h>
 #import "strnote.h"
-
 //-------------------------------------------------------------
 //		Interfaces
 //-------------------------------------------------------------
-
 CStrNote::CStrNote()
 {
     base = NULL;
     nulltmp[0] = 0;
 }
-
-
 CStrNote::~CStrNote()
 {
 }
-
-
 void CStrNote::Select( char *str )
 {
     base = str;
 }
-
-
 int CStrNote::GetSize( void )
 {
     return (int)strlen( base );
 }
-
-
 //-------------------------------------------------------------
 //		Routines
 //-------------------------------------------------------------
-
 int CStrNote::nnget( char *nbase, int line )
 {
     int a,i;
@@ -70,8 +57,6 @@ int CStrNote::nnget( char *nbase, int line )
     lastcr++;
     return 0;
 }
-
-
 int CStrNote::GetLine( char *nres, int line )
 {
     //		Get specified line from note
@@ -93,8 +78,6 @@ int CStrNote::GetLine( char *nres, int line )
     *pp=0;
     return 0;
 }
-
-
 int CStrNote::GetLine( char *nres, int line, int max )
 {
     //		Get specified line from note
@@ -120,8 +103,6 @@ int CStrNote::GetLine( char *nres, int line, int max )
     *pp=0;
     return 0;
 }
-
-
 char *CStrNote::GetLineDirect( int line )
 {
     //		Get specified line from note
@@ -141,16 +122,12 @@ char *CStrNote::GetLineDirect( int line )
     *lastnn = 0;
     return nn;
 }
-
-
 void CStrNote::ResumeLineDirect( void )
 {
     //		Resume last GetLineDirect function
     //
     *lastnn = lastcode;
 }
-
-
 int CStrNote::GetMaxLine( void )
 {
     int a,b;
@@ -172,13 +149,11 @@ int CStrNote::GetMaxLine( void )
         if (b==0) a--;
         return a;
     }
-    
     /*
      rev 54
      mingw : warning : a は未初期化で使用されうる
      問題なさそう、一応対処。
      */
-    
     int CStrNote::PutLine( char *nstr2, int line, int ovr )
     {
         //		Pet specified line to note
@@ -198,7 +173,6 @@ int CStrNote::GetMaxLine( void )
         }
         nstr = nstr2;
         if ( nstr == NULL ) { nstr=(char *)""; }
-        
         pp=nstr;
         if ( nstr2 != NULL ) strcat(nstr,"¥r¥n");
         ln=(int)strlen(nstr);			// base new str + cr/lf
@@ -238,4 +212,3 @@ int CStrNote::GetMaxLine( void )
             }
             return 0;
         }
-        

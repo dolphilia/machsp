@@ -3,39 +3,31 @@
 //	HSP3 COM support
 //	onion software/onitama 2005/4
 //
-
 #import "hsp3config.h"
-
 #ifdef HSPWIN
 #define USE_WINDOWS_COM		// WindowsCOM APIを使用する
 #endif
-
 #ifdef USE_WINDOWS_COM
 #include <windows.h>
 #include <ocidl.h>
 #include <objbase.h>
 #endif
-
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
-
 #import "comutil.h"
-
 #ifdef USE_WINDOWS_COM
 /*------------------------------------------------------------*/
 /*
  Windowsの場合は以下を使用してください。
  */
 /*------------------------------------------------------------*/
-
 static void cnvwstr( void *out, char *in, int bufsize )
 {
     //	sjis->unicode に変換
     //
     MultiByteToWideChar( CP_ACP, 0, in, -1, (LPWSTR)out, bufsize );
 }
-
 static int GetIIDFromString( IID *iid, char *ps, bool fClsid = false )
 {
     //		SJIS文字列 IID から IID 構造体を得る
@@ -60,25 +52,20 @@ static int GetIIDFromString( IID *iid, char *ps, bool fClsid = false )
     }
     return -1;
 }
-
 int ConvertIID( COM_GUID *guid, char *name )
 {
     return GetIIDFromString( (IID *)guid, name );
 }
-
 #else
-
 /*------------------------------------------------------------*/
 /*
  interface
  */
 /*------------------------------------------------------------*/
-
 int ConvertIID( COM_GUID *guid, char *name )
 {
     //		SJIS文字列 IID から IID 構造体を得る
     //		(COMサポート場合は変換が必要)
     return 0;
 }
-
 #endif

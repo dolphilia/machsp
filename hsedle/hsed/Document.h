@@ -1,10 +1,8 @@
 //
 //  Document.h
 //
-
 #import <Cocoa/Cocoa.h>
 #import "AppDelegate.h"
-
 @interface Document : NSDocument {
     AppDelegate* global;
     int accessNumber;

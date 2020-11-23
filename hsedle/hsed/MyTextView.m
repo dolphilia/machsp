@@ -1,23 +1,18 @@
 //
 //  MyTextView.m
 //
-
 #import <Foundation/Foundation.h>
 #import "MyTextView.h"
 #import "MyWindow.h"
-
 @implementation MyTextView
-
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
     global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-
     accessNumber=0;
     if (self) {
         myWindow = ((MyWindow *)self.window);
         timerCount=0;
-
         // タイマー
         NSTimer *tm = [NSTimer scheduledTimerWithTimeInterval:0.01f
                                                        target:self
@@ -25,7 +20,6 @@
                                                      userInfo:nil
                                                       repeats:YES ];
         [tm fire];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(textDidChange:)
                                                      name:NSTextDidChangeNotification
@@ -33,14 +27,12 @@
     }
     return self;
 }
-
 - (void)awakeFromNib
 {
     self.textContainerInset = NSMakeSize(4,4);//テキストの位置を微調整する
     self.automaticQuoteSubstitutionEnabled = NO; //自動でクオートを変換する機能をオフにする
     self.enabledTextCheckingTypes = 0; //文字列のチェックをオフにする
 }
-
 -(void)onTimer:(NSTimer*)timer{
     timerCount++;
     accessNumber=[self.window.title intValue]-1;
@@ -68,7 +60,6 @@
     }
     [((MyWindow *)[self window]) setAccessNumber:accessNumber];
 }
-
 -(void)textDidChange:(NSNotification *)notification
 {
     NSInteger cursorPosition = [self selectedRange].location; //カーソル位置を取得して保持する
@@ -77,17 +68,14 @@
     else {
         [global.globalTexts replaceObjectAtIndex:accessNumber withObject:self.string];
     }
-    
     //グローバル変数を設定
     //通常の行数をカウント（コメントと文字列）
     __block int lineCount = 0;
     [self.string enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
         lineCount++;
     }];
-
     [self setSelectedRange:NSMakeRange(cursorPosition, 0)];//カーソルバーの位置を元に戻す
 }
-
 - (void)insertNewline:(id)sender
 {
     //自動でタブを挿入する処理
@@ -155,9 +143,7 @@
     }
     return;
 }
-
 //---- 文字列操作のためのユーティリティ
-
 -(NSString*)charAt:(NSString*)str index:(int)index //文字列の指定位置で指定された位置の文字を返す
 {
     if (index>=str.length) {
@@ -166,7 +152,6 @@
     if (index<0) return @"";
     return [str substringWithRange:NSMakeRange(index, 1)];
 }
-
 -(NSString*)substr:(NSString*)str index:(int)index length:(int)length //文字列の部分文字列を返す
 {
     if (index>=str.length || index+length>=str.length) {
@@ -175,7 +160,6 @@
     if (index<0) return @"";
     return [str substringWithRange:NSMakeRange(index, length)];
 }
-
 -(NSString*)substrext:(NSString*)str index:(int)index length:(int)length //文字列の部分文字列を返す（字数制限が若干緩め）
 {
     if (index>str.length || index+length>str.length) {
@@ -184,7 +168,6 @@
     if (index<0) return @"";
     return [str substringWithRange:NSMakeRange(index, length)];
 }
-
 -(int)indexOf:(NSString*)str searchStr:(NSString*)searchStr
 {
     if (str.length < searchStr.length) {
@@ -192,7 +175,6 @@
     }
     return (int)[str rangeOfString:searchStr].location;
 }
-
 -(int)indexOf:(NSString*)str searchStr:(NSString*)searchStr location:(int)location
 {
     if (str.length < location+searchStr.length) {
@@ -200,7 +182,6 @@
     }
     return (int)[str rangeOfString:searchStr options:0 range:NSMakeRange(location, str.length-location)].location;
 }
-
 -(BOOL)isSpaceCharacter:(NSString*)str
 {
     if ( [str isEqual:@" "] || [str isEqual:@"\t"] || [str isEqual:@"\f"] || [str isEqual:@"\n"] || [str isEqual:@"\r"] || [str isEqual:@"\v"]) {
@@ -210,7 +191,6 @@
         return NO;
     }
 }
-
 -(BOOL)isOperatorCharacter:(NSString*)str
 {
     if ( [str isEqual:@"+"] || [str isEqual:@"-"] || [str isEqual:@"*"] || [str isEqual:@"/"] || [str isEqual:@"\\"] || [str isEqual:@"="] || [str isEqual:@"&"] || [str isEqual:@"|"] || [str isEqual:@"^"] || [str isEqual:@"<"] || [str isEqual:@">"] || [str isEqual:@"!"]) {
@@ -220,7 +200,6 @@
         return NO;
     }
 }
-
 -(BOOL)isSpaceOrOperatorCharacter:(NSString*)str
 {
     if ( [self isSpaceCharacter:str] ) {
@@ -235,5 +214,4 @@
         }
     }
 }
-
 @end

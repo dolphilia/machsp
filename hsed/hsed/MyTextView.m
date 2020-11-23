@@ -5,13 +5,10 @@
 //  Created by dolphilia on 2016/01/25.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #import <Foundation/Foundation.h>
 #import "MyTextView.h"
 #import "MyWindow.h"
-
 @implementation MyTextView
-
 //文字列操作のためのユーティリティ
 - (NSString*) charAt:(NSString*)str index:(int)index { //文字列の指定位置で指定された位置の文字を返す
     if (index>=str.length) {
@@ -75,17 +72,14 @@
         }
     }
 }
-
 -(int)getEditorLineCount { return editorLineCount; }
 -(int)getEditorTextCount { return editorTextCount; }
 -(int)getEditorTextIndex { return editorTextIndex; }
 -(int)getEditorSelectedTextCount { return editorSelectedTextCount; }
 -(NSString*)getCorsorNearString { //現在のカーソル位置付近の文字列を取得する
     NSString* corsorNearString = @"";
-
     NSInteger cursorPosition = [self selectedRange].location; //カーソル位置を取得して保持する
     NSString* str = [self string]; //現在の文字列を保持する
-    
     BOOL isBackChar = NO;//手前の文字は存在するか
     int index = (int)(str.length-(str.length-cursorPosition));
     if (index <= 0) { //手前の文字が存在しないなら
@@ -94,7 +88,6 @@
     else {
         isBackChar = YES;
     }
-    
     NSString * tmpChar = @"";
     int minusIndex = 0;
     for(int i=(int)cursorPosition-1; i>=0; i--){
@@ -121,12 +114,9 @@
     if(plusIndex==-1) {
         plusIndex = 0;
     }
-    
     corsorNearString = [self substrext:str index:(int)cursorPosition-minusIndex length:plusIndex+minusIndex];
-    
     return corsorNearString;
 }
-
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
@@ -144,31 +134,25 @@
         myWindow = ((MyWindow *)self.window);
         myScrollView = ((MyScrollView *)((MyWindow *)self.window).contentView.subviews[0].subviews[0].subviews[0].subviews[0].subviews[0]);
         timerCount=0;
-        
 //        self.backgroundColor = [NSColor colorWithCalibratedRed:47.0/255.0 green:47.0/255.0 blue:47.0/255.0 alpha:1.0]; //背景色を設定する
 //        self.insertionPointColor = [NSColor whiteColor]; //カーソルバーの色を設定
 //        self.selectedTextAttributes = @{NSBackgroundColorAttributeName: [NSColor colorWithCalibratedRed:67.0/255.0 green:65.0/255.0 blue:70.0/255.0 alpha:1.0]}; //選択中の背景色の設定
 //        self.linkTextAttributes = @{NSForegroundColorAttributeName: [NSColor colorWithCalibratedRed:178.0/255.0 green:237.0/255.0 blue:93.0/255.0 alpha:1.0]}; //リンクの文字色の設定
-
         // タイマー
         NSTimer *tm = [NSTimer scheduledTimerWithTimeInterval:0.01f target:self
          selector:@selector(onTimer:) userInfo:nil repeats:YES ];
         [tm fire];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name: NSTextDidChangeNotification object: self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectionDidChange:) name: NSTextViewDidChangeSelectionNotification object: self];
-        
         //NSTimer *tm2 = [NSTimer scheduledTimerWithTimeInterval:0.01f target:self selector:@selector(onTimer2:) userInfo:nil repeats:YES ];
         //[tm2 fire];
     }
     return self;
 }
-
 -(void)onTimer2:(NSTimer*)timer{
     //NSLog(@"%d",(int)[self selectedRange].location);
     //現在の表示範囲を得る
     documentRect = ((MyScrollView *)((MyWindow *)self.window).contentView.subviews[0].subviews[0].subviews[0].subviews[0].subviews[0]).contentView.documentVisibleRect;
-    
     if (documentVisibleY != documentRect.origin.y) {
         documentVisibleX = documentRect.origin.x;
         documentVisibleY = documentRect.origin.y;
@@ -194,7 +178,6 @@
         documentVisibleHeight = documentRect.size.height;
     }
 }
-
 -(void)onTimer:(NSTimer*)timer{
     timerCount++;
     accessNumber=[self.window.title intValue]-1;
@@ -239,7 +222,6 @@
     [self.string enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
         lineCount++;
     }];
-    
     editorLineCount = lineCount;
     editorTextCount = (int)self.string.length;
     editorTextIndex = (int)self.selectedRange.location;
@@ -253,7 +235,6 @@
     else {
         [global.globalTexts replaceObjectAtIndex:accessNumber withObject:self.string];
     }
-    
     //グローバル変数を設定
     //通常の行数をカウント（コメントと文字列）
     __block int lineCount = 0;
@@ -262,7 +243,6 @@
     }];
     editorLineCount = lineCount;
     editorTextCount = (int)self.string.length;
-    
 //    if (isOperationChangeColor == NO) {
 //        if ([global.selectedColorThemeString isEqual:@"hsed3le"]) {
 //            isOperationChangeColor = YES;
@@ -295,7 +275,6 @@
         }
     }
 }
-
 - (void)insertNewline:(id)sender {
     //NSLog(@"insert");
     //自動でタブを挿入する処理
@@ -365,7 +344,6 @@
 }
 - (void)insertText:(id)aString replacementRange:(NSRange)replacementRange {
     [super insertText:aString replacementRange:replacementRange];
-    
     //スペースキーが挿入された場合は色分けしない
     NSInteger cursorPosition = [self selectedRange].location; //カーソル位置を取得して保持する
     NSString* str = [self string]; //現在の文字列を保持する
@@ -373,7 +351,6 @@
     if ([[self charAt:str index:index-1] isEqual:@" "]) { //手前の文字がスペースなら
         return;
     }
-    
     if (isOperationChangeColor == NO) {
         if ([global.selectedColorThemeString isEqual:@"hsed3le"]) {
             isOperationChangeColor = YES;
@@ -422,8 +399,6 @@
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
 }
-
-
 -(NSAttributedString*) getAttrStringWithColor:(NSString*)text red:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue { //文字色付きのテキストを返す
     NSFont* font = [NSFont fontWithName:@"Menlo Regular" size:[global.selectedFontSizeString floatValue]];
     NSMutableAttributedString* attrStr = [[NSMutableAttributedString alloc]
@@ -448,28 +423,21 @@
     //printf("reset\n");
     [self resetTextColor]; //テキストの全体を一旦リセット
     //printf("change start\n");
-    
     //全体に対する処理
     NSString * str = self.string;
     int size = (int)str.length;
-    
     /*
      myWindow = (MyWindow *)self.window;
      myScrollView = (MyScrollView *)myWindow.contentView.subviews[0].subviews[0].subviews[0].subviews[0].subviews[0];
      */
-    
     //NSLog(@"%f",((MyScrollView *)((MyWindow *)self.window).contentView.subviews[0].subviews[0].subviews[0].subviews[0].subviews[0]).contentView.documentVisibleRect.size.height);
-    
     //現在の表示範囲を得る
     documentRect = ((MyScrollView *)((MyWindow *)self.window).contentView.subviews[0].subviews[0].subviews[0].subviews[0].subviews[0]).contentView.documentVisibleRect;
-    
     documentVisibleX = documentRect.origin.x;
     documentVisibleY = documentRect.origin.y;
     documentVisibleWidth = documentRect.size.width;
     documentVisibleHeight = documentRect.size.height;
-    
     //printf("??? %f ???",documentVisibleHeight);
-    
     //実際に表示している文字のはじめと最後を求める
     __block int firstGlyphRange = 0;
     __block int endGlyphRange = 0;
@@ -494,7 +462,6 @@
          }
          blockCounter++;
      }];
-    
     //ラベルの色分け
     __block int lineCnt = 0;
     [self.string enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
@@ -510,19 +477,16 @@
                     labelCnt++;
                 }
                 NSRange range = NSMakeRange(lineCnt, labelCnt);
-                
                 //NSLog(@"%@",labelStr);
                 [self.textStorage replaceCharactersInRange:range withAttributedString:[self getAttrStringWithColor:labelStr red:110.0/255.0 green:156.0/255.0 blue:190.0/255.0]];
             }
         }
         lineCnt += line.length + 1;
     }];
-    
     //printf("c:%d\n",blockCounter);
     //printf("f:%d\n",firstGlyphRange);
     //printf("e:%d\n",endGlyphRange);
     //printf("y:%f h:%f\n",documentVisibleY,documentVisibleHeight);
-    
     //実際に表示されている行数（右端の改行を含む）
     NSRange allGlyphs = [self.layoutManager glyphRangeForTextContainer:self.textContainer];
     [self.layoutManager
@@ -538,7 +502,6 @@
          else {
              //範囲内
              //表示されている箇所だけ色分けするようにする
-             
              //命令
              NSString* keyword_command[] = {@"goto",@"gosub",@"return",@"break",@"repeat",@"loop",@"continue",@"wait",@"await",@"dim",@"sdim",@"foreach",@"dimtype",@"dup",@"dupptr",@"end",@"stop",@"newmod",@"delmod",@"mref",@"run",@"exgoto",@"on",@"mcall",@"assert",@"logmes",@"newlab",@"resume",@"yield",@"onexit",@"onerror",@"onkey",@"onclick",@"oncmd",@"exist",@"delete",@"mkdir",@"chdir",@"dirlist",@"bload",@"bsave",@"bcopy",@"memfile",@"if",@"else",@"poke",@"wpoke",@"lpoke",@"getstr",@"chdpm",@"memexpand",@"memcpy",@"memset",@"notesel",@"noteadd",@"notedel",@"noteload",@"notesave",@"randomize",@"noteunsel",@"noteget",@"split",@"strrep",@"setease",@"sortval",@"sortstr",@"sortnote",@"sortget",@"button",@"chgdisp",@"exec",@"dialog",@"mmload",@"mmplay",@"mmstop",@"mci",@"pset",@"pget",@"syscolor",@"mes",@"print",@"title",@"pos",@"circle",@"cls",@"font",@"sysfont",@"objsize",@"picload",@"color",@"palcolor",@"palette",@"redraw",@"width",@"gsel",@"gcopy",@"gzoom",@"gmode",@"bmpsave",@"hsvcolor",@"getkey",@"listbox",@"chkbox",@"combox",@"input",@"mesbox",@"buffer",@"screen",@"bgscr",@"mouse",@"objsel",@"groll",@"line",@"clrobj",@"boxf",@"objprm",@"objmode",@"stick",@"grect",@"grotate",@"gsquare",@"gradf",@"objimage",@"objskip",@"objenable",@"celload",@"celdiv",@"celput",@"gfilter",@"setreq",@"getreq",@"mmvol",@"mmpan",@"mmstat",@"mtlist",@"mtinfo",@"devinfo",@"devinfoi",@"devprm",@"devcontrol",@"httpload",@"httpinfo",@"gmulcolor",@"setcls",@"celputm",@"newcom",@"querycom",@"delcom",@"cnvstow",@"comres",@"axobj",@"winobj",@"sendmsg",@"comevent",@"comevarg",@"sarrayconv",@"callfunc",@"cnvwtos",@"comevdisp",@"libptr",@"system",@"hspstat",@"hspver",@"stat",@"cnt",@"err",@"strsize",@"looplev",@"sublev",@"iparam",@"wparam",@"lparam",@"refstr",@"refdval",@"int",@"rnd",@"strlen",@"length",@"length2",@"length3",@"length4",@"vartype",@"gettime",@"peek",@"wpeek",@"lpeek",@"varptr",@"varuse",@"noteinfo",@"instr",@"abs",@"limit",@"getease",@"notefind",@"str",@"strmid",@"strf",@"getpath",@"strtrim",@"sin",@"cos",@"tan",@"atan",@"sqrt",@"double",@"absf",@"expf",@"logf",@"limitf",@"powf",@"geteasef",@"mousex",@"mousey",@"mousew",@"hwnd",@"hinstance",@"hdc",@"ginfo",@"objinfo",@"dirinfo",@"sysinfo",@"thismod",@"setcam"};
              int keyword_command_count = 223;
@@ -586,7 +549,6 @@
                      }
                  }
              }
-             
              //関数
              NSString* keyword_func[] = {@"comevdisp",@"lpeek",@"peek",@"wpeek",@"abs",@"absf",@"atan",@"callfunc",@"cos",@"dirinfo",@"double",@"expf",@"gettime",@"ginfo",@"int",@"length",@"length2",@"length3",@"length4",@"libptr",@"limit",@"limitf",@"logf",@"objinfo",@"powf",@"rnd",@"sin",@"sqrt",@"str",@"strlen",@"sysinfo",@"tan",@"varptr",@"vartype",@"varuse",@"cnvwtos",@"getpath",@"instr",@"noteinfo",@"strf",@"strmid",@"strtrim"};
              int keyword_func_count = 42;
@@ -647,7 +609,6 @@
                      }
                  }
              }
-             
              //プリプロセッサ
              NSString* keyword_preprocessor[] = {@"#addition",@"#cmd",@"#comfunc",@"#const",@"#deffunc",@"#defcfunc",@"#define",@"#else",@"#endif",@"#enum",@"#epack",@"#func",@"#cfunc",@"#global",@"#if",@"#ifdef",@"#ifndef",@"#include",@"#modfunc",@"#modcfunc",@"#modinit",@"#modterm",@"#module",@"#pack",@"#packopt",@"#regcmd",@"#runtime",@"#undef",@"#usecom",@"#uselib",@"#cmpopt",@"#defint",@"#defdouble",@"#defnone",@"#bootopt"};
              int keyword_preprocesser_count = 35;
@@ -684,7 +645,6 @@
                      }
                  }
              }
-             
              //マクロ
              NSString* keyword_macro[] = {@"__hspver__",@"__hsp30__",@"__date__",@"__time__",@"__line__",@"__file__",@"_debug",@"__hspdef__",@"and",@"or",@"xor",@"not",@"screen_normal",@"screen_palette",@"screen_hide",@"screen_fixedsize",@"screen_tool",@"screen_frame",@"gmode_gdi",@"gmode_mem",@"gmode_rgb0",@"gmode_alpha",@"gmode_rgb0alpha",@"gmode_add",@"gmode_sub",@"gmode_pixela",@"ginfo_mx",@"ginfo_my",@"ginfo_act",@"ginfo_sel",@"ginfo_wx1",@"ginfo_wy1",@"ginfo_wx2",@"ginfo_wy2",@"ginfo_vx",@"ginfo_vy",@"ginfo_sizex",@"ginfo_sizey",@"ginfo_winx",@"ginfo_winy",@"ginfo_mesx",@"ginfo_mesy",@"ginfo_r",@"ginfo_g",@"ginfo_b",@"ginfo_paluse",@"ginfo_dispx",@"ginfo_dispy",@"ginfo_cx",@"ginfo_cy",@"ginfo_intid",@"ginfo_newid",@"ginfo_sx",@"ginfo_sy",@"objinfo_mode",@"objinfo_bmscr",@"objinfo_hwnd",@"notemax",@"notesize",@"dir_cur",@"dir_exe",@"dir_win",@"dir_sys",@"dir_cmdline",@"dir_desktop",@"dir_mydoc",@"dir_tv",@"font_normal",@"font_bold",@"font_italic",@"font_underline",@"font_strikeout",@"font_antialias",@"objmode_normal",@"objmode_guifont",@"objmode_usefont",@"gsquare_grad",@"msgothic",@"msmincho",@"do",@"until",@"while",@"wend",@"for",@"next",@"_break",@"_continue",@"switch",@"case",@"default",@"swbreak",@"swend",@"ddim",@"ldim",@"alloc",@"m_pi",@"rad2deg",@"deg2rad",@"ease_linear",@"ease_quad_in",@"ease_quad_out",@"ease_quad_inout",@"ease_cubic_in",@"ease_cubic_out",@"ease_cubic_inout",@"ease_quartic_in",@"ease_quartic_out",@"ease_quartic_inout",@"ease_bounce_in",@"ease_bounce_out",@"ease_bounce_inout",@"ease_shake_in",@"ease_shake_out",@"ease_shake_inout",@"ease_loop",@"notefind_match",@"notefind_first",@"notefind_instr"};
              int keyword_macro_count = 118;
@@ -722,11 +682,9 @@
                      }
                  }
              }
-             
          }
      }
      ];
-    
     //通常の行数をカウント（コメントと文字列）
     __block NSUInteger lineCount = 0;
     __block NSUInteger lineLength = 0;
@@ -735,7 +693,6 @@
         int stringEndIndex = 0;
         int commentIndex = 0;
         int semicolonIndex = 0;
-        
         if (endGlyphRange < lineLength) {
             *stop = YES;
         }
@@ -745,12 +702,9 @@
             stringIndex = [self indexOf:line searchStr:@"\"" location:0]; //文字列の開始
             commentIndex = [self indexOf:line searchStr:@"//" location:0]; //コメント
             semicolonIndex = [self indexOf:line searchStr:@";" location:0]; //セミコロンのコメント
-            
             for (int i=0;i<line.length;i++) {
-                
                 if(stringIndex != -1) {
                     stringEndIndex = [self indexOf:line searchStr:@"\"" location:stringIndex+1];
-                    
                     NSString* colorSpaceName = [[[self.textStorage fontAttributesInRange:NSMakeRange(stringIndex+lineLength, 1)] objectForKey:@"NSColor"] colorSpaceName];
                     if ([colorSpaceName isEqual:@"NSCalibratedWhiteColorSpace"]) { //カラースペースをチェックする（グレースケール／RGBカラー）
                         int w = (int)([[[self.textStorage fontAttributesInRange:NSMakeRange(stringIndex+lineLength, 1)] objectForKey:@"NSColor"] whiteComponent]*100.0);
@@ -766,12 +720,10 @@
                             break;
                         }
                     }
-                    
                     if (stringEndIndex != -1) {
                         NSRange fromRange = NSMakeRange(stringIndex, stringEndIndex - stringIndex + 1);
                         NSRange range = NSMakeRange(stringIndex+lineLength, stringEndIndex - stringIndex + 1);
                         [self.textStorage replaceCharactersInRange:range withAttributedString:[self getAttrStringWithColor:[line substringWithRange:fromRange] red:0.71 green:0.49 blue:0.85]];
-                        
                         stringIndex = [self indexOf:line searchStr:@"\"" location:stringEndIndex+1];
                     }
                     else {
@@ -785,7 +737,6 @@
                         break;
                     }
                 }
-                
                 if(commentIndex != -1) {
                     //すでに文字列としての色が設定されている場合：
                     NSString* colorSpaceName = [[[self.textStorage fontAttributesInRange:NSMakeRange(commentIndex+lineLength, 1)] objectForKey:@"NSColor"] colorSpaceName];
@@ -794,7 +745,6 @@
                         if (w == 54) {
                             break;
                         }
-                        
                         NSRange fromRange = NSMakeRange(commentIndex, line.length - commentIndex);
                         NSRange range = NSMakeRange(commentIndex+lineLength, line.length - commentIndex);
                         [self.textStorage replaceCharactersInRange:range withAttributedString:[self getAttrStringWithColor:[line substringWithRange:fromRange] red:0.54 green:0.54 blue:0.54]];
@@ -827,7 +777,6 @@
                         break;
                     }
                 }
-                
                 if(semicolonIndex != -1) {
                     //すでに文字列としての色が設定されている場合：
                     NSString* colorSpaceName = [[[self.textStorage fontAttributesInRange:NSMakeRange(semicolonIndex+lineLength, 1)] objectForKey:@"NSColor"] colorSpaceName];
@@ -836,7 +785,6 @@
                         if (w == 54) {
                             break;
                         }
-                        
                         NSRange fromRange = NSMakeRange(semicolonIndex, line.length - semicolonIndex);
                         NSRange range = NSMakeRange(semicolonIndex+lineLength, line.length - semicolonIndex);
                         [self.textStorage replaceCharactersInRange:range withAttributedString:[self getAttrStringWithColor:[line substringWithRange:fromRange] red:0.54 green:0.54 blue:0.54]];
@@ -869,17 +817,14 @@
                         break;
                     }
                 }
-                
                 if(stringIndex==-1 && commentIndex==-1 && semicolonIndex == -1) {
                     break;
                 }
             }
         }
-        
         lineCount++;
         lineLength+=line.length+1;
     }];
-    
     //複数行の文字列／コメント
     //表示範囲内にかぶる場合にのみ色付けする
     int index_string = 0;
@@ -991,8 +936,6 @@
             continue;
         }
     }
-    
     [self setSelectedRange:NSMakeRange(cursorPosition, 0)];//カーソルバーの位置を元に戻す
 }
-
 @end

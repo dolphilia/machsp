@@ -7,24 +7,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "hsp3config.h"
 #include "hsc3.h"
 #include "errormsg.h"
-
 /*------------------------------------------------------------*/
 /*
  system data
  */
 /*------------------------------------------------------------*/
-
-
 /*------------------------------------------------------------*/
 /*
  interface
  */
 /*------------------------------------------------------------*/
-
 #ifdef JPNMSG
 static char *err[]={
     (char *)"",														// 0
@@ -116,12 +111,9 @@ static char *err[]={
     "*"
 };
 #endif
-
 char *cg_geterror( int error )
 {
-
     printf("%d\n",error);
     //if ((error<0)||(error>=CGERROR_MAX)) return err[0];
     return err[error];
 }
-

@@ -1,15 +1,12 @@
 
 //	strnote.cpp functions
-
 #ifndef __strnote_h
 #define __strnote_h
-
 //  class
 class CStrNote {
 public:
     CStrNote();
     ~CStrNote();
-    
     void Select( char *str );
     int GetSize( void );
     char *GetStr( void );
@@ -19,10 +16,8 @@ public:
     int PutLine( char *nstr, int line, int ovr );
     char *GetLineDirect( int line );
     void ResumeLineDirect( void );
-    
 private:
     int nnget( char *nbase, int line );
-    
     char *base;
     int lastcr;
     char *nn;
@@ -30,5 +25,4 @@ private:
     char lastcode;
     char nulltmp[4];
 };
-
 #endif

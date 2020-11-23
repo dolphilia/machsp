@@ -5,12 +5,10 @@
 //  Created by dolphilia on 2016/03/03.
 //  Copyright © 2016年 dolphilia. All rights reserved.
 //
-
 #import <Foundation/Foundation.h>
 #import "MyLogTextView.h"
 #import "AppDelegate.h"
 #import "MyWindow.h"
-
 @implementation MyLogTextView
 - (instancetype)initWithCoder:(NSCoder *)coder
 {

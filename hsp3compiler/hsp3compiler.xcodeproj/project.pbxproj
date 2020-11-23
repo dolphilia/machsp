@@ -15,7 +15,6 @@
 		8B422BBA256ACCDC008A363C /* errormsg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422BA3256ACCDB008A363C /* errormsg.mm */; };
 		8B422BBB256ACCDC008A363C /* hsc3.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422BA4256ACCDB008A363C /* hsc3.mm */; };
 		8B422BBC256ACCDC008A363C /* codegen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422BA5256ACCDB008A363C /* codegen.mm */; };
-		8B422BBD256ACCDC008A363C /* runCompiler.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422BA8256ACCDB008A363C /* runCompiler.mm */; };
 		8B422BBE256ACCDC008A363C /* localinfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422BAA256ACCDC008A363C /* localinfo.mm */; };
 		8B422BBF256ACCDC008A363C /* supio_linux.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422BAB256ACCDC008A363C /* supio_linux.mm */; };
 		8B422BC0256ACCDC008A363C /* token.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B422BAD256ACCDC008A363C /* token.mm */; };
@@ -58,11 +57,9 @@
 		8B422BA5256ACCDB008A363C /* codegen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = codegen.mm; path = ../../hsedle/hsed/codegen.mm; sourceTree = "<group>"; };
 		8B422BA6256ACCDB008A363C /* membuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = membuf.h; path = ../../hsedle/hsed/membuf.h; sourceTree = "<group>"; };
 		8B422BA7256ACCDB008A363C /* hspvar_core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hspvar_core.h; path = ../../hsedle/hsed/hspvar_core.h; sourceTree = "<group>"; };
-		8B422BA8256ACCDB008A363C /* runCompiler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = runCompiler.mm; path = ../../hsedle/hsed/runCompiler.mm; sourceTree = "<group>"; };
 		8B422BA9256ACCDB008A363C /* hsc3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hsc3.h; path = ../../hsedle/hsed/hsc3.h; sourceTree = "<group>"; };
 		8B422BAA256ACCDC008A363C /* localinfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = localinfo.mm; path = ../../hsedle/hsed/localinfo.mm; sourceTree = "<group>"; };
 		8B422BAB256ACCDC008A363C /* supio_linux.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = supio_linux.mm; path = ../../hsedle/hsed/supio_linux.mm; sourceTree = "<group>"; };
-		8B422BAC256ACCDC008A363C /* runCompiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = runCompiler.h; path = ../../hsedle/hsed/runCompiler.h; sourceTree = "<group>"; };
 		8B422BAD256ACCDC008A363C /* token.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = token.mm; path = ../../hsedle/hsed/token.mm; sourceTree = "<group>"; };
 		8B422BAE256ACCDC008A363C /* membuf.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = membuf.mm; path = ../../hsedle/hsed/membuf.mm; sourceTree = "<group>"; };
 		8B422BAF256ACCDC008A363C /* tagstack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tagstack.h; path = ../../hsedle/hsed/tagstack.h; sourceTree = "<group>"; };
@@ -108,8 +105,6 @@
 				8B422B98256ACCCA008A363C /* hsp3config.h */,
 				8B422B96256ACCCA008A363C /* hsp3debug.h */,
 				8B422B97256ACCCA008A363C /* hsp3struct.h */,
-				8B422BAC256ACCDC008A363C /* runCompiler.h */,
-				8B422BA8256ACCDB008A363C /* runCompiler.mm */,
 				8B422BB4256ACCDC008A363C /* ahtmodel.h */,
 				8B422BB5256ACCDC008A363C /* ahtmodel.mm */,
 				8B422B9E256ACCDB008A363C /* ahtobj.h */,
@@ -207,7 +202,6 @@
 				8B422BB9256ACCDC008A363C /* strnote.mm in Sources */,
 				8B422BC0256ACCDC008A363C /* token.mm in Sources */,
 				8B422BBB256ACCDC008A363C /* hsc3.mm in Sources */,
-				8B422BBD256ACCDC008A363C /* runCompiler.mm in Sources */,
 				8B422BBA256ACCDC008A363C /* errormsg.mm in Sources */,
 				8B422BC3256ACCDC008A363C /* ahtobj.mm in Sources */,
 				8B422B8C256ACC44008A363C /* main.mm in Sources */,

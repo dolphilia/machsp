@@ -1,4 +1,3 @@
-
 //
 //		Label Manager class
 //			onion software/onitama 2002/2
@@ -7,13 +6,7 @@
 #import <stdlib.h>
 #import <string.h>
 #import <ctype.h>
-
 #import "label.h"
-
-//-------------------------------------------------------------
-//		Routines
-//-------------------------------------------------------------
-
 int CLabel::StrCase( char *str )
 {
     //	string case to lower
@@ -23,11 +16,9 @@ int CLabel::StrCase( char *str )
     unsigned char a2;
     unsigned char *ss;
     hash = 0;
-    
     if ( casemode ) {			// 大文字小文字を区別する
         return GetHash( str );
     }
-    
     ss = (unsigned char *)str;
     while(1) {
         a1=*ss;
@@ -46,8 +37,6 @@ int CLabel::StrCase( char *str )
     }
     return hash;
 }
-
-
 int CLabel::GetHash( char *str )
 {
     //		HUSH値を得る
@@ -73,8 +62,6 @@ int CLabel::GetHash( char *str )
     }
     return hash;
 }
-
-
 int CLabel::StrCmp( char *str1, char *str2 )
 {
     //	string compare (0=not same/-1=same)
@@ -90,14 +77,10 @@ int CLabel::StrCmp( char *str1, char *str2 )
     }
     return -1;
 }
-
-
 int CLabel::Regist( char *name, int type, int opt )
 {
     return Regist(name, type, opt, NULL, -1);
 }
-
-
 int CLabel::Regist( char *name, int type, int opt, char const *filename, int line )
 {
     if ( name[0]==0 ) return -1;
@@ -112,7 +95,6 @@ int CLabel::Regist( char *name, int type, int opt, char const *filename, int lin
         free( mem_lab );
         mem_lab = tmp;
     }
-    
     int label_id = cur;
     LABOBJ *lab=&mem_lab[cur++];
     lab->flag = 1;
@@ -128,44 +110,33 @@ int CLabel::Regist( char *name, int type, int opt, char const *filename, int lin
     lab->init = LAB_INIT_NO;
     lab->typefix = LAB_TYPEFIX_NONE;
     SetDefinition(label_id, filename, line);
-    
     labels.insert(std::make_pair(lab->name, label_id));
     return label_id;
 }
-
-
 void CLabel::SetEternal( int id )
 {
     //		set eternal flag
     //
     mem_lab[id].eternal=1;
 }
-
-
 int CLabel::GetEternal( int id )
 {
     //		set eternal flag
     //
     return mem_lab[id].eternal;
 }
-
-
 void CLabel::SetFlag( int id, int val )
 {
     //		set eternal flag
     //
     mem_lab[id].flag = val;
 }
-
-
 void CLabel::SetOpt( int id, int val )
 {
     //		set option
     //
     mem_lab[id].opt = val;
 }
-
-
 void CLabel::SetData( int id, char *str )
 {
     //		set data
@@ -177,8 +148,6 @@ void CLabel::SetData( int id, char *str )
     }
     lab->data = RegistTable( str, (int)strlen(str)+1 );
 }
-
-
 void CLabel::SetData2( int id, char *str, int size )
 {
     //		set data
@@ -190,31 +159,23 @@ void CLabel::SetData2( int id, char *str, int size )
     }
     lab->data2 = RegistTable( str, size );
 }
-
-
 void CLabel::SetInitFlag( int id, int val )
 {
     //		set init flag
     //
     mem_lab[id].init = (short)val;
 }
-
-
 void CLabel::SetForceType( int id, int val )
 {
     //		set force type
     //
     mem_lab[id].typefix = (short)val;
 }
-
-
 int CLabel::Search( char *oname )
 {
     //		object name search
     //
-    if (cur==0) return -1;
-    
-    //int hash =
+    if (cur==0) return -1;    //int hash =
     StrCase( oname );
     if (*oname != 0) {
         std::pair<LabelMap::iterator, LabelMap::iterator> r = labels.equal_range( oname );
@@ -227,15 +188,12 @@ int CLabel::Search( char *oname )
     }
     return -1;
 }
-
-
 int CLabel::SearchLocal( char *oname, char *loname )
 {
     //		object name search ( for local )
     //
     int hash, hash2;
     if (cur == 0) return -1;
-    
     hash = StrCase(oname);
     hash2 = GetHash(loname);
     if (*oname != 0) {
@@ -246,7 +204,6 @@ int CLabel::SearchLocal( char *oname, char *loname )
                 return it->second;
             }
         }
-        
         std::pair<LabelMap::iterator, LabelMap::iterator> r2 = labels.equal_range( loname );
         for(LabelMap::iterator it = r2.first; it != r2.second; ++it) {
             LABOBJ *lab = mem_lab + it->second;
@@ -257,12 +214,6 @@ int CLabel::SearchLocal( char *oname, char *loname )
     }
     return -1;
 }
-
-
-//-------------------------------------------------------------
-//		Interfaces
-//-------------------------------------------------------------
-
 CLabel::CLabel( void )
 {
     int i;
@@ -272,8 +223,6 @@ CLabel::CLabel( void )
     for(i=0;i<def_maxblock;i++) { symblock[i] = NULL; }
     Reset();
 }
-
-
 CLabel::CLabel( int symmax, int worksize )
 {
     int i;
@@ -283,8 +232,6 @@ CLabel::CLabel( int symmax, int worksize )
     for(i=0;i<def_maxblock;i++) { symblock[i] = NULL; }
     Reset();
 }
-
-
 void CLabel::Reset( void )
 {
     int i;
@@ -296,15 +243,11 @@ void CLabel::Reset( void )
     MakeSymbolBuffer();
     casemode = 0;
 }
-
-
 CLabel::~CLabel( void )
 {
     DisposeSymbolBuffer();
     if ( mem_lab != NULL ) free( mem_lab );
 }
-
-
 void CLabel::MakeSymbolBuffer( void )
 {
     symbol = (char *)malloc( maxsymbol );
@@ -312,8 +255,6 @@ void CLabel::MakeSymbolBuffer( void )
     curblock++;
     symcur = 0;
 }
-
-
 void CLabel::DisposeSymbolBuffer( void )
 {
     int i;
@@ -325,8 +266,6 @@ void CLabel::DisposeSymbolBuffer( void )
     }
     curblock = 0;
 }
-
-
 char *CLabel::ExpandSymbolBuffer( int size )
 {
     char *p;
@@ -341,68 +280,46 @@ char *CLabel::ExpandSymbolBuffer( int size )
     }
     return p;
 }
-
-
 int CLabel::GetCount( void )
 {
     return cur;
 }
-
-
 int CLabel::GetSymbolSize( void )
 {
     return ((maxsymbol * (curblock-1))+symcur);
 }
-
-
 int CLabel::GetFlag( int id )
 {
     return mem_lab[id].flag;
 }
-
-
 int CLabel::GetOpt( int id )
 {
     return mem_lab[id].opt;
 }
-
-
 int CLabel::GetType( int id )
 {
     return mem_lab[id].type;
 }
-
-
 char *CLabel::GetName( int id )
 {
     return mem_lab[id].name;
 }
-
-
 char *CLabel::GetData( int id )
 {
     return mem_lab[id].data;
 }
-
-
 char *CLabel::GetData2( int id )
 {
     return mem_lab[id].data2;
 }
-
-
 LABOBJ *CLabel::GetLabel( int id )
 {
     return &mem_lab[id];
 }
-
-
 int CLabel::GetInitFlag( int id )
 {
     return (int)mem_lab[id].init;
 }
-
-
 char *CLabel::RegistSymbol( char *str )
 {
     //		シンボルテーブルに文字列を登録
@@ -431,8 +348,6 @@ char *CLabel::RegistSymbol( char *str )
     //return hush;
     return pmaster;
 }
-
-
 char *CLabel::RegistTable( char *str, int size )
 {
     //		シンボルテーブルにテーブルデータを登録
@@ -444,8 +359,6 @@ char *CLabel::RegistTable( char *str, int size )
     memcpy( p, src, size );
     return p;
 }
-
-
 char *CLabel::GetListToken( char *str )
 {
     char *p;
@@ -465,8 +378,6 @@ char *CLabel::GetListToken( char *str )
     *dst=0;
     return p;
 }
-
-
 int CLabel::RegistList( char **list, char *modname )
 {
     //		キーワードリストを登録する
@@ -493,8 +404,6 @@ int CLabel::RegistList( char **list, char *modname )
     }
     return 0;
 }
-
-
 int CLabel::RegistList2( char **list, char *modname )
 {
     //		キーワードリストをword@modnameの代替マクロとして登録する
@@ -516,7 +425,6 @@ int CLabel::RegistList2( char **list, char *modname )
         type = atoi( token );
         p = GetListToken( p );
         //id = Regist( token, type, opt );
-        
         id = Regist( token, LAB_TYPE_PPINTMAC, 0 );		// 内部マクロとして定義
         strcat( token, modname );
         SetData( id, token );
@@ -524,8 +432,6 @@ int CLabel::RegistList2( char **list, char *modname )
     }
     return 0;
 }
-
-
 int CLabel::RegistList3( char **list )
 {
     //		キーワードリストを色分けテーブル用に登録する
@@ -535,7 +441,6 @@ int CLabel::RegistList3( char **list )
     char tmp[256];
     int id,i,type,opt;
     static int kwcnv[]={
-        
         LAB_TYPE_PPEX_PRECMD,	//TYPE_MARK 0
         LAB_TYPE_PPMAC,			//TYPE_VAR 1
         LAB_TYPE_PPEX_INTCMD,	//TYPE_STRING 2
@@ -557,7 +462,6 @@ int CLabel::RegistList3( char **list )
         LAB_TYPE_PPEX_INTCMD,	//TYPE_USERDEF 18
         
     };
-    
     i = 1;
     plist = list;
     while(1) {
@@ -575,12 +479,6 @@ int CLabel::RegistList3( char **list )
     }
     return 0;
 }
-
-
-//-------------------------------------------------------------
-//		For debug
-//-------------------------------------------------------------
-
 char *CLabel::Prt( char *str, char *str2 )
 {
     char *p;
@@ -591,8 +489,6 @@ char *CLabel::Prt( char *str, char *str2 )
     *p++=10;
     return p;
 }
-
-
 int CLabel::HtoI( void )
 {
     //	Convert token(hex) to int
@@ -613,8 +509,6 @@ int CLabel::HtoI( void )
     }
     return val;
 }
-
-
 void CLabel::DumpLabel( char *str )
 {
     char tmp[256];
@@ -634,8 +528,6 @@ void CLabel::DumpLabel( char *str )
     }
     *p=0;
 }
-
-
 void CLabel::DumpHSPLabel( char *str, int option, int maxsize )
 {
     char tmp[256];
@@ -646,11 +538,11 @@ void CLabel::DumpHSPLabel( char *str, int option, int maxsize )
     int a;
     p = str;
     p_limit = p + maxsize;
-    
     for(a=0;a<cur;a++) {
-        if ( p >= p_limit ) break;
-        
-        LABOBJ *lab=&mem_lab[a]; typem = NULL;
+        if ( p >= p_limit )
+            break;
+        LABOBJ *lab=&mem_lab[a];
+        typem = NULL;
         switch( lab->type ) {
             case LAB_TYPE_PPEX_PRECMD:
                 if ( option & LAB_DUMPMODE_RESCMD ) typem = (char *)"pre|func";
@@ -688,8 +580,6 @@ void CLabel::DumpHSPLabel( char *str, int option, int maxsize )
     }
     *p=0;
 }
-
-
 void CLabel::AddReference( int id )
 {
     //		参照回数を+1する
@@ -697,8 +587,6 @@ void CLabel::AddReference( int id )
     LABOBJ *lab=&mem_lab[id];
     lab->ref++;
 }
-
-
 int CLabel::GetReference( int id )
 {
     //		参照回数を取得する(依存関係も含める)
@@ -717,8 +605,6 @@ int CLabel::GetReference( int id )
     }
     return total;
 }
-
-
 int CLabel::SearchRelation( int id, int rel_id )
 {
     //		ラベル依存の特定IDデータがあるかを検索
@@ -735,21 +621,16 @@ int CLabel::SearchRelation( int id, int rel_id )
     }
     return 0;
 }
-
-
 void CLabel::AddRelation( int id, int rel_id )
 {
     //		ラベル依存のIDデータを追加する
     //
     LABREL *rel;
     LABREL *tmp;
-    
     if ( id == rel_id ) return;				// 循環するようなデータは登録しない
-    
     rel = (LABREL *)ExpandSymbolBuffer( sizeof(LABREL) );
     rel->link = NULL;
     rel->rel_id = rel_id;
-    
     LABOBJ *lab=&mem_lab[id];
     if ( lab->rel == NULL ) {
         lab->rel = rel;
@@ -762,8 +643,6 @@ void CLabel::AddRelation( int id, int rel_id )
     }
     tmp->link = rel;
 }
-
-
 void CLabel::AddRelation( char *name, int rel_id )
 {
     int i;
@@ -771,17 +650,13 @@ void CLabel::AddRelation( char *name, int rel_id )
     if ( i < 0 ) return;
     AddRelation( i, rel_id );
 }
-
-
 void CLabel::SetCaseMode( int flag )
 {
     casemode = flag;
 }
-
 void CLabel::SetDefinition(int id, char const* filename, int line)
 {
     if ( !(filename != NULL && line >= 0) ) return;
-    
     LABOBJ* const it = GetLabel(id);
     it->def_file = filenames.insert(filename).first->c_str();
     it->def_line = line;

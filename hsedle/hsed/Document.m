@@ -1,11 +1,8 @@
 //
 //  Document.m
 //
-
 #import "Document.h"
-
 @implementation Document
-
 - (NSString*) substr:(NSString*)str index:(int)index length:(int)length { //文字列の部分文字列を返す
     if (index>str.length || index+length>str.length) {
         return @"";
@@ -13,7 +10,6 @@
     if (index<0) return @"";
     return [str substringWithRange:NSMakeRange(index, length)];
 }
-
 - (instancetype)init {
     self = [super init];
     accessNumber=0;
@@ -39,27 +35,20 @@
     }
     return self;
 }
-
 - (void)windowControllerDidLoadNib:(NSWindowController *)_aController {
     [super windowControllerDidLoadNib:_aController];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
-    
 }
-
 + (BOOL)autosavesInPlace {
     return YES;
 }
-
 - (void)makeWindowControllers {
     [self addWindowController:aController];
-    
     title = [aController window].title;
     [global.globalTitles addObject:title];
-    
     [aController window].title = [NSString stringWithFormat:@"%lu", (unsigned long)global.globalTitles.count];
     title = [aController window].title;
     accessNumber = [title intValue]-1;
-    
     if ([self.fileURL absoluteString] == nil) {
         [global.currentPaths addObject:@""];
     }
@@ -73,7 +62,6 @@
                                                  selector:@selector(onTimer:) userInfo:nil repeats:YES ];
     [tm fire];
 }
-
 -(void)onTimer:(NSTimer*)timer {
     if ([self.fileURL absoluteString] != nil) {
         NSString * path = [[self.fileURL absoluteString] stringByDeletingLastPathComponent];
@@ -84,7 +72,6 @@
         }
     }
 }
-
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
     NSDictionary * dic;
     dic = [NSDictionary dictionaryWithObjectsAndKeys:NSPlainTextDocumentType, NSDocumentTypeDocumentAttribute,nil];
@@ -92,7 +79,6 @@
     NSData* data = [str dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     return data;
 }
-
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
     if (outError != NULL) {
     }
@@ -111,7 +97,6 @@
         NSLog(@"Error readFromData: %@",[error localizedDescription]);
         return NO;
     }
-    
     [[[NSOperationQueue alloc] init] addOperationWithBlock:^{
         while(YES) {
             if ([self->title isEqual:@"Window"]) {
@@ -125,15 +110,12 @@
     }];
     return YES;
 }
-
 - (NSDocument *)duplicateAndReturnError:(NSError * _Nullable __autoreleasing *)outError {
     return self;
 }
-
 - (void)duplicateDocument:(id)sender {}
 - (void)duplicateDocumentWithDelegate:(id)delegate didDuplicateSelector:(SEL)didDuplicateSelector contextInfo:(void *)contextInfo {}
 - (void)lockDocument:(id)sender {}
 - (void)lockDocumentWithCompletionHandler:(void (^)(BOOL))completionHandler {}
 - (void)lockWithCompletionHandler:(void (^)(NSError * _Nullable))completionHandler {}
-
 @end

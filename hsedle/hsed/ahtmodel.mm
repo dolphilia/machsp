@@ -7,35 +7,25 @@
 #import <stdlib.h>
 #import <string.h>
 #import <stdarg.h>
-
 #import "supio_linux.h"
 #import "ahtmodel.h"
-
 //-------------------------------------------------------------
 //		Static Data
 //-------------------------------------------------------------
-
 static	int strdummy = 0;
-
 //-------------------------------------------------------------
 //		Routines
 //-------------------------------------------------------------
-
 void AHTMODEL::Mesf( char *format, ... )
 {
     char textbf[1024];
-    
     if ( stdbuf == NULL ) return;
-    
     va_list args;
     va_start( args, format );
     vsprintf( textbf, format, args );
     va_end( args );
-    
     stdbuf->PutStr( textbf );
 }
-
-
 AHTPROP *AHTMODEL::GetPropertyFromAlias( char *propname )
 {
     //		プロパティ名から検索
@@ -51,7 +41,6 @@ AHTPROP *AHTMODEL::GetPropertyFromAlias( char *propname )
     }
     return NULL;
 }
-
 AHTPROP *AHTMODEL::GetProperty( char *propname )
 {
     //		プロパティ名から検索
@@ -67,8 +56,6 @@ AHTPROP *AHTMODEL::GetProperty( char *propname )
     }
     return NULL;
 }
-
-
 int AHTMODEL::GetPropertyID( char *propname )
 {
     //		プロパティ名から検索
@@ -84,8 +71,6 @@ int AHTMODEL::GetPropertyID( char *propname )
     }
     return -1;
 }
-
-
 int AHTMODEL::GetGlobalId2( void )
 {
     //		グローバルIDを返す
@@ -93,8 +78,6 @@ int AHTMODEL::GetGlobalId2( void )
     if ( global_id < 0 ) return 0;
     return global_id;
 }
-
-
 int AHTMODEL::GetPropertyPossibleLines( void )
 {
     //		プロパティ編集が使用する行数を計算する
@@ -135,8 +118,6 @@ int AHTMODEL::GetPropertyPossibleLines( void )
     }
     return lines;
 }
-
-
 void AHTMODEL::SetAHTOption( char *name, char *value )
 {
     if (tstrcmp(name,"flag")) {
@@ -179,8 +160,6 @@ void AHTMODEL::SetAHTOption( char *name, char *value )
         return;
     }
 }
-
-
 char *AHTMODEL::GetAHTOption( char *name )
 {
     if (tstrcmp(name,"flag")) {
@@ -217,8 +196,6 @@ char *AHTMODEL::GetAHTOption( char *name )
     }
     return (char *)&dummy;
 }
-
-
 AHTPROP *AHTMODEL::SetPropertyType( char *propname, int type )
 {
     AHTPROP *p;
@@ -233,8 +210,6 @@ AHTPROP *AHTMODEL::SetPropertyType( char *propname, int type )
     p->ahttype = type;
     return p;
 }
-
-
 AHTPROP *AHTMODEL::SetPropertyDefault( char *propname, char *value )
 {
     //		プロパティのデフォルト値を設定
@@ -251,12 +226,10 @@ AHTPROP *AHTMODEL::SetPropertyDefault( char *propname, char *value )
         a1=*vp;if ((a1!=32)&&(a1!=9)) break;
         vp++;
     }
-    
     if ( a1 == 0x22 ) {
         qmode = 1;
         vp++;
     }
-    
     pname = (char *)vp;
     while(1) {
         a1=*vp;
@@ -279,8 +252,6 @@ AHTPROP *AHTMODEL::SetPropertyDefault( char *propname, char *value )
     //Alertf("%s(%d)",value,qmode);
     return prop;
 }
-
-
 AHTPROP *AHTMODEL::SetPropertyDefaultInt( char *propname, int value )
 {
     AHTPROP *p;
@@ -290,8 +261,6 @@ AHTPROP *AHTMODEL::SetPropertyDefaultInt( char *propname, int value )
     SetPropDefval( p, tmp );
     return p;
 }
-
-
 AHTPROP *AHTMODEL::SetPropertyDefaultStr( char *propname, char *value )
 {
     AHTPROP *p;
@@ -299,8 +268,6 @@ AHTPROP *AHTMODEL::SetPropertyDefaultStr( char *propname, char *value )
     SetPropDefval( p, value );
     return p;
 }
-
-
 AHTPROP *AHTMODEL::SetPropertyDefaultDouble( char *propname, double value )
 {
     AHTPROP *p;
@@ -310,16 +277,12 @@ AHTPROP *AHTMODEL::SetPropertyDefaultDouble( char *propname, double value )
     SetPropDefval( p, tmp );
     return p;
 }
-
-
 int AHTMODEL::SetProp( AHTPROP *prop, char *name, char *value )
 {
     int i,type;
     char tmp[32];
     AHTPROP *p;
-    
     p = prop;
-    
     strcpy2( tmp, name, 16 );
     strcase( tmp );
     i = -1;
@@ -327,14 +290,12 @@ int AHTMODEL::SetProp( AHTPROP *prop, char *name, char *value )
     if (tstrcmp(tmp,"name")) i = 0;
     if (tstrcmp(tmp,"help")) i = 1;
     if (tstrcmp(tmp,"default")) i = 2;
-    
     if (tstrcmp(tmp,"sub")) i = 3;
     if (tstrcmp(tmp,"sub2")) i = 4;
     if (tstrcmp(tmp,"min")) i = 3;
     if (tstrcmp(tmp,"max")) i = 4;
     if (tstrcmp(tmp,"prm")) i = 3;
     if (tstrcmp(tmp,"opt")) i = 4;
-    
     if (tstrcmp(tmp,"int")) { i = 5; type = AHTTYPE_EDIT_INT; }
     if (tstrcmp(tmp,"double")) { i = 5; type = AHTTYPE_EDIT_DOUBLE; }
     if (tstrcmp(tmp,"str")) { i = 5; type = AHTTYPE_EDIT_STRING; }
@@ -344,14 +305,11 @@ int AHTMODEL::SetProp( AHTPROP *prop, char *name, char *value )
     if (tstrcmp(tmp,"font")) { i = 5; type = AHTTYPE_FONT_STRING; }
     if (tstrcmp(tmp,"file")) { i = 5; type = AHTTYPE_FILE_STRING; }
     if (tstrcmp(tmp,"exec")) { i = 5; type = AHTTYPE_EXTF_STRING; }
-    
     if (tstrcmp(tmp,"parts")) { i = 5; type = AHTTYPE_PARTS_INT; }
     if (tstrcmp(tmp,"pprop")) { i = 5; type = AHTTYPE_PARTS_PROP_STRING; }
     if (tstrcmp(tmp,"popt")) { i = 5; type = AHTTYPE_PARTS_OPT_STRING; }
-    
     //Alertf( "%s=%s(%d)", tmp, value, i );
     if ( i < 0 ) return -1;
-    
     switch( i ) {
         case 0:
             SetPropName( p, value );
@@ -372,11 +330,8 @@ int AHTMODEL::SetProp( AHTPROP *prop, char *name, char *value )
             p->ahttype = type;
             break;
     }
-    
     return i;
 }
-
-
 AHTPROP *AHTMODEL::SetProperty( char *propname, char *name, char *value )
 {
     AHTPROP *p;
@@ -392,14 +347,11 @@ AHTPROP *AHTMODEL::SetProperty( char *propname, char *name, char *value )
     if ( SetProp( p, name, value ) < 0 ) return NULL;
     return p;
 }
-
-
 /*
 	rev 54
 	mingw : warning : 比較は常に…
 	に対処。
  */
-
 int AHTMODEL::SetAHTPropertyString( char *propname, char *str )
 {
     //		AHT設定文字列を解析する
@@ -415,7 +367,6 @@ int AHTMODEL::SetAHTPropertyString( char *propname, char *str )
     vp = str;
     res = 0;
     p = SetProperty( propname, NULL, NULL );
-    
     while(1) {
         //		パラメーター名を抽出
         while(1) {
@@ -499,7 +450,6 @@ int AHTMODEL::SetAHTPropertyString( char *propname, char *str )
                 refprop = p;
                 amb = 0;
             }
-            
             if ( amb ) {
                 if ( SetProp( p, pname, (char *)"" ) < 0 ) res = 1;
             }
@@ -508,12 +458,9 @@ int AHTMODEL::SetAHTPropertyString( char *propname, char *str )
     }
     return res;
 }
-
-
 //-------------------------------------------------------------
 //		AHTModel Interfaces
 //-------------------------------------------------------------
-
 AHTMODEL::AHTMODEL( void )
 {
     flag = AHTMODEL_FLAG_NONE;
@@ -523,21 +470,17 @@ AHTMODEL::AHTMODEL( void )
     SetNextID( -1 );
     SetPrevID( -1 );
     SetGlobalId( 0 );
-    
     obj.option1 = 0;
     obj.option2 = 0;
     obj.option3 = 0;
     obj.option4 = 0;
-    
     prop_cnt = 0;
     mem_prop_size = 0;
     mem_prop = NULL;
-    
     source = NULL;
     propstr = NULL;
     exp = NULL;
     stdbuf = NULL;
-    
     *name = 0;
     *classname = 0;
     *author = 0;
@@ -545,12 +488,9 @@ AHTMODEL::AHTMODEL( void )
     *fname = 0;
     *fpath = 0;
     refprop = NULL;
-    
     *icon = 0;
     iconid = 0;
 }
-
-
 AHTMODEL::~AHTMODEL( void )
 {
     int i;
@@ -561,8 +501,6 @@ AHTMODEL::~AHTMODEL( void )
     if ( propstr != NULL ) delete propstr;
     if ( exp != NULL ) delete exp;
 }
-
-
 AHTPROP *AHTMODEL::AddProperty( void )
 {
     int i,sz;
@@ -576,8 +514,6 @@ AHTPROP *AHTMODEL::AddProperty( void )
     mem_prop[ i ] = obj;
     return obj;
 }
-
-
 void AHTMODEL::SetSource( char *filename )
 {
     strcpy2( fname, filename, AHTMODEL_FNMAX );
@@ -585,56 +521,38 @@ void AHTMODEL::SetSource( char *filename )
     exp = new CMemBuf( 0x1000 );
     flag = AHTMODEL_FLAG_READY;
 }
-
-
 void AHTMODEL::SetSourcePath( char *filename )
 {
     strcpy2( fpath, filename, AHTMODEL_FNMAX );
 }
-
-
 void AHTMODEL::SetName( char *dname )
 {
     strcpy2( name, dname, 128 );
 }
-
-
 void AHTMODEL::SetAuthor( char *name )
 {
     strcpy2( author, name, 32 );
 }
-
-
 void AHTMODEL::SetVersion( char *name )
 {
     strcpy2( ver, name, 32 );
 }
-
-
 void AHTMODEL::SetClass( char *name )
 {
     strcpy2( classname, name, 128 );
 }
-
-
 void AHTMODEL::SetIconFile( char *name )
 {
     strcpy2( icon, name, 32 );
 }
-
-
 void AHTMODEL::SetIconId( int id )
 {
     iconid = id;
 }
-
-
 void AHTMODEL::SetStdBuffer( CMemBuf *buf )
 {
     stdbuf = buf;
 }
-
-
 void AHTMODEL::SetPropName( AHTPROP *prop, char *value )
 {
     char *p;
@@ -642,8 +560,6 @@ void AHTMODEL::SetPropName( AHTPROP *prop, char *value )
     propstr->PutStrBlock( value );
     prop->name = p;
 }
-
-
 void AHTMODEL::SetPropOrgName( AHTPROP *prop, char *value )
 {
     char *p;
@@ -652,8 +568,6 @@ void AHTMODEL::SetPropOrgName( AHTPROP *prop, char *value )
     prop->orgname = p;
     prop->name = p;
 }
-
-
 void AHTMODEL::SetPropHelp( AHTPROP *prop, char *value )
 {
     char *p;
@@ -661,8 +575,6 @@ void AHTMODEL::SetPropHelp( AHTPROP *prop, char *value )
     propstr->PutStrBlock( value );
     prop->help = p;
 }
-
-
 void AHTMODEL::SetPropDefval( AHTPROP *prop, char *value )
 {
     char *p;
@@ -670,8 +582,6 @@ void AHTMODEL::SetPropDefval( AHTPROP *prop, char *value )
     propstr->PutStrBlock( value );
     prop->defval = p;
 }
-
-
 void AHTMODEL::SetPropDefval2( AHTPROP *prop, char *value )
 {
     char *p;
@@ -679,8 +589,6 @@ void AHTMODEL::SetPropDefval2( AHTPROP *prop, char *value )
     propstr->PutStrBlock( value );
     prop->defval2 = p;
 }
-
-
 void AHTMODEL::SetPropDefval3( AHTPROP *prop, char *value )
 {
     char *p;
@@ -688,20 +596,14 @@ void AHTMODEL::SetPropDefval3( AHTPROP *prop, char *value )
     propstr->PutStrBlock( value );
     prop->defval3 = p;
 }
-
-
 void AHTMODEL::SetNextID( int id )
 {
     obj.next=id;
 }
-
-
 void AHTMODEL::SetPrevID( int id )
 {
     obj.prev=id;
 }
-
-
 char *AHTMODEL::GetName( void )
 {
     if ( refprop != NULL ) {
@@ -709,18 +611,13 @@ char *AHTMODEL::GetName( void )
     }
     return name;
 }
-
-
 void AHTMODEL::SetHelpKeyword( char *name )
 {
     strcpy2( helpkw, name, 256 );
 }
-
-
 //-------------------------------------------------------------
 //		AHTProperty Interfaces
 //-------------------------------------------------------------
-
 AHTPROP::AHTPROP( void )
 {
     char *p;
@@ -738,15 +635,11 @@ AHTPROP::AHTPROP( void )
     newval = NULL;
     outname = NULL;
 }
-
-
 AHTPROP::~AHTPROP( void )
 {
     if ( newval != NULL ) free( newval );
     if ( outname != NULL ) free( outname );
 }
-
-
 void AHTPROP::SetOutValue( char *data )
 {
     //		ダブルクォート付加時の書式展開
@@ -755,7 +648,6 @@ void AHTPROP::SetOutValue( char *data )
     unsigned char a1;
     unsigned char *p;
     unsigned char *src;
-    
     if ( outname != NULL ) { free( outname ); outname = NULL; }
     i = ( (int)strlen( data ) * 2 ) + 1;
     if ( i < 64 ) i = 64;
@@ -763,11 +655,9 @@ void AHTPROP::SetOutValue( char *data )
     *outname = 0;
     p = (unsigned char *)outname;
     src = (unsigned char *)data;
-    
     //*p++ = 0x22;
     //strcpy( (char *)p, data );
     //strcat( (char *)p, "¥"" );
-    
     if ( ahtmode & AHTMODE_OUTPUT_PURE ) {
         *p++ = 0x22;
     } else {
@@ -775,7 +665,6 @@ void AHTPROP::SetOutValue( char *data )
         *p++ = '\\';
         *p++ = 0x22;
     }
-    
     while(1) {
         a1 = *src++;
         if ( a1 == 0 ) break;
@@ -802,15 +691,12 @@ void AHTPROP::SetOutValue( char *data )
         }
         *p++ = a1;
     }
-    
     if ( ahtmode & AHTMODE_OUTPUT_PURE ) {
         strcpy( (char *)p, "\"" );
                } else {
                    strcpy( (char *)p, "\\\"\"" );
                }
                }
-               
-               
                char *AHTPROP::GetOutValue( void )
         {
             if ( ahtmode & AHTMODE_OUTPUT_RAW ) {
@@ -822,8 +708,6 @@ void AHTPROP::SetOutValue( char *data )
             }
             return GetValue();
         }
-               
-               
                void AHTPROP::SetNewVal( char *data )
         {
             int i;
@@ -837,26 +721,20 @@ void AHTPROP::SetOutValue( char *data )
             newval = (char *)malloc( i );
             strcpy( newval, data );
         }
-               
                char *AHTPROP::GetValue( void )
         {
             if ( newval != NULL ) return newval;
             return defval;
         }
-               
-               
                int AHTPROP::GetValueInt( void )
         {
             char *p;
             p = GetValue();
             return atoi( p );
         }
-               
-               
                double AHTPROP::GetValueDouble( void )
         {
             char *p;
             p = GetValue();
             return atof( p );
         }
-               

@@ -2,31 +2,23 @@
 /*----------------------------------------------------------------*/
 //		local info related routines
 /*----------------------------------------------------------------*/
-
 #import <sys/time.h>
 #import <time.h>
 #import <stdio.h>
 #import <string.h>
 #import "localinfo.h"
-
 //-------------------------------------------------------------
 //		Interfaces
 //-------------------------------------------------------------
-
 CLocalInfo::CLocalInfo()
 {
 }
-
-
 CLocalInfo::~CLocalInfo()
 {
 }
-
-
 //-------------------------------------------------------------
 //		Routines
 //-------------------------------------------------------------
-
 int CLocalInfo::GetTime( int index )
 {
     /*
@@ -43,10 +35,8 @@ int CLocalInfo::GetTime( int index )
      */
     struct timeval tv;
     struct tm *lt;
-    
     gettimeofday( &tv, NULL );	// MinGWだとVerによって通りません
     lt = localtime( &tv.tv_sec );
-    
     switch( index ) {
         case 0:
             return lt->tm_year+1900;
@@ -70,20 +60,15 @@ int CLocalInfo::GetTime( int index )
     }
     return 0;
 }
-
-
 char *CLocalInfo::CurrentTime( void )
 {
-    sprintf( curtime, "\"%02d:%02d:%02d\"",
+    sprintf(curtime, "\"%02d:%02d:%02d\"",
             GetTime(4),GetTime(5),GetTime(6) );
     return curtime;
 }
-
-
 char *CLocalInfo::CurrentDate( void )
 {
     sprintf( curdate, "\"%04d/%02d/%02d\"",
             GetTime(0),GetTime(1),GetTime(3) );
     return curdate;
 }
-

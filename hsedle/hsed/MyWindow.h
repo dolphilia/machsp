@@ -1,13 +1,10 @@
 //
 //  MyWindow.h
 //
-
 #ifndef MyWindow_h
 #define MyWindow_h
-
 #import <Cocoa/Cocoa.h>
 #import "AppDelegate.h"
-
 @interface MyWindow:NSWindow {
     AppDelegate* global;
 @public
@@ -19,7 +16,5 @@
 - (BOOL)preg_match:(NSString*)str patternStr:(NSString*)patternStr;
 - (NSString*)trim:(NSString*)str;
 - (NSString*)append:(NSString*)str append:(NSString*)append;
-
 @end
-
 #endif /* MyWindow_h */

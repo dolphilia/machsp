@@ -4,12 +4,10 @@
 //
 #ifndef __token_h
 #define __token_h
-
 #import <vector>
 #import <string>
 #import <map>
 #import <memory>
-
 // token type
 #define TK_NONE 0
 #define TK_OBJ 1
@@ -25,11 +23,9 @@
 #define TK_ERROR -1
 #define TK_CALCERROR -2
 #define TK_CALCSTOP -3
-
 #define DUMPMODE_RESCMD 3
 #define DUMPMODE_DLLCMD 4
 #define DUMPMODE_ALL 15
-
 #define CMPMODE_PPOUT 1
 #define CMPMODE_OPTCODE 2
 #define CMPMODE_CASE 4
@@ -38,10 +34,8 @@
 #define CMPMODE_VARINIT 32
 #define CMPMODE_OPTPRM 64
 #define CMPMODE_SKIPJPSPC 128
-
 #define CG_FLAG_ENABLE 0
 #define CG_FLAG_DISABLE 1
-
 #define CG_LASTCMD_NONE 0
 #define CG_LASTCMD_LET 1
 #define CG_LASTCMD_CMD 2
@@ -49,59 +43,45 @@
 #define CG_LASTCMD_CMDMIF 4
 #define CG_LASTCMD_CMDELSE 5
 #define CG_LASTCMD_CMDMELSE 6
-
 #define CG_IFLEV_MAX 128
 #define CG_REPLEV_MAX 128
-
 // option for 'GetTokenCG'
 #define GETTOKEN_DEFAULT 0
 #define GETTOKEN_NOFLOAT 1		// '.'を小数点と見なさない(整数のみ取得)
 #define GETTOKEN_LABEL 2		// '*'に続く名前をラベルとして取得
 #define GETTOKEN_EXPRBEG 4		// 式の先頭
-
 #define CG_LOCALSTRUCT_MAX 256
-
 #define CG_IFCHECK_SCOPE 0
 #define CG_IFCHECK_LINE 1
-
 #define CG_LIBMODE_NONE -1
 #define CG_LIBMODE_DLL 0
 #define CG_LIBMODE_DLLNEW 1
 #define CG_LIBMODE_COM 2
 #define CG_LIBMODE_COMNEW 3
-
 #define	CALCVAR double
-
 #define LINEBUF_MAX 0x10000
-
 // line mode type
 #define LMODE_ON 0
 #define LMODE_STR 1
 #define LMODE_COMMENT 2
 #define LMODE_OFF 3
-
 // macro default data storage
 typedef struct MACDEF {
     int		index[32];				// offset to data
     char	data[1];
 } MACDEF;
-
 // module related define
 #define OBJNAME_MAX 60
 #define MODNAME_MAX 20
-
 #define COMP_MODE_DEBUG 1
 #define COMP_MODE_DEBUGWIN 2
 #define COMP_MODE_UTF8 4
-
 #define SWSTACK_MAX 32
-
 #define HEDINFO_RUNTIME 0x1000		// 動的ランタイムを有効にする
 #define HEDINFO_NOMMTIMER 0x2000	// マルチメディアタイマーを無効にする
 #define HEDINFO_NOGDIP 0x4000		// GDI+による描画を無効にする
 #define HEDINFO_FLOAT32 0x8000		// 実数を32bit floatとして処理する
 #define HEDINFO_ORGRND 0x10000		// 標準の乱数発生を使用する
-
 enum ppresult_t {
     PPRESULT_SUCCESS,				// 成功
     PPRESULT_ERROR,					// エラー
@@ -110,17 +90,14 @@ enum ppresult_t {
     PPRESULT_WROTE_LINE,			// 1行書き込まれた
     PPRESULT_WROTE_LINES,			// 2行以上書き込まれた
 };
-
 class CLabel;
 class CMemBuf;
 class CTagStack;
 class CStrNote;
 class AHTMODEL;
-
 #define SCNVBUF_DEFAULTSIZE 0x8000
 #define SCNV_OPT_NONE 0
 #define SCNV_OPT_SJISUTF8 1
-
 //  token analysis class
 class CToken {
 public:
@@ -129,10 +106,8 @@ public:
     ~CToken();
     CLabel *GetLabelInfo( void );
     void SetLabelInfo( CLabel *lbinfo );
-    
     //void InitSCNV( int size );
     //char *ExecSCNV( char *srcbuf, int opt );
-    
     void Error( char *mes );
     void LineError( char *mes, int line, char *fname );
     void SetError( char *mes );
@@ -141,25 +116,21 @@ public:
     void SetErrorBuf( CMemBuf *buf );
     void SetAHT( AHTMODEL *aht );
     void SetAHTBuffer( CMemBuf *aht );
-    
     void ResetCompiler( void );
     int GetToken( void );
     int PeekToken( void );
     int Calc( CALCVAR &val );
     char *CheckValidWord( void );
-    
     //		For preprocess
     //
     ppresult_t Preprocess( char *str );
     ppresult_t PreprocessNM( char *str );
     void PreprocessCommentCheck( char *str );
-    
     int ExpandLine( CMemBuf *buf, CMemBuf *src, char *refname );
     int ExpandFile( CMemBuf *buf, char *fname, char *refname );
     void FinishPreprocess( CMemBuf *buf );
     void SetCommonPath( char *path );
     int SetAdditionMode( int mode );
-    
     void SetLook( char *buf );
     char *GetLook( void );
     char *GetLookResult( void );
@@ -174,19 +145,15 @@ public:
     int RegistExtMacro( char *keyword, int val );
     void SetPackfileOut( CMemBuf *pack );
     int AddPackfile( char *name, int mode );
-    
     void InitSCNV( int size );
     char *ExecSCNV( char *srcbuf, int opt );
     int CheckByteSJIS( unsigned char byte );
     int CheckByteUTF8( unsigned char byte );
     int SkipMultiByte( unsigned char byte );
-    
-    
     //		For Code Generate
     //
     int GenerateCode( char *fname, char *oname, int mode );
     int GenerateCode( CMemBuf *srcbuf, char *oname, int mode );
-    
     void PutCS( int type, int value, int exflg );
     void PutCSSymbol( int label_id, int exflag );
     int GetCS( void );
@@ -213,16 +180,13 @@ public:
     int PutStructEnd( char *name, int libindex, int otindex, int funcflag );
     int PutStructEnd( int i, char *name, int libindex, int otindex, int funcflag );
     int PutStructEndDll( char *name, int libindex, int subid, int otindex );
-    
     void CalcCG( int ex );
-    
     int GetHeaderOption( void ) { return hed_option; }
     char *GetHeaderRuntimeName( void ) { return hed_runtime; }
     void SetHeaderOption( int opt, char *name ) { hed_option=opt; strcpy( hed_runtime, name ); }
     int GetCmpOption( void ) { return hed_cmpmode; }
     void SetCmpOption( int cmpmode ) { hed_cmpmode = cmpmode; }
     void SetUTF8Input( int utf8mode ) { pp_utf8 = utf8mode; }
-    
 private:
     //		For preprocess
     //
@@ -237,7 +201,6 @@ private:
     void Calc_bool2( CALCVAR &v );
     void Calc_compare( CALCVAR &v );
     void Calc_start( CALCVAR &v );
-    
     ppresult_t PP_Define( void );
     ppresult_t PP_Const( void );
     ppresult_t PP_Enum( void );
@@ -261,14 +224,12 @@ private:
     ppresult_t PP_Ahtout( void );
     ppresult_t PP_Ahtmes( void );
     ppresult_t PP_BootOpt( void );
-    
     void SetModuleName( char *name );
     char *GetModuleName( void );
     void AddModuleName( char *str );
     void FixModuleName( char *str );
     int IsGlobalMode( void );
     int CheckModuleName( char *name );
-    
     char *SkipLine( char *str, int *pline );
     char *ExpandStr( char *str, int opt );
     char *ExpandStrEx( char *str );
@@ -282,9 +243,7 @@ private:
     char *SendLineBuf( char *str );
     char *SendLineBufPP( char *str, int *lines );
     int ReplaceLineBuf( char *str1, char *str2, char *repl, int macopt, MACDEF *macdef );
-    
     void SetErrorSymbolOverdefined(char* keyword, int label_id);
-    
     //		For Code Generate
     //
     int GenerateCodeMain( CMemBuf *src );
@@ -303,7 +262,6 @@ private:
     int GenerateCodePRMF4( int t );
     void GenerateCodeMethod( void );
     void GenerateCodeLabel( char *name, int ex );
-    
     void GenerateCodePP_regcmd( void );
     void GenerateCodePP_cmd( void );
     void GenerateCodePP_deffunc0( int is_command );
@@ -316,12 +274,10 @@ private:
     void GenerateCodePP_usecom( void );
     void GenerateCodePP_comfunc( void );
     void GenerateCodePP_defvars( int fixedvalue );
-    
     int GetParameterTypeCG( char *name );
     int GetParameterStructTypeCG( char *name );
     int GetParameterFuncTypeCG( char *name );
     int GetParameterResTypeCG( char *name );
-    
     char *GetTokenCG( char *str, int option );
     char *GetTokenCG( int option );
     char *GetSymbolCG( char *str );
@@ -335,9 +291,7 @@ private:
     void CheckInternalIF( int opt );
     void CheckCMDIF_Set( int mode );
     void CheckCMDIF_Fin( int mode );
-    
     int SetVarsFixed( char *varname, int fixedvalue );
-    
     void CalcCG_token( void );
     void CalcCG_token_exprbeg( void );
     void CalcCG_token_exprbeg_redo( void );
@@ -350,11 +304,9 @@ private:
     void CalcCG_bool( void );
     void CalcCG_compare( void );
     void CalcCG_start( void );
-    
     bool CG_optCode() const { return (hed_cmpmode & CMPMODE_OPTCODE) != 0; }
     bool CG_optInfo() const { return (hed_cmpmode & CMPMODE_OPTINFO) != 0; }
     void CG_MesLabelDefinition(int label_id);
-    
     //		Data
     //
     CLabel *lb;						// label object
@@ -368,7 +320,6 @@ private:
     AHTMODEL *ahtmodel;				// AHT process data
     char common_path[HSP_MAX_PATH];	// common path
     char search_path[HSP_MAX_PATH];	// search path
-    
     int line;
     int val;
     int ttype;						// last token type
@@ -395,7 +346,6 @@ private:
     int fileadd;					// File Addition Mode (1=on)
     int swflag;						// generator sw enable flag
     char *ahtkeyword;				// keyword for AHT
-    
     char modname[MODNAME_MAX+2];	// Module Name Prefix
     int	modgc;						// Global counter for Module
     int enumgc;						// Global counter for Enum
@@ -409,7 +359,6 @@ private:
     int cs_lasttype;				// パラメーターのタイプ(単一時)
     int calccount;					// パラメーター個数
     int pp_utf8;                    // ソースコードをUTF-8として処理する(0=無効)
-    
     //		for CodeGenerator
     //
     int cg_flag;
@@ -428,7 +377,6 @@ private:
     char *cg_str;
     unsigned char *cg_wp;
     char cg_libname[1024];
-    
     int	replev;
     int repend[CG_REPLEV_MAX];
     int iflev;
@@ -437,34 +385,28 @@ private:
     int ifscope[CG_IFLEV_MAX];
     int ifptr[CG_IFLEV_MAX];
     int ifterm[CG_IFLEV_MAX];
-    
     int cg_lastcmd;
     int cg_lasttype;
     int cg_lastval;
     int cg_lastcs;
-    
     CMemBuf *cs_buf;
     CMemBuf *ds_buf;
     CMemBuf *ot_buf;
     CMemBuf *di_buf;
-    
     CMemBuf *li_buf;
     CMemBuf *fi_buf;
     CMemBuf *mi_buf;
     CMemBuf *fi2_buf;
     CMemBuf *hpi_buf;
-    
 #ifdef HSP_DS_POOL
     std::map<double, int> double_literal_table; // 定数プール用
     std::map<std::string, int> string_literal_table;
 #endif
-    
     //		for Header info
     int hed_option;
     char hed_runtime[64];
     int hed_cmpmode;
     int hed_autoopt_timer;
-    
     //		for Struct
     int	cg_stnum;
     int	cg_stsize;
@@ -473,19 +415,14 @@ private:
     int cg_libmode;
     int cg_localstruct[CG_LOCALSTRUCT_MAX];
     int cg_localcur;
-    
     //		for Error
     //
     int cg_errline;
     int cg_orgline;
     char cg_orgfile[HSP_MAX_PATH];
-    
     //		for SCNV
     //
     char *scnvbuf;			// SCNV変換バッファ
     int	scnvsize;			// SCNV変換バッファサイズ
-    
 };
-
-
 #endif

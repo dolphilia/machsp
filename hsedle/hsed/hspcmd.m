@@ -1,7 +1,6 @@
 //
 //		settings for HSP
 //
-
 char s_rec[1]= "";
 char *hsp_prestr[] = {
     //
@@ -15,9 +14,7 @@ char *hsp_prestr[] = {
     //	"$000 8 goto",
     //
     s_rec,
-
     //	program control commands (ver3.0)
-    
     (char *)"$000 15 goto",
     (char *)"$001 15 gosub",
     (char *)"$002 15 return",
@@ -27,7 +24,6 @@ char *hsp_prestr[] = {
     (char *)"$006 15 continue",
     (char *)"$007 15 wait",
     (char *)"$008 15 await",
-    
     (char *)"$009 15 dim",
     (char *)"$00a 15 sdim",
     //	"$00d 15 skiperr",				// delete
@@ -36,7 +32,6 @@ char *hsp_prestr[] = {
     (char *)"$00d 15 dimtype",				// (ver3.0)
     (char *)"$00e 15 dup",
     (char *)"$00f 15 dupptr",				// (ver3.0)
-    
     (char *)"$010 15 end",
     (char *)"$011 15 stop",
     (char *)"$012 15 newmod",				// (ver3.0)
@@ -53,36 +48,28 @@ char *hsp_prestr[] = {
     (char *)"$01d 15 newlab",				// (ver3.2)
     (char *)"$01e 15 resume",				// (ver3.2)
     (char *)"$01f 15 yield",				// (ver3.2)
-    
     //	"$015 15 logmode",				// (ver2.55)
     //	"$016 15 logmes",				// (ver2.55)
-    
     //	enhanced command (ver2.6)
-    
     (char *)"$10000 8 onexit",
     (char *)"$10001 8 onerror",
     (char *)"$10002 8 onkey",
     (char *)"$10003 8 onclick",
     (char *)"$10004 8 oncmd",
-    
     (char *)"$011 8 exist",
     (char *)"$012 8 delete",
     (char *)"$013 8 mkdir",
     (char *)"$014 8 chdir",
-    
     (char *)"$015 8 dirlist",
     (char *)"$016 8 bload",
     (char *)"$017 8 bsave",
     (char *)"$018 8 bcopy",
     (char *)"$019 8 memfile",				// (changed on ver2.6*)
-    
     //	no macro command (ver2.61)
     //
     (char *)"$000 11 if",
     (char *)"$001 11 else",
-    
     //	normal commands
-    
     (char *)"$01a 8 poke",
     (char *)"$01b 8 wpoke",
     (char *)"$01c 8 lpoke",
@@ -91,7 +78,6 @@ char *hsp_prestr[] = {
     (char *)"$01f 8 memexpand",				// (3.0)
     (char *)"$020 8 memcpy",				// (ver2.55)
     (char *)"$021 8 memset",				// (ver2.55)
-    
     (char *)"$022 8 notesel",				// (changed on ver2.55)
     (char *)"$023 8 noteadd",				// (changed on ver2.55)
     (char *)"$024 8 notedel",				// (changed on ver2.55)
@@ -107,28 +93,20 @@ char *hsp_prestr[] = {
     (char *)"$02e 8 sortstr",				// (3.5)
     (char *)"$02f 8 sortnote",				// (3.5)
     (char *)"$030 8 sortget",				// (3.5)
-
-    
     //	enhanced command (ver2.2)
-    
     (char *)"$10000 9 button",
-    
     (char *)"$001 9 chgdisp",
     (char *)"$002 9 exec",
     (char *)"$003 9 dialog",
-    
     //	"$007 9 palfade",				// delete
     //	"$009 9 palcopy",				// delete
-    
     (char *)"$008 9 mmload",
     (char *)"$009 9 mmplay",
     (char *)"$00a 9 mmstop",
     (char *)"$00b 9 mci",
-    
     (char *)"$00c 9 pset",
     (char *)"$00d 9 pget",
     (char *)"$00e 9 syscolor",				// (ver3.0)
-    
     (char *)"$00f 9 mes", (char *)"$00f 9 print",
     (char *)"$010 9 title",
     (char *)"$011 9 pos",
@@ -148,32 +126,24 @@ char *hsp_prestr[] = {
     (char *)"$01f 9 gzoom",
     (char *)"$020 9 gmode",
     (char *)"$021 9 bmpsave",
-    
     //	"$022 9 text",					// delete
-    
     (char *)"$022 9 hsvcolor",				// (ver3.0)
     (char *)"$023 9 getkey",
-    
     (char *)"$024 9 listbox",
     (char *)"$025 9 chkbox",
     (char *)"$026 9 combox",
-    
     (char *)"$027 9 input",
     (char *)"$028 9 mesbox",
     (char *)"$029 9 buffer",
     (char *)"$02a 9 screen",
     (char *)"$02b 9 bgscr",
-    
     (char *)"$02c 9 mouse",
     (char *)"$02d 9 objsel",
     (char *)"$02e 9 groll",
     (char *)"$02f 9 line",
-    
     (char *)"$030 9 clrobj",
     (char *)"$031 9 boxf",
-    
     //	enhanced command (ver2.3)
-    
     (char *)"$032 9 objprm",
     (char *)"$033 9 objmode",
     (char *)"$034 9 stick",
@@ -188,7 +158,6 @@ char *hsp_prestr[] = {
     (char *)"$03c 9 celload",				// (ver3.2)
     (char *)"$03d 9 celdiv",				// (ver3.2)
     (char *)"$03e 9 celput",				// (ver3.2)
-    
     (char *)"$03f 9 gfilter",				// (ver3.5)
     (char *)"$040 9 setreq",				// (ver3.5)
     (char *)"$041 9 getreq",				// (ver3.5)
@@ -206,7 +175,6 @@ char *hsp_prestr[] = {
     (char *)"$05d 9 gmulcolor",				// (ver3.5)
     (char *)"$05e 9 setcls",				// (ver3.5)
     (char *)"$05f 9 celputm",				// (ver3.5)
-    
     //================================================================================>>>MacOSX
     //
     // 音声関連
@@ -238,9 +206,7 @@ char *hsp_prestr[] = {
     //3D関連
     (char *)"$0d0 9 setcam",
     //================================================================================<<<MacOSX
-    
     //	enhanced command (ver3.0)
-    
     (char *)"$000 17 newcom",
     (char *)"$001 17 querycom",
     (char *)"$002 17 delcom",
@@ -253,14 +219,11 @@ char *hsp_prestr[] = {
     (char *)"$009 17 comevarg",
     (char *)"$00a 17 sarrayconv",
     //"$00b 17 variantref",
-    
     (char *)"$100 17 callfunc",
     (char *)"$101 17 cnvwtos",
     (char *)"$102 17 comevdisp",
     (char *)"$103 17 libptr",
-    
     //	3.0 system vals
-    
     (char *)"$000 14 system",
     (char *)"$001 14 hspstat",
     (char *)"$002 14 hspver",
@@ -278,7 +241,6 @@ char *hsp_prestr[] = {
     //================================================================================>>>MacOSX
     (char *)"$020 14 dcnt",
     //================================================================================<<<MacOSX
-    
     //	3.0 internal function
     (char *)"$000 13 int",
     (char *)"$001 13 rnd",
@@ -300,7 +262,6 @@ char *hsp_prestr[] = {
     (char *)"$011 13 limit",					// (3.0)
     (char *)"$012 13 getease",					// (3.4)
     (char *)"$013 13 notefind",					// (3.5)
-    
     //================================================================================>>>MacOSX
     (char *)"$020 13 qframe",
     (char *)"$021 13 qcount",
@@ -311,7 +272,6 @@ char *hsp_prestr[] = {
     (char *)"$042 13 getmousedown",
     (char *)"$050 13 ginfo",
     //================================================================================<<<MacOSX
-    
     //	3.0 string function
     (char *)"$100 13 str",
     (char *)"$101 13 strmid",
@@ -319,11 +279,9 @@ char *hsp_prestr[] = {
     (char *)"$104 13 getpath",
     (char *)"$105 13 strtrim",					// (3.2)
     (char *)"$106 13 getfontfamilies",
-    
     //================================================================================>>>MacOSX
     //regexp()
     //================================================================================<<<MacOSX
-    
     //	3.0 math function
     (char *)"$180 13 sin",
     (char *)"$181 13 cos",
@@ -337,7 +295,6 @@ char *hsp_prestr[] = {
     (char *)"$189 13 limitf",
     (char *)"$18a 13 powf",						// (3.3)
     (char *)"$18b 13 geteasef",					// (3.4)
-    
     //================================================================================>>>MacOSX
     (char *)"$190 13 qrate",
     (char *)"$191 13 qpi",
@@ -345,32 +302,23 @@ char *hsp_prestr[] = {
     (char *)"$1a1 13 randf",
     (char *)"$1a2 13 getretina",
     //================================================================================<<<MacOSX
-    
-    
     //	3.0 external sysvar,function
-    
     (char *)"$000 10 mousex",
     (char *)"$001 10 mousey",
     (char *)"$002 10 mousew",					// (3.0)
     (char *)"$003 10 hwnd",						// (3.0)
     (char *)"$004 10 hinstance",				// (3.0)
     (char *)"$005 10 hdc",						// (3.0)
-    
 //    (char *)"$100 10 ginfo",
     (char *)"$101 10 objinfo",
     (char *)"$102 10 dirinfo",
     (char *)"$103 10 sysinfo",
-    
     (char *)"$ffffffff 5 thismod",
-    
     (char *)"*"
 };
-
-
 char 	*hsp_prepp[] =
 {
     s_rec,
-    
     (char *)"$000 0 #addition",
     (char *)"$000 0 #cmd",
     (char *)"$000 0 #comfunc",
@@ -406,7 +354,5 @@ char 	*hsp_prepp[] =
     (char *)"$000 0 #defdouble",
     (char *)"$000 0 #defnone",
     (char *)"$000 0 #bootopt",					// (3.5)
-    
     (char *)"*"
 };
-

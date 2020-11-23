@@ -1,4 +1,3 @@
-
 //
 //		stack buffer with tag class
 //			onion software/onitama 2002/10
@@ -7,13 +6,7 @@
 #import <stdlib.h>
 #import <string.h>
 #import "tagstack.h"
-
-//-------------------------------------------------------------
-//		Routines
-//-------------------------------------------------------------
-
-int CTagStack::StrCmp( char *str1, char *str2 )
-{
+int CTagStack::StrCmp( char *str1, char *str2 ) {
     //	string compare (0=not same/-1=same)
     //  (case sensitive)
     int ap;
@@ -27,12 +20,7 @@ int CTagStack::StrCmp( char *str1, char *str2 )
     }
     return -1;
 }
-
-
-int CTagStack::SearchTagID( char *tag )
-{
-    //		É^ÉOÇåüçı
-    //
+int CTagStack::SearchTagID( char *tag ) {
     int i;
     if ( tagent==0 ) return -1;
     for(i=0;i<tagent;i++) {
@@ -40,12 +28,7 @@ int CTagStack::SearchTagID( char *tag )
     }
     return -1;
 }
-
-
-int CTagStack::RegistTagID( char *tag )
-{
-    //		É^ÉOÇìoò^
-    //
+int CTagStack::RegistTagID( char *tag ) {
     int i,len;
     if ( tagent>=TAGSTK_TAGMAX ) return -1;
     i = tagent; tagent++;
@@ -53,12 +36,7 @@ int CTagStack::RegistTagID( char *tag )
     strcpy( mem_tag[i].name, tag );
     return i;
 }
-
-
-void CTagStack::GetTagUniqueName( int tagid, char *outname )
-{
-    //		É^ÉOIDÇ…ëŒâûÇµÇΩÉÜÉjÅ[ÉNñºÇéÊìæ
-    //
+void CTagStack::GetTagUniqueName( int tagid, char *outname ) {
     TAGINF *t;
     if (( tagid < 0 )||( tagid >= TAGSTK_TAGMAX )) {
         sprintf( outname,"TagErr%04x",gcount++ );
@@ -67,33 +45,17 @@ void CTagStack::GetTagUniqueName( int tagid, char *outname )
         sprintf( outname,"_%s_%04x", t->name, t->uid++ );
     }
 }
-
-
-int CTagStack::GetTagID( char *tag )
-{
-    //		É^ÉOñº->É^ÉOID Ç…ïœä∑Ç∑ÇÈ
-    //
+int CTagStack::GetTagID( char *tag ) {
     int i;
     i = SearchTagID( tag );
     if ( i<0 ) { i = RegistTagID( tag ); }
     return i;
 }
-
-
-char *CTagStack::GetTagName( int tagid )
-{
-    //		É^ÉOID->É^ÉOñº Ç…ïœä∑Ç∑ÇÈ
-    //
+char *CTagStack::GetTagName( int tagid ) {
     if (( tagid < 0 )||( tagid >= TAGSTK_TAGMAX )) return tagerr;
     return mem_tag[tagid].name;
 }
-
-
-int CTagStack::StackCheck( char *res )
-{
-    //		Ç∑Ç◊ÇƒÇÃÉXÉ^ÉbÉNÇ™âåàÇ≥ÇÍÇƒÇ¢ÇÈÇ©ÇÉ`ÉFÉbÉN
-    //			0=OK/1>=NG (resÇ…ÉGÉâÅ[ÉXÉ^ÉbÉNÇä‹ÇﬁÉ^ÉOàÍóó)
-    //
+int CTagStack::StackCheck( char *res ) {
     int i,n;
     TAGDATA *t;
     strcpy ( res, "\t" );
@@ -115,12 +77,7 @@ int CTagStack::StackCheck( char *res )
     }
     return n;
 }
-
-
-int CTagStack::PushTag( int tagid, char *str )
-{
-    //		É^ÉOID,strÇÉXÉ^ÉbÉNÇ…ì¸ÇÍÇÈ
-    //
+int CTagStack::PushTag( int tagid, char *str ) {
     int i,len;
     TAGDATA *t;
     if (( tagid < 0 )||( tagid >= TAGSTK_TAGMAX )) return -1;
@@ -132,12 +89,7 @@ int CTagStack::PushTag( int tagid, char *str )
     strcpy( t->data, str );
     return i;
 }
-
-
-char *CTagStack::PopTag( int tagid )
-{
-    //		É^ÉOIDÇ…ëŒâûÇµÇΩÉXÉ^ÉbÉNstrÇéÊÇËèoÇ∑
-    //
+char *CTagStack::PopTag( int tagid ) {
     int i;
     TAGDATA *t;
     char *p;
@@ -160,13 +112,7 @@ char *CTagStack::PopTag( int tagid )
     }
     return p;
 }
-
-
-char *CTagStack::LookupTag( int tagid, int level )
-{
-    //		É^ÉOIDÇ…ëŒâûÇµÇΩÉXÉ^ÉbÉNstrÇéÊÇËèoÇ∑(POPÇµÇ»Ç¢)
-    //				(level=ÉXÉ^ÉbÉNíiêî0,1,2Åc)
-    //
+char *CTagStack::LookupTag( int tagid, int level ) {
     int i,lv;
     TAGDATA *t;
     if (( tagid < 0 )||( tagid >= TAGSTK_TAGMAX )) return NULL;
@@ -183,14 +129,7 @@ char *CTagStack::LookupTag( int tagid, int level )
     }
     return t->data;
 }
-
-
-//-------------------------------------------------------------
-//		Interfaces
-//-------------------------------------------------------------
-
-CTagStack::CTagStack()
-{
+CTagStack::CTagStack() {
     int i;
     for(i=0;i<TAGSTK_TAGMAX;i++) {
         mem_tag[i].name[0] = 0;
@@ -205,10 +144,4 @@ CTagStack::CTagStack()
 	gcount = 0;
 	strcpy( tagerr, "%err%" );
 }
-
-
-CTagStack::~CTagStack()
-{
-}
-
-
+CTagStack::~CTagStack() {}

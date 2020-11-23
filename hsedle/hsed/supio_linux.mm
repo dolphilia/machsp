@@ -1,4 +1,3 @@
-
 //
 //	supio.cpp functions (for Linux)
 //	Linux用のsupio.cppを別ファイルとして作成しました。
@@ -7,14 +6,11 @@
 //	http://hspdev-wiki.net/?OpenHSP%2FLinux%2Fhsp3
 //
 //
-
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
 #import <stdarg.h>
-#import <ctype.h>
-
-// gettime
+#import <ctype.h>// gettime
 #import <sys/time.h>
 #import <time.h>
 // mkdir stat
@@ -24,9 +20,7 @@
 #import <unistd.h>
 // dirlist
 #import <dirent.h>
-
 #import "supio_linux.h"
-
 #ifndef _MAX_PATH
 #define _MAX_PATH	256
 #endif
@@ -39,8 +33,6 @@
 #ifndef _MAX_FNAME
 #define _MAX_FNAME	256
 #endif
-
-
 //
 //		Internal function support (without Windows API)
 //
@@ -49,10 +41,8 @@ static void _splitpath( const char *path, char *p_drive, char *dir, char *fname,
     //		Linux用ファイルパス切り出し
     //
     char *p, pathtmp[256];
-    
     p_drive[0] = 0;
     strcpy( pathtmp, path );
-    
     p = strchr2( pathtmp, '.' );
     if ( p == NULL ) {
         ext[0] = 0;
@@ -70,7 +60,6 @@ static void _splitpath( const char *path, char *p_drive, char *dir, char *fname,
         strcpy( dir, pathtmp );
     }
 }
-
 static int wildcard( char *text, char *wc )
 {
     //		textに対してワイルドカード処理を適応
@@ -99,19 +88,15 @@ static int wildcard( char *text, char *wc )
     }
     return 0;
 }
-
-
 //
 //		basic C I/O support
 //
 char *mem_ini( int size ) {
     return (char *)calloc(size,1);
 }
-
 void mem_bye( void *ptr ) {
     free(ptr);
 }
-
 int mem_load( const char *fname, void *mem, int msize )
 {
     FILE *fp;
@@ -122,12 +107,10 @@ int mem_load( const char *fname, void *mem, int msize )
     fclose(fp);
     return flen;
 }
-
 int mem_save( const char *fname, const void *mem, int msize, int seekofs )
 {
     FILE *fp;
     int flen;
-    
     if (seekofs<0) {
         fp=fopen(fname,"wb");
     }
@@ -140,8 +123,6 @@ int mem_save( const char *fname, const void *mem, int msize, int seekofs )
     fclose(fp);
     return flen;
 }
-
-
 void strcase( char *str )
 {
     //	string case to lower
@@ -162,8 +143,6 @@ void strcase( char *str )
         }
     }
 }
-
-
 void strcase2( char *str, char *str2 )
 {
     //	string case to lower and copy
@@ -191,8 +170,6 @@ void strcase2( char *str, char *str2 )
     }
     *ss2=0;
 }
-
-
 int tstrcmp( const char *str1, const char *str2 )
 {
     //	string compare (0=not same/-1=same)
@@ -208,8 +185,6 @@ int tstrcmp( const char *str1, const char *str2 )
     }
     return -1;
 }
-
-
 void getpath( const char *src, char *outbuf, int p2 )
 {
     char *p;
@@ -218,7 +193,6 @@ void getpath( const char *src, char *outbuf, int p2 )
     char p_dir[_MAX_DIR];
     char p_fname[_MAX_FNAME];
     char p_ext[_MAX_EXT];
-    
     p = outbuf;
     strcpy( stmp, src );
     if (p2&16) strcase( stmp );
@@ -242,8 +216,6 @@ void getpath( const char *src, char *outbuf, int p2 )
             break;
     }
 }
-
-
 void strcpy2( char *dest, const char *src, size_t size )
 {
     if(size == 0) {
@@ -259,72 +231,65 @@ void strcpy2( char *dest, const char *src, size_t size )
     }
     *d = '\0';
     return;
-}
-
-
-/*----------------------------------------------------------*/
-
+}/*----------------------------------------------------------*/
 void addext( char *st, const char *exstr )
 {
     //	add extension of filename
-    
     int a1;
     char c1;
-    a1=0;while(1) {
-        c1=st[a1];if (c1==0) break;
+    a1=0;
+    while(1) {
+        c1=st[a1];
+        if (c1==0) break;
         if (c1=='.') return;
         a1++;
     }
     st[a1]='.'; st[a1+1]=0;
     strcat(st,exstr);
 }
-
 void cutext( char *st )
 {
     //	cut extension of filename
-    
     int a1;
     char c1;
-    a1=0;while(1) {
-        c1=st[a1];if (c1==0) break;
+    a1=0;
+    while(1) {
+        c1=st[a1];
+        if (c1==0) break;
         if (c1=='.') break;
         a1++;
     }
     st[a1]=0;
 }
-
 void cutlast( char *st )
 {
     //	cut last characters
-    
     int a1;
     unsigned char c1;
-    a1=0;while(1) {
-        c1=st[a1];if (c1<33) break;
+    a1=0;
+    while(1) {
+        c1=st[a1];
+        if (c1<33) break;
         st[a1]=tolower(c1);
         a1++;
     }
     st[a1]=0;
 }
-
-
 void cutlast2( char *st )
 {
     //	cut last characters
-    
     int a1;
     char c1;
     char ts[256];
-    
     strcpy(ts,st);
     a1=0;
     while(1) {
-        c1=ts[a1];if (c1<33) break;
+        c1=ts[a1];
+        if (c1<33) break;
         ts[a1]=tolower(c1);
         a1++;
     }
     ts[a1]=0;
-    
     while(1) {
         a1--;c1=ts[a1];
         if (c1==0x5c) { a1++;break; }
@@ -332,8 +297,6 @@ void cutlast2( char *st )
     }
     strcpy(st,ts+a1);
 }
-
-
 char *strchr2( char *target, char code )
 {
     //		str中最後のcode位置を探す(全角対応版)
@@ -353,7 +316,6 @@ char *strchr2( char *target, char code )
     }
     return res;
 }
-
 int is_sjis_char_head( const unsigned char *str, int pos )
 {
     //		Shift_JIS文字列のposバイト目が文字の先頭バイトであるか
@@ -364,7 +326,6 @@ int is_sjis_char_head( const unsigned char *str, int pos )
     }
     return result;
 }
-
 char *to_hsp_string_literal( const char *src ) {
     //		文字列をHSPの文字列リテラル形式に
     //		戻り値のメモリは呼び出し側がfreeする必要がある。
@@ -439,7 +400,6 @@ char *to_hsp_string_literal( const char *src ) {
     *d = '\0';
     return dest;
 }
-
 int atoi_allow_overflow( const char *s )
 {
     //		オーバーフローチェックをしないatoi
@@ -451,7 +411,6 @@ int atoi_allow_overflow( const char *s )
     }
     return result;
 }
-
 void CutLastChr( char *p, char code )
 {
     //		最後の'/'を取り除く
@@ -464,14 +423,9 @@ void CutLastChr( char *p, char code )
         i = (int)strlen( p ); ss2 = p + i -1;
         if (( i > 3 )&&( ss == ss2 )) *ss = 0;
     }
-}
-
-
-
-/*----------------------------------------------------------*/
+}/*----------------------------------------------------------*/
 //					HSP string trim support
 /*----------------------------------------------------------*/
-
 char *strchr3( char *target, int code, int sw, char **findptr )
 {
     //		文字列中のcode位置を探す(2バイトコード、全角対応版)
@@ -486,17 +440,15 @@ char *strchr3( char *target, int code, int sw, char **findptr )
     unsigned char code2;
     char *res;
     char *pres;
-    
     p=(unsigned char *)target;
     code1 = (unsigned char)(code&0xff);
     code2 = (unsigned char)(code>>8);
-    
     res = NULL;
     pres = NULL;
     *findptr = NULL;
-    
     while(1) {
-        a1=*p;if ( a1==0 ) break;
+        a1=*p;
+        if ( a1==0 ) break;
         if ( a1==code1 ) {
             if ( a1 <129 ) {
                 res=(char *)p;
@@ -515,7 +467,6 @@ char *strchr3( char *target, int code, int sw, char **findptr )
             if ((a1<=159)||(a1>=224)) p++;
         }
         if ( res != NULL ) { *findptr = res; pres = (char *)p; res = NULL; }
-        
         switch( sw ) {
             case 1:
                 if ( *findptr != NULL ) return (char *)p;
@@ -526,8 +477,6 @@ char *strchr3( char *target, int code, int sw, char **findptr )
     }
     return pres;
 }
-
-
 void TrimCodeR( char *p, int code )
 {
     //		最後のcodeを取り除く
@@ -545,8 +494,6 @@ void TrimCodeR( char *p, int code )
         *ss2 = 0;
     }
 }
-
-
 void TrimCode( char *p, int code )
 {
     //		すべてのcodeを取り除く
@@ -559,8 +506,6 @@ void TrimCode( char *p, int code )
         strcpy( ss2, ss );
     }
 }
-
-
 void TrimCodeL( char *p, int code )
 {
     //		最初のcodeを取り除く
@@ -573,13 +518,6 @@ void TrimCodeL( char *p, int code )
         strcpy( ss2, ss );
     }
 }
-
-
-
-/*----------------------------------------------------------*/
-//					HSP system support
-/*----------------------------------------------------------*/
-
 void dirinfo( char *p, int id )
 {
     //		dirinfo命令の内容をstmpに設定する
@@ -595,18 +533,10 @@ void dirinfo( char *p, int id )
             *p = 0;
             return;
     }
-    
     //		最後の'/'を取り除く
     //
     CutLastChr( p, '/' );
 }
-
-
-/*----------------------------------------------------------*/
-
-//
-//		Memory Manager
-//
 char *mem_alloc( void *base, int newsize, int oldsize )
 {
     char *p;
@@ -620,4 +550,3 @@ char *mem_alloc( void *base, int newsize, int oldsize )
     free( base );
     return p;
 }
-

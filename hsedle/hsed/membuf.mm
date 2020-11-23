@@ -1,4 +1,3 @@
-
 //
 //		Memory buffer class
 //			onion software/onitama 2002/2
@@ -9,11 +8,6 @@
 #import <stdarg.h>
 #import <assert.h>
 #import "membuf.h"
-
-//-------------------------------------------------------------
-//		Routines
-//-------------------------------------------------------------
-
 void CMemBuf::InitMemBuf( int sz )
 {
     //	バッファ初期化
@@ -36,8 +30,6 @@ void CMemBuf::InitMemBuf( int sz )
     curidx = 0;
     idxbuf = NULL;
 }
-
-
 void CMemBuf::InitIndexBuf( int sz )
 {
     //	Indexバッファ初期化
@@ -46,8 +38,6 @@ void CMemBuf::InitIndexBuf( int sz )
     curidx = 0;
     idxbuf = (int *)malloc( sizeof(int)*sz );
 }
-
-
 char *CMemBuf::PreparePtr( int sz )
 {
     //	バッファ拡張チェック
@@ -73,8 +63,6 @@ char *CMemBuf::PreparePtr( int sz )
     cur += sz;
     return p;
 }
-
-
 void CMemBuf::RegistIndex( int val )
 {
     //	インデックスを登録
@@ -89,70 +77,52 @@ void CMemBuf::RegistIndex( int val )
         idxbuf = p;
     }
 }
-
-
 void CMemBuf::Index( void )
 {
     RegistIndex( cur );
 }
-
-
 void CMemBuf::Put( int data )
 {
     char *p;
     p = PreparePtr( sizeof(int) );
     memcpy( p, &data, sizeof(int) );
 }
-
-
 void CMemBuf::Put( short data )
 {
     char *p;
     p = PreparePtr( sizeof(short) );
     memcpy( p, &data, sizeof(short) );
 }
-
-
 void CMemBuf::Put( char data )
 {
     char *p;
     p = PreparePtr( 1 );
     *p = data;
 }
-
-
 void CMemBuf::Put( unsigned char data )
 {
     unsigned char *p;
     p = (unsigned char *) PreparePtr( 1 );
     *p = data;
 }
-
-
 void CMemBuf::Put( float data )
 {
     char *p;
     p = PreparePtr( sizeof(float) );
     memcpy( p, &data, sizeof(float) );
 }
-
-
 void CMemBuf::Put( double data )
 {
     char *p;
     p = PreparePtr( sizeof(double) );
     memcpy( p, &data, sizeof(data) );
 }
-
-
 void CMemBuf::PutStr( char *data )
 {
     char *p;
     p = PreparePtr( (int)strlen(data) );
     strcpy( p, data );
 }
-
-
 void CMemBuf::PutStrDQ( char *data )
 {
     //		ダブルクォート内専用str
@@ -163,11 +133,9 @@ void CMemBuf::PutStrDQ( char *data )
     unsigned char a2 = '\0';
     int fl;
     src = (unsigned char *)data;
-    
     while(1) {
         a1 = *src++;
         if ( a1 == 0 ) break;
-        
         fl = 0;
         if ( a1 == '\\' ) {					// ¥を¥¥に
             p = (unsigned char *) PreparePtr( 1 );
@@ -177,7 +145,6 @@ void CMemBuf::PutStrDQ( char *data )
             fl = 1; a2 = 10;
             if ( *src == 10 ) src++;
         }
-        
         if (a1>=129) {						// 全角文字チェック
             if (a1<=159) { fl = 1; a2 = *src++; }
             else if (a1>=224) {  fl = 1; a2 = *src++; }
@@ -193,38 +160,29 @@ void CMemBuf::PutStrDQ( char *data )
         *p = a1;
     }
 }
-
-
 void CMemBuf::PutStrBlock( char *data )
 {
     char *p;
     p = PreparePtr( (int)strlen(data)+1 );
     strcpy( p, data );
 }
-
-
 void CMemBuf::PutCR( void )
 {
     char *p;
     p = PreparePtr( 2 );
     *p++ = 13; *p++ = 10;
 }
-
-
 void CMemBuf::PutData( void *data, int sz )
 {
     char *p;
     p = PreparePtr( sz );
     memcpy( p, (char *)data, sz );
 }
-
-
 #if ( WIN32 || _WIN32 ) && ! __CYGWIN__
 # define VSNPRINTF _vsnprintf
 #else
 # define VSNPRINTF vsnprintf
 #endif
-
 void CMemBuf::PutStrf( char *format, ... )
 {
     va_list args;
@@ -249,8 +207,6 @@ void CMemBuf::PutStrf( char *format, ... )
         }
     }
 }
-
-
 int CMemBuf::PutFile( char *fname )
 {
     //		バッファに指定ファイルの内容を追加
@@ -259,51 +215,36 @@ int CMemBuf::PutFile( char *fname )
     char *p;
     int length;
     FILE *ff;
-    
     ff=fopen( fname,"rb" );
     if (ff==NULL) return -1;
     fseek( ff,0,SEEK_END );
     length=(int)ftell( ff );			// normal file size
     fclose(ff);
-    
     p = PreparePtr( length+1 );
     ff=fopen( fname,"rb" );
     fread( p, 1, length, ff );
     fclose(ff);
     p[length]=0;
-    
     strcpy( name,fname );
     return length;
 }
-
-
 void CMemBuf::ReduceSize( int new_cur )
 {
     assert( new_cur >= 0 && new_cur <= cur );
     cur = new_cur;
 }
-
-
-//-------------------------------------------------------------
-//		Interfaces
-//-------------------------------------------------------------
-
 CMemBuf::CMemBuf( void )
 {
     //		空のバッファを初期化(64K)
     //
     InitMemBuf( 0x10000 );
 }
-
-
 CMemBuf::CMemBuf( int sz )
 {
     //		指定サイズのバッファを初期化(64K)
     //
     InitMemBuf( sz );
 }
-
-
 CMemBuf::~CMemBuf( void )
 {
     if ( mem_buf != NULL ) {
@@ -315,59 +256,41 @@ CMemBuf::~CMemBuf( void )
         idxbuf = NULL;
     }
 }
-
-
 void CMemBuf::AddIndexBuffer( void )
 {
     InitIndexBuf( 256 );
 }
-
-
 void CMemBuf::AddIndexBuffer( int sz )
 {
     InitIndexBuf( sz );
 }
-
-
 char *CMemBuf::GetBuffer( void )
 {
     return mem_buf;
 }
-
-
 int CMemBuf::GetBufferSize( void )
 {
     return size;
 }
-
-
 int *CMemBuf::GetIndexBuffer( void )
 {
     return idxbuf;
 }
-
-
 void CMemBuf::SetIndex( int idx, int val )
 {
     if ( idxflag==0 ) return;
     idxbuf[idx] = val;
 }
-
-
 int CMemBuf::GetIndex( int idx )
 {
     if ( idxflag==0 ) return -1;
     return idxbuf[idx];
 }
-
-
 int CMemBuf::GetIndexBufferSize( void )
 {
     if ( idxflag==0 ) return -1;
     return curidx;
 }
-
-
 int CMemBuf::SearchIndexValue( int val )
 {
     int i;
@@ -379,8 +302,6 @@ int CMemBuf::SearchIndexValue( int val )
     }
     return j;
 }
-
-
 int CMemBuf::SaveFile( char *fname )
 {
     //		バッファをファイルにセーブ
@@ -395,13 +316,9 @@ int CMemBuf::SaveFile( char *fname )
     strcpy( name,fname );
     return flen;
 }
-
-
 char *CMemBuf::GetFileName( void )
 {
     //		ファイル名を取得
     //
     return name;
 }
-
-
