@@ -4,6 +4,11 @@
 //
 #ifndef __hsc3_h
 #define __hsc3_h
+#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+#import "AppDelegate.h"
+#import "membuf.h"
+#import "label.h"
 #define HSC3TITLE "HSP script preprocessor"
 #define HSC3TITLE2 "HSP code generator"
 #define HSC3_OPT_NOHSPDEF 1
@@ -16,8 +21,8 @@
 #define HSC3_MODE_DEBUG 1
 #define HSC3_MODE_DEBUGWIN 2
 #define HSC3_MODE_UTF8 4		// UTF8コードを出力
-class CMemBuf;
-class CToken;
+//class CMemBuf;
+//class CToken;
 /*
 	rev 54
 	lb_info の型を void * から CLabel * に変更。
@@ -25,47 +30,43 @@ class CToken;
 	mingw : warning : void * 型の delete は未定義
 	に対処。
  */
-class CLabel;
+//class CLabel;
 // HSC3 class
-class CHsc3 {
-public:
-    CHsc3();
-    ~CHsc3();
-    char *GetError( void );
-    int GetErrorSize( void );
-    void ResetError( void );
-    int PreProcess( char *fname, char *outname, int option, char *rname, void *ahtoption=NULL );
-    int PreProcessAht( char *fname, void *ahtoption, int mode=0 );
-    void PreProcessEnd( void );
-    int Compile( char *fname, char *outname, int mode );
-    void SetCommonPath( char *path );
-    //		Service
-    int GetCmdList( int option );
-    int OpenPackfile( void );
-    void ClosePackfile( void );
-    void GetPackfileOption( char *out, char *keyword, char *defval );
-    int GetPackfileOptionInt( char *keyword, int defval );
-    int GetRuntimeFromHeader( char *fname, char *res );
-    int SaveOutbuf( char *fname );
-    int SaveAHTOutbuf( char *fname );
-    //		Data
+@interface CHsc3 : NSObject {
+    //        Data
     //
     CMemBuf *errbuf;
     CMemBuf *pfbuf;
     CMemBuf *addkw;
     CMemBuf *outbuf;
     CMemBuf *ahtbuf;
-private:
-    //		Private Data
+    //        Private Data
     //
     int process_option;
-    void AddSystemMacros( CToken *tk, int option );
-    char common_path[512];			// common path
-    //		for Header info
+    char common_path[512];            // common path
+    //        for Header info
     int hed_option;
     char hed_runtime[64];
-    //		for Compile Optimize
+    //        for Compile Optimize
     int cmpopt;
     CLabel *lb_info;
-};
+}
+-(char*)GetError;
+-(int)GetErrorSize;
+-(void)ResetError;
+-(int)PreProcess:(char*)fname outname:(char*)outname option:(int)option rname:(char*)rname ahtoption:(void*)ahtoption;//=NULL );
+//-(int)PreProcessAht:(char*)fname ahtoption:(void*)ahtoption mode:(int)mode;//=0 );
+-(void)PreProcessEnd;
+-(int)Compile:(char*)fname outname:(char*)outname mode:(int)mode;
+-(void)SetCommonPath:(char*)path;
+-(int)GetCmdList:(int)option;
+-(int)OpenPackfile;
+-(void)ClosePackfile;
+-(void)GetPackfileOption:(char*)out keyword:(char*)keyword defval:(char*)defval;
+-(int)GetPackfileOptionInt:(char*)keyword defval:(int)defval;
+-(int)GetRuntimeFromHeader:(char*)fname res:(char*)res;
+-(int)SaveOutbuf:(char*)fname;
+-(int)SaveAHTOutbuf:(char*)fname;
+-(void)AddSystemMacros:(CToken*)tk option:(int)option;
+@end
 #endif

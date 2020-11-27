@@ -8,8 +8,35 @@
 #import <stdarg.h>
 #import <assert.h>
 #import "membuf.h"
-void CMemBuf::InitMemBuf( int sz )
+@implementation CMemBuf : NSObject
+- (instancetype)init
 {
+    self = [super init];
+    if (self) {
+        //        空のバッファを初期化(64K)
+        //
+        //[self InitMemBuf:0x10000];
+    }
+    return self;
+}
+//CMemBuf::CMemBuf( int sz )
+//{
+//    //        指定サイズのバッファを初期化(64K)
+//    //
+//    InitMemBuf( sz );
+//}
+- (void)dealloc
+{
+    if ( mem_buf != NULL ) {
+        free( mem_buf );
+        mem_buf = NULL;
+    }
+    if ( idxbuf != NULL ) {
+        free( idxbuf );
+        idxbuf = NULL;
+    }
+}
+-(void)InitMemBuf:(int)sz {
     //	バッファ初期化
     size = sz;
     if ( size<0x1000 ) {
@@ -30,16 +57,14 @@ void CMemBuf::InitMemBuf( int sz )
     curidx = 0;
     idxbuf = NULL;
 }
-void CMemBuf::InitIndexBuf( int sz )
-{
+-(void)InitIndexBuf:(int)sz {
     //	Indexバッファ初期化
     idxflag = 1;
     idxmax = sz;
     curidx = 0;
     idxbuf = (int *)malloc( sizeof(int)*sz );
 }
-char *CMemBuf::PreparePtr( int sz )
-{
+-(char*)PreparePtr:(int)sz {
     //	バッファ拡張チェック
     //	(szサイズを書き込み可能なバッファを返す)
     //		(return:もとのバッファ先頭ptr)
@@ -63,8 +88,7 @@ char *CMemBuf::PreparePtr( int sz )
     cur += sz;
     return p;
 }
-void CMemBuf::RegistIndex( int val )
-{
+-(void)RegistIndex:(int)val {
     //	インデックスを登録
     int *p;
     if ( idxflag==0 ) return;
@@ -77,54 +101,45 @@ void CMemBuf::RegistIndex( int val )
         idxbuf = p;
     }
 }
-void CMemBuf::Index( void )
-{
-    RegistIndex( cur );
+-(void)Index {
+    [self RegistIndex:cur];
 }
-void CMemBuf::Put( int data )
-{
+-(void)Put_int:(int)data {
     char *p;
-    p = PreparePtr( sizeof(int) );
+    p = [self PreparePtr:sizeof(int)];
     memcpy( p, &data, sizeof(int) );
 }
-void CMemBuf::Put( short data )
-{
+-(void)Put_short:(short)data {
     char *p;
-    p = PreparePtr( sizeof(short) );
+    p = [self PreparePtr:sizeof(short)];
     memcpy( p, &data, sizeof(short) );
 }
-void CMemBuf::Put( char data )
-{
+-(void)Put_char:(char)data {
     char *p;
-    p = PreparePtr( 1 );
+    p = [self PreparePtr:1];
     *p = data;
 }
-void CMemBuf::Put( unsigned char data )
-{
+-(void)Put_uchar:(unsigned char)data {
     unsigned char *p;
-    p = (unsigned char *) PreparePtr( 1 );
+    p = (unsigned char *)[self PreparePtr:1];
     *p = data;
 }
-void CMemBuf::Put( float data )
-{
+-(void)Put_float:(float)data {
     char *p;
-    p = PreparePtr( sizeof(float) );
+    p = [self PreparePtr:sizeof(float)];
     memcpy( p, &data, sizeof(float) );
 }
-void CMemBuf::Put( double data )
-{
+-(void)Put_double:(double)data {
     char *p;
-    p = PreparePtr( sizeof(double) );
+    p = [self PreparePtr:sizeof(double)];
     memcpy( p, &data, sizeof(data) );
 }
-void CMemBuf::PutStr( char *data )
-{
+-(void)PutStr:(char*)data {
     char *p;
-    p = PreparePtr( (int)strlen(data) );
+    p = [self PreparePtr:(int)strlen(data)];
     strcpy( p, data );
 }
-void CMemBuf::PutStrDQ( char *data )
-{
+-(void)PutStrDQ:(char*)data {
     //		ダブルクォート内専用str
     //
     unsigned char *src;
@@ -138,7 +153,7 @@ void CMemBuf::PutStrDQ( char *data )
         if ( a1 == 0 ) break;
         fl = 0;
         if ( a1 == '\\' ) {					// ¥を¥¥に
-            p = (unsigned char *) PreparePtr( 1 );
+            p = (unsigned char *)[self PreparePtr:1];
             *p = a1;
         }
         if ( a1 == 13 ) {					// CRを¥nに
@@ -151,31 +166,28 @@ void CMemBuf::PutStrDQ( char *data )
             if ( a2 == 0 ) break;
         }
         if ( fl ) {
-            p = (unsigned char *) PreparePtr( 2 );
+            p = (unsigned char *)[self PreparePtr:2];
             p[0] = a1;
             p[1] = a2;
             continue;
         }
-        p = (unsigned char *) PreparePtr( 1 );
+        p = (unsigned char *)[self PreparePtr:1];
         *p = a1;
     }
 }
-void CMemBuf::PutStrBlock( char *data )
-{
+-(void)PutStrBlock:(char*)data {
     char *p;
-    p = PreparePtr( (int)strlen(data)+1 );
+    p = [self PreparePtr:(int)strlen(data)+1];
     strcpy( p, data );
 }
-void CMemBuf::PutCR( void )
-{
+-(void)PutCR {
     char *p;
-    p = PreparePtr( 2 );
+    p = [self PreparePtr:2];
     *p++ = 13; *p++ = 10;
 }
-void CMemBuf::PutData( void *data, int sz )
-{
+-(void)PutData:(void*)data sz:(int)sz {
     char *p;
-    p = PreparePtr( sz );
+    p = [self PreparePtr:sz];
     memcpy( p, (char *)data, sz );
 }
 #if ( WIN32 || _WIN32 ) && ! __CYGWIN__
@@ -183,13 +195,12 @@ void CMemBuf::PutData( void *data, int sz )
 #else
 # define VSNPRINTF vsnprintf
 #endif
-void CMemBuf::PutStrf( char *format, ... )
-{
+-(void)PutStrf:(char*)format, ... {
     va_list args;
     int c = cur;
     int space = size - cur;
     while(1) {
-        char *p = PreparePtr(space - 1);
+        char *p = [self PreparePtr:space - 1];
         cur = c;
         space = size - cur;
         int n;
@@ -207,8 +218,7 @@ void CMemBuf::PutStrf( char *format, ... )
         }
     }
 }
-int CMemBuf::PutFile( char *fname )
-{
+-(int)PutFile:(char*)fname {
     //		バッファに指定ファイルの内容を追加
     //		(return:ファイルサイズ(-1=error))
     //
@@ -220,7 +230,7 @@ int CMemBuf::PutFile( char *fname )
     fseek( ff,0,SEEK_END );
     length=(int)ftell( ff );			// normal file size
     fclose(ff);
-    p = PreparePtr( length+1 );
+    p = [self PreparePtr:length+1];
     ff=fopen( fname,"rb" );
     fread( p, 1, length, ff );
     fclose(ff);
@@ -228,71 +238,38 @@ int CMemBuf::PutFile( char *fname )
     strcpy( name,fname );
     return length;
 }
-void CMemBuf::ReduceSize( int new_cur )
-{
+-(void)ReduceSize:(int)new_cur {
     assert( new_cur >= 0 && new_cur <= cur );
     cur = new_cur;
 }
-CMemBuf::CMemBuf( void )
-{
-    //		空のバッファを初期化(64K)
-    //
-    InitMemBuf( 0x10000 );
+-(void)AddIndexBuffer {
+    [self InitIndexBuf:256];
 }
-CMemBuf::CMemBuf( int sz )
-{
-    //		指定サイズのバッファを初期化(64K)
-    //
-    InitMemBuf( sz );
+-(void)AddIndexBuffer:(int)sz {
+    [self InitIndexBuf:sz];
 }
-CMemBuf::~CMemBuf( void )
-{
-    if ( mem_buf != NULL ) {
-        free( mem_buf );
-        mem_buf = NULL;
-    }
-    if ( idxbuf != NULL ) {
-        free( idxbuf );
-        idxbuf = NULL;
-    }
-}
-void CMemBuf::AddIndexBuffer( void )
-{
-    InitIndexBuf( 256 );
-}
-void CMemBuf::AddIndexBuffer( int sz )
-{
-    InitIndexBuf( sz );
-}
-char *CMemBuf::GetBuffer( void )
-{
+-(char*)GetBuffer {
     return mem_buf;
 }
-int CMemBuf::GetBufferSize( void )
-{
+-(int)GetBufferSize {
     return size;
 }
-int *CMemBuf::GetIndexBuffer( void )
-{
+-(int*)GetIndexBuffer {
     return idxbuf;
 }
-void CMemBuf::SetIndex( int idx, int val )
-{
+-(void)SetIndex:(int)idx val:(int)val {
     if ( idxflag==0 ) return;
     idxbuf[idx] = val;
 }
-int CMemBuf::GetIndex( int idx )
-{
+-(int)GetIndex:(int)idx {
     if ( idxflag==0 ) return -1;
     return idxbuf[idx];
 }
-int CMemBuf::GetIndexBufferSize( void )
-{
+-(int)GetIndexBufferSize {
     if ( idxflag==0 ) return -1;
     return curidx;
 }
-int CMemBuf::SearchIndexValue( int val )
-{
+-(int)SearchIndexValue:(int)val {
     int i;
     int j;
     if ( idxflag==0 ) return -1;
@@ -302,8 +279,7 @@ int CMemBuf::SearchIndexValue( int val )
     }
     return j;
 }
-int CMemBuf::SaveFile( char *fname )
-{
+-(int)SaveFile:(char*)fname {
     //		バッファをファイルにセーブ
     //		(return:ファイルサイズ(-1=error))
     //
@@ -316,9 +292,9 @@ int CMemBuf::SaveFile( char *fname )
     strcpy( name,fname );
     return flen;
 }
-char *CMemBuf::GetFileName( void )
-{
+-(char*)GetFileName {
     //		ファイル名を取得
     //
     return name;
 }
+@end

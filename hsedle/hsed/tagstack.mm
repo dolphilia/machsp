@@ -6,7 +6,29 @@
 #import <stdlib.h>
 #import <string.h>
 #import "tagstack.h"
-int CTagStack::StrCmp( char *str1, char *str2 ) {
+@implementation CTagStack : NSObject
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        int i;
+        for(i=0;i<TAGSTK_TAGMAX;i++) {
+            mem_tag[i].name[0] = 0;
+            mem_tag[i].uid = 0;
+        }
+        for(i=0;i<TAGSTK_MAX;i++) {
+            mem_buf[i].data[0] = 0;
+            mem_buf[i].tagid = -1;
+        }
+        tagent = 0;
+        lastidx = 0;
+        gcount = 0;
+        strcpy( tagerr, "%err%" );
+    }
+    return self;
+}
+- (void)dealloc {
+}
+-(int)StrCmp:(char*)str1 str2:(char*)str2 {
     //	string compare (0=not same/-1=same)
     //  (case sensitive)
     int ap;
@@ -20,15 +42,15 @@ int CTagStack::StrCmp( char *str1, char *str2 ) {
     }
     return -1;
 }
-int CTagStack::SearchTagID( char *tag ) {
+-(int)SearchTagID:(char*)tag {
     int i;
     if ( tagent==0 ) return -1;
     for(i=0;i<tagent;i++) {
-        if ( StrCmp( mem_tag[i].name, tag )) return i;
+        if ( [self StrCmp:mem_tag[i].name str2:tag]) return i;
     }
     return -1;
 }
-int CTagStack::RegistTagID( char *tag ) {
+-(int)RegistTagID:(char*)tag {
     int i,len;
     if ( tagent>=TAGSTK_TAGMAX ) return -1;
     i = tagent; tagent++;
@@ -37,7 +59,7 @@ int CTagStack::RegistTagID( char *tag ) {
     strcpy( mem_tag[i].name, tag );
     return i;
 }
-void CTagStack::GetTagUniqueName( int tagid, char *outname ) {
+-(void)GetTagUniqueName:(int)tagid outname:(char*)outname {
     TAGINF *t;
     if (( tagid < 0 )||( tagid >= TAGSTK_TAGMAX )) {
         sprintf( outname,"TagErr%04x",gcount++ );
@@ -46,17 +68,18 @@ void CTagStack::GetTagUniqueName( int tagid, char *outname ) {
         sprintf( outname,"_%s_%04x", t->name, t->uid++ );
     }
 }
-int CTagStack::GetTagID( char *tag ) {
+-(int)GetTagID:(char*)tag {
     int i;
-    i = SearchTagID( tag );
-    if ( i<0 ) { i = RegistTagID( tag ); }
+    i = [self SearchTagID:tag];
+    if ( i<0 ) { i = [self RegistTagID:tag]; }
     return i;
 }
-char *CTagStack::GetTagName( int tagid ) {
-    if (( tagid < 0 )||( tagid >= TAGSTK_TAGMAX )) return tagerr;
+-(char*)GetTagName:(int)tagid {
+    if (( tagid < 0 )||( tagid >= TAGSTK_TAGMAX ))
+        return tagerr;
     return mem_tag[tagid].name;
 }
-int CTagStack::StackCheck( char *res ) {
+-(int)StackCheck:(char*)res {
     int i,n;
     TAGDATA *t;
     strcpy ( res, "\t" );
@@ -78,7 +101,7 @@ int CTagStack::StackCheck( char *res ) {
     }
     return n;
 }
-int CTagStack::PushTag( int tagid, char *str ) {
+-(int)PushTag:(int)tagid str:(char*)str {
     int i,len;
     TAGDATA *t;
     if (( tagid < 0 )||( tagid >= TAGSTK_TAGMAX )) return -1;
@@ -90,7 +113,7 @@ int CTagStack::PushTag( int tagid, char *str ) {
     strcpy( t->data, str );
     return i;
 }
-char *CTagStack::PopTag( int tagid ) {
+-(char*)PopTag:(int)tagid {
     int i;
     TAGDATA *t;
     char *p;
@@ -113,7 +136,7 @@ char *CTagStack::PopTag( int tagid ) {
     }
     return p;
 }
-char *CTagStack::LookupTag( int tagid, int level ) {
+-(char*)LookupTag:(int)tagid level:(int)level {
     int i,lv;
     TAGDATA *t;
     if (( tagid < 0 )||( tagid >= TAGSTK_TAGMAX )) return NULL;
@@ -130,19 +153,4 @@ char *CTagStack::LookupTag( int tagid, int level ) {
     }
     return t->data;
 }
-CTagStack::CTagStack() {
-    int i;
-    for(i=0;i<TAGSTK_TAGMAX;i++) {
-        mem_tag[i].name[0] = 0;
-        mem_tag[i].uid = 0;
-    }
-    for(i=0;i<TAGSTK_MAX;i++) {
-        mem_buf[i].data[0] = 0;
-		mem_buf[i].tagid = -1;
-	}
-	tagent = 0;
-	lastidx = 0;
-	gcount = 0;
-	strcpy( tagerr, "%err%" );
-}
-CTagStack::~CTagStack() {}
+@end

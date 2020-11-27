@@ -2972,12 +2972,12 @@ CToken::PutLIB(int flag, char* name)
             i = -1;
         }
     }
-    if (flag == LIBDAT_FLAG_COMOBJ) {
-        COM_GUID guid;
-        if (ConvertIID(&guid, name))
-            return -1;
-        i = PutDSBuf((char*)&guid, sizeof(COM_GUID));
-    }
+//    if (flag == LIBDAT_FLAG_COMOBJ) {
+//        COM_GUID guid;
+//        if (ConvertIID(&guid, name))
+//            return -1;
+//        i = PutDSBuf((char*)&guid, sizeof(COM_GUID));
+//    }
     lib.flag = flag;
     lib.nameidx = i;
     lib.hlib = NULL;
