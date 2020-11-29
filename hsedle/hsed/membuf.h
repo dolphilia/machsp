@@ -50,6 +50,7 @@
 -(void)PutCR;
 -(void)PutData:(void*)data sz:(int)sz;
 -(void)PutStrf:(char*)format, ...;
+//-(void)PutStrf_file:(char*)format, (char*)fname;
 -(int)PutFile:(char*)fname;
 -(int)SaveFile:(char*)fname;
 -(char*)GetFileName;

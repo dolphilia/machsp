@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "membuf.h"
 #import "label.h"
+#import "token.h"
 #define HSC3TITLE "HSP script preprocessor"
 #define HSC3TITLE2 "HSP code generator"
 #define HSC3_OPT_NOHSPDEF 1

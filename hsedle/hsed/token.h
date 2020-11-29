@@ -15,6 +15,9 @@
 #import "tagstack.h"
 #import "membuf.h"
 #import "strnote.h"
+#import "hspvar_core.h"
+#import "errormsg.h"
+#import "hsp3struct.h"
 // token type
 #define TK_NONE 0
 #define TK_OBJ 1
