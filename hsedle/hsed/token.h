@@ -269,8 +269,8 @@ typedef struct undefined_symbol_t {
 -(int)LabelDump:(CMemBuf*)out option:(int)option;
 -(int)GetLabelBufferSize;
 -(int)RegistExtMacroPath:(char*)name str:(char*)str;
--(int)RegistExtMacro:(char*)name str:(char*)str;
--(int)RegistExtMacro:(char*)keyword val:(int)val;
+-(int)RegistExtMacro_str:(char*)name str:(char*)str;
+-(int)RegistExtMacro_val:(char*)keyword val:(int)val;
 -(void)SetPackfileOut:(CMemBuf*)pack;
 -(int)AddPackfile:(char*)name mode:(int)mode;
 -(void)InitSCNV:(int)size;
@@ -287,6 +287,8 @@ typedef struct undefined_symbol_t {
 -(void)PutCSSymbol:(int)label_id exflag:(int)exflag;
 -(int)GetCS;
 -(int)PutOT:(int)value;
+-(int)PutDS_double:(double)value;
+-(int)PutDS:(char*)str;
 -(int)PutDSStr:(char*)str converts_to_utf8:(bool)converts_to_utf8;
 -(int)PutDSBuf:(char*)str;
 -(int)PutDSBuf_size:(char*)str size:(int)size;

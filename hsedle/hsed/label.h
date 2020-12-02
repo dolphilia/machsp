@@ -82,7 +82,7 @@ typedef struct LABOBJ {
 //~CLabel();
 -(void)Reset;
 -(int)Regist:(char*)name type:(int)type opt:(int)opt;
--(int)Regist:(char*)name type:(int)type opt:(int)opt filename:(char const*)filename line:(int)line;
+-(int)Regist2:(char*)name type:(int)type opt:(int)opt filename:(char const*)filename line:(int)line;
 -(void)SetEternal:(int)id;
 -(int)GetEternal:(int)id;
 -(void)SetOpt:(int)id val:(int)val;

@@ -103,7 +103,7 @@
     return -1;
 }
 -(int)Regist:(char*)name type:(int)type opt:(int)opt {
-    return [self Regist:name type:type opt:opt filename:NULL line:-1];
+    return [self Regist2:name type:type opt:opt filename:NULL line:-1];
 }
 -(int)Regist2:(char*)name type:(int)type opt:(int)opt filename:(char const*)filename line:(int)line {
     if ( name[0]==0 ) return -1;

@@ -3124,7 +3124,7 @@ bad_macro_param_expr:
     *errtmp = 0;
     unsigned char a1;
     while(1) {
-        [self RegistExtMacro:(char *)"__line__" val:pline];			// 行番号マクロを更新
+        [self RegistExtMacro_val:(char *)"__line__" val:pline];			// 行番号マクロを更新
         while(1) {
             a1 = *(unsigned char *)p;
             if ( a1 == ' ' || a1 == '\t' ) {
@@ -3190,7 +3190,7 @@ bad_macro_param_expr:
                 // include後の処理
                 pline += 1+mline;
                 char *fname_literal = to_hsp_string_literal( refname );
-                [self RegistExtMacro:(char *)"__file__" str:fname_literal];
+                [self RegistExtMacro_str:(char *)"__file__" str:fname_literal];
                 // ファイル名マクロを更新
                 wrtbuf = buf;
                 [wrtbuf PutStrf:(char *)"##%d %s\r\n", pline-1, fname_literal];
@@ -3347,7 +3347,7 @@ bad_macro_param_expr:
         }
     }
     char *fname_literal = to_hsp_string_literal( refname );
-    [self RegistExtMacro:(char *)"__file__" str:fname_literal];
+    [self RegistExtMacro_str:(char *)"__file__" str:fname_literal];
     // ファイル名マクロを更新
     [buf PutStrf:(char *)"##0 %s\r\n", fname_literal];
     free( fname_literal );
@@ -3468,7 +3468,7 @@ bad_macro_param_expr:
     [lb SetEternal:id];
     return 0;
 }
--(int)RegistExtMacro:(char*)keyword str:(char*)str {
+-(int)RegistExtMacro_str:(char*)keyword str:(char*)str {
     //		マクロを外部から登録
     //
     int id, res;
@@ -3486,7 +3486,7 @@ bad_macro_param_expr:
     [lb SetEternal:id];
     return 0;
 }
--(int)RegistExtMacro:(char*)keyword val:(int)val {
+-(int)RegistExtMacro_val:(char*)keyword val:(int)val {
     //		マクロを外部から登録(数値)
     //
     int id, res;
@@ -3788,7 +3788,7 @@ bad_macro_param_expr:
                     [lb SetInitFlag:id val:LAB_INIT_DONE];
                 }
             }
-            GenerateCodeVAR(id, texflag);
+            [self GenerateCodeVAR:id ex:texflag];
             texflag = 0;
             if (ttype == TK_NONE)
                 ttype = val; // CalcCG_token()に合わせるため
@@ -3823,87 +3823,87 @@ bad_macro_param_expr:
     if (ttype == '-') {
         op = ttype;
         [self CalcCG_token_exprbeg];
-        if (is_statement_end(ttype))
+        if ([self is_statement_end:ttype])
             throw CGERROR_CALCEXP;
-        CalcCG_unary();
+        [self CalcCG_unary];
         texflag = 0;
-        PutCS(TYPE_INUM, -1, texflag);
-        CalcCG_regmark('*');
+        [self PutCS:TYPE_INUM value:-1 exflg:texflag];
+        [self CalcCG_regmark:'*'];
     } else {
-        CalcCG_factor();
+        [self CalcCG_factor];
     }
 }
 -(void)CalcCG_muldiv {
     int op;
-    CalcCG_unary();
+    [self CalcCG_unary];
     while ((ttype == '*') || (ttype == '/') || (ttype == '\\')) {
         op = ttype;
         [self CalcCG_token_exprbeg];
-        if (is_statement_end(ttype))
+        if ([self is_statement_end:ttype])
             throw CGERROR_CALCEXP;
-        CalcCG_unary();
-        CalcCG_regmark(op);
+        [self CalcCG_unary];
+        [self CalcCG_regmark:op];
     }
 }
 -(void)CalcCG_addsub {
     int op;
-    CalcCG_muldiv();
+    [self CalcCG_muldiv];
     while ((ttype == '+') || (ttype == '-')) {
         op = ttype;
         [self CalcCG_token_exprbeg];
-        if (is_statement_end(ttype))
+        if ([self is_statement_end:ttype])
             throw CGERROR_CALCEXP;
-        CalcCG_muldiv();
-        CalcCG_regmark(op);
+        [self CalcCG_muldiv];
+        [self CalcCG_regmark:op];
     }
 }
 -(void)CalcCG_shift {
     int op;
-    CalcCG_addsub();
+    [self CalcCG_addsub];
     while ((ttype == 0x63) || (ttype == 0x64)) {
         op = ttype;
         [self CalcCG_token_exprbeg];
-        if (is_statement_end(ttype))
+        if ([self is_statement_end:ttype])
             throw CGERROR_CALCEXP;
-        CalcCG_addsub();
-        CalcCG_regmark(op);
+        [self CalcCG_addsub];
+        [self CalcCG_regmark:op];
     }
 }
 -(void)CalcCG_compare {
     int op;
-    CalcCG_shift();
+    [self CalcCG_shift];
     while ((ttype == '<') || (ttype == '>') || (ttype == '=') || (ttype == '!') ||
            (ttype == 0x61) || (ttype == 0x62)) {
         op = ttype;
         [self CalcCG_token_exprbeg];
-        if (is_statement_end(ttype))
+        if ([self is_statement_end:ttype])
             throw CGERROR_CALCEXP;
-        CalcCG_shift();
-        CalcCG_regmark(op);
+        [self CalcCG_shift];
+        [self CalcCG_regmark:op];
     }
 }
 -(void)CalcCG_bool {
     int op;
-    CalcCG_compare();
+    [self CalcCG_compare];
     while ((ttype == '&') || (ttype == '|') || (ttype == '^')) {
         op = ttype;
         [self CalcCG_token_exprbeg];
-        if (is_statement_end(ttype))
+        if ([self is_statement_end:ttype])
             throw CGERROR_CALCEXP;
-        CalcCG_compare();
-        CalcCG_regmark(op);
+        [self CalcCG_compare];
+        [self CalcCG_regmark:op];
     }
 }
 -(void)CalcCG_start {
     //        entry point
-    CalcCG_bool();
+    [self CalcCG_bool];
 }
 -(void)CalcCG:(int)ex {
     //        パラメーターの式を評価する
     //        (結果は逆ポーランドでコードを出力する)
     //
     texflag = ex;
-    cs_lastptr = cs_buf->GetSize();
+    cs_lastptr = [cs_buf GetSize];
     calccount = 0;
     [self CalcCG_token_exprbeg_redo];
     [self CalcCG_start];
@@ -3921,7 +3921,7 @@ bad_macro_param_expr:
     char* ps;
     p = psrc = str;
     while (1) {
-        p = PickStringCG2(p, &psrc);
+        p = [self PickStringCG2:p strsrc:&psrc];
         if (*psrc != 0)
             break;
         ps = [self GetLineCG];
@@ -3937,7 +3937,7 @@ bad_macro_param_expr:
     if (*psrc != '}')
         throw CGERROR_MULTILINE_STR;
     if (cg_debug) {
-        PutDI(254, 0, cg_orgline); // ラインだけをデバッグ情報として登録
+        [self PutDI_int:254 a:0 subid:cg_orgline]; // ラインだけをデバッグ情報として登録
     }
     psrc++;
     return psrc;
@@ -3982,7 +3982,7 @@ bad_macro_param_expr:
         // if (a1>=129) {
         //    if ((a1<=159)||(a1>=224)) {
         //        NSLog(@"A:%s",str);
-        skip = SkipMultiByte(a1); // 全角文字チェック
+        skip = [self SkipMultiByte:a1]; // 全角文字チェック
         if (skip) {
             for (i = 0; i < skip; i++) {
                 *pp++ = a1;
@@ -4051,7 +4051,7 @@ bad_macro_param_expr:
         }
         // if (a1>=129) {                    // 全角文字チェック
         //    if ((a1<=159)||(a1>=224)) {
-        skip = SkipMultiByte(a1); // 全角文字チェック
+        skip = [self SkipMultiByte:a1]; // 全角文字チェック
         if (skip) {
             for (i = 0; i < skip; i++) {
                 *pp++ = a1;
@@ -4068,7 +4068,7 @@ bad_macro_param_expr:
 }
 -(char*)GetTokenCG:(int)option{
     cg_ptr_bak = cg_ptr;
-    cg_ptr = GetTokenCG(cg_ptr, option);
+    cg_ptr = [self GetTokenCG:cg_ptr option:option];
     return cg_ptr;
 }
 -(int)PickNextCodeCG{
@@ -4124,7 +4124,7 @@ bad_macro_param_expr:
         vs++;
         ttype = TK_STRING;
         cg_str = (char*)vs;
-        return PickStringCG((char*)vs, 0x22);
+        return [self PickStringCG:(char*)vs sep:0x22];
     }
     if (a1 == '{') { // {"〜"}
         if (vs[1] == 0x22) {
@@ -4135,14 +4135,14 @@ bad_macro_param_expr:
             }
             ttype = TK_STRING;
             cg_str = (char*)vs;
-            return PickLongStringCG((char*)vs);
+            return [self PickLongStringCG:(char*)vs];
         }
     }
     if (a1 == 0x27) { // '〜'
         char* p;
         vs++;
         cg_str = (char*)vs;
-        p = PickStringCG((char*)vs, 0x27);
+        p = [self PickStringCG:(char*)vs sep:0x27];
         ttype = TK_NUM;
         val = ((unsigned char*)cg_str)[0];
         return p;
@@ -4380,7 +4380,7 @@ bad_macro_param_expr:
         // if (a1>=129) {
         //全角文字チェック＊
         //    if ((a1<=159)||(a1>=224)) {
-        skip = SkipMultiByte(a1); // 全角文字チェック
+        skip = [self SkipMultiByte:a1]; // 全角文字チェック
         if (skip) {
             for (i = 0; i < (skip + 1); i++) {
                 NSLog(@"B:%s", str);
@@ -4477,7 +4477,7 @@ bad_macro_param_expr:
         a1 = *vs;
         // if (a1>=129) {                // 全角文字チェック
         //    if ((a1<=159)||(a1>=224)) {
-        skip = SkipMultiByte(a1); // 全角文字チェック
+        skip = [self SkipMultiByte:a1]; // 全角文字チェック
         if (skip) {
             for (i = 0; i < (skip + 1); i++) {
                 if (a < OBJNAME_MAX) {
@@ -4520,13 +4520,13 @@ bad_macro_param_expr:
         if (ttype == TK_NONE) {
             if (val == ',') { // 先頭が','の場合は省略
                 if (ex & EXFLG_2)
-                    PutCS(TYPE_MARK, '?', EXFLG_2);
-                GetTokenCG(GETTOKEN_DEFAULT);
+                    [self PutCS:TYPE_MARK value:'?' exflg:EXFLG_2];
+                [self GetTokenCG:GETTOKEN_DEFAULT];
                 ex |= EXFLG_2;
                 continue;
             }
         }
-        CalcCG(ex); // 式の評価
+        [self CalcCG:ex]; // 式の評価
         // Mesf( "#count %d", calccount );
         if (hed_cmpmode & CMPMODE_OPTPRM) {
             if (calccount == 1) { // パラメーターが単一項目の時
@@ -4535,7 +4535,7 @@ bad_macro_param_expr:
                     case TK_DNUM:
                     case TK_STRING: {
                         unsigned short* cstmp;
-                        cstmp = (unsigned short*)(cs_buf->GetBuffer() + cs_lastptr);
+                        cstmp = (unsigned short*)([cs_buf GetBuffer] + cs_lastptr);
                         *cstmp |= EXFLG_0; // 単一項目フラグを立てる
                         break;
                     }
@@ -4552,10 +4552,10 @@ bad_macro_param_expr:
             //エラー箇所
             throw CGERROR_CALCEXP;
         }
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         ex |= EXFLG_2;
         if (ttype >= TK_SEPARATE) {
-            PutCS(TYPE_MARK, '?', EXFLG_2);
+            [self PutCS:TYPE_MARK value:'?' exflg:EXFLG_2];
             break;
         }
     }
@@ -4573,13 +4573,13 @@ bad_macro_param_expr:
             }
             if (val == ',') { // 先頭が','の場合は省略
                 if (ex & EXFLG_2)
-                    PutCS(TYPE_MARK, '?', EXFLG_2);
-                GetTokenCG(GETTOKEN_DEFAULT);
+                    [self PutCS:TYPE_MARK value:'?' exflg:EXFLG_2];
+                [self GetTokenCG:GETTOKEN_DEFAULT];
                 ex |= EXFLG_2;
                 continue;
             }
         }
-        CalcCG(ex);
+        [self CalcCG:ex];
         if (ttype >= TK_SEPARATE)
             throw CGERROR_PRMEND;
         if (ttype == ')')
@@ -4587,7 +4587,7 @@ bad_macro_param_expr:
         if (ttype != ',') {
             throw CGERROR_CALCEXP;
         }
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         ex |= EXFLG_2;
     }
     return 0;
@@ -4606,35 +4606,35 @@ bad_macro_param_expr:
         switch (ttype) {
             case TK_NONE:
                 if (val == '(') {
-                    GetTokenCG(GETTOKEN_DEFAULT);
-                    CalcCG(ex);
+                    [self GetTokenCG:GETTOKEN_DEFAULT];
+                    [self CalcCG:ex];
                     if (ttype != ')')
                         throw CGERROR_CALCEXP;
                 } else {
                     throw CGERROR_ARRAYEXP;
                 }
-                GetTokenCG(GETTOKEN_NOFLOAT);
+                [self GetTokenCG:GETTOKEN_NOFLOAT];
                 break;
             case TK_NUM:
-                PutCS(TYPE_INUM, val, ex);
-                GetTokenCG(GETTOKEN_NOFLOAT);
+                [self PutCS:TYPE_INUM value:val exflg:ex];
+                [self GetTokenCG:GETTOKEN_NOFLOAT];
                 break;
             case TK_OBJ:
-                id = SetVarsFixed(cg_str, cg_defvarfix);
+                id = [self SetVarsFixed:cg_str fixedvalue:cg_defvarfix];
                 t = [lb GetType:id];
                 if ((t == TYPE_XLABEL) || (t == TYPE_LABEL))
                     throw CGERROR_LABELNAME;
-                PutCSSymbol(id, ex);
-                GetTokenCG(GETTOKEN_DEFAULT);
+                [self PutCSSymbol:id exflag:ex];
+                [self GetTokenCG:GETTOKEN_DEFAULT];
                 if (ttype == TK_NONE) {
                     if (val == '(') { // '(' 配列指定
-                        GetTokenCG(GETTOKEN_DEFAULT);
-                        PutCS(TYPE_MARK, '(', 0);
-                        tmp = GenerateCodePRMF();
+                        [self GetTokenCG:GETTOKEN_DEFAULT];
+                        [self PutCS:TYPE_MARK value:'(' exflg:0];
+                        tmp = [self GenerateCodePRMF];
                         if (tmp)
-                            PutCS(TYPE_MARK, '?', EXFLG_2);
-                        PutCS(TYPE_MARK, ')', 0);
-                        GetTokenCG(GETTOKEN_DEFAULT);
+                            [self PutCS:TYPE_MARK value:'?' exflg:EXFLG_2];
+                        [self PutCS:TYPE_MARK value:')' exflg:0];
+                        [self GetTokenCG:GETTOKEN_DEFAULT];
                     }
                 }
                 // GenerateCodeVAR( id, ex );
@@ -4648,7 +4648,7 @@ bad_macro_param_expr:
             throw CGERROR_ARRAYEXP;
         if (val != '.')
             return;
-        GetTokenCG(GETTOKEN_NOFLOAT);
+        [self GetTokenCG:GETTOKEN_NOFLOAT];
         ex |= EXFLG_2;
     }
 }
@@ -4657,16 +4657,16 @@ bad_macro_param_expr:
     //
     int id, ex;
     ex = 0;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_OBJ)
         throw CGERROR_PP_BAD_STRUCT_SOURCE;
-    id = SetVarsFixed(cg_str, cg_defvarfix);
-    GenerateCodeVAR(id, ex);
+    id = [self SetVarsFixed:cg_str fixedvalue:cg_defvarfix];
+    [self GenerateCodeVAR:id ex:ex];
     if (ttype != TK_NONE)
         throw CGERROR_PP_BAD_STRUCT_SOURCE;
     if (val != ']')
         throw CGERROR_PP_BAD_STRUCT_SOURCE;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
 }
 -(int)GenerateCodePRMF4:(int)t {
     //        HSP3Codeを展開する(構造体/配列指定パラメーター)
@@ -4677,38 +4677,38 @@ bad_macro_param_expr:
     ex = 0;
     if (ttype == TK_NONE) {
         if (val == '.') {
-            GetTokenCG(GETTOKEN_NOFLOAT);
+            [self GetTokenCG:GETTOKEN_NOFLOAT];
             /*
              if ( ttype == TK_OBJ ) {
              id = lb->Search( cg_str );
              if ( id < 0 ) throw CGERROR_PP_BAD_STRUCT;
              t = [lb GetType:id];
              if ( t == TYPE_STRUCT ) {
-             PutCS( t, lb->GetOpt(id), ex );
+             PutCS( t, [lb GetOpt:id];, ex );
              GetTokenCG( GETTOKEN_DEFAULT );
              return GenerateCodePRMF4();
              }
              }
              */
-            PutCS(TYPE_MARK, '(', 0); // '.' 配列指定
-            GenerateCodePRMF2();
-            PutCS(TYPE_MARK, ')', 0);
+            [self PutCS:TYPE_MARK value:'(' exflg:0]; // '.' 配列指定
+            [self GenerateCodePRMF2];
+            [self PutCS:TYPE_MARK value:')' exflg:0];
             return 1;
         }
         if (val == '(') { // '(' 配列指定
-            GetTokenCG(GETTOKEN_DEFAULT);
-            PutCS(TYPE_MARK, '(', 0);
-            tmp = GenerateCodePRMF();
+            [self GetTokenCG:GETTOKEN_DEFAULT];
+            [self PutCS:TYPE_MARK value:'(' exflg:0];
+            tmp = [self GenerateCodePRMF];
             if (tmp)
-                PutCS(TYPE_MARK, '?', EXFLG_2);
-            PutCS(TYPE_MARK, ')', 0);
-            GetTokenCG(GETTOKEN_DEFAULT);
+                [self PutCS:TYPE_MARK value:'?' exflg:EXFLG_2];
+            [self PutCS:TYPE_MARK value:')' exflg:0];
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             return 1;
         }
         if (t == TYPE_STRUCT) {
             if (val == '[') { // '[' ソース指定
-                PutCS(TYPE_MARK, '[', 0);
-                GenerateCodePRMF3();
+                [self PutCS:TYPE_MARK value:'[' exflg:0];
+                [self GenerateCodePRMF3];
                 return 0;
             }
         }
@@ -4724,16 +4724,16 @@ bad_macro_param_expr:
         throw CGERROR_SYNTAX;
     switch (ttype) {
         case TK_NUM:
-            PutCS(TYPE_INUM, val, ex);
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self PutCS:TYPE_INUM value:val exflg:ex];
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             break;
         case TK_STRING:
-            PutCS(TYPE_STRING, PutDS(cg_str), ex);
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self PutCS:TYPE_STRING value:[self PutDS:cg_str] exflg:ex];
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             break;
         case TK_OBJ:
-            id = SetVarsFixed(cg_str, cg_defvarfix);
-            GenerateCodeVAR(id, ex);
+            id = [self SetVarsFixed:cg_str fixedvalue:cg_defvarfix];
+            [self GenerateCodeVAR:id ex:ex];
             break;
         default:
             throw CGERROR_SYNTAX;
@@ -4743,19 +4743,19 @@ bad_macro_param_expr:
         if (ttype == TK_NONE) {
             if (val == ',') { // 先頭が','の場合は省略
                 if (ex & EXFLG_2)
-                    PutCS(TYPE_MARK, '?', EXFLG_2);
-                GetTokenCG(GETTOKEN_DEFAULT);
+                    [self PutCS:TYPE_MARK value:'?' exflg:EXFLG_2];
+                [self GetTokenCG:GETTOKEN_DEFAULT];
                 ex |= EXFLG_2;
                 continue;
             }
         }
-        CalcCG(ex); // 式の評価
+        [self CalcCG:ex]; // 式の評価
         if (ttype >= TK_SEPARATE)
             break;
         if (ttype != ',') {
             throw CGERROR_CALCEXP;
         }
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         ex |= EXFLG_2;
     }
 }
@@ -4771,35 +4771,36 @@ bad_macro_param_expr:
         switch( ttype ) {
             case TK_NONE:
                 if ( val == ',' ) {
-                    if ( ex & EXFLG_2 ) PutCS( TYPE_MARK, '?', ex );
+                    if ( ex & EXFLG_2 )
+                        [self PutCS:TYPE_MARK value:'?' exflg:ex];
                     ex |= EXFLG_2;
                 } else {
-                    PutCS( TYPE_MARK, val, ex );
+                    [self PutCS:TYPE_MARKa value:val exflg:ex];
                     ex = 0;
                 }
                 break;
             case TK_NUM:
-                PutCS( TYPE_INUM, val, ex );
+                [self PutCS:TYPE_INUM value:val exflg:ex];
                 ex = 0;
                 break;
             case TK_STRING:
-                PutCS( TYPE_STRING, PutDS( cg_str ), ex );
+                [self PutCS:TYPE_STRING value:[self PutDS:cg_str] exflg:ex];
                 ex = 0;
                 break;
             case TK_DNUM:
-                PutCS( TYPE_DNUM, val_d, ex );
+                [self PutCS:TYPE_DNUM val;ue:val_d exflg:ex];
                 ex = 0;
                 break;
             case TK_OBJ:
-                i = lb->Search( cg_str );
+                i = [lb Search:cg_str];
                 if ( i < 0 ) {
-                    lb->Regist( cg_str, TYPE_VAR, cg_valcnt );
-                    PutCS( TYPE_VAR, cg_valcnt, ex );
+                    [lb Regist:cg_str type:TYPE_VAR opt:cg_valcnt];
+                    [self PutCS:TYPE_VAR value:cg_valcnt exflg:ex];
                     cg_valcnt++;
                 } else {
                     t = lb->GetType( i );
                     if ( t == TYPE_XLABEL ) t = TYPE_LABEL;
-                    PutCS( t, lb->GetOpt(i), ex );
+                    [self PutCS:t value:[lb GetOpt:i] exflg:ex];
                 }
                 ex = 0;
                 break;
@@ -4835,16 +4836,16 @@ bad_macro_param_expr:
         sprintf(lname, "@l%d", i); // local label
         name = lname;
     }
-    id = lb->Search(name);
+    id = [lb Search:name];
     if (id < 0) { // 仮のラベル
-        i = PutOT(-1);
-        id = lb->Regist(name, TYPE_XLABEL, i);
+        i = [self PutOT:-1];
+        id = [lb Regist:name type:TYPE_XLABEL opt:i];
     } else {
         t = [lb GetType:id];
         if ((t != TYPE_XLABEL) && (t != TYPE_LABEL))
             throw CGERROR_LABELEXIST;
     }
-    PutCS(TYPE_LABEL, lb->GetOpt(id), ex);
+    [self PutCS:TYPE_LABEL value:[lb GetOpt:id] exflg:ex];
 }
 -(void)GenerateCodeVAR:(int)id ex:(int)ex {
     //        HSP3Codeを展開する(変数ほか)
@@ -4855,11 +4856,11 @@ bad_macro_param_expr:
     if ((t == TYPE_XLABEL) || (t == TYPE_LABEL))
         throw CGERROR_LABELNAME;
     //
-    PutCSSymbol(id, ex);
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self PutCSSymbol:id exflag:ex];
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (t == TYPE_SYSVAR)
         return;
-    GenerateCodePRMF4(t); // 構造体/配列のチェック
+    [self GenerateCodePRMF4:t]; // 構造体/配列のチェック
 }
 -(void)CheckCMDIF_Set:(int)mode {
     //        set 'if'&'else' command additional code
@@ -4868,9 +4869,9 @@ bad_macro_param_expr:
     if (iflev >= CG_IFLEV_MAX)
         throw CGERROR_IF_OVERFLOW;
     iftype[iflev] = mode;
-    ifptr[iflev] = GetCS();
-    cs_buf->Put((short)0);
-    ifmode[iflev] = GetCS();
+    ifptr[iflev] = [self GetCS];
+    [cs_buf Put_short:(short)0];
+    ifmode[iflev] = [self GetCS];
     ifscope[iflev] = CG_IFCHECK_LINE;
     ifterm[iflev] = 0;
     iflev++;
@@ -4887,13 +4888,13 @@ bad_macro_param_expr:
         return;
 finag:
     iflev--;
-    a = GetCS() - ifmode[iflev];
+    a = [self GetCS] - ifmode[iflev];
     if (mode) { // when 'else'
         a++;
     }
     if (ifterm[iflev] == 0) {
         ifterm[iflev] = 1;
-        p = (short*)cs_buf->GetBuffer();
+        p = (short*)[cs_buf GetBuffer];
         p[ifptr[iflev]] = (short)a;
     }
     // sprintf(tmp,"#IF FINISH [L=%d(%d)] [skip%d]¥n",cline,iflev,a);
@@ -4912,11 +4913,11 @@ finag:
     if (opt) { // 'else'+offset
         if (iflev == 0)
             throw CGERROR_ELSE_WO_IF;
-        CheckCMDIF_Fin(1);
-        CheckCMDIF_Set(1);
+        [self CheckCMDIF_Fin:1];
+        [self CheckCMDIF_Set:1];
         return;
     }
-    CheckCMDIF_Set(0); // normal if
+    [self CheckCMDIF_Set:0]; // normal if
 }
 -(void)CheckInternalListenerCMD:(int)opt {
     //        命令生成時チェック(命令+命令セット)
@@ -4924,17 +4925,17 @@ finag:
     int i, t, o;
     if (ttype != TK_OBJ)
         return;
-    i = lb->Search(cg_str);
+    i = [lb Search:cg_str];
     if (i < 0)
         return;
-    t = lb->GetType(i);
-    o = lb->GetOpt(i);
+    t = [lb GetType:i];
+    o = [lb GetOpt:i];
     if (t != TYPE_PROGCMD)
         return;
     if (o == 0x001) { // gosub
-        PutCS(t, o & 0xffff, 0);
+        [self PutCS:t value:o&0xffff exflg:0];
     }
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
 }
 -(void)CheckInternalProgCMD:(int)opt orgcs:(int)orgcs {
     //        内蔵プログラム命令生成時チェック
@@ -4950,10 +4951,10 @@ finag:
             }
             i = repend[replev];
             if (i == -1) {
-                i = PutOT(-1);
+                i = [self PutOT:-1];
                 repend[replev] = i;
             }
-            PutCS(TK_LABEL, i, 0);
+            [self PutCS:TK_LABEL value:i exflg:0];
             break;
         case 0x04: // repeat start
         case 0x0b: // (foreach)
@@ -4962,13 +4963,13 @@ finag:
             replev++;
             i = repend[replev];
             if (i == -1) {
-                i = PutOT(-1);
+                i = [self PutOT:-1];
                 repend[replev] = i;
             }
-            PutCS(TK_LABEL, i, 0);
+            [self PutCS:TK_LABEL value:i exflg:0];
             if (opt == 0x0b) {
-                PutCS(TYPE_PROGCMD, 0x0c, EXFLG_1);
-                PutCS(TK_LABEL, i, 0);
+                [self PutCS:TYPE_PROGCMD value:0x0c exflg:EXFLG_1];
+                [self PutCS:TK_LABEL value:i exflg:0];
             }
             break;
         case 0x05: // repeat end
@@ -4976,25 +4977,25 @@ finag:
                 throw CGERROR_LOOP_WO_REPEAT;
             i = repend[replev];
             if (i != -1) {
-                SetOT(i, GetCS());
+                [self SetOT:i value:[self GetCS]];
                 repend[replev] = -1;
             }
             replev--;
             break;
         case 0x11: // stop
-            i = PutOT(orgcs);
-            PutCS(TYPE_PROGCMD, 0, EXFLG_1);
-            PutCS(TYPE_LABEL, i, 0);
+            i = [self PutOT:orgcs];
+            [self PutCS:TYPE_PROGCMD value:0 exflg:EXFLG_1];
+            [self PutCS:TYPE_LABEL value:i exflg:0];
             break;
         case 0x19: // on
-            GetTokenCG(GETTOKEN_DEFAULT);
-            CalcCG(0); // 式の評価
+            [self GetTokenCG:GETTOKEN_DEFAULT];
+            [self CalcCG:0]; // 式の評価
             if (ttype != TK_OBJ)
                 throw CGERROR_SYNTAX;
-            i = lb->Search(cg_str);
+            i = [lb Search:cg_str];
             if (i < 0)
                 throw CGERROR_SYNTAX;
-            PutCS(lb->GetType(i), lb->GetOpt(i), EXFLG_2);
+            [self PutCS:[lb GetType:i] value:[lb GetOpt:i] exflg:EXFLG_2];
             break;
         case 0x08: // await
             //    await命令の出現をカウントする(HEDINFO_NOMMTIMER自動設定のため)
@@ -5006,11 +5007,11 @@ finag:
         case 0x0d: // dimtype
         case 0x0e: // dup
         case 0x0f: // dupptr
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             if (ttype == TK_OBJ) {
-                i = SetVarsFixed(cg_str, cg_defvarfix);
+                i = [self SetVarsFixed:cg_str fixedvalue:cg_defvarfix];
                 //    変数の初期化フラグをセットする
-                lb->SetInitFlag(i, LAB_INIT_DONE);
+                [lb SetInitFlag:i val:LAB_INIT_DONE];
                 // Mesf( "#initflag set [%s]", cg_str );
             }
             cg_ptr = cg_ptr_bak;
@@ -5024,17 +5025,17 @@ finag:
     int t, opt;
     int orgcs;
     t = [lb GetType:id];
-    opt = lb->GetOpt(id);
-    orgcs = GetCS();
-    PutCSSymbol(id, EXFLG_1);
+    opt = [lb GetOpt:id];;
+    orgcs = [self GetCS];
+    [self PutCSSymbol:id exflag:EXFLG_1];
     if (t == TYPE_PROGCMD)
-        CheckInternalProgCMD(opt, orgcs);
+        [self CheckInternalProgCMD:opt orgcs:orgcs];
     if (t == TYPE_CMPCMD)
-        CheckInternalIF(opt);
-    GetTokenCG(GETTOKEN_DEFAULT);
+        [self CheckInternalIF:opt];
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (opt & 0x10000)
-        CheckInternalListenerCMD(opt);
-    GenerateCodePRM();
+        [self CheckInternalListenerCMD:opt];
+    [self GenerateCodePRM];
     cg_lastcmd = CG_LASTCMD_CMD;
     cg_lasttype = t;
     cg_lastval = opt;
@@ -5051,26 +5052,26 @@ finag:
         throw CGERROR_LABELNAME;
     //
     mcall = 0;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if ((ttype == TK_NONE) && (val == 0x65)) { // ->が続いているか?
-        PutCS(TYPE_PROGCMD, 0x1a, EXFLG_1); // 'mcall'コマンドに置き換える
-        PutCS(t, lb->GetOpt(id), 0);        // 変数パラメーター
-        GetTokenCG(GETTOKEN_DEFAULT);
-        GenerateCodeMethod(); // パラメーター展開
+        [self PutCS:TYPE_PROGCMD value:0x1a exflg:EXFLG_1]; // 'mcall'コマンドに置き換える
+        [self PutCS:t value:[lb GetOpt:id] exflg:0];        // 変数パラメーター
+        [self GetTokenCG:GETTOKEN_DEFAULT];
+        [self GenerateCodeMethod]; // パラメーター展開
         return;
     }
-    PutCS(t, lb->GetOpt(id), EXFLG_1); // 通常の変数代入
-    GenerateCodePRMF4(t);              // 構造体/配列のチェック
+    [self PutCS:t value:[lb GetOpt:id] exflg:EXFLG_1]; // 通常の変数代入
+    [self GenerateCodePRMF4:t];              // 構造体/配列のチェック
     if (ttype != TK_NONE) {
         throw CGERROR_SYNTAX;
     }
     op = val;
     // PutCS( TK_NONE, op, 0 );
     texflag = 0;
-    CalcCG_regmark(op);
+    [self CalcCG_regmark:op];
     cg_lastcmd = CG_LASTCMD_LET;
     cg_lastval = op;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     switch (op) {
         case '+': // '++'
         case '-': // '--'
@@ -5078,7 +5079,7 @@ finag:
                 return;
             if (ttype == TK_NONE) {
                 if (val == op) {
-                    GetTokenCG(GETTOKEN_DEFAULT);
+                    [self GetTokenCG:GETTOKEN_DEFAULT];
                     if (ttype >= TK_SEPARATE)
                         return;
                     throw CGERROR_SYNTAX;
@@ -5086,15 +5087,15 @@ finag:
             }
             break;
         case '=': // 変数=prm
-            GenerateCodePRM();
+            [self GenerateCodePRM];
             return;
         default:
             break;
     }
     if ((ttype == TK_NONE) && (val == '=')) {
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
     }
-    GenerateCodePRM();
+    [self GenerateCodePRM];
 }
 -(void)GenerateCodePP_regcmd {
     //        HSP3Codeを展開する(regcmd)
@@ -5103,33 +5104,33 @@ finag:
     char cmd2[1024];
     cg_pptype = cg_typecnt;
     cmd[0] = 0;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     switch (ttype) {
         case TK_STRING:
             strcpy(cmd, cg_str);
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             if (ttype != TK_NONE)
                 throw CGERROR_PP_NO_REGCMD;
             if (val != ',')
                 throw CGERROR_PP_NO_REGCMD;
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             if (ttype != TK_STRING)
                 throw CGERROR_PP_NO_REGCMD;
             strcpy(cmd2, cg_str);
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             if (ttype == TK_NONE) {
                 if (val != ',')
                     throw CGERROR_PP_NO_REGCMD;
-                GetTokenCG(GETTOKEN_DEFAULT);
+                [self GetTokenCG:GETTOKEN_DEFAULT];
                 if (ttype != TK_NUM)
                     throw CGERROR_PP_NO_REGCMD;
                 cg_varhpi += val;
             }
-            PutHPI(HPIDAT_FLAG_TYPEFUNC, 0, cmd2, cmd);
+            [self PutHPI:HPIDAT_FLAG_TYPEFUNC option:0 libname:cmd2 funcname:cmd];
             cg_typecnt++;
             break;
         case TK_NUM:
-            PutHPI(HPIDAT_FLAG_SELFFUNC, 0, (char*)"", (char*)"");
+            [self PutHPI:HPIDAT_FLAG_SELFFUNC option:0 libname:(char*)"" funcname:(char*)""];
             cg_pptype = val;
             break;
         default:
@@ -5144,24 +5145,24 @@ finag:
     char cmd[1024];
     if (cg_pptype < 0)
         throw CGERROR_PP_NO_REGCMD;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_OBJ)
         throw CGERROR_PP_NO_REGCMD;
     strcpy(cmd, cg_str);
     // if ( ttype != TK_NONE ) throw CGERROR_PP_NO_REGCMD;
     // if ( val != ',' ) throw CGERROR_PP_NO_REGCMD;
     // GetTokenCG( GETTOKEN_DEFAULT );
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_NUM)
         throw CGERROR_PP_NO_REGCMD;
     id = val;
-    lb->Regist(cmd, cg_pptype, id, cg_orgfile, cg_orgline);
+    [lb Regist2:cmd type:cg_pptype opt:id filename:cg_orgfile line:cg_orgline];
     // Mesf( "#%x:%d [%s]",cg_pptype, id, cmd );
 }
 -(void)GenerateCodePP_uselib {
     //        HSP3Codeを展開する(uselib)
     //
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     cg_libname[0] = 0;
     if (ttype == TK_STRING) {
         strncpy(cg_libname, cg_str, 1023);
@@ -5177,36 +5178,35 @@ finag:
     char libname[1024];
     char clsname[128];
     char iidname[128];
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_OBJ) {
         throw CGERROR_PP_NAMEREQUIRED;
     }
     strncpy(libname, cg_str, 1023);
-    i = lb->Search(libname);
+    i = [lb Search:libname];
     if (i >= 0) {
-        CG_MesLabelDefinition(i);
+        [self CG_MesLabelDefinition:i];
         throw CGERROR_PP_ALREADY_USE_PARAM;
     }
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_STRING)
         throw CGERROR_PP_BAD_IMPORT_IID;
     strncpy(iidname, cg_str, 127);
     *clsname = 0;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype < TK_EOL) {
         if (ttype != TK_STRING)
             throw CGERROR_PP_BAD_IMPORT_IID;
         strncpy(clsname, cg_str, 127);
     }
-    cg_libindex = PutLIB(LIBDAT_FLAG_COMOBJ, iidname);
+    cg_libindex = [self PutLIB:LIBDAT_FLAG_COMOBJ name:iidname];
     if (cg_libindex < 0)
         throw CGERROR_PP_BAD_IMPORT_IID;
-    SetLIBIID(cg_libindex, clsname);
+    [self SetLIBIID:cg_libindex clsid:clsname];
     cg_libmode = CG_LIBMODE_COM;
-    PutStructStart();
-    prmid = PutStructEndDll((char*)"*", cg_libindex, STRUCTPRM_SUBID_COMOBJ, -1);
-    lb->Regist(libname, TYPE_DLLCTRL, prmid | TYPE_OFFSET_COMOBJ, cg_orgfile,
-               cg_orgline);
+    [self PutStructStart];
+    prmid = [self PutStructEndDll:(char*)"*" libindex:cg_libindex subid:STRUCTPRM_SUBID_COMOBJ otindex:-1];
+    [lb Regist2:libname type:TYPE_DLLCTRL opt:prmid | TYPE_OFFSET_COMOBJ filename:cg_orgfile line:cg_orgline];
     // Mesf( "#usecom %s [%s][%s]",libname,clsname,iidname );
 }
 -(void)GenerateCodePP_func:(int)deftype {
@@ -5216,26 +5216,26 @@ finag:
     int ref;
     char fbase[1024];
     char fname[1024];
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_OBJ)
         throw CGERROR_PP_NAMEREQUIRED;
     strncpy(fbase, cg_str, 1023);
     ref = -1;
     if ((hed_cmpmode & CMPMODE_OPTCODE) &&
         (tmp_lb != NULL)) { // プリプロセス情報から最適化を行なう
-        i = tmp_lb->Search(fbase);
+        i = [tmp_lb Search:fbase];
         if (i >= 0) {
-            ref = tmp_lb->GetReference(i);
+            ref = [tmp_lb GetReference:i];
             // Mesf( "#func %s [use%d]", fbase, ref );
         }
     }
     warn = 0;
     otflag = deftype;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype == TK_OBJ) {
         if (strcmp(cg_str, "onexit") == 0) {
             otflag |= STRUCTDAT_OT_CLEANUP;
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self GetTokenCG:GETTOKEN_DEFAULT];
         }
     }
     if (ref == 0 && (otflag & STRUCTDAT_OT_CLEANUP) == 0) {
@@ -5245,7 +5245,7 @@ finag:
         return;
     }
     if (cg_libmode == CG_LIBMODE_DLLNEW) { // 初回はDLL名を登録する
-        cg_libindex = PutLIB(LIBDAT_FLAG_DLL, cg_libname);
+        cg_libindex = [self PutLIB:LIBDAT_FLAG_DLL name:cg_libname];
         cg_libmode = CG_LIBMODE_DLL;
     }
     if (cg_libmode != CG_LIBMODE_DLL)
@@ -5265,8 +5265,8 @@ finag:
         default:
             throw CGERROR_PP_BAD_IMPORT_NAME;
     }
-    GetTokenCG(GETTOKEN_DEFAULT);
-    PutStructStart();
+    [self GetTokenCG:GETTOKEN_DEFAULT];
+    [self PutStructStart];
     if (ttype == TK_NUM) {
         int p1, p2, p3, p4, c1;
         warn = 1;
@@ -5299,33 +5299,33 @@ finag:
         }
         //        if ( val & 0x220 ) throw CGERROR_PP_INCOMPATIBLE_IMPORT;
         //        Mesf("#oldfunc %d,%d,%d,%d",p1,p2,p3,p4);
-        PutStructParam(p1, STRUCTPRM_SUBID_STID);
-        PutStructParam(p2, STRUCTPRM_SUBID_STID);
-        PutStructParam(p3, STRUCTPRM_SUBID_STID);
-        PutStructParam(p4, STRUCTPRM_SUBID_STID);
+        [self PutStructParam:p1 extype:STRUCTPRM_SUBID_STID];
+        [self PutStructParam:p2 extype:STRUCTPRM_SUBID_STID];
+        [self PutStructParam:p3 extype:STRUCTPRM_SUBID_STID];
+        [self PutStructParam:p4 extype:STRUCTPRM_SUBID_STID];
     } else {
         while (1) {
             if (ttype >= TK_EOL)
                 break;
             if (ttype != TK_OBJ)
                 throw CGERROR_PP_WRONG_PARAM_NAME;
-            t = GetParameterFuncTypeCG(cg_str);
+            t = [self GetParameterFuncTypeCG:cg_str];
             if (t == MPTYPE_NONE)
                 throw CGERROR_PP_WRONG_PARAM_NAME;
-            PutStructParam(t, STRUCTPRM_SUBID_STID);
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self PutStructParam:t extype:STRUCTPRM_SUBID_STID];
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             if (ttype >= TK_EOL)
                 break;
             if (ttype != TK_NONE)
                 throw CGERROR_PP_WRONG_PARAM_NAME;
             if (val != ',')
                 throw CGERROR_PP_WRONG_PARAM_NAME;
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self GetTokenCG:GETTOKEN_DEFAULT];
         }
     }
-    i = lb->Search(fbase);
+    i = [lb Search:fbase];
     if (i >= 0) {
-        CG_MesLabelDefinition(i);
+        [self CG_MesLabelDefinition:i];
         throw CGERROR_PP_ALREADY_USE_FUNCNAME;
     }
     subid = STRUCTPRM_SUBID_DLL;
@@ -5333,8 +5333,8 @@ finag:
         subid = STRUCTPRM_SUBID_OLDDLL;
         // Mesf( "Warning:Old func expression [%s]", fbase );
     }
-    i = PutStructEndDll(fname, cg_libindex, subid, otflag);
-    lb->Regist(fbase, TYPE_DLLFUNC, i, cg_orgfile, cg_orgline);
+    i = [self PutStructEndDll:fname libindex:cg_libindex subid:subid otindex:otflag];
+    [lb Regist2:fbase type:TYPE_DLLFUNC opt:i filename:cg_orgfile line:cg_orgline];
     // Mesf( "#func [%s][%s][%d]",fbase, fname, i );
 }
 -(void)GenerateCodePP_comfunc {
@@ -5344,45 +5344,44 @@ finag:
     char fbase[1024];
     if (cg_libmode != CG_LIBMODE_COM)
         throw CGERROR_PP_NO_USECOM;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_OBJ)
         throw CGERROR_PP_NAMEREQUIRED;
     strncpy(fbase, cg_str, 1023);
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_NUM) {
         throw CGERROR_PP_BAD_IMPORT_INDEX;
     }
     imp_index = val;
-    GetTokenCG(GETTOKEN_DEFAULT);
-    PutStructStart();
-    PutStructParam(MPTYPE_IOBJECTVAR, STRUCTPRM_SUBID_STID);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
+    [self PutStructStart];
+    [self PutStructParam:MPTYPE_IOBJECTVAR extype:STRUCTPRM_SUBID_STID];
     while (1) {
         if (ttype >= TK_EOL)
             break;
         if (ttype != TK_OBJ)
             throw CGERROR_PP_WRONG_PARAM_NAME;
-        t = GetParameterFuncTypeCG(cg_str);
+        t = [self GetParameterFuncTypeCG:cg_str];
         if (t == MPTYPE_NONE)
             throw CGERROR_PP_WRONG_PARAM_NAME;
-        PutStructParam(t, STRUCTPRM_SUBID_STID);
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self PutStructParam:t extype:STRUCTPRM_SUBID_STID];
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         if (ttype >= TK_EOL)
             break;
         if (ttype != TK_NONE)
             throw CGERROR_PP_WRONG_PARAM_NAME;
         if (val != ',')
             throw CGERROR_PP_WRONG_PARAM_NAME;
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
     }
-    i = lb->Search(fbase);
+    i = [lb Search:fbase];
     if (i >= 0) {
-        CG_MesLabelDefinition(i);
+        [self CG_MesLabelDefinition:i];
         throw CGERROR_PP_ALREADY_USE_TAGNAME;
     }
     subid = STRUCTPRM_SUBID_COMOBJ;
-    i = PutStructEndDll((char*)"*", cg_libindex, subid, imp_index);
-    lb->Regist(fbase, TYPE_DLLCTRL, i | TYPE_OFFSET_COMOBJ, cg_orgfile,
-               cg_orgline);
+    i = [self PutStructEndDll:(char*)"*" libindex:cg_libindex subid:subid otindex:imp_index];
+    [lb Regist2:fbase type:TYPE_DLLCTRL opt:i | TYPE_OFFSET_COMOBJ filename:cg_orgfile line:cg_orgline];
     // Mesf( "#comfunc [%s][%d][%d]",fbase, imp_index, i );
 }
 -(int)GetParameterTypeCG:(char*)name {
@@ -5483,8 +5482,8 @@ finag:
         return MPTYPE_FLOAT;
     return MPTYPE_NONE;
 }
-#define GET_FI_SIZE() ((int)(fi_buf->GetSize() / sizeof(STRUCTDAT)))
-#define GET_FI(n) (((STRUCTDAT*)fi_buf->GetBuffer()) + (n))
+#define GET_FI_SIZE() ((int)([fi_buf GetSize] / sizeof(STRUCTDAT)))
+#define GET_FI(n) (((STRUCTDAT*)[fi_buf GetBuffer] + (n)))
 #define STRUCTDAT_INDEX_DUMMY ((short)0x8000)
 -(void)GenerateCodePP_deffunc0:(int)is_command {
     //        HSP3Codeを展開する(deffunc / defcfunc)
@@ -5498,39 +5497,38 @@ finag:
     STRUCTPRM* prm;
     STRUCTDAT* st;
     prep = 0;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_OBJ)
         throw CGERROR_PP_NAMEREQUIRED;
     if (is_command && !strcmp(cg_str, "prep")) { // プロトタイプ宣言
         prep = 1;
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         if (ttype != TK_OBJ)
             throw CGERROR_PP_NAMEREQUIRED;
     }
     strncpy(funcname, cg_str, 1023);
     for (i = 0; i < cg_localcur; i++) {
-        lb->SetFlag(cg_localstruct[i],
-                    -1); // 以前に指定されたパラメーター名を削除する
+        [lb SetFlag:cg_localstruct[i] val:-1]; // 以前に指定されたパラメーター名を削除する
     }
     cg_localcur = 0;
     funcflag = 0;
     regflag = 1;
     index = -1;
-    int label_id = lb->Search(funcname);
+    int label_id = [lb Search:funcname];
     if (label_id >= 0) {
-        if (lb->GetType(label_id) != TYPE_MODCMD) {
-            CG_MesLabelDefinition(label_id);
+        if ([lb GetType:label_id] != TYPE_MODCMD) {
+            [self CG_MesLabelDefinition:label_id];
             throw CGERROR_PP_ALREADY_USE_FUNC;
         }
-        index = lb->GetOpt(label_id);
+        index = [lb GetOpt:label_id];
         if (index >= 0 && GET_FI(index)->index != STRUCTDAT_INDEX_DUMMY) {
-            CG_MesLabelDefinition(label_id);
+            [self CG_MesLabelDefinition:label_id];
             throw CGERROR_PP_ALREADY_USE_FUNC;
         }
     }
-    PutStructStart();
+    [self PutStructStart];
     while (1) {
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         if (ttype >= TK_EOL)
             break;
         if (ttype != TK_OBJ)
@@ -5539,52 +5537,52 @@ finag:
             funcflag |= STRUCTDAT_FUNCFLAG_CLEANUP;
             break;
         }
-        t = GetParameterTypeCG(cg_str);
+        t = [self GetParameterTypeCG:cg_str];
         if (t == MPTYPE_NONE)
             throw CGERROR_PP_WRONG_PARAM_NAME;
         if ((t == MPTYPE_MODULEVAR) || (t == MPTYPE_IMODULEVAR) ||
             (t == MPTYPE_TMODULEVAR)) {
             //    モジュール名指定
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             if (ttype != TK_OBJ)
                 throw CGERROR_PP_WRONG_PARAM_NAME;
-            i = lb->Search(cg_str);
+            i = [lb Search:cg_str];
             if (i < 0)
                 throw CGERROR_PP_BAD_STRUCT;
-            if (lb->GetType(i) != TYPE_STRUCT)
+            if ([lb GetType:i] != TYPE_STRUCT)
                 throw CGERROR_PP_BAD_STRUCT;
-            prm = (STRUCTPRM*)mi_buf->GetBuffer();
-            subid = prm[lb->GetOpt(i)].subid;
+            prm = (STRUCTPRM*)[mi_buf GetBuffer];
+            subid = prm[[lb GetOpt:i]].subid;
             // Mesf( "%s:struct%d",cg_str,subid );
             if (t == MPTYPE_IMODULEVAR) {
-                if (prm[lb->GetOpt(i)].offset != -1)
+                if (prm[[lb GetOpt:i]].offset != -1)
                     throw CGERROR_PP_MODINIT_USED;
-                prm[lb->GetOpt(i)].offset = GET_FI_SIZE();
+                prm[[lb GetOpt:i]].offset = GET_FI_SIZE();
                 regflag = 0;
             }
             if (t == MPTYPE_TMODULEVAR) {
-                st = (STRUCTDAT*)fi_buf->GetBuffer();
+                st = (STRUCTDAT*)[fi_buf GetBuffer];
                 if (st[subid].otindex != 0)
                     throw CGERROR_PP_MODTERM_USED;
                 st[subid].otindex = GET_FI_SIZE();
                 regflag = 0;
             }
-            prmid = PutStructParam(t, subid);
-            GetTokenCG(GETTOKEN_DEFAULT);
+            prmid = [self PutStructParam:t extype:subid];
+            [self GetTokenCG:GETTOKEN_DEFAULT];
         } else {
-            prmid = PutStructParam(t, STRUCTPRM_SUBID_STACK);
+            prmid = [self PutStructParam:t extype:STRUCTPRM_SUBID_STACK];
             // Mesf( "%d:type%d",prmid,t );
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             if (ttype == TK_OBJ) {
                 //    引数のエイリアス
-                i = lb->Search(cg_str);
+                i = [lb Search:cg_str];
                 if (i >= 0) {
-                    CG_MesLabelDefinition(i);
+                    [self CG_MesLabelDefinition:i];
                     throw CGERROR_PP_ALREADY_USE_PARAM;
                 }
-                i = lb->Regist(cg_str, TYPE_STRUCT, prmid, cg_orgfile, cg_orgline);
+                i = [lb Regist2:cg_str type:TYPE_STRUCT opt:prmid filename:cg_orgfile line:cg_orgline];
                 cg_localstruct[cg_localcur++] = i;
-                GetTokenCG(GETTOKEN_DEFAULT);
+                [self GetTokenCG:GETTOKEN_DEFAULT];
             }
         }
         if (ttype >= TK_EOL)
@@ -5594,40 +5592,40 @@ finag:
         if (val != ',')
             throw CGERROR_PP_WRONG_PARAM_NAME;
     }
-    ot = PutOT(GetCS());
+    ot = [self PutOT:[self GetCS]];
     if (index == -1) {
         index = GET_FI_SIZE();
-        fi_buf->PreparePtr(sizeof(STRUCTDAT));
+        [fi_buf PreparePtr:sizeof(STRUCTDAT)];
         if (regflag) {
-            lb->Regist(funcname, TYPE_MODCMD, index, cg_orgfile, cg_orgline);
+            [lb Regist2:funcname type:TYPE_MODCMD opt:index filename:cg_orgfile line:cg_orgline];
         }
     }
     if (label_id >= 0) {
-        lb->SetOpt(label_id, index);
+        [lb SetOpt:label_id val:index];
     }
     int dat_index = is_command ? STRUCTDAT_INDEX_FUNC : STRUCTDAT_INDEX_CFUNC;
-    PutStructEnd(index, funcname, dat_index, ot, funcflag);
+    [self PutStructEnd_int:index name:funcname libindex:dat_index otindex:ot funcflag:funcflag];
 }
 -(void)GenerateCodePP_deffunc {
-    GenerateCodePP_deffunc0(1);
+    [self GenerateCodePP_deffunc0:1];
 }
 -(void)GenerateCodePP_defcfunc {
-    GenerateCodePP_deffunc0(0);
+    [self GenerateCodePP_deffunc0:0];
 }
 -(void)GenerateCodePP_module {
     //        HSP3Codeを展開する(module)
     //
     int i, ref;
     char* modname;
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_OBJ)
         throw CGERROR_PP_NAMEREQUIRED;
     modname = cg_str;
     if ((hed_cmpmode & CMPMODE_OPTCODE) &&
         (tmp_lb != NULL)) { // プリプロセス情報から最適化を行なう
-        i = tmp_lb->Search(modname);
+        i = [tmp_lb Search:modname];
         if (i >= 0) {
-            ref = tmp_lb->GetReference(i);
+            ref = [tmp_lb GetReference:i];
             if (ref == 0) {
                 cg_flag = CG_FLAG_DISABLE;
                 if (hed_cmpmode & CMPMODE_OPTINFO) {
@@ -5643,40 +5641,40 @@ finag:
     //
     int i, t, prmid;
     char funcname[1024];
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype != TK_OBJ)
         throw CGERROR_PP_NAMEREQUIRED;
     strncpy(funcname, cg_str, 1023);
-    i = lb->Search(funcname);
+    i = [lb Search:funcname];
     if (i >= 0) {
-        CG_MesLabelDefinition(i);
+        [self CG_MesLabelDefinition:i];
         throw CGERROR_PP_ALREADY_USE_PARAM;
     }
-    PutStructStart();
-    prmid = PutStructParamTag(); // modinit用のTAG
-    lb->Regist(funcname, TYPE_STRUCT, prmid, cg_orgfile, cg_orgline);
+    [self PutStructStart];
+    prmid = [self PutStructParamTag]; // modinit用のTAG
+    [lb Regist2:funcname type:TYPE_STRUCT opt:prmid filename:cg_orgfile line:cg_orgline];
     // Mesf( "%d:%s",prmid, funcname );
     while (1) {
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         if (ttype >= TK_EOL)
             break;
         if (ttype != TK_OBJ)
             throw CGERROR_PP_WRONG_PARAM_NAME;
-        t = GetParameterStructTypeCG(cg_str);
+        t = [self GetParameterStructTypeCG:cg_str];
         if (t == MPTYPE_NONE)
             throw CGERROR_PP_WRONG_PARAM_NAME;
-        prmid = PutStructParam(t, STRUCTPRM_SUBID_STID);
+        prmid = [self PutStructParam:t extype:STRUCTPRM_SUBID_STID];
         // Mesf( "%d:type%d",prmid,t );
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         if (ttype != TK_OBJ)
             throw CGERROR_PP_WRONG_PARAM_NAME;
-        i = lb->Search(cg_str);
+        i = [lb Search:cg_str];
         if (i >= 0) {
-            CG_MesLabelDefinition(i);
+            [self CG_MesLabelDefinition:i];
             throw CGERROR_PP_ALREADY_USE_PARAM;
         }
-        lb->Regist(cg_str, TYPE_STRUCT, prmid, cg_orgfile, cg_orgline);
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [lb Regist2:cg_str type:TYPE_STRUCT opt:prmid filename:cg_orgfile line:cg_orgline];
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         if (ttype >= TK_EOL)
             break;
         if (ttype != TK_NONE)
@@ -5684,7 +5682,7 @@ finag:
         if (val != ',')
             throw CGERROR_PP_WRONG_PARAM_NAME;
     }
-    PutStructEnd(funcname, STRUCTDAT_INDEX_STRUCT, 0, 0);
+    [self PutStructEnd:funcname libindex:STRUCTDAT_INDEX_STRUCT otindex:0 funcflag:0];
 }
 -(void)GenerateCodePP_defvars:(int)fixedvalue {
     //        HSP3Codeを展開する(defint,defdouble,defnone)
@@ -5693,18 +5691,18 @@ finag:
     int prms;
     prms = 0;
     while (1) {
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         if (ttype >= TK_EOL)
             break;
         if (ttype != TK_OBJ)
             throw CGERROR_WRONG_VARIABLE;
-        id = SetVarsFixed(cg_str, fixedvalue);
+        id = [self SetVarsFixed:cg_str fixedvalue:fixedvalue];
         if ([lb GetType:id] != TYPE_VAR) {
             throw CGERROR_WRONG_VARIABLE;
         }
         prms++;
         // Mesf( "name:%s(%d) fixed:%d", cg_str, id, fixedvalue );
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         if (ttype >= TK_EOL)
             break;
         if (ttype != TK_NONE)
@@ -5720,37 +5718,37 @@ finag:
     //        変数の固定型を設定する
     //
     int id;
-    id = lb->Search(varname);
+    id = [lb Search:varname];
     if (id < 0) {
-        id = lb->Regist(varname, TYPE_VAR, cg_valcnt, cg_orgfile, cg_orgline);
+        id = [lb Regist2:varname type:TYPE_VAR opt:cg_valcnt filename:cg_orgfile line:cg_orgline];
         cg_valcnt++;
     }
-    lb->SetForceType(id, fixedvalue);
+    [lb SetForceType:id val:fixedvalue];
     return id;
 }
 -(void)GenerateCodePP:(char*)buf {
     //        HSP3Codeを展開する(プリプロセスコマンド)
     //
     int i;
-    GetTokenCG(GETTOKEN_DEFAULT); // 最初の'#'を読み飛ばし
-    GetTokenCG(GETTOKEN_DEFAULT);
+    [self GetTokenCG:GETTOKEN_DEFAULT]; // 最初の'#'を読み飛ばし
+    [self GetTokenCG:GETTOKEN_DEFAULT];
     if (ttype == TK_NONE) { // プリプロセッサから渡される行情報
         if (val != '#')
             throw CGERROR_UNKNOWN;
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         if (ttype != TK_NUM)
             throw CGERROR_UNKNOWN;
         cg_orgline = val;
-        GetTokenCG(GETTOKEN_DEFAULT);
+        [self GetTokenCG:GETTOKEN_DEFAULT];
         if (ttype == TK_STRING) {
             strcpy(cg_orgfile, cg_str);
             if (cg_debug) {
-                i = PutDSBuf(cg_str);
-                PutDI(254, i, cg_orgline); // ファイル名をデバッグ情報として登録
+                i = [self PutDSBuf:cg_str];
+                [self PutDI_int:254 a:i subid:cg_orgline]; // ファイル名をデバッグ情報として登録
             }
         } else {
             if (cg_debug) {
-                PutDI(254, 0, cg_orgline); // ラインだけをデバッグ情報として登録
+                [self PutDI_int:254 a:0 subid:cg_orgline]; // ラインだけをデバッグ情報として登録
             }
         }
         // Mesf( "#%d [%s]",cg_orgline, cg_str );
@@ -5767,59 +5765,59 @@ finag:
         return;
     }
     if (!strcmp(cg_str, "regcmd")) {
-        GenerateCodePP_regcmd();
+        [self GenerateCodePP_regcmd];
         return;
     }
     if (!strcmp(cg_str, "cmd")) {
-        GenerateCodePP_cmd();
+        [self GenerateCodePP_cmd];
         return;
     }
     if (!strcmp(cg_str, "uselib")) {
-        GenerateCodePP_uselib();
+        [self GenerateCodePP_uselib];
         return;
     }
     if (!strcmp(cg_str, "func")) {
-        GenerateCodePP_func(STRUCTDAT_OT_STATEMENT | STRUCTDAT_OT_FUNCTION);
+        [self GenerateCodePP_func:STRUCTDAT_OT_STATEMENT | STRUCTDAT_OT_FUNCTION];
         return;
     }
     if (!strcmp(cg_str, "cfunc")) {
-        GenerateCodePP_func(STRUCTDAT_OT_FUNCTION);
+        [self GenerateCodePP_func:STRUCTDAT_OT_FUNCTION];
         return;
     }
     if (!strcmp(cg_str, "deffunc")) {
-        GenerateCodePP_deffunc();
+        [self GenerateCodePP_deffunc];
         return;
     }
     if (!strcmp(cg_str, "defcfunc")) {
-        GenerateCodePP_defcfunc();
+        [self GenerateCodePP_defcfunc];
         return;
     }
     if (!strcmp(cg_str, "module")) {
-        GenerateCodePP_module();
+        [self GenerateCodePP_module];
         return;
     }
     if (!strcmp(cg_str, "struct")) {
-        GenerateCodePP_struct();
+        [self GenerateCodePP_struct];
         return;
     }
     if (!strcmp(cg_str, "usecom")) {
-        GenerateCodePP_usecom();
+        [self GenerateCodePP_usecom];
         return;
     }
     if (!strcmp(cg_str, "comfunc")) {
-        GenerateCodePP_comfunc();
+        [self GenerateCodePP_comfunc];
         return;
     }
     if (!strcmp(cg_str, "defint")) {
-        GenerateCodePP_defvars(LAB_TYPEFIX_INT);
+        [self GenerateCodePP_defvars:LAB_TYPEFIX_INT];
         return;
     }
     if (!strcmp(cg_str, "defdouble")) {
-        GenerateCodePP_defvars(LAB_TYPEFIX_DOUBLE);
+        [self GenerateCodePP_defvars:LAB_TYPEFIX_DOUBLE];
         return;
     }
     if (!strcmp(cg_str, "defnone")) {
-        GenerateCodePP_defvars(LAB_TYPEFIX_NONE);
+        [self GenerateCodePP_defvars:LAB_TYPEFIX_NONE];
         return;
     }
 }
@@ -5834,14 +5832,14 @@ finag:
     if (cg_ptr == NULL)
         return TK_EOF;
     if (*cg_ptr == '#') {
-        GenerateCodePP(cg_ptr);
+        [self GenerateCodePP:cg_ptr];
         return TK_EOL;
     }
     if (cg_flag != CG_FLAG_ENABLE)
         return TK_EOL; // 最適化による出力抑制
     //    while(1) {
     //        if ( cg_ptr!=NULL ) Mes( cg_ptr );
-    GetTokenCG(GETTOKEN_LABEL);
+    [self GetTokenCG:GETTOKEN_LABEL];
     if (ttype >= TK_SEPARATE)
         return ttype;
     switch (ttype) {
@@ -5863,25 +5861,25 @@ finag:
             //            break;
         case TK_OBJ:
             cg_lastcmd = CG_LASTCMD_LET;
-            i = lb->Search(cg_str);
+            i = [lb Search:cg_str];
             if (i < 0) {
                 // Mesf( "[%s][%d]",cg_str, cg_valcnt );
-                i = SetVarsFixed(cg_str, cg_defvarfix);
-                lb->SetInitFlag(i, LAB_INIT_DONE); //    変数の初期化フラグをセットする
-                GenerateCodeLET(i);
+                i = [self SetVarsFixed:cg_str fixedvalue:cg_defvarfix];
+                [lb SetInitFlag:i val:LAB_INIT_DONE]; //    変数の初期化フラグをセットする
+                [self GenerateCodeLET:i];
             } else {
-                t = lb->GetType(i);
+                t = [lb GetType:i];
                 switch (t) {
                     case TYPE_VAR:
                     case TYPE_STRUCT:
-                        GenerateCodeLET(i);
+                        [self GenerateCodeLET:i];
                         break;
                     case TYPE_LABEL:
                     case TYPE_XLABEL:
                         throw CGERROR_LABELNAME;
                         break;
                     default:
-                        GenerateCodeCMD(i);
+                        [self GenerateCodeCMD:i];
                         break;
                 }
             }
@@ -5894,19 +5892,19 @@ finag:
                 sprintf(cg_str, "@l%d", cg_locallabel); // local label
                 cg_locallabel++;
             }
-            i = lb->Search(cg_str);
+            i = [lb Search:cg_str];
             if (i >= 0) {
                 LABOBJ* lab;
-                lab = lb->GetLabel(i);
+                lab = [lb GetLabel:i];
                 if (lab->type != TYPE_XLABEL)
                     throw CGERROR_LABELEXIST;
-                SetOT(lb->GetOpt(i), GetCS());
+                [self SetOT:[lb GetOpt:i] value:[self GetCS]];
                 lab->type = TYPE_LABEL;
             } else {
-                i = lb->Regist(cg_str, TYPE_LABEL, ot_buf->GetSize() / sizeof(int));
-                PutOT(GetCS());
+                i = [lb Regist:cg_str type:TYPE_LABEL opt:[ot_buf GetSize] / sizeof(int)];
+                [self PutOT:[self GetCS]];
             }
-            GetTokenCG(GETTOKEN_DEFAULT);
+            [self GetTokenCG:GETTOKEN_DEFAULT];
             break;
         default:
             throw CGERROR_SYNTAX;
@@ -5942,7 +5940,7 @@ finag:
         //        if ( *p >= 32 ) { p++; continue; }
         //    }
         //}
-        skip = SkipMultiByte(a1); // 全角文字チェック
+        skip = [self SkipMultiByte:a1]; // 全角文字チェック
         if (skip) {
             p += skip + 1;
             continue;
@@ -5994,14 +5992,14 @@ finag:
     int res, id, ff;
     char a1;
     char* p;
-    res = GenerateCodeSub();
+    res = [self GenerateCodeSub];
     if (res == TK_EOF)
         return res;
     if (res == TK_EOL) {
         cg_ptr = [self GetLineCG];
         if (iflev) {
             if (ifscope[iflev - 1] == CG_IFCHECK_LINE)
-                CheckCMDIF_Fin(0); // 'if' jump support
+                [self CheckCMDIF_Fin:0]; // 'if' jump support
         }
         if (cg_debug)
             [self PutDI];
@@ -6021,23 +6019,23 @@ finag:
             if (ifscope[iflev - 1] != CG_IFCHECK_SCOPE)
                 throw CGERROR_BLOCKEXP;
             ff = 0;
-            p = GetTokenCG(cg_ptr, GETTOKEN_DEFAULT);
+            p = [self GetTokenCG:cg_ptr option:GETTOKEN_DEFAULT];
             if (ttype == TK_EOL) { // 次行のコマンドがelseかどうか調べる
                 if (cg_wp != NULL) {
-                    p = GetSymbolCG((char*)cg_wp);
+                    p = [self GetSymbolCG:(char*)cg_wp];
                     if (p != NULL) {
-                        id = lb->Search(p);
+                        id = [lb Search:p];
                         if (id >= 0) {
-                            if (([lb GetType:id] == TYPE_CMPCMD) && (lb->GetOpt(id) == 1)) {
+                            if (([lb GetType:id] == TYPE_CMPCMD) && ([lb GetOpt:id] == 1)) {
                                 ff = 1;
                             }
                         }
                     }
                 }
             } else if (ttype == TK_OBJ) { // 次のコマンドがelseかどうか調べる
-                id = lb->Search(cg_str);
+                id = [lb Search:cg_str];
                 if (id >= 0) {
-                    if (([lb GetType:id] == TYPE_CMPCMD) && (lb->GetOpt(id) == 1)) {
+                    if (([lb GetType:id] == TYPE_CMPCMD) && ([lb GetOpt:id] == 1)) {
                         // ifscope[iflev-1] = CG_IFCHECK_LINE;                    // line
                         // scope
                         // on
@@ -6046,7 +6044,7 @@ finag:
                 }
             }
             if (ff == 0)
-                CheckCMDIF_Fin(0);
+                [self CheckCMDIF_Fin:0];
         }
     }
     return res;
@@ -6056,16 +6054,16 @@ finag:
     //
     if (tmp_lb == NULL)
         return;
-    int len = tmp_lb->GetCount();
+    int len = [tmp_lb GetCount];
     for (int i = 0; i < len; i++) {
-        if (tmp_lb->GetType(i) == LAB_TYPE_PPMODFUNC && tmp_lb->GetFlag(i) >= 0) {
-            char* name = tmp_lb->GetName(i);
-            if (lb->Search(name) >= 0) {
+        if ([tmp_lb GetType:i] == LAB_TYPE_PPMODFUNC && [tmp_lb GetFlag:i] >= 0) {
+            char* name = [tmp_lb GetName:i];
+            if ([lb Search:name] >= 0) {
                 throw CGERROR_PP_ALREADY_USE_FUNC;
             }
-            LABOBJ* lab = tmp_lb->GetLabel(i);
-            int id = lb->Regist(name, TYPE_MODCMD, -1, lab->def_file, lab->def_line);
-            lb->SetData2(id, (char*)&i, sizeof i);
+            LABOBJ* lab = [tmp_lb GetLabel:i];
+            int id = [lb Regist2:name type:TYPE_MODCMD opt:-1 filename:lab->def_file line:lab->def_line];
+            [lb SetData2:id str:(char*)&i size:sizeof i];
         }
     }
 }
@@ -6080,7 +6078,7 @@ finag:
     cg_typecnt = HSP3_TYPE_USER;
     cg_pptype = -1;
     cg_iflev = 0;
-    cg_wp = (unsigned char*)buf->GetBuffer();
+    cg_wp = (unsigned char*)[buf GetBuffer];
     cg_ptr = [self GetLineCG];
     cg_orgfile[0] = 0;
     cg_libindex = -1;
@@ -6096,9 +6094,9 @@ finag:
         repend[a] = -1;
     }
     try {
-        RegisterFuncLabels();
+        [self RegisterFuncLabels];
         while (1) {
-            if (GenerateCodeBlock() == TK_EOF)
+            if ([self GenerateCodeBlock] == TK_EOF)
                 break;
         }
         cg_errline = -1; // エラーの行番号は該当なし
@@ -6108,16 +6106,16 @@ finag:
         //        ラベル未処理チェック
         int errend;
         errend = 0;
-        for (a = 0; a < lb->GetCount(); a++) {
-            if (lb->GetType(a) == TYPE_XLABEL) {
-                NSLog(@"#ラベルの定義が存在しません [%s]\n",lb->GetName(a));
+        for (a = 0; a < [lb GetCount]; a++) {
+            if ([lb GetType:a] == TYPE_XLABEL) {
+                NSLog(@"#ラベルの定義が存在しません [%s]\n",[lb GetName:a]);
                 errend++;
             }
         }
         //        関数未処理チェック
         for (a = 0; a < GET_FI_SIZE(); a++) {
             if (GET_FI(a)->index == STRUCTDAT_INDEX_DUMMY) {
-                NSLog(@"#関数が定義されていません [%s]\n",lb->GetName(GET_FI(a)->otindex));
+                NSLog(@"#関数が定義されていません [%s]\n",[lb GetName:GET_FI(a)->otindex]);
                 errend++;
             }
         }
@@ -6144,46 +6142,46 @@ finag:
     v = (unsigned int)value;
     a = (type & CSTYPE) | exflg;
     if (v < 0x10000) { // when 16bit encode
-        cs_buf->Put((short)(a));
-        cs_buf->Put((short)(v));
+        [cs_buf Put_short:(short)(a)];
+        [cs_buf Put_short:(short)(v)];
     } else { // when 32bit encode
-        cs_buf->Put((short)(0x8000 | a));
-        cs_buf->Put((int)value);
+        [cs_buf Put_short:(short)(0x8000 | a)];
+        [cs_buf Put_int:(int)value];
     }
 }
--(void)PutCS:(int)type value:(double)value exflg:(int)exflg {
+-(void)PutCS_double:(int)type value:(double)value exflg:(int)exflg {
     //        Register command code (double)
     //
-    PutCS(type, PutDS(value), exflg);
+    [self PutCS:type value:[self PutDS_double:value] exflg:exflg];
 }
 -(void)PutCSSymbol:(int)label_id exflag:(int)exflag {
     //        まだ定義されていない関数の呼び出しがあったら仮登録する
     //
-    int type = lb->GetType(label_id);
-    int value = lb->GetOpt(label_id);
+    int type = [lb GetType:label_id];
+    int value = [lb GetOpt:label_id];
     if (type == TYPE_MODCMD && value == -1) {
-        int id = *(int*)lb->GetData2(label_id);
-        tmp_lb->AddReference(id);
+        int id = *(int*)[lb GetData2:label_id];
+        [tmp_lb AddReference:id];
         STRUCTDAT st = { STRUCTDAT_INDEX_DUMMY };
         st.otindex = label_id;
         value = GET_FI_SIZE();
-        fi_buf->PutData(&st, sizeof(STRUCTDAT));
-        lb->SetOpt(label_id, value);
+        [fi_buf PutData:&st sz:sizeof(STRUCTDAT)];
+        [lb SetOpt:label_id val:value];
     }
     if (exflag & EXFLG_1 && type != TYPE_VAR && type != TYPE_STRUCT) {
         value &= 0xffff;
     }
-    PutCS(type, value, exflag);
+    [self PutCS:type value:value exflg:exflag];
 }
 -(int)GetCS {
     //        Get current CS index
     //
-    return (cs_buf->GetSize()) >> 1;
+    return ([cs_buf GetSize]) >> 1;
 }
 -(int)PutDS_double:(double)value {
     //        Register doubles to data segment
     //
-    int i = ds_buf->GetSize();
+    int i = [ds_buf GetSize];
 #ifdef HSP_DS_POOL
     if (CG_optCode()) {
         int i_cache =
@@ -6196,29 +6194,29 @@ finag:
         }
     }
 #endif
-    ds_buf->Put(value);
+    [ds_buf Put_double:value];
     return i;
 }
 -(int)PutDS:(char*)str {
     //        Register strings to data segment (script string)
     //
-    return PutDSStr(str, cg_utf8out != 0);
+    return [self PutDSStr:str converts_to_utf8:cg_utf8out != 0];
 }
 -(int)PutDSBuf:(char*)str {
     //        Register strings to data segment (direct)
     //
-    return PutDSStr(str, false);
+    return [self PutDSStr:str converts_to_utf8:false];
 }
 -(int)PutDSStr:(char*)str converts_to_utf8:(bool)converts_to_utf8 {
     //        Register strings to data segment (caching)
     char* p;
     // output as UTF8 format
     if (converts_to_utf8) {
-        p = ExecSCNV(str, SCNV_OPT_SJISUTF8);
+        p = [self ExecSCNV:str opt:SCNV_OPT_SJISUTF8];
     } else {
         p = str;
     }
-    int i = ds_buf->GetSize();
+    int i = [ds_buf GetSize];
 #ifdef HSP_DS_POOL
     if (CG_optCode()) {
         int i_cache = string_literal_table.insert(std::make_pair(std::string(p), i))
@@ -6234,34 +6232,34 @@ finag:
     }
 #endif
     if (converts_to_utf8) {
-        ds_buf->PutData(p, (int)(strlen(p) + 1));
+        [ds_buf PutData:p sz:(int)(strlen(p) + 1)];
     } else {
-        ds_buf->PutStr(p);
-        ds_buf->Put((char)0);
+        [ds_buf PutStr:p];
+        [ds_buf Put_char:(char)0];
     }
     return i;
 }
--(int)PutDSBuf:(char*)str size:(int)size {
+-(int)PutDSBuf_size:(char*)str size:(int)size {
     //        Register strings to data segment (direct)
     //
     int i;
-    i = ds_buf->GetSize();
-    ds_buf->PutData(str, size);
+    i = [ds_buf GetSize];
+    [ds_buf PutData:str sz:size];
     return i;
 }
 -(int)PutOT:(int)value {
     //        Register object temp
     //
     int i;
-    i = ot_buf->GetSize() / sizeof(int);
-    ot_buf->Put(value);
+    i = [ot_buf GetSize] / sizeof(int);
+    [ot_buf Put_int:value];
     return i;
 }
 -(void)SetOT:(int)id value:(int)value {
     //        Modify object temp
     //
     int* p;
-    p = (int*)(ot_buf->GetBuffer());
+    p = (int*)([ot_buf GetBuffer]);
     p[id] = value;
 }
 -(void)PutDI {
@@ -6275,31 +6273,31 @@ finag:
     //            255             = end of debug data
     //
     int ofs;
-    ofs = (int)(GetCS() - cg_lastcs);
+    ofs = (int)([self GetCS] - cg_lastcs);
     if (ofs <= 250) {
-        di_buf->Put((unsigned char)ofs);
+        [di_buf Put_uchar:(unsigned char)ofs];
     } else {
-        di_buf->Put((unsigned char)252);
-        di_buf->Put((unsigned char)(ofs));
-        di_buf->Put((unsigned char)(ofs >> 8));
+        [di_buf Put_uchar:(unsigned char)252];
+        [di_buf Put_uchar:(unsigned char)(ofs)];
+        [di_buf Put_uchar:(unsigned char)(ofs >> 8)];
     }
-    cg_lastcs = GetCS();
+    cg_lastcs = [self GetCS];
 }
--(void)PutDI:(int)dbg_code a:(int)a subid:(int)subid) {
+-(void)PutDI:(int)dbg_code a:(int)a subid:(int)subid {
     //        special Debug code register
     //            in : -1=end of code
     //                254=(a=file ds ptr./subid=line num.)
     //
     if (dbg_code < 0) {
-        di_buf->Put((unsigned char)255);
-        di_buf->Put((unsigned char)255);
+        [di_buf Put_uchar:(unsigned char)255];
+        [di_buf Put_uchar:(unsigned char)255];
     } else {
-        di_buf->Put((unsigned char)dbg_code);
-        di_buf->Put((unsigned char)(a));
-        di_buf->Put((unsigned char)(a >> 8));
-        di_buf->Put((unsigned char)(a >> 16));
-        di_buf->Put((unsigned char)(subid));
-        di_buf->Put((unsigned char)(subid >> 8));
+        [di_buf Put_uchar:(unsigned char)dbg_code];
+        [di_buf Put_uchar:(unsigned char)(a)];
+        [di_buf Put_uchar:(unsigned char)(a >> 8)];
+        [di_buf Put_uchar:(unsigned char)(a >> 16)];
+        [di_buf Put_uchar:(unsigned char)(subid)];
+        [di_buf Put_uchar:(unsigned char)(subid >> 8)];
     }
 }
 -(void)PutDIVars {
@@ -6311,8 +6309,8 @@ finag:
     char* p;
     id = 0;
     strcpy(vtmpname, "I_");
-    for (a = 0; a < lb->GetNumEntry(); a++) {
-        lab = lb->GetLabel(a);
+    for (a = 0; a < [lb GetNumEntry]; a++) {
+        lab = [lb GetLabel:a];
         if (lab->type == TK_OBJ) {
             switch (lab->typefix) {
                 case LAB_TYPEFIX_INT:
@@ -6330,54 +6328,54 @@ finag:
                     p = lab->name;
                     break;
             }
-            i = PutDSBuf(p);
-            PutDI(253, i, lab->opt);
+            i = [self PutDSBuf:p];
+            [self PutDI:253 a:i subid:lab->opt];
         }
     }
 }
 // ラベル名の情報を出力する
 -(void)PutDILabels {
-    int num = ot_buf->GetSize() / sizeof(int);
+    int num = [ot_buf GetSize] / sizeof(int);
     int* table = new int[num];
     for (int i = 0; i < num; i++)
         table[i] = -1;
-    for (int i = 0; i < lb->GetNumEntry(); i++) {
-        if (lb->GetType(i) == TYPE_LABEL) {
-            int id = lb->GetOpt(i);
+    for (int i = 0; i < [lb GetNumEntry]; i++) {
+        if ([lb GetType:i] == TYPE_LABEL) {
+            int id = [lb GetOpt:i];
             table[id] = i;
         }
     }
-    di_buf->Put((unsigned char)255);
+    [di_buf Put_uchar:(unsigned char)255];
     for (int i = 0; i < num; i++) {
         if (table[i] == -1)
             continue;
-        char* name = lb->GetName(table[i]);
-        int dsPos = PutDSBuf(name);
-        PutDI(251, dsPos, i);
+        char* name = [lb GetName:table[i]];
+        int dsPos = [self PutDSBuf:name];
+        [self PutDI:251 a:dsPos subid:i];
     }
     delete[] table;
 }
 // 引数名の情報を出力する
 -(void)PutDIParams {
-    di_buf->Put((unsigned char)255);
-    for (int i = 0; i < lb->GetNumEntry(); i++) {
-        if (lb->GetType(i) == TYPE_STRUCT) {
-            int id = lb->GetOpt(i);
+    [di_buf Put_uchar:(unsigned char)255];
+    for (int i = 0; i < [lb GetNumEntry]; i++) {
+        if ([lb GetType:i] == TYPE_STRUCT) {
+            int id = [lb GetOpt:i];
             if (id < 0)
                 continue;
-            char* name = lb->GetName(i);
-            int dsPos = PutDSBuf(name);
-            PutDI(251, dsPos, id);
+            char* name = [lb GetName:i];
+            int dsPos = [self PutDSBuf:name];
+            [self PutDI:251 a:dsPos subid:id];
         }
     }
 }
 -(char*)GetDS:(int)ptr {
     int i;
     char* p;
-    i = ds_buf->GetSize();
+    i = [ds_buf GetSize];
     if (ptr >= i)
         return NULL;
-    p = ds_buf->GetBuffer();
+    p = [ds_buf GetBuffer];
     p += ptr;
     return p;
 }
@@ -6390,19 +6388,19 @@ finag:
     int a, i = -1, p;
     LIBDAT lib;
     LIBDAT* l;
-    p = li_buf->GetSize() / sizeof(LIBDAT);
-    l = (LIBDAT*)li_buf->GetBuffer();
+    p = [li_buf GetSize] / sizeof(LIBDAT);
+    l = (LIBDAT*)[li_buf GetBuffer];
     if (flag == LIBDAT_FLAG_DLL) {
         if (*name != 0) {
             for (a = 0; a < p; a++) {
                 if (l->flag == flag) {
-                    if (strcmp(GetDS(l->nameidx), name) == 0) {
+                    if (strcmp([self GetDS:l->nameidx], name) == 0) {
                         return a;
                     }
                 }
                 l++;
             }
-            i = PutDSBuf(name);
+            i = [self PutDSBuf:name];
         } else {
             i = -1;
         }
@@ -6417,25 +6415,25 @@ finag:
     lib.nameidx = i;
     lib.hlib = NULL;
     lib.clsid = -1;
-    li_buf->PutData(&lib, sizeof(LIBDAT));
+    [li_buf PutData:&lib sz:sizeof(LIBDAT)];
     // Mesf( "LIB#%d:%s",flag,name );
     return p;
 }
 -(void)SetLIBIID:(int)id clsid:(char*)clsid {
     LIBDAT* l;
-    l = (LIBDAT*)li_buf->GetBuffer();
+    l = (LIBDAT*)[li_buf GetBuffer];
     l += id;
     if (*clsid == 0) {
         l->clsid = -1;
     } else {
-        l->clsid = PutDSBuf(clsid);
+        l->clsid = [self PutDSBuf:clsid];
     }
 }
 -(int)PutStructParam:(short)mptype extype:(int)extype {
     int size;
     int i;
     STRUCTPRM prm;
-    i = mi_buf->GetSize() / sizeof(STRUCTPRM);
+    i = [mi_buf GetSize] / sizeof(STRUCTPRM);
     prm.mptype = mptype;
     if (extype == STRUCTPRM_SUBID_STID) {
         prm.subid = (short)GET_FI_SIZE();
@@ -6488,31 +6486,31 @@ finag:
     }
     cg_stsize += size;
     cg_stnum++;
-    mi_buf->PutData(&prm, sizeof(STRUCTPRM));
+    [mi_buf PutData:&prm sz:sizeof(STRUCTPRM)];
     return i;
 }
 -(int)PutStructParamTag {
     int i;
     STRUCTPRM prm;
-    i = mi_buf->GetSize() / sizeof(STRUCTPRM);
+    i = [mi_buf GetSize] / sizeof(STRUCTPRM);
     prm.mptype = MPTYPE_STRUCTTAG;
     prm.subid = (short)GET_FI_SIZE();
     prm.offset = -1;
     cg_stnum++;
-    mi_buf->PutData(&prm, sizeof(STRUCTPRM));
+    [mi_buf PutData:&prm sz:sizeof(STRUCTPRM)];
     return i;
 }
 -(void)PutStructStart {
     cg_stnum = 0;
     cg_stsize = 0;
-    cg_stptr = mi_buf->GetSize() / sizeof(STRUCTPRM);
+    cg_stptr = [mi_buf GetSize] / sizeof(STRUCTPRM);
 }
--(int)PutStructEnd:(int)i name:(char*)name libindex:(int)libindex opindex:(int)otindex funcflag:(int)funcflag {
+-(int)PutStructEnd_int:(int)i name:(char*)name libindex:(int)libindex opindex:(int)otindex funcflag:(int)funcflag {
     //        STRUCTDATを登録する(モジュール用)
     //
     STRUCTDAT st;
     st.index = libindex;
-    st.nameidx = PutDSBuf(name);
+    st.nameidx = [self PutDSBuf:name];
     st.subid = i;
     st.prmindex = cg_stptr;
     st.prmmax = cg_stnum;
@@ -6531,8 +6529,8 @@ finag:
 }
 -(int)PutStructEnd:(char*)name libindex:(int)libindex opindex:(int)otindex funcflag:(int)funcflag {
     int i = GET_FI_SIZE();
-    fi_buf->PreparePtr(sizeof(STRUCTDAT));
-    return PutStructEnd(i, name, libindex, otindex, funcflag);
+    [fi_buf PreparePtr:sizeof(STRUCTDAT)];
+    return [self PutStructEnd_int:i name:name libindex:libindex opindex:otindex funcflag:funcflag];
 }
 -(int)PutStructEndDll:(char*)name libindex:(int)libindex subid:(int)subid otindex:(int)otindex {
     //        STRUCTDATを登録する(DLL用)
@@ -6544,7 +6542,7 @@ finag:
     if (name[0] == '*') {
         st.nameidx = -1;
     } else {
-        st.nameidx = PutDSBuf(name);
+        st.nameidx = [self PutDSBuf:name];
     }
     st.subid = subid;
     st.prmindex = cg_stptr;
@@ -6552,7 +6550,7 @@ finag:
     st.proc = NULL;
     st.size = cg_stsize;
     st.otindex = otindex;
-    fi_buf->PutData(&st, sizeof(STRUCTDAT));
+    [fi_buf PutData:&st sz:sizeof(STRUCTDAT)];
     // Mesf( "#%d : %s(LIB%d) prm%d size%d ot%d", i, name, libindex, cg_stnum,
     // cg_stsize, otindex );
     return i;
@@ -6561,51 +6559,51 @@ finag:
     HPIDAT hpi;
     hpi.flag = flag;
     hpi.option = option;
-    hpi.libname = PutDSBuf(libname);
-    hpi.funcname = PutDSBuf(funcname);
+    hpi.libname = [self PutDSBuf:libname];
+    hpi.funcname = [self PutDSBuf:funcname];
     hpi.libptr = NULL;
-    hpi_buf->PutData(&hpi, sizeof(HPIDAT));
+    [hpi_buf PutData:&hpi sz:sizeof(HPIDAT)];
 }
 -(int)GenerateCode:(char*)fname oname:(char*)oname mode:(int)mode {
-    CMemBuf srcbuf;
-    if (srcbuf.PutFile(fname) < 0) {
+    CMemBuf* srcbuf;
+    if ([srcbuf PutFile:fname] < 0) {
         // Mes( (char *)"#No file." );
         @autoreleasepool {
             NSLog(@"#No file.\n");
         }
         return -1;
     }
-    return GenerateCode(&srcbuf, oname, mode);
+    return [self GenerateCode_membuf:srcbuf oname:oname mode:mode];
 }
--(int)GenerateCode:(CMemBuf*)srcbuf oname:(char*)oname mode:(int)mode {
+-(int)GenerateCode_membuf:(CMemBuf*)srcbuf oname:(char*)oname mode:(int)mode {
     //        ファイルをHSP3Codeに展開する
     //        mode            Debug code (0=off 1=on)
     //
     int i, orgcs, res;
     int adjsize;
-    CMemBuf optbuf; // オプション文字列用バッファ
-    CMemBuf bakbuf; // プリプロセッサソース保存用バッファ
-    cs_buf = new CMemBuf;
-    ds_buf = new CMemBuf;
-    ot_buf = new CMemBuf;
-    di_buf = new CMemBuf;
-    li_buf = new CMemBuf;
-    fi_buf = new CMemBuf;
-    mi_buf = new CMemBuf;
-    fi2_buf = new CMemBuf;
-    hpi_buf = new CMemBuf;
-    bakbuf.PutStr(srcbuf->GetBuffer()); // プリプロセッサソースを保存する
+    CMemBuf* optbuf; // オプション文字列用バッファ
+    CMemBuf* bakbuf; // プリプロセッサソース保存用バッファ
+    cs_buf = [[CMemBuf alloc] init];
+    ds_buf = [[CMemBuf alloc] init];
+    ot_buf = [[CMemBuf alloc] init];
+    di_buf = [[CMemBuf alloc] init];
+    li_buf = [[CMemBuf alloc] init];
+    fi_buf = [[CMemBuf alloc] init];
+    mi_buf = [[CMemBuf alloc] init];
+    fi2_buf = [[CMemBuf alloc] init];
+    hpi_buf = [[CMemBuf alloc] init];
+    [bakbuf PutStr:[srcbuf GetBuffer]]; // プリプロセッサソースを保存する
     cg_debug = mode & COMP_MODE_DEBUG;
     cg_utf8out = mode & COMP_MODE_UTF8;
     if (pp_utf8)
         cg_utf8out = 0; // ソースコードがUTF-8の場合は変換は必要ない
     cg_putvars = hed_cmpmode & CMPMODE_PUTVARS;
-    res = GenerateCodeMain(srcbuf);
+    res = [self GenerateCodeMain:srcbuf];
     if (res) {
         //        エラー終了
         char tmp[512];
-        CStrNote note;
-        CMemBuf srctmp;
+        CStrNote* note;
+        CMemBuf* srctmp;
         // Mesf( (char *)"%s(%d) : error %d : %s (%d行目)", cg_orgfile, cg_orgline,
         // res, cg_geterror((CGERROR)res), cg_orgline );
         char* err[] = {
@@ -6660,8 +6658,8 @@ finag:
                                 cg_orgfile, cg_orgline, res,
                   nsstr_error_message, cg_orgline);
             if (cg_errline > 0) {
-                note.Select(bakbuf.GetBuffer());
-                note.GetLine(tmp, cg_errline - 1, 510);
+                [note Select:[bakbuf GetBuffer]];
+                [note GetLine:tmp line:cg_errline - 1 max:510];
                 NSLog(@"--> %s\n", tmp);
                 NSLog(@"error %d : %@ (%d行目)\n--> %s\n", res,
                       nsstr_error_message, cg_orgline, tmp);
@@ -6673,15 +6671,15 @@ finag:
             //global.isError = YES;
     } else {
         //        正常終了
-        CMemBuf axbuf;
-        HSPHED hsphed;
+        CMemBuf* axbuf;
+        HSPHED* hsphed;
         int sz_hed, sz_opt, cs_size, ds_size, ot_size, di_size;
         int li_size, fi_size, mi_size, fi2_size, hpi_size;
-        orgcs = GetCS();
-        PutCS(TYPE_PROGCMD, 0x11, EXFLG_1); // 終了コードを最後に入れる
-        i = PutOT(orgcs);
-        PutCS(TYPE_PROGCMD, 0, EXFLG_1);
-        PutCS(TYPE_LABEL, i, 0);
+        orgcs = [self GetCS];
+        [self PutCS:TYPE_PROGCMD value:0x11 exflg:EXFLG_1]; // 終了コードを最後に入れる
+        i = [self PutOT:orgcs];
+        [self PutCS:TYPE_PROGCMD value:0 exflg:EXFLG_1];
+        [self PutCS:TYPE_LABEL value:i exflg:0];
         if (cg_debug) {
             [self PutDI];
         }
@@ -6692,124 +6690,124 @@ finag:
             [self PutDILabels];
             [self PutDIParams];
         }
-        PutDI(-1, 0, 0); // デバッグ情報終端
+        [self PutDI:-1 a:0 subid:0]; // デバッグ情報終端
         sz_hed = sizeof(HSPHED);
         memset(&hsphed, 0, sz_hed);
-        hsphed.bootoption = 0;
-        hsphed.runtime = 0;
+        hsphed->bootoption = 0;
+        hsphed->runtime = 0;
         if (hed_option & HEDINFO_RUNTIME) {
-            optbuf.PutStr(hed_runtime);
+            [optbuf PutStr:hed_runtime];
         }
-        sz_opt = optbuf.GetSize();
+        sz_opt = [optbuf GetSize];
         if (sz_opt) {
             while (1) {
                 adjsize = (sz_opt + 15) & 0xfff0;
                 if (adjsize == sz_opt)
                     break;
-                optbuf.Put((char)0);
-                sz_opt = optbuf.GetSize();
+                [optbuf Put_char:(char)0];
+                sz_opt = [optbuf GetSize];
             }
-            hsphed.bootoption |= HSPHED_BOOTOPT_RUNTIME;
-            hsphed.runtime = sz_hed;
+            hsphed->bootoption |= HSPHED_BOOTOPT_RUNTIME;
+            hsphed->runtime = sz_hed;
             sz_hed += sz_opt;
         }
         //        デバッグウインドゥ表示
         if (mode & COMP_MODE_DEBUGWIN)
-            hsphed.bootoption |= HSPHED_BOOTOPT_DEBUGWIN;
+            hsphed->bootoption |= HSPHED_BOOTOPT_DEBUGWIN;
         //        起動オプションの設定
         if (hed_autoopt_timer >= 0) {
             // awaitが使用されていない場合はマルチメディアタイマーを無効にする(自動設定)
             if (hed_autoopt_timer == 0)
-                hsphed.bootoption |= HSPHED_BOOTOPT_NOMMTIMER;
+                hsphed->bootoption |= HSPHED_BOOTOPT_NOMMTIMER;
         } else {
             // 設定されたオプションに従ってマルチメディアタイマーを無効にする
             if (hed_option & HEDINFO_NOMMTIMER)
-                hsphed.bootoption |= HSPHED_BOOTOPT_NOMMTIMER;
+                hsphed->bootoption |= HSPHED_BOOTOPT_NOMMTIMER;
         }
         if (hed_option & HEDINFO_NOGDIP)
-            hsphed.bootoption |= HSPHED_BOOTOPT_NOGDIP; // GDI+による描画を無効にする
+            hsphed->bootoption |= HSPHED_BOOTOPT_NOGDIP; // GDI+による描画を無効にする
         if (hed_option & HEDINFO_FLOAT32)
-            hsphed.bootoption |=
+            hsphed->bootoption |=
             HSPHED_BOOTOPT_FLOAT32; // 実数を32bit floatとして処理する
         if (hed_option & HEDINFO_ORGRND)
-            hsphed.bootoption |= HSPHED_BOOTOPT_ORGRND; // 標準の乱数発生を使用する
-        cs_size = cs_buf->GetSize();
-        ds_size = ds_buf->GetSize();
-        ot_size = ot_buf->GetSize();
-        di_size = di_buf->GetSize();
-        li_size = li_buf->GetSize();
-        fi_size = fi_buf->GetSize();
-        mi_size = mi_buf->GetSize();
-        fi2_size = fi2_buf->GetSize();
-        hpi_size = hpi_buf->GetSize();
-        hsphed.h1 = 'H';
-        hsphed.h2 = 'S';
-        hsphed.h3 = 'P';
-        hsphed.h4 = '3';
-        hsphed.version = 0x0350;    // version3.5
-        hsphed.max_val = cg_valcnt; // max count of VAL Object
-        hsphed.allsize = sz_hed + cs_size + ds_size + ot_size + di_size;
-        hsphed.allsize += li_size + fi_size + mi_size + fi2_size + hpi_size;
-        hsphed.pt_cs = sz_hed;                    // ptr to Code Segment
-        hsphed.max_cs = cs_size;                  // size of CS
-        hsphed.pt_ds = sz_hed + cs_size;          // ptr to Data Segment
-        hsphed.max_ds = ds_size;                  // size of DS
-        hsphed.pt_ot = hsphed.pt_ds + ds_size;    // ptr to Object Temp
-        hsphed.max_ot = ot_size;                  // size of OT
-        hsphed.pt_dinfo = hsphed.pt_ot + ot_size; // ptr to Debug Info
-        hsphed.max_dinfo = di_size;               // size of DI
-        hsphed.pt_linfo = hsphed.pt_dinfo + di_size; // ptr to Debug Info
-        hsphed.max_linfo = li_size;                  // size of LINFO
-        hsphed.pt_finfo = hsphed.pt_linfo + li_size; // ptr to Debug Info
-        hsphed.max_finfo = fi_size;                  // size of FINFO
-        hsphed.pt_minfo = hsphed.pt_finfo + fi_size; // ptr to Debug Info
-        hsphed.max_minfo = mi_size;                  // size of MINFO
-        hsphed.pt_finfo2 = hsphed.pt_minfo + mi_size; // ptr to Debug Info
-        hsphed.max_finfo2 = fi2_size;                 // size of FINFO2
-        hsphed.pt_hpidat = hsphed.pt_finfo2 + fi2_size; // ptr to Debug Info
-        hsphed.max_hpi = hpi_size;                      // size of HPIDAT
-        hsphed.max_varhpi = cg_varhpi;                  // Num of Vartype Plugins
-        hsphed.pt_sr = sizeof(HSPHED); // ptr to Option Segment
-        hsphed.max_sr = sz_opt;        // size of Option Segment
-        hsphed.opt1 = 0;
-        hsphed.opt2 = 0;
-        axbuf.PutData(&hsphed, sizeof(HSPHED));
+            hsphed->bootoption |= HSPHED_BOOTOPT_ORGRND; // 標準の乱数発生を使用する
+        cs_size = [cs_buf GetSize];
+        ds_size = [ds_buf GetSize];
+        ot_size = [ot_buf GetSize];
+        di_size = [di_buf GetSize];
+        li_size = [li_buf GetSize];
+        fi_size = [fi_buf GetSize];
+        mi_size = [mi_buf GetSize];
+        fi2_size = [fi2_buf GetSize];
+        hpi_size = [hpi_buf GetSize];
+        hsphed->h1 = 'H';
+        hsphed->h2 = 'S';
+        hsphed->h3 = 'P';
+        hsphed->h4 = '3';
+        hsphed->version = 0x0350;    // version3.5
+        hsphed->max_val = cg_valcnt; // max count of VAL Object
+        hsphed->allsize = sz_hed + cs_size + ds_size + ot_size + di_size;
+        hsphed->allsize += li_size + fi_size + mi_size + fi2_size + hpi_size;
+        hsphed->pt_cs = sz_hed;                    // ptr to Code Segment
+        hsphed->max_cs = cs_size;                  // size of CS
+        hsphed->pt_ds = sz_hed + cs_size;          // ptr to Data Segment
+        hsphed->max_ds = ds_size;                  // size of DS
+        hsphed->pt_ot = hsphed->pt_ds + ds_size;    // ptr to Object Temp
+        hsphed->max_ot = ot_size;                  // size of OT
+        hsphed->pt_dinfo = hsphed->pt_ot + ot_size; // ptr to Debug Info
+        hsphed->max_dinfo = di_size;               // size of DI
+        hsphed->pt_linfo = hsphed->pt_dinfo + di_size; // ptr to Debug Info
+        hsphed->max_linfo = li_size;                  // size of LINFO
+        hsphed->pt_finfo = hsphed->pt_linfo + li_size; // ptr to Debug Info
+        hsphed->max_finfo = fi_size;                  // size of FINFO
+        hsphed->pt_minfo = hsphed->pt_finfo + fi_size; // ptr to Debug Info
+        hsphed->max_minfo = mi_size;                  // size of MINFO
+        hsphed->pt_finfo2 = hsphed->pt_minfo + mi_size; // ptr to Debug Info
+        hsphed->max_finfo2 = fi2_size;                 // size of FINFO2
+        hsphed->pt_hpidat = hsphed->pt_finfo2 + fi2_size; // ptr to Debug Info
+        hsphed->max_hpi = hpi_size;                      // size of HPIDAT
+        hsphed->max_varhpi = cg_varhpi;                  // Num of Vartype Plugins
+        hsphed->pt_sr = sizeof(HSPHED); // ptr to Option Segment
+        hsphed->max_sr = sz_opt;        // size of Option Segment
+        hsphed->opt1 = 0;
+        hsphed->opt2 = 0;
+        [axbuf PutData:&hsphed sz:sizeof(HSPHED)];
         if (sz_opt)
-            axbuf.PutData(optbuf.GetBuffer(), sz_opt);
+            [axbuf PutData:[optbuf GetBuffer] sz:sz_opt];
         if (cs_size)
-            axbuf.PutData(cs_buf->GetBuffer(), cs_size);
+            [axbuf PutData:[cs_buf GetBuffer] sz:cs_size];
         if (ds_size)
-            axbuf.PutData(ds_buf->GetBuffer(), ds_size);
+            [axbuf PutData:[ds_buf GetBuffer] sz:ds_size];
         if (ot_size)
-            axbuf.PutData(ot_buf->GetBuffer(), ot_size);
+            [axbuf PutData:[ot_buf GetBuffer] sz:ot_size];
         if (di_size)
-            axbuf.PutData(di_buf->GetBuffer(), di_size);
+            [axbuf PutData:[di_buf GetBuffer] sz:di_size];
         if (li_size)
-            axbuf.PutData(li_buf->GetBuffer(), li_size);
+            [axbuf PutData:[li_buf GetBuffer] sz:li_size];
         if (fi_size)
-            axbuf.PutData(fi_buf->GetBuffer(), fi_size);
+            [axbuf PutData:[fi_buf GetBuffer] sz:fi_size];
         if (mi_size)
-            axbuf.PutData(mi_buf->GetBuffer(), mi_size);
+            [axbuf PutData:[mi_buf GetBuffer] sz:mi_size];
         if (fi2_size)
-            axbuf.PutData(fi2_buf->GetBuffer(), fi2_size);
+            [axbuf PutData:[fi2_buf GetBuffer] sz:fi2_size];
         if (hpi_size)
-            axbuf.PutData(hpi_buf->GetBuffer(), hpi_size);
-        res = axbuf.SaveFile(oname);
+            [axbuf PutData:[hpi_buf GetBuffer] sz:hpi_size];
+        res = [axbuf SaveFile:oname];
         if (res < 0) {
             NSLog(@"#出力ファイルを書き込めません\n");
         } else {
             int n_mod, n_hpi;
-            n_hpi = hpi_buf->GetSize() / sizeof(HPIDAT);
-            n_mod = fi_buf->GetSize() / sizeof(STRUCTDAT);
+            n_hpi = [hpi_buf GetSize] / sizeof(HPIDAT);
+            n_mod = [fi_buf GetSize] / sizeof(STRUCTDAT);
             @autoreleasepool {
                 NSLog(@"# Code size (%d) String data size (%d) param size (%d)\n",
-                                    cs_size, ds_size, mi_buf->GetSize());
+                                    cs_size, ds_size, [mi_buf GetSize]);
                 NSLog(@"# Vars (%d) Labels (%d) Modules (%d) "
                                     @"Libs (%d) Plugins (%d)\n",
                                     cg_valcnt, ot_size >> 2, n_mod, li_size,
                                     n_hpi);
                NSLog(@"# No error detected. (total %d bytes)\n",
-                                    hsphed.allsize);
+                                    hsphed->allsize);
                NSLog(@"\n");
             }
             // Mesf( (char *)"#Code size (%d) String data size (%d) param size
@@ -6820,25 +6818,24 @@ finag:
             res = 0;
         }
     }
-    delete hpi_buf;
-    delete fi2_buf;
-    delete mi_buf;
-    delete fi_buf;
-    delete li_buf;
-    delete di_buf;
-    delete ot_buf;
-    delete ds_buf;
-    delete cs_buf;
+    hpi_buf = NULL;
+    fi2_buf = NULL;
+    mi_buf = NULL;
+    fi_buf = NULL;
+    li_buf = NULL;
+    di_buf = NULL;
+    ot_buf = NULL;
+    ds_buf = NULL;
+    cs_buf = NULL;
     return res;
 }
 -(void)CG_MesLabelDefinition:(int)label_id {
     if (!cg_debug)
         return;
-    LABOBJ* const labobj = lb->GetLabel(label_id);
+    LABOBJ* const labobj = [lb GetLabel:label_id];
     if (labobj->def_file) {
             NSLog(@"#識別子「%s」の定義位置: line %d in [%s]\n",
-                                lb->GetName(label_id), labobj->def_line,
-                                labobj->def_file);
+                                [lb GetName:label_id], labobj->def_line, labobj->def_file);
     }
 }
 @end

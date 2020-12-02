@@ -65,13 +65,14 @@ extern char *hsp_prepp[];
     process_option = option;
     if (( option & HSC3_OPT_NOHSPDEF )==0 ) {
         //CLocalInfo linfo;
-        tk->RegistExtMacro( (char *)"__hspver__", vercode );
-        tk->RegistExtMacro( (char *)"__hsp30__",(char *)"" );
-        tk->RegistExtMacro( (char *)"__date__",get_current_date() );
-        tk->RegistExtMacro( (char *)"__time__",get_current_time() );
-        tk->RegistExtMacro( (char *)"__line__", 0 );
-        tk->RegistExtMacro( (char *)"__file__", (char *)"" );
-        if ( option & HSC3_OPT_DEBUGMODE ) tk->RegistExtMacro( (char *)"_debug", (char *)"" );
+        [tk RegistExtMacro_val:(char *)"__hspver__" val:vercode];
+        [tk RegistExtMacro_str:(char *)"__hsp30__" str:(char *)""];
+        [tk RegistExtMacro_str:(char *)"__date__" str:get_current_date()];
+        [tk RegistExtMacro_str:(char *)"__time__" str:get_current_time()];
+        [tk RegistExtMacro_val:(char *)"__line__" val:0];
+        [tk RegistExtMacro_str:(char *)"__file__" str:(char *)""];
+        if ( option & HSC3_OPT_DEBUGMODE )
+            [tk RegistExtMacro_str:(char *)"_debug" str:(char *)""];
     }
 }
 //int CHsc3::PreProcessAht( char *fname, void *ahtoption, int mode )
@@ -118,38 +119,40 @@ extern char *hsp_prepp[];
     //
     int res;
     //char mm[512];
-    CToken tk;
-    CMemBuf *packbuf = NULL;
+    CToken* tk;
+    CMemBuf* packbuf = NULL;
     lb_info = NULL;
     outbuf = [[CMemBuf alloc] init];
     [outbuf InitMemBuf:0x10000];
     ahtbuf = NULL;
-    tk.SetErrorBuf( errbuf );
-    tk.SetCommonPath( common_path );
-    tk.LabelRegist2( hsp_prestr );
-    [self AddSystemMacros:&tk option:option];
+    [tk SetErrorBuf:errbuf];
+    [tk SetCommonPath:common_path];
+    [tk LabelRegist2:hsp_prestr];
+    [self AddSystemMacros:tk option:option];
     if ( option & HSC3_OPT_MAKEPACK ) {
         packbuf = [[CMemBuf alloc] init];
         [outbuf InitMemBuf:0x1000];
-        tk.SetPackfileOut( packbuf );
+        [tk SetPackfileOut:packbuf];
     }
 //    if ( option & (HSC3_OPT_READAHT|HSC3_OPT_MAKEAHT) ) {
 //        tk.SetAHT( (AHTMODEL *)ahtoption );
 //    }
     if ( option & HSC3_OPT_UTF8IN ) {
-        tk.SetUTF8Input( 1 );
+        [tk SetUTF8Input:1];
     }
     NSLog(@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE, hspver);
     //sprintf( mm,"#%s ver%s / onion software 1997-2015(c)", HSC3TITLE, hspver );
     //tk.Mes( mm );
-    tk.SetAdditionMode( 1 );
-    res = tk.ExpandFile( outbuf, (char *)"hspdef.as", (char *)"hspdef.as" );
-    tk.SetAdditionMode( 0 );
-    if ( res<-1 ) return -1;
-    res = tk.ExpandFile( outbuf, fname, rname );
-    if ( res<0 ) return -1;
-    tk.FinishPreprocess( outbuf );
-    cmpopt = tk.GetCmpOption();
+    [tk SetAdditionMode:1];
+    res = [tk ExpandFile:outbuf fname:(char *)"hspdef.as" refname:(char *)"hspdef.as"];
+    [tk SetAdditionMode:0];
+    if ( res<-1 )
+        return -1;
+    res = [tk ExpandFile:outbuf fname:fname refname:rname];
+    if ( res<0 )
+        return -1;
+    [tk FinishPreprocess:outbuf];
+    cmpopt = [tk GetCmpOption];
     if ( cmpopt & CMPMODE_PPOUT	 ) {
         res = [outbuf SaveFile:outname];
         if ( res<0 ) {
@@ -167,7 +170,7 @@ extern char *hsp_prepp[];
     //sprintf( mm,"#Macro buffer %x.", tk.GetLabelBufferSize() );
     //tk.Mes( mm );
     if ( option & HSC3_OPT_MAKEPACK ) {
-        tk.AddPackfile( (char *)"start.ax", 1 );
+        [tk AddPackfile:(char *)"start.ax" mode:1];
         res = [packbuf SaveFile:(char *)"packfile"];
         //delete packbuf;
         packbuf = NULL;
@@ -177,9 +180,9 @@ extern char *hsp_prepp[];
         }
         NSLog(@"#packfile generated.\n");
     }
-    hed_option = tk.GetHeaderOption();
-    strcpy( hed_runtime, tk.GetHeaderRuntimeName() );
-    lb_info = tk.GetLabelInfo();
+    hed_option = [tk GetHeaderOption];
+    strcpy( hed_runtime, [tk GetHeaderRuntimeName] );
+    lb_info = [tk GetLabelInfo];
     return 0;
 }
 -(void)PreProcessEnd {
@@ -203,21 +206,22 @@ extern char *hsp_prepp[];
     //res = tcomp_main( fname, outname, errbuf, mode, "" );
     int res;
     //char mm[512];
-    CToken tk;
-    if ( lb_info != NULL ) tk.SetLabelInfo( lb_info );		// プリプロセッサのラベル情報
-    tk.SetErrorBuf( errbuf );
-    tk.SetCommonPath( common_path );
-    tk.LabelRegist( hsp_prestr, 1 );
-    tk.SetHeaderOption( hed_option, hed_runtime );
-    tk.SetCmpOption( cmpopt );
+    CToken* tk;
+    if ( lb_info != NULL )
+        [tk SetLabelInfo:lb_info];		// プリプロセッサのラベル情報
+    [tk SetErrorBuf:errbuf];
+    [tk SetCommonPath:common_path];
+    [tk LabelRegist:hsp_prestr mode:1];
+    [tk SetHeaderOption:hed_option name:hed_runtime];
+    [tk SetCmpOption:cmpopt];
     if ( process_option & HSC3_OPT_UTF8IN ) {
-        tk.SetUTF8Input( 1 );
+        [tk SetUTF8Input:1];
     }
     NSLog(@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE2, hspver);
     if ( outbuf != NULL ) {
-        res = tk.GenerateCode( outbuf, outname, mode );
+        res = [tk GenerateCode_membuf:outbuf oname:outname mode:mode];
     } else {
-        res = tk.GenerateCode( fname, outname, mode );
+        res = [tk GenerateCode:fname oname:outname mode:mode];
     }
     return res;
 }
@@ -230,16 +234,16 @@ extern char *hsp_prepp[];
 }
 -(int)GetCmdList:(int)option {
     int res;
-    CToken tk;
+    CToken* tk;
     //CMemBuf outbuf;
-    tk.SetErrorBuf( errbuf );
-    tk.SetCommonPath( common_path );
-    tk.LabelRegist3( hsp_prestr );			// 標準キーワード
-    tk.LabelRegist3( hsp_prepp );			// プリプロセッサキーワード
-    [self AddSystemMacros:&tk option:option];
-    res = tk.ExpandFile( outbuf, (char *)"hspdef.as", (char *)"hspdef.as" );
+    [tk SetErrorBuf:errbuf];
+    [tk SetCommonPath:common_path];
+    [tk LabelRegist3:hsp_prestr];			// 標準キーワード
+    [tk LabelRegist3:hsp_prepp];			// プリプロセッサキーワード
+    [self AddSystemMacros:tk option:option];
+    res = [tk ExpandFile:outbuf fname:(char *)"hspdef.as" refname:(char *)"hspdef.as"];
     //	if ( res<-1 ) return -1;
-    tk.LabelDump( errbuf, DUMPMODE_ALL );
+    [tk LabelDump:errbuf option:DUMPMODE_ALL];
     //errbuf->PutStr("-----¥r¥n");
     //if ( addkw != NULL ) errbuf->PutStr( addkw->GetBuffer() );
     return 0;

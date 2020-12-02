@@ -34,7 +34,7 @@ int main(int argc, const char * argv[]) {
     char fname2[HSP_MAX_PATH];
     char oname[HSP_MAX_PATH];
     char compath[HSP_MAX_PATH];
-    CHsc3 *hsc3=NULL;
+    //CHsc3 *hsc3=NULL;
     //    check switch and prm
     if (argc<2) {
         usage1();
@@ -108,16 +108,16 @@ int main(int argc, const char * argv[]) {
     addext( fname2,"i" );
     addext( fname,"hsp" );            // 拡張子がなければ追加する
     //        call main
-    hsc3 = new CHsc3;
-    hsc3->SetCommonPath( compath );
-    st = hsc3->PreProcess( fname, fname2, ppopt, fname );
+    CHsc3* hsc3 = [[CHsc3 alloc] init];
+    [hsc3 SetCommonPath:compath];
+    st = [hsc3 PreProcess:fname outname:fname2 option:ppopt rname:fname ahtoption:NULL];
     if (( cmpopt < 2 )&&( st == 0 )) {
-        st = hsc3->Compile( fname2, oname, cmpopt );
+        st = [hsc3 Compile:fname2 outname:oname mode:cmpopt];
     }
-    puts( hsc3->GetError() );
-    hsc3->PreProcessEnd();
+    puts( [hsc3 GetError] );
+    [hsc3 PreProcessEnd];
     if ( hsc3 != NULL ) {
-        delete hsc3;
+        //delete hsc3;
         hsc3=NULL;
     }
     return st;
