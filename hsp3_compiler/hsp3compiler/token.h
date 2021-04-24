@@ -1,15 +1,13 @@
-//@
 //
 //	token.cpp structures
 //
 #ifndef __token_h
 #define __token_h
-//#import "AppDelegate.h"
+
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 #import <vector>
 #import <string>
-//#import <map>
 #import <memory>
 #import "label.h"
 #import "tagstack.h"

@@ -1,4 +1,3 @@
-//@
 //
 //		local info related routines
 //
