@@ -296,7 +296,7 @@ extern char *hsp_prepp[];
 }
 -(int)GetRuntimeFromHeader:(char*)fname res:(char*)res {
     FILE *fp;
-    HSPHED hsphed;
+    hsp_header_t hsphed;
     int hedsize;
     int exsize;
     int ires;

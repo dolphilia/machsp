@@ -5894,7 +5894,7 @@ finag:
             }
             i = [lb Search:cg_str];
             if (i >= 0) {
-                LABOBJ* lab;
+                label_object_t* lab;
                 lab = [lb GetLabel:i];
                 if (lab->type != TYPE_XLABEL)
                     throw CGERROR_LABELEXIST;
@@ -6061,7 +6061,7 @@ finag:
             if ([lb Search:name] >= 0) {
                 throw CGERROR_PP_ALREADY_USE_FUNC;
             }
-            LABOBJ* lab = [tmp_lb GetLabel:i];
+            label_object_t* lab = [tmp_lb GetLabel:i];
             int id = [lb Regist2:name type:TYPE_MODCMD opt:-1 filename:lab->def_file line:lab->def_line];
             [lb SetData2:id str:(char*)&i size:sizeof i];
         }
@@ -6304,7 +6304,7 @@ finag:
     //        Debug info register for vals
     //
     int a, i, id;
-    LABOBJ* lab;
+    label_object_t* lab;
     char vtmpname[256];
     char* p;
     id = 0;
@@ -6672,7 +6672,7 @@ finag:
     } else {
         //        正常終了
         CMemBuf* axbuf;
-        HSPHED* hsphed;
+        hsp_header_t* hsphed;
         int sz_hed, sz_opt, cs_size, ds_size, ot_size, di_size;
         int li_size, fi_size, mi_size, fi2_size, hpi_size;
         orgcs = [self GetCS];
@@ -6691,7 +6691,7 @@ finag:
             [self PutDIParams];
         }
         [self PutDI:-1 a:0 subid:0]; // デバッグ情報終端
-        sz_hed = sizeof(HSPHED);
+        sz_hed = sizeof(hsp_header_t);
         memset(&hsphed, 0, sz_hed);
         hsphed->bootoption = 0;
         hsphed->runtime = 0;
@@ -6767,11 +6767,11 @@ finag:
         hsphed->pt_hpidat = hsphed->pt_finfo2 + fi2_size; // ptr to Debug Info
         hsphed->max_hpi = hpi_size;                      // size of HPIDAT
         hsphed->max_varhpi = cg_varhpi;                  // Num of Vartype Plugins
-        hsphed->pt_sr = sizeof(HSPHED); // ptr to Option Segment
+        hsphed->pt_sr = sizeof(hsp_header_t); // ptr to Option Segment
         hsphed->max_sr = sz_opt;        // size of Option Segment
         hsphed->opt1 = 0;
         hsphed->opt2 = 0;
-        [axbuf PutData:&hsphed sz:sizeof(HSPHED)];
+        [axbuf PutData:&hsphed sz:sizeof(hsp_header_t)];
         if (sz_opt)
             [axbuf PutData:[optbuf GetBuffer] sz:sz_opt];
         if (cs_size)
@@ -6832,7 +6832,7 @@ finag:
 -(void)CG_MesLabelDefinition:(int)label_id {
     if (!cg_debug)
         return;
-    LABOBJ* const labobj = [lb GetLabel:label_id];
+    label_object_t* const labobj = [lb GetLabel:label_id];
     if (labobj->def_file) {
             NSLog(@"#識別子「%s」の定義位置: line %d in [%s]\n",
                                 [lb GetName:label_id], labobj->def_line, labobj->def_file);

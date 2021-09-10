@@ -9,6 +9,7 @@
 #import <string>
 #import <map>
 #import <set>
+
 #define	maxname	256				// label name max
 #define def_maxsymbol 0x10000	// Symbol Table Size (default)
 #define def_maxblock 128		// Symbol Table Block max (default)
@@ -38,15 +39,18 @@
 #define LAB_TYPEFIX_NONE 0
 #define LAB_TYPEFIX_INT 4
 #define LAB_TYPEFIX_DOUBLE 3
+
 typedef std::set<std::string> FileNameSet;
 typedef std::multimap<std::string, int> LabelMap;
 //typedef NSMutableDictionary LabelDic;
+
 typedef struct LABREL LABREL;
 struct LABREL {
     LABREL	*link;				// link to next (NULL=end)
     int		rel_id;				// related id
 };
-typedef struct LABOBJ {
+
+typedef struct label_object_t {
     int		flag;				// exist flag
     int		type;				// object type
     int		opt;				// option code
@@ -61,12 +65,13 @@ typedef struct LABOBJ {
     short	typefix;			// force type
     char const* def_file;
     int def_line;
-} LABOBJ;
+} label_object_t;
+
 //  label manager class
 @interface CLabel : NSObject {
     //    data
     char *symbol;                        // Symbol Table
-    LABOBJ *mem_lab;                    // Label object
+    label_object_t *mem_lab;                    // Label object
     char *symblock[def_maxblock];        // Symbol Table Block
     int    curblock;                        // Current Block
     int    cur;                            // Current
@@ -104,7 +109,7 @@ typedef struct LABOBJ {
 -(char*)GetData:(int)id;
 -(char*)GetData2:(int)id;
 -(int)GetInitFlag:(int)id;
--(LABOBJ*)GetLabel:(int)id;
+-(label_object_t*)GetLabel:(int)id;
 -(void)DumpLabel:(char*)str;
 -(void)DumpHSPLabel:(char*)str option:(int)option maxsize:(int)maxsize;
 -(int)RegistList:(char**)list modname:(char*)modname;

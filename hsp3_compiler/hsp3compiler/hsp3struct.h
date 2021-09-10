@@ -45,7 +45,8 @@
 #define EXFLG_2 0x4000
 #define EXFLG_3 0x8000
 #define CSTYPE 0x0fff
-typedef struct HSPHED
+
+typedef struct hsp_header_t //HSPHED
 {
     //		HSP3.0 header structure
     //
@@ -83,7 +84,8 @@ typedef struct HSPHED
     int		max_sr;				// size of Option Segment
     int		opt1;				// option (reserved)
     int		opt2;				// option (reserved)
-} HSPHED;
+} hsp_header_t;
+
 #define HSPHED_BOOTOPT_DEBUGWIN 1			// 起動時デバッグウインドゥ表示
 #define HSPHED_BOOTOPT_WINHIDE 2			// 起動時ウインドゥ非表示
 #define HSPHED_BOOTOPT_DIRSAVE 4			// 起動時カレントディレクトリ変更なし
@@ -97,6 +99,7 @@ typedef struct HSPHED
 #define HPIDAT_FLAG_SELFFUNC -1
 #define HPIDAT_FLAG_VARFUNC 1
 #define HPIDAT_FLAG_DLLFUNC 2
+
 typedef struct MEM_HPIDAT {		// native HPIDAT
     short	flag;				// flag info
     short	option;
@@ -104,6 +107,7 @@ typedef struct MEM_HPIDAT {		// native HPIDAT
     int		funcname;			// function name index (DS)
     void	*libptr;			// lib handle
 } MEM_HPIDAT;
+
 #ifdef PTR64BIT
 typedef struct HPIDAT {
     short	flag;				// flag info
@@ -115,6 +119,7 @@ typedef struct HPIDAT {
 #else
 typedef MEM_HPIDAT HPIDAT;
 #endif
+
 #define LIBDAT_FLAG_NONE 0
 #define LIBDAT_FLAG_DLL 1
 #define LIBDAT_FLAG_DLLINIT 2
@@ -127,6 +132,7 @@ typedef struct LIBDAT {
     void	*hlib;				// Lib handle
     int		clsid;				// CLSID (DS) ( Com Object )
 } LIBDAT;
+
 #ifdef PTR64BIT
 typedef struct HED_LIBDAT {
     int		flag;				// initalize flag
@@ -388,12 +394,12 @@ typedef struct HSPEXINFO
     int (*HspFunc_seekvar)( const char *name );
 } HSPEXINFO;
 #define HSP3_REPEAT_MAX 32
-typedef struct LOOPDAT {
+typedef struct loop_data_t {
     int		time;				// loop times left
     int		cnt;				// count
     int		step;				// count add value
     unsigned short *pt;			// loop start ptr
-} LOOPDAT;
+} loop_data_t;
 // 実行モード
 enum
 {
@@ -414,7 +420,7 @@ struct HSPCTX
 {
     //	HSP Context
     //
-    HSPHED *hsphed;						// HSP object file header
+    hsp_header_t *hsphed;						// HSP object file header
     unsigned short *mcs;				// current code segment ptr
     unsigned short *mem_mcs;			// code segment ptr
     char *mem_mds;						// data segment ptr
@@ -433,7 +439,7 @@ struct HSPCTX
     int waittick;						// next tick for await
     int lasttick;						// previous tick
     int sublev;							// subroutine level
-    LOOPDAT mem_loop[HSP3_REPEAT_MAX];	// repeat loop info
+    loop_data_t mem_loop[HSP3_REPEAT_MAX];	// repeat loop info
     int looplev;						// repeat loop level
     HSPERROR err;						// error code
     int hspstat;						// HSP status

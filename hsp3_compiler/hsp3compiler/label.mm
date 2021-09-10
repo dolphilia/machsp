@@ -16,7 +16,7 @@
         int i;
         maxsymbol = def_maxsymbol;
         maxlab = def_maxlab;
-        mem_lab = (LABOBJ *)malloc( sizeof(LABOBJ)*maxlab );
+        mem_lab = (label_object_t *)malloc( sizeof(label_object_t)*maxlab );
         //labels = [NSMutableDictionary dictionary];
         for(i=0;i<def_maxblock;i++) { symblock[i] = NULL; }
         [self Reset];
@@ -110,18 +110,18 @@
 -(int)Regist2:(char*)name type:(int)type opt:(int)opt filename:(char const*)filename line:(int)line {
     if ( name[0]==0 ) return -1;
     if ( cur>=maxlab ) {				// ラベルバッファ拡張
-        LABOBJ *tmp;
+        label_object_t *tmp;
         int i,oldsize;
-        oldsize = sizeof(LABOBJ)*maxlab;
+        oldsize = sizeof(label_object_t)*maxlab;
         maxlab += def_maxlab;
-        tmp = (LABOBJ *)malloc( sizeof(LABOBJ)*maxlab );
+        tmp = (label_object_t *)malloc( sizeof(label_object_t)*maxlab );
         for(i=0;i<maxlab;i++) { tmp[i].flag = -1; }
         memcpy( (char *)tmp, (char *)mem_lab, oldsize );
         free( mem_lab );
         mem_lab = tmp;
     }
     int label_id = cur;
-    LABOBJ *lab=&mem_lab[cur++];
+    label_object_t *lab=&mem_lab[cur++];
     lab->flag = 1;
     lab->type = type;
     lab->opt  = opt;
@@ -163,7 +163,7 @@
 -(void)SetData:(int)id str:(char*)str {
     //		set data
     //
-    LABOBJ *lab=&mem_lab[id];
+    label_object_t *lab=&mem_lab[id];
     if ( str == NULL ) {
         lab->data = NULL;
         return;
@@ -173,7 +173,7 @@
 -(void)SetData2:(int)id str:(char*)str size:(int)size {
     //		set data
     //
-    LABOBJ *lab=&mem_lab[id];
+    label_object_t *lab=&mem_lab[id];
     if ( str == NULL ) {
         lab->data2 = NULL;
         return;
@@ -198,7 +198,7 @@
     if (*oname != 0) {
         std::pair<LabelMap::iterator, LabelMap::iterator> r = labels.equal_range( oname );
         for(LabelMap::iterator it = r.first; it != r.second; ++it) {
-            LABOBJ *lab = mem_lab + it->second;
+            label_object_t *lab = mem_lab + it->second;
             if ( lab->flag >= 0 ) {
                 return it->second;
             }
@@ -216,14 +216,14 @@
     if (*oname != 0) {
         std::pair<LabelMap::iterator, LabelMap::iterator> r = labels.equal_range( oname );
         for(LabelMap::iterator it = r.first; it != r.second; ++it) {
-            LABOBJ *lab = mem_lab + it->second;
+            label_object_t *lab = mem_lab + it->second;
             if (lab->flag >= 0 && lab->eternal) {
                 return it->second;
             }
         }
         std::pair<LabelMap::iterator, LabelMap::iterator> r2 = labels.equal_range( loname );
         for(LabelMap::iterator it = r2.first; it != r2.second; ++it) {
-            LABOBJ *lab = mem_lab + it->second;
+            label_object_t *lab = mem_lab + it->second;
             if (lab->flag >= 0 && !lab->eternal) {
                 return it->second;
             }
@@ -294,7 +294,7 @@
 -(char*)GetData2:(int)id {
     return mem_lab[id].data2;
 }
--(LABOBJ*)GetLabel:(int)id {
+-(label_object_t*)GetLabel:(int)id {
     return &mem_lab[id];
 }
 -(int)GetInitFlag:(int)id {
@@ -490,7 +490,7 @@
     sprintf( tmp,"#Labels:%d",cur );
     p=[self Prt:p str2:tmp];
     for(a=0;a<cur;a++) {
-        LABOBJ *lab=&mem_lab[a];
+        label_object_t *lab=&mem_lab[a];
         sprintf( tmp,"#ID:%d (%s) flag:%d  type:%d  opt:%x",a,lab->name,lab->flag,lab->type,lab->opt );
         p=[self Prt:p str2:tmp];
         //		lab = GetLabel( Search( lab->name) );
@@ -511,7 +511,7 @@
     for(a=0;a<cur;a++) {
         if ( p >= p_limit )
             break;
-        LABOBJ *lab=&mem_lab[a];
+        label_object_t *lab=&mem_lab[a];
         typem = NULL;
         switch( lab->type ) {
             case LAB_TYPE_PPEX_PRECMD:
@@ -553,7 +553,7 @@
 -(void)AddReference:(int)id {
     //		参照回数を+1する
     //
-    LABOBJ *lab=&mem_lab[id];
+    label_object_t *lab=&mem_lab[id];
     lab->ref++;
 }
 -(int)GetReference:(int)id {
@@ -561,7 +561,7 @@
     //
     int total;
     LABREL *rel;
-    LABOBJ *lab=&mem_lab[id];
+    label_object_t *lab=&mem_lab[id];
     total = lab->ref;
     rel = lab->rel;
     if ( rel != NULL ) {
@@ -578,7 +578,7 @@
     //		(0=なし/1=あり)
     //
     LABREL *tmp;
-    LABOBJ *lab=&mem_lab[id];
+    label_object_t *lab=&mem_lab[id];
     tmp = lab->rel;
     if ( tmp == NULL ) return 0;
     while(1) {
@@ -597,7 +597,7 @@
     rel = (LABREL *)[self ExpandSymbolBuffer:sizeof(LABREL)];
     rel->link = NULL;
     rel->rel_id = rel_id;
-    LABOBJ *lab=&mem_lab[id];
+    label_object_t *lab=&mem_lab[id];
     if ( lab->rel == NULL ) {
         lab->rel = rel;
         return;
@@ -620,7 +620,7 @@
 }
 -(void)SetDefinition:(int)id filename:(char const*)filename line:(int)line {
     if ( !(filename != NULL && line >= 0) ) return;
-    LABOBJ* const it = [self GetLabel:id];
+    label_object_t* const it = [self GetLabel:id];
     it->def_file = filenames.insert(filename).first->c_str();
     it->def_line = line;
 }
