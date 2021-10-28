@@ -14,7 +14,7 @@
 }
 -(void)Select:(char*)str;
 -(int)GetSize;
--(char*)GetStr;
+//-(char*)GetStr;
 -(int)GetMaxLine;
 -(int)GetLine:(char*)nres line:(int)line;
 -(int)GetLine:(char*)nres line:(int)line max:(int)max;

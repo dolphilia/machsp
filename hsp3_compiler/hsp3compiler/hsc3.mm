@@ -16,9 +16,11 @@
 #import "label.h"
 #import "token.h"
 #import "localinfo.h"
+
 extern char *hsp_prestr[];
 extern char *hsp_prepp[];
 #define ERRBUF_SIZE 0x10000
+
 @implementation CHsc3 : NSObject
 - (instancetype)init {
     self = [super init];

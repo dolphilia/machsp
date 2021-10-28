@@ -5,6 +5,7 @@
 //	onion software/onitama 2004/6
 //
 #import "stack.h"
+
 @implementation ViewController (stack)
 - (void)StackInit {
     StackManagerData *stm;
