@@ -3,6 +3,8 @@
 //		Memory buffer class
 //			onion software/onitama 2002/2
 //
+
+
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
@@ -26,6 +28,34 @@
 //    //
 //    InitMemBuf( sz );
 //}
+/**
+* 箇条書き
+    - aaa
+    - aaa
+    - aaa
+
+* 番号付き
+    1. aaa
+    2. aaa
+    3. aaa
+
+* コード1
+ // ほげほげ
+ let hoge = Hoge()
+ hoge.doSomething()
+
+
+* コード2
+
+    // ふがふが
+    let fuga = Fuga()
+    fuga.doSomething()
+
+
+:param: 引数1
+:param: 引数2
+:returns: 戻り値
+*/
 - (void)dealloc
 {
     if ( mem_buf != NULL ) {
@@ -37,6 +67,9 @@
         idxbuf = NULL;
     }
 }
+
+/// バッファを初期化する
+/// @param sz バッファのサイズ
 -(void)InitMemBuf:(int)sz {
     //	バッファ初期化
     size = sz;
