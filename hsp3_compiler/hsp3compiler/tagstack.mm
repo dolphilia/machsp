@@ -29,9 +29,9 @@
 }
 - (void)dealloc {
 }
+//    string compare (0=not same/-1=same)
+//  (case sensitive)
 -(int)StrCmp:(char*)str1 str2:(char*)str2 {
-    //	string compare (0=not same/-1=same)
-    //  (case sensitive)
     int ap;
     char as;
     ap=0;
