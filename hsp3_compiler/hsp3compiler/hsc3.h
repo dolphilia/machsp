@@ -10,6 +10,8 @@
 #import "membuf.h"
 #import "label.h"
 #import "token.h"
+#import "utility_string.h"
+
 #define HSC3TITLE "HSP script preprocessor"
 #define HSC3TITLE2 "HSP code generator"
 #define HSC3_OPT_NOHSPDEF 1

@@ -3,25 +3,27 @@
 //		HSP compiler class rev.3
 //			onion software/onitama 2002/2
 //
+
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
+
 #import "hsp3config.h"
 #import "hsp3debug.h"
 #import "hsp3struct.h"
-#import "supio_linux.h"
 #import "hsc3.h"
 #import "membuf.h"
 #import "strnote.h"
 #import "label.h"
 #import "token.h"
-#import "localinfo.h"
+#import "utility_time.h"
 
 extern char *hsp_prestr[];
 extern char *hsp_prepp[];
 #define ERRBUF_SIZE 0x10000
 
 @implementation CHsc3 : NSObject
+
 - (instancetype)init {
     self = [super init];
     if (self) {
@@ -33,40 +35,45 @@ extern char *hsp_prepp[];
     }
     return self;
 }
+
 - (void)dealloc {
-    if ( addkw != NULL ) {
+    if (addkw != NULL) {
         //delete addkw;
-        addkw=NULL;
+        addkw = NULL;
     }
     if ( errbuf != NULL ) {
         //delete errbuf;
-        errbuf=NULL;
+        errbuf = NULL;
     }
 }
+
 -(char*)GetError {
     return [errbuf GetBuffer];
 }
+
 -(int)GetErrorSize {
     return [errbuf GetSize] + 1;
 }
+
 -(void)ResetError {
     //		エラーメッセージ消去
     //
-    if ( errbuf != NULL ) {
+    if (errbuf != NULL) {
         //delete errbuf;
-        errbuf=NULL;
+        errbuf = NULL;
     }
     errbuf = [[CMemBuf alloc] init];//new CMemBuf( ERRBUF_SIZE );
     [errbuf InitMemBuf:ERRBUF_SIZE];
     hed_option = 0;
     hed_runtime[0] = 0;
 }
+
 //-------------------------------------------------------------
 //		Interfaces
 //-------------------------------------------------------------
 -(void)AddSystemMacros:(CToken*)tk option:(int)option {
     process_option = option;
-    if (( option & HSC3_OPT_NOHSPDEF )==0 ) {
+    if ((option & HSC3_OPT_NOHSPDEF) == 0) {
         //CLocalInfo linfo;
         [tk RegistExtMacro_val:(char *)"__hspver__" val:vercode];
         [tk RegistExtMacro_str:(char *)"__hsp30__" str:(char *)""];
@@ -74,7 +81,7 @@ extern char *hsp_prepp[];
         [tk RegistExtMacro_str:(char *)"__time__" str:get_current_time()];
         [tk RegistExtMacro_val:(char *)"__line__" val:0];
         [tk RegistExtMacro_str:(char *)"__file__" str:(char *)""];
-        if ( option & HSC3_OPT_DEBUGMODE )
+        if (option & HSC3_OPT_DEBUGMODE)
             [tk RegistExtMacro_str:(char *)"_debug" str:(char *)""];
     }
 }
@@ -122,7 +129,7 @@ extern char *hsp_prepp[];
     //
     int res;
     //char mm[512];
-    CToken* tk;
+    CToken* tk = [[CToken alloc] init];
     CMemBuf* packbuf = NULL;
     lb_info = NULL;
     outbuf = [[CMemBuf alloc] init];
@@ -132,76 +139,75 @@ extern char *hsp_prepp[];
     [tk SetCommonPath:common_path];
     [tk LabelRegist2:hsp_prestr];
     [self AddSystemMacros:tk option:option];
-    if ( option & HSC3_OPT_MAKEPACK ) {
+    if (option & HSC3_OPT_MAKEPACK) {
         packbuf = [[CMemBuf alloc] init];
+        [packbuf InitMemBuf:0x1000];
         [outbuf InitMemBuf:0x1000];
         [tk SetPackfileOut:packbuf];
     }
 //    if ( option & (HSC3_OPT_READAHT|HSC3_OPT_MAKEAHT) ) {
 //        tk.SetAHT( (AHTMODEL *)ahtoption );
 //    }
-    if ( option & HSC3_OPT_UTF8IN ) {
+    if (option & HSC3_OPT_UTF8IN) {
         [tk SetUTF8Input:1];
     }
     NSLog(@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE, hspver);
     //sprintf( mm,"#%s ver%s / onion software 1997-2015(c)", HSC3TITLE, hspver );
     //tk.Mes( mm );
     [tk SetAdditionMode:1];
-    res = [tk ExpandFile:outbuf fname:(char *)"hspdef.as" refname:(char *)"hspdef.as"];
+    //res = [tk ExpandFile:outbuf fname:(char *)"hspdef.as" refname:(char *)"hspdef.as"];
     [tk SetAdditionMode:0];
-    if ( res<-1 )
+    if (res < -1)
         return -1;
+    
     res = [tk ExpandFile:outbuf fname:fname refname:rname];
-    if ( res<0 )
+    
+    if (res < 0)
         return -1;
     [tk FinishPreprocess:outbuf];
     cmpopt = [tk GetCmpOption];
-    if ( cmpopt & CMPMODE_PPOUT	 ) {
+    if (cmpopt & CMPMODE_PPOUT) {
         res = [outbuf SaveFile:outname];
-        if ( res<0 ) {
+        if (res < 0) {
             NSLog(@"#プリプロセッサファイルの出力に失敗しました\n");
             return -2;
         }
     }
     [outbuf Put_int:(int)0];
-#if 0
-    //		ソースのラベルを追加(停止中)
-    if ( addkw != NULL ) { delete addkw; addkw=NULL; }
-    addkw = new CMemBuf( 0x1000 );
-    tk.LabelDump( addkw, DUMPMODE_DLLCMD );
-#endif
     //sprintf( mm,"#Macro buffer %x.", tk.GetLabelBufferSize() );
     //tk.Mes( mm );
-    if ( option & HSC3_OPT_MAKEPACK ) {
+    if (option & HSC3_OPT_MAKEPACK) {
         [tk AddPackfile:(char *)"start.ax" mode:1];
         res = [packbuf SaveFile:(char *)"packfile"];
         //delete packbuf;
         packbuf = NULL;
-        if ( res<0 ) {
+        if (res < 0) {
             NSLog(@"#packfileの出力に失敗しました\n");
             return -3;
         }
         NSLog(@"#packfile generated.\n");
     }
     hed_option = [tk GetHeaderOption];
-    strcpy( hed_runtime, [tk GetHeaderRuntimeName] );
+    //strcpy(hed_runtime, [tk GetHeaderRuntimeName]); // MARK: error
     lb_info = [tk GetLabelInfo];
     return 0;
 }
+
 -(void)PreProcessEnd {
-    if ( lb_info != NULL ) {
+    if (lb_info != NULL) {
         //delete lb_info;
         lb_info = NULL;
     }
-    if ( outbuf != NULL ) {
+    if (outbuf != NULL) {
         //delete outbuf;
         outbuf = NULL;
     }
-    if ( ahtbuf != NULL ) {
+    if (ahtbuf != NULL) {
         //delete ahtbuf;
         ahtbuf = NULL;
     }
 }
+
 -(int)Compile:(char*)fname outname:(char*)outname mode:(int)mode {
     //		Compile
     //
@@ -209,35 +215,39 @@ extern char *hsp_prepp[];
     //res = tcomp_main( fname, outname, errbuf, mode, "" );
     int res;
     //char mm[512];
-    CToken* tk;
-    if ( lb_info != NULL )
+    CToken* tk = [[CToken alloc] init];
+    if (lb_info != NULL)
         [tk SetLabelInfo:lb_info];		// プリプロセッサのラベル情報
     [tk SetErrorBuf:errbuf];
     [tk SetCommonPath:common_path];
     [tk LabelRegist:hsp_prestr mode:1];
     [tk SetHeaderOption:hed_option name:hed_runtime];
     [tk SetCmpOption:cmpopt];
-    if ( process_option & HSC3_OPT_UTF8IN ) {
+    if (process_option & HSC3_OPT_UTF8IN) {
         [tk SetUTF8Input:1];
     }
-    NSLog(@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE2, hspver);
-    if ( outbuf != NULL ) {
+    NSLog(@"# %s ver%s / onion software 1997-2015(c)\n", HSC3TITLE2, hspver);
+    if (outbuf != NULL) {
         res = [tk GenerateCode_membuf:outbuf oname:outname mode:mode];
+        
     } else {
         res = [tk GenerateCode:fname oname:outname mode:mode];
+        
     }
     return res;
 }
+
 -(void)SetCommonPath:(char*)path {
-    if ( path==NULL ) {
-        common_path[0]=0;
+    if (path == NULL) {
+        common_path[0] = 0;
         return;
     }
-    strcpy( common_path, path );
+    strcpy(common_path, path);
 }
+
 -(int)GetCmdList:(int)option {
     int res;
-    CToken* tk;
+    CToken* tk = [[CToken alloc] init];
     //CMemBuf outbuf;
     [tk SetErrorBuf:errbuf];
     [tk SetCommonPath:common_path];
@@ -251,18 +261,20 @@ extern char *hsp_prepp[];
     //if ( addkw != NULL ) errbuf->PutStr( addkw->GetBuffer() );
     return 0;
 }
+
 -(int)OpenPackfile {
     pfbuf = [[CMemBuf alloc] init];
     [pfbuf InitMemBuf:0x1000];
-    if ( [pfbuf PutFile:(char *)"packfile"] < 0 ) {
+    if ([pfbuf PutFile:(char *)"packfile"] < 0) {
         //delete pfbuf;
         pfbuf = NULL;
         return -1;
     }
     return 0;
 }
+
 -(void)GetPackfileOption:(char*)out keyword:(char*)keyword defval:(char*)defval {
-    int max,i;
+    int max, i;
     char tmp[512];
     char *s;
     char a1;
@@ -270,32 +282,41 @@ extern char *hsp_prepp[];
     [note Select:[pfbuf GetBuffer]];
     max = [note GetMaxLine];
     strcpy( out, defval );
-    for( i=0;i<max;i++ ) {
+    for(i = 0; i < max; i++) {
         [note GetLine:tmp line:i];
-        if (( tmp[0]==';' )&&( tmp[1]=='!' )) {
-            s = tmp+2;while(1) {
-                a1 = *s;if (( a1==0 )||( a1=='=' )) break;
+        if ((tmp[0] == ';') && (tmp[1] == '!')) {
+            s = tmp + 2;
+            while(1) {
+                a1 = *s;
+                if ((a1 == 0) || (a1 == '='))
+                    break;
                 s++;
             }
-            if ( a1 != 0 ) {
-                s[0]=0;
-                if ( tstrcmp( tmp+2, keyword )) { strcpy( out, s+1 ); }
+            if (a1 != 0) {
+                s[0] = 0;
+                if (tstrcmp(tmp + 2, keyword)) {
+                    strcpy(out, s + 1 );
+                }
             }
         }
     }
 }
+
 -(int)GetPackfileOptionInt:(char*)keyword defval:(int)defval {
     char tmp[512];
     char deftmp[32];
-    sprintf( deftmp,"%d",defval );
+    sprintf(deftmp, "%d", defval);
     [self GetPackfileOption:tmp keyword:keyword defval:deftmp];
-    if (( tmp[0]>='0' )&&( tmp[0]<='9' )) return atoi( tmp );
+    if ((tmp[0] >= '0') && (tmp[0] <= '9'))
+        return atoi(tmp);
     return defval;
 }
+
 -(void)ClosePackfile {
     //delete pfbuf;
     pfbuf = NULL;
 }
+
 -(int)GetRuntimeFromHeader:(char*)fname res:(char*)res {
     FILE *fp;
     hsp_header_t hsphed;
@@ -303,42 +324,45 @@ extern char *hsp_prepp[];
     int exsize;
     int ires;
     char *data;
-    fp=fopen( fname, "rb" );
-    if ( fp == NULL ) return -1;
+    fp = fopen(fname, "rb");
+    if (fp == NULL)
+        return -1;
     hedsize = sizeof(hsphed);
-    fread( &hsphed, 1, hedsize, fp );
+    fread(&hsphed, 1, hedsize, fp);
     exsize = hsphed.pt_cs - hedsize;
-    if ( exsize == 0 ) {
+    if (exsize == 0) {
         fclose(fp);
         return 0;
     }
-    data = (char *)malloc( exsize );
-    fread( data, 1, exsize, fp );
+    data = (char *)malloc(exsize);
+    fread(data, 1, exsize, fp);
     fclose(fp);
     ires = 0;
-    if ( hsphed.bootoption & HSPHED_BOOTOPT_RUNTIME ) {
+    if (hsphed.bootoption & HSPHED_BOOTOPT_RUNTIME) {
         char runtime[HSP_MAX_PATH];
-        strcpy( runtime, data + (hsphed.runtime - hedsize) );
-        cutext( runtime );
-        addext( runtime, "exe" );
-        strcpy( res, runtime );
+        strcpy(runtime, data + (hsphed.runtime - hedsize));
+        cutext(runtime);
+        addext(runtime, "exe");
+        strcpy(res, runtime);
         ires = 1;
     }
-    free( data );
+    free(data);
     return ires;
 }
+
 -(int)SaveOutbuf:(char*)fname {
     int res;
     res = [outbuf SaveFile:fname];
-    if ( res<0 ) {
+    if (res < 0) {
         return -1;
     }
     return 0;
 }
+
 -(int)SaveAHTOutbuf:(char*)fname {
     int res;
     res = [ahtbuf SaveFile:fname];
-    if ( res<0 ) {
+    if (res < 0) {
         return -1;
     }
     return 0;

@@ -16,6 +16,8 @@
 #import "hspvar_core.h"
 #import "errormsg.h"
 #import "hsp3struct.h"
+#include "utility_string.h"
+
 // token type
 #define TK_NONE 0
 #define TK_OBJ 1
@@ -114,6 +116,7 @@ typedef struct undefined_symbol_t {
 } undefined_symbol_t;
 
 @interface CToken : NSObject {
+    std::vector<undefined_symbol_t> undefined_symbols;
     //        Data
     //
     CLabel *lb;                        // label object
@@ -156,7 +159,6 @@ typedef struct undefined_symbol_t {
     char modname[MODNAME_MAX+2];    // Module Name Prefix
     int    modgc;                        // Global counter for Module
     int enumgc;                        // Global counter for Enum
-    std::vector<undefined_symbol_t> undefined_symbols;
     int cs_lastptr;                    // パラメーターの初期CS位置
     int cs_lasttype;                // パラメーターのタイプ(単一時)
     int calccount;                    // パラメーター個数
@@ -200,10 +202,6 @@ typedef struct undefined_symbol_t {
     CMemBuf *mi_buf;
     CMemBuf *fi2_buf;
     CMemBuf *hpi_buf;
-#ifdef HSP_DS_POOL
-    std::map<double, int> double_literal_table; // 定数プール用
-    std::map<std::string, int> string_literal_table;
-#endif
     //        for Header info
     int hed_option;
     char hed_runtime[64];

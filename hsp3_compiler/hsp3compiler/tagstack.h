@@ -4,12 +4,15 @@
 //
 #ifndef __tagstack_h
 #define __tagstack_h
+
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
+
 #define TAGSTK_MAX 256
 #define TAGSTK_SIZE 124
 #define TAGSTK_TAGMAX 256
 #define TAGSTK_TAGSIZE 56
+
 // tag info storage
 typedef struct TAGINF {
     char	name[TAGSTK_TAGSIZE];	// tag name
@@ -33,6 +36,7 @@ typedef struct TAGDATA {
     int        lastidx;                // Current last index
     int        gcount;                    // Global Counter
 }
+
 -(int)GetTagID:(char*)tag;
 -(char*)GetTagName:(int)tagid;
 -(int)PushTag:(int)tagid str:(char*)str;
@@ -45,5 +49,7 @@ typedef struct TAGDATA {
 -(int)StrCmp:(char*)str1 str2:(char*)str2;
 -(int)SearchTagID:(char*)tag;
 -(int)RegistTagID:(char*)tag;
+
 @end
+
 #endif
