@@ -317,8 +317,7 @@ char *hsp_prestr[] = {
     (char *)"$ffffffff 5 thismod",
     (char *)"*"
 };
-char 	*hsp_prepp[] =
-{
+char *hsp_prepp[] = {
     s_rec,
     (char *)"$000 0 #addition",
     (char *)"$000 0 #cmd",
