@@ -7,16 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B24C4EE27463613008BBACF /* utility_string.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B24C4ED27463613008BBACF /* utility_string.mm */; };
+		8B69FE892748DDDE002ED64B /* utility.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B69FE882748DDDE002ED64B /* utility.c */; };
+		8B69FE8F27490BB1002ED64B /* utility_time.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B69FE8E27490BB1002ED64B /* utility_time.mm */; };
 		8B6E9D1825A0ACE800EC204E /* hsc3.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D0125A0ACE800EC204E /* hsc3.mm */; };
 		8B6E9D1925A0ACE800EC204E /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D0225A0ACE800EC204E /* main.mm */; };
-		8B6E9D1A25A0ACE800EC204E /* supio_linux.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D0425A0ACE800EC204E /* supio_linux.mm */; };
 		8B6E9D1B25A0ACE800EC204E /* tagstack.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D0625A0ACE800EC204E /* tagstack.mm */; };
 		8B6E9D1C25A0ACE800EC204E /* label.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D0925A0ACE800EC204E /* label.mm */; };
 		8B6E9D1D25A0ACE800EC204E /* membuf.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D0F25A0ACE800EC204E /* membuf.mm */; };
 		8B6E9D1E25A0ACE800EC204E /* hspcmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D1025A0ACE800EC204E /* hspcmd.m */; };
 		8B6E9D1F25A0ACE800EC204E /* token.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D1125A0ACE800EC204E /* token.mm */; };
 		8B6E9D2025A0ACE800EC204E /* errormsg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D1325A0ACE800EC204E /* errormsg.mm */; };
-		8B6E9D2125A0ACE800EC204E /* localinfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D1525A0ACE800EC204E /* localinfo.mm */; };
 		8B6E9D2225A0ACE800EC204E /* strnote.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B6E9D1625A0ACE800EC204E /* strnote.mm */; };
 /* End PBXBuildFile section */
 
@@ -33,13 +34,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8B24C4EC27463613008BBACF /* utility_string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utility_string.h; sourceTree = "<group>"; };
+		8B24C4ED27463613008BBACF /* utility_string.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = utility_string.mm; sourceTree = "<group>"; };
 		8B422B88256ACC44008A363C /* hsp3compiler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hsp3compiler; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B69FE872748DDDE002ED64B /* utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utility.h; sourceTree = "<group>"; };
+		8B69FE882748DDDE002ED64B /* utility.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = utility.c; sourceTree = "<group>"; };
+		8B69FE8D27490BB1002ED64B /* utility_time.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utility_time.h; sourceTree = "<group>"; };
+		8B69FE8E27490BB1002ED64B /* utility_time.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = utility_time.mm; sourceTree = "<group>"; };
 		8B6E9D0025A0ACE800EC204E /* membuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = membuf.h; sourceTree = "<group>"; };
 		8B6E9D0125A0ACE800EC204E /* hsc3.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = hsc3.mm; sourceTree = "<group>"; };
 		8B6E9D0225A0ACE800EC204E /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		8B6E9D0325A0ACE800EC204E /* strnote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strnote.h; sourceTree = "<group>"; };
-		8B6E9D0425A0ACE800EC204E /* supio_linux.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = supio_linux.mm; sourceTree = "<group>"; };
-		8B6E9D0525A0ACE800EC204E /* supio_linux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = supio_linux.h; sourceTree = "<group>"; };
 		8B6E9D0625A0ACE800EC204E /* tagstack.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = tagstack.mm; sourceTree = "<group>"; };
 		8B6E9D0725A0ACE800EC204E /* hsc3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsc3.h; sourceTree = "<group>"; };
 		8B6E9D0825A0ACE800EC204E /* label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = label.h; sourceTree = "<group>"; };
@@ -47,7 +52,6 @@
 		8B6E9D0A25A0ACE800EC204E /* errormsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errormsg.h; sourceTree = "<group>"; };
 		8B6E9D0B25A0ACE800EC204E /* hsp3debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3debug.h; sourceTree = "<group>"; };
 		8B6E9D0C25A0ACE800EC204E /* hsp3config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3config.h; sourceTree = "<group>"; };
-		8B6E9D0D25A0ACE800EC204E /* localinfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = localinfo.h; sourceTree = "<group>"; };
 		8B6E9D0E25A0ACE800EC204E /* hspvar_core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hspvar_core.h; sourceTree = "<group>"; };
 		8B6E9D0F25A0ACE800EC204E /* membuf.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = membuf.mm; sourceTree = "<group>"; };
 		8B6E9D1025A0ACE800EC204E /* hspcmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = hspcmd.m; sourceTree = "<group>"; };
@@ -55,7 +59,6 @@
 		8B6E9D1225A0ACE800EC204E /* tagstack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tagstack.h; sourceTree = "<group>"; };
 		8B6E9D1325A0ACE800EC204E /* errormsg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = errormsg.mm; sourceTree = "<group>"; };
 		8B6E9D1425A0ACE800EC204E /* hsp3struct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3struct.h; sourceTree = "<group>"; };
-		8B6E9D1525A0ACE800EC204E /* localinfo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = localinfo.mm; sourceTree = "<group>"; };
 		8B6E9D1625A0ACE800EC204E /* strnote.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = strnote.mm; sourceTree = "<group>"; };
 		8B6E9D1725A0ACE800EC204E /* token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = token.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,6 +74,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B123AB927462247003D0855 /* utility */ = {
+			isa = PBXGroup;
+			children = (
+				8B69FE8D27490BB1002ED64B /* utility_time.h */,
+				8B69FE8E27490BB1002ED64B /* utility_time.mm */,
+				8B24C4EC27463613008BBACF /* utility_string.h */,
+				8B24C4ED27463613008BBACF /* utility_string.mm */,
+				8B69FE872748DDDE002ED64B /* utility.h */,
+				8B69FE882748DDDE002ED64B /* utility.c */,
+			);
+			path = utility;
+			sourceTree = "<group>";
+		};
 		8B422B7F256ACC44008A363C = {
 			isa = PBXGroup;
 			children = (
@@ -90,32 +106,37 @@
 		8B422B8A256ACC44008A363C /* hsp3compiler */ = {
 			isa = PBXGroup;
 			children = (
-				8B6E9D0A25A0ACE800EC204E /* errormsg.h */,
-				8B6E9D1325A0ACE800EC204E /* errormsg.mm */,
-				8B6E9D0C25A0ACE800EC204E /* hsp3config.h */,
-				8B6E9D0B25A0ACE800EC204E /* hsp3debug.h */,
-				8B6E9D1425A0ACE800EC204E /* hsp3struct.h */,
-				8B6E9D1025A0ACE800EC204E /* hspcmd.m */,
+				8B6E9D0225A0ACE800EC204E /* main.mm */,
 				8B6E9D0725A0ACE800EC204E /* hsc3.h */,
 				8B6E9D0125A0ACE800EC204E /* hsc3.mm */,
-				8B6E9D0E25A0ACE800EC204E /* hspvar_core.h */,
+				8B6E9D1725A0ACE800EC204E /* token.h */,
+				8B6E9D1125A0ACE800EC204E /* token.mm */,
 				8B6E9D0825A0ACE800EC204E /* label.h */,
 				8B6E9D0925A0ACE800EC204E /* label.mm */,
-				8B6E9D0D25A0ACE800EC204E /* localinfo.h */,
-				8B6E9D1525A0ACE800EC204E /* localinfo.mm */,
-				8B6E9D0225A0ACE800EC204E /* main.mm */,
 				8B6E9D0025A0ACE800EC204E /* membuf.h */,
 				8B6E9D0F25A0ACE800EC204E /* membuf.mm */,
 				8B6E9D0325A0ACE800EC204E /* strnote.h */,
 				8B6E9D1625A0ACE800EC204E /* strnote.mm */,
-				8B6E9D0525A0ACE800EC204E /* supio_linux.h */,
-				8B6E9D0425A0ACE800EC204E /* supio_linux.mm */,
 				8B6E9D1225A0ACE800EC204E /* tagstack.h */,
 				8B6E9D0625A0ACE800EC204E /* tagstack.mm */,
-				8B6E9D1725A0ACE800EC204E /* token.h */,
-				8B6E9D1125A0ACE800EC204E /* token.mm */,
+				8B69FE9027490C95002ED64B /* header */,
+				8B123AB927462247003D0855 /* utility */,
 			);
 			path = hsp3compiler;
+			sourceTree = "<group>";
+		};
+		8B69FE9027490C95002ED64B /* header */ = {
+			isa = PBXGroup;
+			children = (
+				8B6E9D0E25A0ACE800EC204E /* hspvar_core.h */,
+				8B6E9D0C25A0ACE800EC204E /* hsp3config.h */,
+				8B6E9D0B25A0ACE800EC204E /* hsp3debug.h */,
+				8B6E9D1425A0ACE800EC204E /* hsp3struct.h */,
+				8B6E9D0A25A0ACE800EC204E /* errormsg.h */,
+				8B6E9D1025A0ACE800EC204E /* hspcmd.m */,
+				8B6E9D1325A0ACE800EC204E /* errormsg.mm */,
+			);
+			path = header;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -174,6 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B69FE892748DDDE002ED64B /* utility.c in Sources */,
 				8B6E9D1925A0ACE800EC204E /* main.mm in Sources */,
 				8B6E9D2225A0ACE800EC204E /* strnote.mm in Sources */,
 				8B6E9D1F25A0ACE800EC204E /* token.mm in Sources */,
@@ -183,8 +205,8 @@
 				8B6E9D1D25A0ACE800EC204E /* membuf.mm in Sources */,
 				8B6E9D1C25A0ACE800EC204E /* label.mm in Sources */,
 				8B6E9D2025A0ACE800EC204E /* errormsg.mm in Sources */,
-				8B6E9D1A25A0ACE800EC204E /* supio_linux.mm in Sources */,
-				8B6E9D2125A0ACE800EC204E /* localinfo.mm in Sources */,
+				8B24C4EE27463613008BBACF /* utility_string.mm in Sources */,
+				8B69FE8F27490BB1002ED64B /* utility_time.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
