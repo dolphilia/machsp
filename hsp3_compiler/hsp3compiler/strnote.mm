@@ -25,7 +25,7 @@
 }
 
 -(int)GetSize {
-    return (int)strlen( base );
+    return (int)strlen(base);
 }
 
 -(int)nnget:(char*)nbase line:(int)line {
@@ -67,9 +67,9 @@
     return 0;
 }
 
-//        Get specified line from note
-//                result:0=ok/1=no line
-//
+/// ノートから指定した行を取得する
+///                result:0=ok/1=no line
+///
 -(int)GetLine:(char*)nres line:(int)line {
     char a1;
     char *pp;
@@ -92,9 +92,9 @@
     return 0;
 }
 
-//        Get specified line from note
-//                result:0=ok/1=no line
-//
+/// ノートから指定した行を取得する
+///
+/// @return 0 = ok, 1 = no line
 -(int)GetLine:(char*)nres line:(int)line max:(int)max {
     char a1;
     char *pp;
@@ -122,8 +122,8 @@
     return 0;
 }
 
-//        Get specified line from note
-//
+/// ノートから指定した行を取得する
+///
 -(char*)GetLineDirect:(int)line {
     char a1;
     if ([self nnget:base line:line])
@@ -142,8 +142,8 @@
     return nn;
 }
 
-//        Resume last GetLineDirect function
-//
+/// 最後の GetLineDirect 関数を再開する
+///
 -(void)ResumeLineDirect {
     *lastnn = lastcode;
 }
@@ -175,9 +175,9 @@
  mingw : warning : a は未初期化で使用されうる
  問題なさそう、一応対処。
  */
-//        Pet specified line to note
-//                result:0=ok/1=no line
-//
+/// ノートに指定行を入れる
+///                result:0=ok/1=no line
+///
 -(int)PutLine:(char*)nstr2 line:(int)line ovr:(int)ovr {
     int a = 0, ln, la, lw;
     char a1;
@@ -202,7 +202,7 @@
         strcat(nstr, "¥r¥n");
     ln = (int)strlen(nstr);			// base new str + cr/lf
     la = (int)strlen(base);
-    lw = la - (int)(nn-base) + 1;
+    lw = la - (int)(nn - base) + 1;
     //
     if (ovr) {						// when overwrite mode
         p1 = nn;

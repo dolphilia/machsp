@@ -127,7 +127,7 @@ extern char *hsp_prepp[];
     //					 bit4=write AHT file(on)
     //					 bit5=UTF8(on)
     //
-    int res;
+    int res = 0;
     //char mm[512];
     CToken* tk = [[CToken alloc] init];
     CMemBuf* packbuf = NULL;

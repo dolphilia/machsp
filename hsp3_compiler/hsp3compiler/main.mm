@@ -39,6 +39,15 @@ void usage1() {
 }
 
 int main(int argc, const char * argv[]) {
+    CStrNote* note = [[CStrNote alloc] init];
+    [note Select:"aiueo\nkakikukeko\nsasisus"];
+    int size = [note GetSize];
+    char str[] = "aiueo\nkakikukeko\nsasisus";
+    int line = [note GetLine:str line:0];
+    printf("%d\n",size);
+    printf("%s\n",str);
+    return 0;
+/*
     char a1, a2;
     int b, st;
     int cmpopt, ppopt, utfopt, pponly;
@@ -143,4 +152,5 @@ int main(int argc, const char * argv[]) {
         hsc3 = NULL;
     }
     return st;
+*/
 }

@@ -55,30 +55,30 @@ static void _splitpath(const char *path, char *p_drive, char *dir, char *fname, 
 /// @param str 元の文字列
 /// @param wc ワイルドカード
 /// @return value: yes 1, no 0
-static int wildcard( char *str, char *wc ) {
-    if (wc[0] == '\0' && *str == '\0') {
-        return 1;
-    }
-    if (wc[0] == '*') {
-        if (*str == '\0' && wc[1] == '\0') {
-            return 1;
-        } else if (*str == '\0') {
-            return 0;
-        }
-        if (wc[1] == *str | wc[1] == '*') {
-            if (wildcard(str, wc + 1)) {
-                return 1;
-            }
-        }
-        if (*str != '\0') {
-            return wildcard(str + 1, wc);
-        }
-    }
-    if ((*str != '\0') && (wc[0] == *str)) {
-        return wildcard(str + 1, wc + 1);
-    }
-    return 0;
-}
+//static int _wildcard( char *str, char *wc ) {
+//    if (wc[0] == '\0' && *str == '\0') {
+//        return 1;
+//    }
+//    if (wc[0] == '*') {
+//        if (*str == '\0' && wc[1] == '\0') {
+//            return 1;
+//        } else if (*str == '\0') {
+//            return 0;
+//        }
+//        if (wc[1] == *str | wc[1] == '*') {
+//            if (_wildcard(str, wc + 1)) {
+//                return 1;
+//            }
+//        }
+//        if (*str != '\0') {
+//            return _wildcard(str + 1, wc);
+//        }
+//    }
+//    if ((*str != '\0') && (wc[0] == *str)) {
+//        return _wildcard(str + 1, wc + 1);
+//    }
+//    return 0;
+//}
 
 //
 //        basic C I/O support

@@ -5,7 +5,7 @@
 //  Created by dolphilia on 2021/11/20.
 //
 
-#include "utility.h"
+#include "utility_io.h"
 
 char *mem_ini(int size) {
     return (char *)calloc(size, 1);

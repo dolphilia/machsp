@@ -5,8 +5,8 @@
 //  Created by dolphilia on 2021/11/20.
 //
 
-#ifndef utility_h
-#define utility_h
+#ifndef utility_io_h
+#define utility_io_h
 
 #include <stdio.h>
 #include <stdlib.h>

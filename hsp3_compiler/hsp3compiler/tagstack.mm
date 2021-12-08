@@ -33,8 +33,8 @@
 - (void)dealloc {
 }
 
-//    string compare (0=not same/-1=same)
-//  (case sensitive)
+//    文字列比較 (0=not same/-1=same)
+//  (大文字小文字の区別)
 -(int)StrCmp:(char*)str1 str2:(char*)str2 {
     int ap;
     char as;
@@ -52,7 +52,7 @@
 
 -(int)SearchTagID:(char*)tag {
     int i;
-    if (tagent==0)
+    if (tagent == 0)
         return -1;
     for(i = 0; i < tagent; i++) {
         if ([self StrCmp:mem_tag[i].name str2:tag])

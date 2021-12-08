@@ -76,6 +76,15 @@
     //    buffer = NULL;
 }
 
+-(void)PutDI_int:(int)dbg_code a:(int)a subid:(int)subid {
+    // MARK: 処理が不明
+}
+
+-(void)GenerateCodePRMN {
+    // MARK: 処理が不明
+}
+
+
 -(int)GetHeaderOption {
     return hed_option;
 }
@@ -7209,7 +7218,7 @@ finag:
         //        エラー終了
         char tmp[512];
         CStrNote* note = [[CStrNote alloc] init];
-        CMemBuf* srctmp = [[CMemBuf alloc] init];
+        //CMemBuf* srctmp = [[CMemBuf alloc] init];
         // Mesf( (char *)"%s(%d) : error %d : %s (%d行目)", cg_orgfile, cg_orgline,
         // res, cg_geterror((CGERROR)res), cg_orgline );
         char* err[] = {

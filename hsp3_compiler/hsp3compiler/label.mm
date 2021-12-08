@@ -43,6 +43,14 @@
         free( mem_lab );
 }
 
+-(int)GetNumEntry {
+    return cur;
+}
+
+-(void)AddRelation_name:(char*)name rel_id:(int)rel_id {
+    // MARK: 処理が不明
+}
+
 //    string case to lower
 //
 -(int)StrCase:(char*)str {
