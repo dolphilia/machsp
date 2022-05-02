@@ -1,0 +1,15 @@
+f = 440.0
+amp1 = 1.0
+amp2 = 3.0
+op1_f = 1.0 * f
+op2_f = 1.0 * f
+g1 = 0.0
+g2 = 0.0
+
+repeat qframe()*100
+    g2 = amp2 * sin(2.0 * qpi() * op2_f * dcnt / qrate())
+    g1 = amp1 * sin(2.0 * qpi() * op1_f / qrate() + g2)
+    qins g1
+loop
+
+qplay

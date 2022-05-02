@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>WebkitView Test</title>
+        <script src="jquery.min.js"></script>
+        <script src="doclib.js"></script>
+        <script src="doclib_com.js"></script>
+        <script src="doclib_file.js"></script>
+        <script src="doclib_graph.js"></script>
+        <script src="doclib_hsp3util.js"></script>
+        <script src="doclib_hspdef.js"></script>
+        <script src="doclib_hspmath.js"></script>
+        <script src="doclib_mem.js"></script>
+        <script src="doclib_mmedia.js"></script>
+        <script src="doclib_object.js"></script>
+        <script src="doclib_prep.js"></script>
+        <script src="doclib_prog.js"></script>
+        <script src="doclib_stdfunc.js"></script>
+        <script src="doclib_stdio.js"></script>
+        <script src="doclib_string.js"></script>
+        <script src="doclib_sysval.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+<!--        <iframe src="https://dolphilia.github.io" frameborder="0"></iframe>-->
+
+        <!-- 検索フィールド -->
+        <div style="display:block;">
+            <div style="flex:1;">
+                <div class="searchbox">
+                    <input id="textfield" type="text" name="">
+                    <button id="button">検索</button>
+                </div>
+                <div id="result" class="result" style=""></div>
+            </div>
+            <div id="detail" class="detail" style="flex:3;">
+                <div id='symbol'></div>
+                <div id='title'></div>
+                <div id='format'></div>
+                <div id='parameter'></div>
+                <div id='inst'></div>
+                <div id='href'></div>
+                <div id='info'>
+	                <table>
+	                <tr><td>バージョン</td><td id='ver'></td></tr>
+	                <tr><td>作成日</td><td id='date'></td></tr>
+	                <tr><td>著作者</td><td id='author'></td></tr>
+	                <tr><td>URL</td><td id='url'></td></tr>
+	                <tr><td>備考</td><td id='note'></td></tr>
+	                <tr><td>タイプ</td><td id='type'></td></tr>
+	                <tr><td>グループ</td><td id='group'></td></tr>
+	                <!--<tr><td>対応環境</td><td id='port'></td></tr>-->
+	                </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- アコーディオン -->
+        <dl id="acMenu" style="display:none;">
+		    <dt>HSPシステム制御命令</dt>
+		    <dd>----</dd><dt>オブジェクト制御命令</dt>
+		    <dd>----</dd><dt>システム変数</dt>
+		    <dd>----</dd><dt>ファイル操作命令</dt>
+		    <dd>----</dd><dt>プリプロセッサ命令</dt>
+		    <dd>----</dd><dt>プログラム制御マクロ</dt>
+		    <dd>----</dd><dt>プログラム制御命令</dt>
+			<dd>----</dd><dt>マルチメディア制御命令</dt>
+			<dd>----</dd><dt>メモリ管理命令</dt>
+			<dd>----</dd><dt>メモリ管理関数</dt>
+			<dd>----</dd><dt>基本入出力制御命令</dt>
+			<dd>----</dd><dt>基本入出力関数</dt>
+			<dd>----</dd><dt>数学定数</dt>
+			<dd>----</dd><dt>文字列操作命令</dt>
+			<dd>----</dd><dt>文字列操作関数</dt>
+			<dd>----</dd><dt>標準定義マクロ</dt>
+			<dd>----</dd><dt>特殊代入命令</dt>
+		</dl>
+        
+<script>
+
+	//一時変数
+	var tmpdata = {
+		'type'		: '',
+		'ver'		: '',
+		'note'		: '',
+		'author'	: '',
+		'date'		: '',
+		'url'		: '',
+		'port'		: [],
+		'index'		: '',
+		'title'		: '',
+		'group'		: '',
+		'format'	: '',
+		'parameter' : [],
+		'inst' : [],
+		'href' : []
+	};
+	
+	//検索データ
+	var refdata = {};
+    
+    for(var key in doclib) {
+	    for(var i=0; i<doclib[key].length; i++) {
+		    if		(doclib[key][i] == "%type")		{ i++; tmpdata['type'] = doclib[key][i]; }
+		    else if	(doclib[key][i] == "%ver")		{ i++; tmpdata['ver']  = doclib[key][i]; }
+		    else if	(doclib[key][i] == "%note")		{ i++; tmpdata['note'] = doclib[key][i]; }
+		    else if	(doclib[key][i] == "%date")		{ i++; tmpdata['date'] = doclib[key][i]; }
+		    else if	(doclib[key][i] == "%author")	{ i++; tmpdata['author'] = doclib[key][i]; }
+		    else if	(doclib[key][i] == "%url")		{ i++; tmpdata['url'] = doclib[key][i]; }
+		    else if	(doclib[key][i] == "%port")		{
+			    tmpdata['port'] = [];
+				for(var j=0;j<20;j++){
+					i++;
+					if (doclib[key][i].indexOf("%") != -1) {
+						i--;
+						break;
+					}
+					else {
+						tmpdata['port'].push(doclib[key][i]);
+					}
+				}
+				console.log(tmpdata['port']);
+			}
+		    else if	(doclib[key][i] == "%index")	{ i++; tmpdata['index'] = doclib[key][i];
+			    									  i++; tmpdata['title'] = doclib[key][i]; }
+			else if (doclib[key][i] == "%group")	{ i++; tmpdata['group'] = doclib[key][i];}
+			else if (doclib[key][i] == "%prm") {
+				i++; tmpdata['format'] = doclib[key][i];
+				tmpdata['parameter'] = [];
+				for(var j=0;j<20;j++){
+					i++;
+					if (doclib[key][i].indexOf("%") != -1) {
+						i--;
+						break;
+					}
+					else {
+						tmpdata['parameter'].push(doclib[key][i]);
+					}
+				}
+			}
+			else if (doclib[key][i] == "%inst") {
+				tmpdata['inst'] = [];
+				for(var j=0;j<200;j++){
+					i++;
+					if (doclib[key][i].indexOf("%") != -1) {
+						i--;
+						break;
+					}
+					else {
+						tmpdata['inst'].push(doclib[key][i]);
+					}
+				}
+			}
+			else if (doclib[key][i] == "%href") {
+				tmpdata['href'] = [];
+				for(var j=0;j<20;j++){
+					i++;
+					if (doclib[key][i].indexOf("%") != -1) {
+						i--;
+						break;
+					}
+					else {
+						tmpdata['href'].push(doclib[key][i]);
+					}
+				}
+			}
+			else if (doclib[key][i] == "%end") {
+				refdata[tmpdata['index']] = {
+					'type'		: tmpdata['type'],
+					'ver'		: tmpdata['ver'],
+					'note'		: tmpdata['note'],
+					'author'	: tmpdata['author'],
+					'date'		: tmpdata['date'],
+					'url'		: tmpdata['url'],
+					'port'		: tmpdata['port'],
+					'title'		: tmpdata['title'],
+					'group'		: tmpdata['group'],
+					'format'	: tmpdata['format'],
+					'parameter' : tmpdata['parameter'],
+					'inst' : tmpdata['inst'],
+					'href' : tmpdata['href']
+				}
+			}
+	    }
+    }
+    
+    
+    //console.log(refdata);
+    
+    //ary = joinArray(['a','b','c']);
+    //$('#result').html();    // nagoya,osaka,tokyo
+    
+    
+    $(function(){
+        //**アコーディオンの開け閉め処理
+        $("#acMenu dt").on("click", function() {
+            $(this).next().slideToggle();
+            $(this).toggleClass("active");//追加部分
+        });
+      
+        //**検索システム
+        //==汎用的な関数
+        //--GETパラメータを取得する (http://aaa.bbb.com?page=1 の場合 1 を取得する)
+        function getGetPrm(e) {
+            var ret = null;//Return
+            var url = location.href; //URL取得
+            parameters = url.split("?");//URL分割
+            if( parameters.length > 1 ) {//パラメータあり
+                var params = parameters[1].split("&");//分割
+                var paramsArray = [];//パラメータ配列
+                for ( i = 0; i < params.length; i++ ) {//パラメータ数繰り返し
+                    var neet = params[i].split("=");
+                    paramsArray.push(neet[0]);
+                    paramsArray[neet[0]] = neet[1];
+                }
+                ret = paramsArray[e];//Get Param
+            }
+            return ret;
+        }
+        //--文字列に含まれる特定の文字を数える
+        var counter = function(str,seq){
+            return str.split(seq).length - 1;
+        }
+        //--検索する
+        function reference() {
+	        $('#result').text(""); //結果のdivを初期化
+	        $('#detail').css('display', 'none');
+	        $('#symbol').text("");
+            $('#title').text("");
+            $('#format').text("");
+            $('#parameter').text("");
+            $('#inst').text("");
+            $('#href').text("");
+            $('#ver').text("");
+            $('#date').text("");
+            $('#author').text("");
+            $('#url').text("");
+            $('#type').text("");
+            $('#group').text("");
+            $('#port').text("");
+            var text = $('#textfield').val(); //テキストフィールドの文字列を取得する
+            var matchCount = 0;
+            var matchData = [];
+            var matchedKey = [];
+            var cnt = 0;
+            for (var key in refdata) {
+	            //console.log(key+":"+text);
+                if ( key == text ) {//直接のヒットがあったら
+                    $('#result').append('<tr><td><a href="?symbol='+key+'">'+key+'</a></td><td>'+refdata[key]['title']+"</td></tr>");
+                    matchCount++;
+                    matchedKey.push(key);
+                }
+                else {
+	            	cnt = counter(key,text);
+					if(cnt>0) {
+						$('#result').append('<tr><td><a href="?symbol='+key+'">'+key+'</a></td><td>'+refdata[key]['title']+"</td></tr>");
+						matchedKey.push(key);
+						matchCount++;
+                	}
+                }
+                cnt = counter(refdata[key]['inst'].join(),text);
+                if(cnt>0) {
+	                var matchedCnt=0;
+	                $.each(matchedKey,function(i,val){
+		                if(val==key) {
+			                matchedCnt++;
+		                }
+	                });
+	                if(matchedCnt == 0) {
+	                	matchData.push({name:key,value:cnt});
+	                	matchCount++;
+	                }
+                }
+                //console.log(counter(refdata[key]['inst'].join(),text));
+            }
+            matchData.sort(function(a,b){ //降順ソート
+			    if(a.value >b.value) return -1;
+			    if(a.value < b.value) return 1;
+			    return 0;
+			});
+			$.each(matchData,function(i,val){
+				$('#result').append('<tr><td><a href="?symbol='+val['name']+'">'+val['name']+'</a></td><td>'+refdata[val['name']]['title']+"</td></tr>");
+				//console.log(val['name']);
+			});
+			//$('#result').append('<a href="?symbol='+text+'">'+text+'</a>:'+refdata[text]['title']);
+            
+            
+            if (matchCount==0) {
+                $('#result').text('該当なし');
+            }
+        }
+        //==イベントの設定
+        $('#button').click(function(e) {
+            reference();
+        });
+        $('#textfield').change(function() {
+            //$('#result').text("change");
+        });
+        $('#textfield').keypress(function(e) {
+            if (e.keyCode==13) {
+                reference();
+            }
+            //$('#result').text("keypress");
+        });
+        $('#textfield').keyup(function() {
+            //$('#result').text("keyup");
+        });
+        //==処理
+        function joinInst(array) {
+	        var ret = "<p>";
+			$.each(array,function(i,val) {
+				if(val=="^" || val=="^p") {
+					ret += "</p><p>"
+				}
+				else {
+					ret += val+'<br>';
+				}
+			});
+			ret += "</p>"
+			return ret;
+        }
+        function joinHref(array) {
+	        var ret = "<p>関連項目</p>";
+			$.each(array,function(i,val) {
+				ret += '<a href="?symbol='+val+'">'+val+'</a><br>';
+			});
+			return ret;
+        }
+        function joinURL(str) {
+	        return '<a href="'+str+'">'+str+'</a>';
+        }
+        var curSymbol = getGetPrm("symbol");
+        var curSearch = getGetPrm("search");
+        if (getGetPrm("symbol") != null) { //getパラメータを取得／判定する
+	        $('#detail').css('display', 'block');
+	        $('#textfield').val(curSymbol);
+            $('#symbol').text(curSymbol);
+            $('#title').text(refdata[curSymbol]['title']);
+            $('#format').text(curSymbol+" "+refdata[curSymbol]['format']);
+            $('#parameter').html(refdata[curSymbol]['parameter'].join('<br>'));
+            $('#inst').html(joinInst(refdata[curSymbol]['inst']));
+            $('#href').html(joinHref(refdata[curSymbol]['href']));
+            $('#ver').text(refdata[curSymbol]['ver']);
+            $('#date').text(refdata[curSymbol]['date']);
+            $('#author').text(refdata[curSymbol]['author']);
+            $('#url').html(joinURL(refdata[curSymbol]['url']));
+            $('#type').text(refdata[curSymbol]['type']);
+            $('#group').text(refdata[curSymbol]['group']);
+            //$('#port').text(refdata[curSymbol]['port']);
+        }
+        if (getGetPrm("search") != null) { //getパラメータを取得／判定する
+            $('#textfield').val(decodeURI(curSearch));
+            reference();
+        }
+    });
+</script>
+
+    </body>
+</html>
