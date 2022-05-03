@@ -192,13 +192,9 @@ CAutoSbFree::~CAutoSbFree() {
 //
 //}
 
-/*------------------------------------------------------------*/
-/*
- Easing Function
- */
-/*------------------------------------------------------------*/
-
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
+// Easing Function
+//------------------------------------------------------------
 
 - (double)_ease_linear:(double)t {
     return hsp3int_ease_diff * t + hsp3int_ease_start;
@@ -323,7 +319,7 @@ CAutoSbFree::~CAutoSbFree() {
     return [self _ease_shake_out:tt];
 }
 
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
 
 - (void)initEase {
     hsp3int_ease_4096 = (double)1.0 / (double)4096.0;
@@ -451,8 +447,8 @@ CAutoSbFree::~CAutoSbFree() {
 #define SNPRINTF snprintf
 #endif
 
-//        フォーマット付き文字列を作成する
-//
+/// フォーマット付き文字列を作成する
+///
 - (char *)cnvformat {
     char fstr[1024];
     char *fp;
@@ -580,8 +576,8 @@ CAutoSbFree::~CAutoSbFree() {
     return result;
 }
 
-//        変数にstrからlenバイトの文字列を代入する
-//
+/// 変数にstrからlenバイトの文字列を代入する
+///
 - (void)var_set_str_len:(PVal *)pval aptr:(APTR)aptr str:(char *)str len:(int)len {
     HspVarProc *proc = HspVarCoreGetProc(HSPVAR_FLAG_STR);
     if (pval->flag != HSPVAR_FLAG_STR) {
@@ -608,20 +604,15 @@ CAutoSbFree::~CAutoSbFree() {
     }
     
     // HspVarCoreAllocBlock( pval, dst, len + 1 );
-    if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") ==
-        0) {  //整数のAllocBlock
+    if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) {  //整数のAllocBlock
         HspVarInt_AllocBlock(pval, dst, len + 1);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") ==
-               0) {  //実数のAllocBlock
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") == 0) {  //実数のAllocBlock
         HspVarDouble_AllocBlock(pval, dst, len + 1);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") ==
-               0) {  //文字列のAllocBlock
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") == 0) {  //文字列のAllocBlock
         HspVarStr_AllocBlock(pval, dst, len + 1);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
-               0) {  //ラベルのAllocBlock
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") == 0) {  //ラベルのAllocBlock
         HspVarLabel_AllocBlock(pval, dst, len + 1);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") ==
-               0) {  // structのAllocBlock
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) {  // structのAllocBlock
         HspVarLabel_AllocBlock(pval, dst, len + 1);
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
@@ -647,9 +638,10 @@ CAutoSbFree::~CAutoSbFree() {
     
 }
 
-//        cmdfunc : TYPE_INTCMD
-//        (内蔵コマンド)
-//
+/// cmdfunc : TYPE_INTCMD
+///
+/// (内蔵コマンド)
+///
 - (int)cmdfunc_intcmd:(int)cmd {
     [self code_next];  // 次のコードを取得(最初に必ず必要です)
     
@@ -758,11 +750,6 @@ CAutoSbFree::~CAutoSbFree() {
     return RUNMODE_RUN;
 }
 
-/*
- rev 45
- 不具合 : (onxxx系命令) (ラベル型変数)  形式の書式でエラー
- に対処
- */
 - (void)cmdfunc_on:(int)cmd {
     int tval = *hsp3int_type;
     int opt = IRQ_OPT_GOTO;
@@ -812,25 +799,20 @@ CAutoSbFree::~CAutoSbFree() {
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     nPs = [global.current_directory_path stringByAppendingPathComponent:nPs];
     
-    //ファイルの有無をチェック
+    // ファイルの有無をチェック
     BOOL isDir = NO;
     BOOL isExists = NO;
     NSFileManager *filemanager = [NSFileManager defaultManager];
     
-    // 0.エディタと同じディレクトリ
-    // path = [[[[NSBundle mainBundle] bundlePath]
-    // stringByDeletingLastPathComponent] stringByAppendingString:@"/hsp.app"];
+    // エディタと同じディレクトリ
     isExists = [filemanager fileExistsAtPath:nPs isDirectory:&isDir];
-    if (isExists) {  //存在する
-        if (isDir) {   //ディレクトリ
+    if (isExists) { // 存在する
+        if (isDir) { // ディレクトリ
             abc_hspctx.strsize = -2;
         } else {  //ファイル
-            unsigned long long fileSize =
-            [[filemanager attributesOfItemAtPath:nPs error:nil] fileSize];
+            unsigned long long fileSize = [[filemanager attributesOfItemAtPath:nPs error:nil] fileSize];
             abc_hspctx.strsize = (int)fileSize;
         }
-        //[[NSWorkspace sharedWorkspace] launchApplication:path];
-        // return;
     } else {
         abc_hspctx.strsize = -1;
     }
@@ -856,11 +838,7 @@ CAutoSbFree::~CAutoSbFree() {
     nPs = [global.current_directory_path stringByAppendingPathComponent:nPs];
     //ディレクトリを作成する
     NSError *error = nil;
-    [[NSFileManager defaultManager] createDirectoryAtPath:nPs
-                              withIntermediateDirectories:YES
-                                               attributes:nil
-                                                    error:&error];
-    
+    [[NSFileManager defaultManager] createDirectoryAtPath:nPs withIntermediateDirectories:YES attributes:nil error:&error];
 }
 
 - (void)cmdfunc_chdir {
@@ -868,14 +846,12 @@ CAutoSbFree::~CAutoSbFree() {
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     NSArray *paths = [nPs pathComponents];
     for (int i = 0; i < paths.count; i++) {
-        if (i == 0 && [paths[i] isEqual:@"/"]) {  //初期化
+        if (i == 0 && [paths[i] isEqual:@"/"]) { // 初期化
             global.current_directory_path = @"/";
-        } else if ([paths[i] isEqual:@".."]) {  //ディレクトリを一つ戻る
-            global.current_directory_path =
-            [global.current_directory_path stringByDeletingLastPathComponent];
-        } else if (![paths[i] isEqual:@"/"]) {  //通常のパス
-            global.current_directory_path = [global.current_directory_path
-                                             stringByAppendingPathComponent:paths[i]];
+        } else if ([paths[i] isEqual:@".."]) { // ディレクトリを一つ戻る
+            global.current_directory_path = [global.current_directory_path stringByDeletingLastPathComponent];
+        } else if (![paths[i] isEqual:@"/"]) { // 通常のパス
+            global.current_directory_path = [global.current_directory_path stringByAppendingPathComponent:paths[i]];
         }
     }
     chdir([global.current_directory_path UTF8String]);
@@ -883,9 +859,8 @@ CAutoSbFree::~CAutoSbFree() {
 
 - (void)cmdfunc_dirlist {
     PVal *pval;
-    APTR aptr;
+    APTR aptr = [self code_getva:&pval];
     char *ptr;
-    aptr = [self code_getva:&pval];
     [self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:[self code_gets]];
     int p1 = [self code_getdi:0];
     [self code_event:HSPEVENT_FDIRLIST1 prm1:p1 prm2:0 prm3:&ptr];
@@ -902,7 +877,8 @@ CAutoSbFree::~CAutoSbFree() {
     ptr = [self code_getvptr:&pval size:&size];
     int p1 = [self code_getdi:-1];
     int p2 = [self code_getdi:-1];
-    if ((p1 < 0) || (p1 > size)) p1 = size;
+    if ((p1 < 0) || (p1 > size))
+        p1 = size;
     if (cmd == 0x16) {
         tmpsize = p2;
         if (tmpsize < 0) tmpsize = 0;
@@ -915,28 +891,26 @@ CAutoSbFree::~CAutoSbFree() {
 - (void)cmdfunc_bcopy {
     [self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:[self code_gets]];
     [self code_event:HSPEVENT_FCOPY prm1:0 prm2:0 prm3:[self code_gets]];
-    
 }
 
 - (void)cmdfunc_memfile {
     PVal *pval;
-    char *ptr;
     int size;
-    ptr = [self code_getvptr:&pval size:&size];
+    char *ptr = [self code_getvptr:&pval size:&size];
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
-    if (p2 == 0) p2 = size - p1;
+    if (p2 == 0)
+        p2 = size - p1;
     [self dpm_memfile:ptr + p1 size:p2];
 }
 
 - (void)cmdfunc_poke_wpoke_lpoke:(int)cmd {
     PVal *pval;
-    char *ptr;
     int size;
+    char *ptr = [self code_getvptr:&pval size:&size];
     int fl;
     int len;
     char *bp;
-    ptr = [self code_getvptr:&pval size:&size];
     int p1 = [self code_getdi:0];
     int p2;
     if (p1 < 0) {
@@ -991,18 +965,15 @@ CAutoSbFree::~CAutoSbFree() {
         }
         *(int *)ptr = (*(int *)bp);
     }
-    
 }
 
 - (void)cmdfunc_getstr {
     PVal *pval2;
     PVal *pval;
-    APTR aptr;
-    char *ptr;
-    char *p;
+    APTR aptr = [self code_getva:&pval];
     int size;
-    aptr = [self code_getva:&pval];
-    ptr = [self code_getvptr:&pval2 size:&size];
+    char *ptr = [self code_getvptr:&pval2 size:&size];
+    char *p;
     int p1 = [self code_getdi:0];
     int p2 = [self code_getdi:0];
     int p3 = [self code_getdi:1024];
@@ -1040,20 +1011,15 @@ CAutoSbFree::~CAutoSbFree() {
     if (p1 < 64) p1 = 64;
     
     // HspVarCoreAllocBlock( pval, ptr, p1 );
-    if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") ==
-        0) {  //整数のAllocBlock
+    if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) {  //整数のAllocBlock
         HspVarInt_AllocBlock(pval, ptr, p1);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") ==
-               0) {  //実数のAllocBlock
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") == 0) {  //実数のAllocBlock
         HspVarDouble_AllocBlock(pval, ptr, p1);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") ==
-               0) {  //文字列のAllocBlock
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") == 0) {  //文字列のAllocBlock
         HspVarStr_AllocBlock(pval, ptr, p1);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
-               0) {  //ラベルのAllocBlock
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") == 0) {  //ラベルのAllocBlock
         HspVarLabel_AllocBlock(pval, ptr, p1);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") ==
-               0) {  // structのAllocBlock
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) {  // structのAllocBlock
         HspVarLabel_AllocBlock(pval, ptr, p1);
     } else {
          @throw [self make_nsexception:HSPERR_SYNTAX];
@@ -1125,8 +1091,7 @@ CAutoSbFree::~CAutoSbFree() {
     NSString *nPs = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     
     char *cStr = vc_hspctx->note_pval->pt;
-    NSString *nStr =
-    [NSString stringWithCString:cStr encoding:NSUTF8StringEncoding];
+    NSString *nStr = [NSString stringWithCString:cStr encoding:NSUTF8StringEncoding];
     
     __block NSString *nRet = @"";
     __block NSUInteger lineCount = 0;
@@ -1225,25 +1190,21 @@ CAutoSbFree::~CAutoSbFree() {
     
     //ファイルを読み込む
     NSData *data = [[NSData alloc] initWithContentsOfFile:path];
-    NSString *str = [[NSString alloc]
-                     initWithData:data
-                     encoding:NSUTF8StringEncoding];  // NSData -> NSString
-    char *ret = (char *)[str UTF8String];    // NSString -> char
-    vc_hspctx->note_pval->pt = ret;  // noteselで指定されている変数に情報を書き込む
+    NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];  // NSData -> NSString
+    char *ret = (char *)[str UTF8String]; // NSString -> char
+    vc_hspctx->note_pval->pt = ret; // noteselで指定されている変数に情報を書き込む
     vc_hspctx->note_pval->size = (int)strlen(ret) + 1;  //サイズを書き込む
     
 }
 
 - (void)cmdfunc_notesave {
     char *ps = [self code_gets];
-    NSString *filename =
-    [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
+    NSString *filename = [NSString stringWithCString:ps encoding:NSUTF8StringEncoding];
     NSString *path;
     
-    if (![global.current_script_path
-          isEqual:@""]) {  //ソースコードのあるディレクトリ
+    if (![global.current_script_path isEqual:@""]) { // ソースコードのあるディレクトリ
         path = global.current_script_path;
-    } else {                     //ホームディレクトリ
+    } else { // ホームディレクトリ
         path = NSHomeDirectory();  //[NSHomeDirectory()
         //stringByAppendingString:@"/Documents/hsptmp"];
     }
@@ -1251,8 +1212,7 @@ CAutoSbFree::~CAutoSbFree() {
     path = [path stringByAppendingString:filename];
     //
     char *cStr = vc_hspctx->note_pval->pt;
-    NSString *nStr =
-    [NSString stringWithCString:cStr encoding:NSUTF8StringEncoding];
+    NSString *nStr = [NSString stringWithCString:cStr encoding:NSUTF8StringEncoding];
     [nStr writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
@@ -1436,7 +1396,7 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_sortstr {
-    int i, len, order;
+    int len, order;
     char *p;
     PVal *pv;
     APTR ap;
@@ -1458,7 +1418,7 @@ CAutoSbFree::~CAutoSbFree() {
     len = pv->len[1];
     [self DataIni:len];
     
-    for (i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++) {
         p = (char *)HspVarCorePtrAPTR(pv, i);
         hsp3int_data_temp[i].as.skey = p;
         hsp3int_data_temp[i].info = i;
@@ -1473,7 +1433,7 @@ CAutoSbFree::~CAutoSbFree() {
     }
     
     pvstr = (char **)(pv->master);  // 変数に直接sbポインタを書き戻す
-    for (i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++) {
         if (i == 0) {
             pv->pt = hsp3int_data_temp[i].as.skey;
             sbSetOption(pv->pt, &pv->pt);
@@ -1517,12 +1477,9 @@ CAutoSbFree::~CAutoSbFree() {
 
 - (void)cmdfunc_sortget {
     PVal *pv;
-    APTR ap;
+    APTR ap = [self code_getva:&pv];
     int result;
-    int n;
-    
-    ap = [self code_getva:&pv];
-    n = [self code_getdi:0];
+    int n = [self code_getdi:0];
     
     if (hsp3int_data_temp == NULL) {
          @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
@@ -1535,9 +1492,10 @@ CAutoSbFree::~CAutoSbFree() {
     [self code_setva:pv aptr:ap type:HSPVAR_FLAG_INT ptr:&result];
 }
 
-//        reffunc : TYPE_INTFUNC
-//        (内蔵関数)
-//
+/// reffunc : TYPE_INTFUNC
+///
+/// (内蔵関数)
+///
 - (void *)reffunc_intfunc:(int *)type_res arg:(int)arg {
     void *ptr;
     int chk;
@@ -1791,11 +1749,10 @@ CAutoSbFree::~CAutoSbFree() {
             p = [self code_stmpstr:ps];
             findopt = [self code_getdi:0];
             [self note_update];
-            
             break;
         }
             
-            //================================================================================>>>MacOSX
+        //================================================================================>>>MacOSX
         case 0x020:  // qframe
         {
             if (qAudio->isInitialized != YES) {
@@ -1810,7 +1767,6 @@ CAutoSbFree::~CAutoSbFree() {
                     break;
                 }
             }
-            
             break;
         }
         case 0x021:  // qcount
@@ -1818,7 +1774,6 @@ CAutoSbFree::~CAutoSbFree() {
             hsp3int_reffunc_intfunc_ivalue = (int)global.q_audio_buffer.count;
             break;
         }
-            
         case 0x030:  // clock
         {
             hsp3int_reffunc_intfunc_ivalue = (int)clock();
@@ -1964,7 +1919,7 @@ CAutoSbFree::~CAutoSbFree() {
             
             break;
         }
-            //================================================================================<<<MacOSX
+        //================================================================================<<<MacOSX
             
             // str function
         case 0x100:  // str
@@ -2011,7 +1966,6 @@ CAutoSbFree::~CAutoSbFree() {
             *p = 0;
             break;
         }
-            
         case 0x103:  // strf
             ptr = [self cnvformat];
             break;
@@ -2200,15 +2154,14 @@ CAutoSbFree::~CAutoSbFree() {
     return ptr;
 }
 
-/*------------------------------------------------------------*/
-/*
- controller
- */
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
+// controller
+//------------------------------------------------------------
 
-//        termfunc : TYPE_INTCMD
-//        (内蔵)
-//
+/// termfunc : TYPE_INTCMD
+///
+/// (内蔵)
+///
 - (int)termfunc_intcmd:(int)option {
     return 0;
 }
@@ -2296,9 +2249,10 @@ CAutoSbFree::~CAutoSbFree() {
     return 0;
 }
 
-//        Get specified line from note
-//                result:0=ok/1=no line
-//
+/// Get specified line from note
+///
+/// result:0=ok/1=no line
+///
 - (int)GetLine:(char *)nres line:(int)line {
     char a1;
     char *pp;

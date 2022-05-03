@@ -1,8 +1,7 @@
-
 //
 //	HSPVAR core module
 //	onion software/onitama 2003/4
-//=============================================================================>>>hspvar_int
+
 #import "hspvar_int.h"
 #import "debug_message.h"
 #import "hsp3config.h"
@@ -15,28 +14,26 @@
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
-//=============================================================================<<<hspvar_int
 
 @implementation ViewController (hspvar_int)
-//=============================================================================>>>hspvar_int
-/*------------------------------------------------------------*/
-/*
- HSPVAR core interface (int)
- */
-/*------------------------------------------------------------*/
+
+//------------------------------------------------------------
+// HSPVAR core interface (int)
+//------------------------------------------------------------
 
 #define hspvar_int_GetPtr(pval) ((int*)pval)
 int hspvar_int_conv;
 
-// Core
+/// Core
 PDAT* HspVarInt_GetPtr(PVal* pval) {
     return (PDAT*)(((int*)(pval->pt)) + pval->offset);
 }
 
-//        リクエストされた型 -> 自分の型への変換を行なう
-//        (組み込み型にのみ対応でOK)
-//        (参照元のデータを破壊しないこと)
-//
+/// リクエストされた型 -> 自分の型への変換を行なう
+///
+/// (組み込み型にのみ対応でOK)
+/// (参照元のデータを破壊しないこと)
+///
 void* HspVarInt_Cnv(const void* buffer, int flag) {
     switch (flag) {
         case HSPVAR_FLAG_STR:
@@ -45,21 +42,17 @@ void* HspVarInt_Cnv(const void* buffer, int flag) {
             } else {
                 hspvar_int_conv = atoi((char*)buffer);
             }
-            
             return &hspvar_int_conv;
         case HSPVAR_FLAG_INT:
             break;
         case HSPVAR_FLAG_DOUBLE:
             hspvar_int_conv = (int)(*(double*)buffer);
-            
             return &hspvar_int_conv;
         default: {
-            NSString* error_str =
-            [NSString stringWithFormat:@"%d", HSPVAR_ERROR_TYPEMISS];
+            NSString* error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_TYPEMISS];
             @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
         }
     }
-    
     return (void*)buffer;
 }
 
@@ -75,12 +68,12 @@ void* HspVarInt_Cnv(const void* buffer, int flag) {
  }
  */
 
-//        PVALポインタの変数が必要とするサイズを取得する
-//        (sizeフィールドに設定される)
-//
+/// PVALポインタの変数が必要とするサイズを取得する
+///
+/// (sizeフィールドに設定される)
+///
 int HspVarInt_GetVarSize(PVal* pval) {
-    int size;
-    size = pval->len[1];
+    int size = pval->len[1];
     if (pval->len[2])
         size *= pval->len[2];
     if (pval->len[3])
@@ -91,8 +84,8 @@ int HspVarInt_GetVarSize(PVal* pval) {
     return size;
 }
 
-//        PVALポインタの変数メモリを解放する
-//
+/// PVALポインタの変数メモリを解放する
+///
 void HspVarInt_Free(PVal* pval) {
     if (pval->mode == HSPVAR_MODE_MALLOC) {
         sbFree(pval->pt);
@@ -101,13 +94,14 @@ void HspVarInt_Free(PVal* pval) {
     pval->mode = HSPVAR_MODE_NONE;
 }
 
-//        pval変数が必要とするサイズを確保する。
-//        (pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
-//        (pval2がNULLの場合は、新規データ)
-//        (pval2が指定されている場合は、pval2の内容を継承して再確保)
-//
+/// pval変数が必要とするサイズを確保する。
+///
+/// (pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
+/// (pval2がNULLの場合は、新規データ)
+/// (pval2が指定されている場合は、pval2の内容を継承して再確保)
+///
 void HspVarInt_Alloc(PVal* pval, const PVal* pval2) {
-    int i, size;
+    int size;
     char* pt;
     int* fv;
     if (pval->len[1] < 1)
@@ -116,7 +110,7 @@ void HspVarInt_Alloc(PVal* pval, const PVal* pval2) {
     pval->mode = HSPVAR_MODE_MALLOC;
     pt = sbAlloc(size);
     fv = (int*)pt;
-    for (i = 0; i < (int)(size / sizeof(int)); i++) {
+    for (int i = 0; i < (int)(size / sizeof(int)); i++) {
         fv[i] = 0;
     }
     if (pval2 != NULL) {
@@ -137,32 +131,32 @@ void HspVarInt_Alloc(PVal* pval, const PVal* pval2) {
  }
  */
 
-// Size
+/// Size
 int HspVarInt_GetSize(const PDAT* pval) {
     return sizeof(int);
 }
 
-// Set
+/// Set
 void HspVarInt_Set(PVal* pval, PDAT* pdat, const void* in) {
     *hspvar_int_GetPtr(pdat) = *((int*)(in));
 }
 
-// Add
+/// Add
 void HspVarInt_AddI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) += *((int*)(val));
 }
 
-// Sub
+/// Sub
 void HspVarInt_SubI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) -= *((int*)(val));
 }
 
-// Mul
+/// Mul
 void HspVarInt_MulI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) *= *((int*)(val));
 }
 
-// Div
+/// Div
 void HspVarInt_DivI(PDAT* pval, const void* val) {
     int p = *((int*)(val));
     if (p == 0) {
@@ -172,7 +166,7 @@ void HspVarInt_DivI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) /= p;
 }
 
-// Mod
+/// Mod
 void HspVarInt_ModI(PDAT* pval, const void* val) {
     int p = *((int*)(val));
     if (p == 0) {
@@ -182,57 +176,57 @@ void HspVarInt_ModI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) %= p;
 }
 
-// And
+/// And
 void HspVarInt_AndI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) &= *((int*)(val));
 }
 
-// Or
+/// Or
 void HspVarInt_OrI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) |= *((int*)(val));
 }
 
-// Xor
+/// Xor
 void HspVarInt_XorI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) ^= *((int*)(val));
 }
 
-// Eq
+/// Eq
 void HspVarInt_EqI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) == *((int*)(val)));
 }
 
-// Ne
+/// Ne
 void HspVarInt_NeI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) != *((int*)(val)));
 }
 
-// Gt
+/// Gt
 void HspVarInt_GtI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) > *((int*)(val)));
 }
 
-// Lt
+/// Lt
 void HspVarInt_LtI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) < *((int*)(val)));
 }
 
-// GtEq
+/// GtEq
 void HspVarInt_GtEqI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) >= *((int*)(val)));
 }
 
-// LtEq
+/// LtEq
 void HspVarInt_LtEqI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) <= *((int*)(val)));
 }
 
-// Rr
+/// Rr
 void HspVarInt_RrI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) >>= *((int*)(val));
 }
 
-// Lr
+/// Lr
 void HspVarInt_LrI(PDAT* pval, const void* val) {
     *hspvar_int_GetPtr(pval) <<= *((int*)(val));
 }
@@ -245,7 +239,7 @@ void* HspVarInt_GetBlockSize(PVal* pval, PDAT* pdat, int* size) {
 void HspVarInt_AllocBlock(PVal* pval, PDAT* pdat, int size) {
 }
 
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
 
 void HspVarInt_Init(HspVarProc* p) {
     
@@ -285,11 +279,7 @@ void HspVarInt_Init(HspVarProc* p) {
     p->version = 0x001; // 型タイプランタイムバージョン(0x100 = 1.0)
     p->support = HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY;
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
-    p->basesize =
-    sizeof(int); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
-    
+    p->basesize = sizeof(int); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
 
-/*------------------------------------------------------------*/
-//=============================================================================<<<hspvar_int
 @end

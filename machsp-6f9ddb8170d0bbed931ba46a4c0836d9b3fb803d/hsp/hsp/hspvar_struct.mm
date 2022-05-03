@@ -3,7 +3,7 @@
 //	HSPVAR core module
 //	onion software/onitama 2003/4
 //
-//=============================================================================>>>hspvar_struct
+
 #import "hspvar_struct.h"
 #import "debug_message.h"
 #import "hsp3struct_debug.h"
@@ -15,17 +15,14 @@
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
-//=============================================================================<<<hspvar_struct
 
 @implementation ViewController (hspvar_struct)
-//=============================================================================>>>hspvar_struct
-/*------------------------------------------------------------*/
-/*
- HSPVAR core interface (struct)
- */
-/*------------------------------------------------------------*/
 
-// Core
+//------------------------------------------------------------
+// HSPVAR core interface (struct)
+//------------------------------------------------------------
+
+/// Core
 PDAT* HspVarStruct_GetPtr(PVal* pval) {
     return (PDAT*)(((FlexValue*)(pval->pt)) + pval->offset);
 }
@@ -54,8 +51,8 @@ PDAT* HspVarStruct_GetPtr(PVal* pval) {
  }
  */
 
-//        PVALポインタの変数メモリを解放する
-//
+/// PVALポインタの変数メモリを解放する
+///
 void HspVarStruct_Free(PVal* pval) {
     FlexValue* fv;
     if (pval->mode == HSPVAR_MODE_MALLOC) {
@@ -72,11 +69,12 @@ void HspVarStruct_Free(PVal* pval) {
     pval->mode = HSPVAR_MODE_NONE;
 }
 
-//        pval変数が必要とするサイズを確保する。
-//        (pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
-//        (pval2がNULLの場合は、新規データ)
-//        (pval2が指定されている場合は、pval2の内容を継承して再確保)
-//
+/// pval変数が必要とするサイズを確保する。
+///
+/// (pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
+/// (pval2がNULLの場合は、新規データ)
+/// (pval2が指定されている場合は、pval2の内容を継承して再確保)
+///
 void HspVarStruct_Alloc(PVal* pval, const PVal* pval2) {
     int size;
     char* pt;
@@ -88,13 +86,6 @@ void HspVarStruct_Alloc(PVal* pval, const PVal* pval2) {
     pt = sbAlloc(size);
     fv = (FlexValue*)pt;
     for (int i = 0; i < pval->len[1]; i++) {
-        
-        /*
-         rev 53
-         BT#113: dimtypeでstruct型(モジュール型)変数が不完全な状態で作成される
-         に対処。
-         */
-        
         memset(fv, 0, sizeof(FlexValue));
         fv->type = FLEXVAL_TYPE_NONE;
         fv++;
@@ -117,18 +108,18 @@ void HspVarStruct_Alloc(PVal* pval, const PVal* pval2) {
  }
  */
 
-// Size
+/// Size
 int HspVarStruct_GetSize(const PDAT* pdat) {
     return sizeof(FlexValue); // 実態のポインタが渡されます
 }
 
-// Using
+/// Using
 int HspVarStruct_GetUsing(const PDAT* pdat) {
     FlexValue* fv = (FlexValue*)pdat; // 実態のポインタが渡されます
     return fv->type;
 }
 
-// Set
+/// Set
 void HspVarStruct_Set(PVal* pval, PDAT* pdat, const void* in) {
     FlexValue* fv = (FlexValue*)in;
     FlexValue* fv_src = (FlexValue*)pdat;
@@ -157,7 +148,7 @@ void* HspVarStruct_GetBlockSize(PVal* pval, PDAT* pdat, int* size) {
 void HspVarStruct_AllocBlock(PVal* pval, PDAT* pdat, int size) {
 }
 
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
 
 void HspVarStruct_Init(HspVarProc* p) {
     
@@ -198,11 +189,7 @@ void HspVarStruct_Init(HspVarProc* p) {
     p->support =
     HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY | HSPVAR_SUPPORT_VARUSE;
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
-    p->basesize =
-    sizeof(FlexValue); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
-    
+    p->basesize = sizeof(FlexValue); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
 
-/*------------------------------------------------------------*/
-//=============================================================================<<<hspvar_struct
 @end

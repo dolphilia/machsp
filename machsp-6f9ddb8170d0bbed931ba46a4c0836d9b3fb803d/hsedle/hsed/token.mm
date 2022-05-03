@@ -3731,38 +3731,20 @@ int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
         i++;
         common_path[i] = *(char *)"\0";
     }
-    
-    //NSString *decodedString = [ns_search_path stringByRemovingPercentEncoding];
-    
-    //NSLog(@"%@",decodedString);
-    //    NSLog(@"c_path:%s",c_search_path);
-    //    NSLog(@"path:%@",ns_search_path);
-    //    NSLog(@"purename:%s",purename);
-    //    NSLog(@"common_path:%s",common_path);
-    //    NSLog(@"search_path:%s",search_path);
-    
-    //-------
-    //NSLog(@"1:%s",fname);
+
     if (fbuf.PutFile(fname) < 0) {
         strcpy(cname, common_path);
         strcat(cname, purename);
-        //NSLog(@"2:%s",cname);
-        
         if (fbuf.PutFile( cname ) < 0) {
             strcpy(cname, search_path);
             strcat(cname, purename);
-            
-            // NSLog(@"3:%s",cname);
             if (fbuf.PutFile( cname) < 0) {
                 strcpy(cname, common_path);
                 strcat(cname, search_path);
                 strcat(cname, purename);
-                
-                //  NSLog(@"4:%s",cname);
                 if (fbuf.PutFile( cname ) < 0) {
                     if (fileadd == 0) {
 #ifdef JPNMSG
-                        //Mesf( (char *)"#スクリプトファイルが見つかりません [%s]", purename );
                         @autoreleasepool {
                             AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
                             global.logString = [global.logString stringByAppendingFormat:@"#スクリプトファイルが見つかりません [%s]\n", purename];
@@ -3776,11 +3758,10 @@ int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
             }
         }
     }
-    //NSLog(@"----");
+    
     fbuf.Put((char)0);
     
     if (fileadd) {
-        //Mesf( (char *)"#Use file [%s]",purename );
         @autoreleasepool {
             AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
             global.logString = [global.logString stringByAppendingFormat:@"#Use file [%s]\n",purename];

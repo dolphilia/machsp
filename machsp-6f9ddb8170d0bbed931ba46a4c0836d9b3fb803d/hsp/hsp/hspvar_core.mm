@@ -1,5 +1,3 @@
-
-
 //
 //	HSPVAR manager
 //	onion software/onitama 2003/4
@@ -7,7 +5,7 @@
 //関数ポインタの使用箇所あり
 //->LrI
 //->Cnv
-//=============================================================================>>>hspvar_core
+
 #import "hspvar_core.h"
 #import "debug_message.h"
 #import "hsp3struct_debug.h"
@@ -26,55 +24,46 @@
 #import "hspvar_str.h"
 #import "hspvar_struct.h"
 #import "utility_string.h"
-//=============================================================================<<<hspvar_core
-@implementation ViewController (hspvar_core)
-//=============================================================================>>>hspvar_core
 
-/*------------------------------------------------------------*/
-/*
- master pointer
- */
-/*------------------------------------------------------------*/
+@implementation ViewController (hspvar_core)
+
+//------------------------------------------------------------
+// master pointer
+//------------------------------------------------------------
 
 PVal* mem_pval;
 HspVarProc* hspvarproc;
 int hspvartype_max;
 int hspvartype_limit;
 
-//        変数データの実態ポインタを得る
-//        (APTRとpvalから実態を求める)
-//
+///        変数データの実態ポインタを得る
+///
+///        (APTRとpvalから実態を求める)
+///
 PDAT* HspVarCorePtrAPTR(PVal* pv, APTR ofs) {
     pv->offset = ofs;
-    
     PDAT* dst;
     if (strcmp(hspvarproc[(pv)->flag].vartype_name, "int") == 0) { //整数のFree
         dst = HspVarInt_GetPtr(pv);
-    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "double") ==
-               0) { //実数のFree
+    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "double") == 0) { //実数のFree
         dst = HspVarDouble_GetPtr(pv);
-    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "str") ==
-               0) { //文字列のFree
+    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "str") == 0) { //文字列のFree
         dst = HspVarStr_GetPtr(pv);
-    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "label") ==
-               0) { //ラベルのFree
+    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "label") == 0) { //ラベルのFree
         dst = HspVarLabel_GetPtr(pv);
-    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "struct") ==
-               0) { // structのFree
+    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "struct") == 0) { // structのFree
         dst = HspVarLabel_GetPtr(pv);
     } else {
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
     return dst; // hspvarproc[(pv)->flag].GetPtr(pv);
 }
 
 void HspVarCoreInit(void) {
-    int i;
     hspvarproc = (HspVarProc*)sbAlloc(sizeof(HspVarProc) * HSPVAR_FLAG_MAX);
     hspvartype_max = HSPVAR_FLAG_MAX;
-    for (i = 0; i < HSPVAR_FLAG_MAX; i++) {
+    for (int i = 0; i < HSPVAR_FLAG_MAX; i++) {
         hspvarproc[i].flag = 0;
     }
     
@@ -82,7 +71,7 @@ void HspVarCoreInit(void) {
     //		(実態の初期化は、変数使用時に行なわれます)
     PVal* pval;
     mem_pval = (PVal*)sbAlloc(sizeof(PVal) * HSPVAR_FLAG_MAX);
-    for (i = 0; i < HSPVAR_FLAG_MAX; i++) {
+    for (int i = 0; i < HSPVAR_FLAG_MAX; i++) {
         pval = &mem_pval[i];
         pval->mode = HSPVAR_MODE_NONE;
         pval->flag = HSPVAR_FLAG_INT; // 仮の型
@@ -90,24 +79,18 @@ void HspVarCoreInit(void) {
 }
 
 void HspVarCoreBye(void) {
-    int i;
-    for (i = 0; i < hspvartype_max; i++) {
+    for (int i = 0; i < hspvartype_max; i++) {
         if (mem_pval[i].mode == HSPVAR_MODE_MALLOC) {
             // HspVarCoreDispose( &mem_pval[i] );
-            if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "int") ==
-                0) { //整数のFree
+            if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "int") == 0) { //整数のFree
                 HspVarInt_Free(&mem_pval[i]);
-            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name,
-                              "double") == 0) { //実数のFree
+            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "double") == 0) { //実数のFree
                 HspVarDouble_Free(&mem_pval[i]);
-            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "str") ==
-                       0) { //文字列のFree
+            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "str") == 0) { //文字列のFree
                 HspVarStr_Free(&mem_pval[i]);
-            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name,
-                              "label") == 0) { //ラベルのFree
+            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "label") == 0) { //ラベルのFree
                 HspVarLabel_Free(&mem_pval[i]);
-            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name,
-                              "struct") == 0) { // structのFree
+            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "struct") == 0) { // structのFree
                 HspVarLabel_Free(&mem_pval[i]);
             } else {
                 NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
@@ -119,26 +102,23 @@ void HspVarCoreBye(void) {
     sbFree(hspvarproc);
 }
 
-//        VARTYPEを初期化する(HspVarCoreInitの後で呼ぶ)
-//        (expandに拡張するVARTYPEの数を指定する)
-//
+/// VARTYPEを初期化する(HspVarCoreInitの後で呼ぶ)
+///
+/// (expandに拡張するVARTYPEの数を指定する)
+///
 void HspVarCoreResetVartype(int expand) {
     hspvartype_limit = hspvartype_max + expand;
     if (expand >= 0) {
-        hspvarproc = (HspVarProc*)sbExpand((char*)hspvarproc,
-                                           sizeof(HspVarProc) * hspvartype_limit);
-        mem_pval =
-        (PVal*)sbExpand((char*)mem_pval, sizeof(PVal) * hspvartype_limit);
+        hspvarproc = (HspVarProc*)sbExpand((char*)hspvarproc, sizeof(HspVarProc) * hspvartype_limit);
+        mem_pval = (PVal*)sbExpand((char*)mem_pval, sizeof(PVal) * hspvartype_limit);
     }
     
-    //		標準の型を登録する
-    //
+    // 標準の型を登録する
     HspVarCoreRegisterType(HSPVAR_FLAG_INT, (char*)"int");
     HspVarCoreRegisterType(HSPVAR_FLAG_STR, (char*)"str");
     HspVarCoreRegisterType(HSPVAR_FLAG_DOUBLE, (char*)"double");
     HspVarCoreRegisterType(HSPVAR_FLAG_STRUCT, (char*)"struct");
     HspVarCoreRegisterType(HSPVAR_FLAG_LABEL, (char*)"label"); // ラベル型(3.1)
-    
 }
 
 int HspVarCoreAddType() {
@@ -159,8 +139,7 @@ int HspVarCoreAddType() {
 }
 
 static void PutInvalid(void) {
-    NSString* error_str =
-    [NSString stringWithFormat:@"%d", HSPERR_UNSUPPORTED_FUNCTION];
+    NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_UNSUPPORTED_FUNCTION];
     @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
 }
 
@@ -173,7 +152,6 @@ void HspVarCoreRegisterType(int flag, char* vartype_name) {
     if (id < 0) {
         id = HspVarCoreAddType();
         if (id < 0) {
-            
             return;
         }
     }
@@ -200,12 +178,10 @@ void HspVarCoreRegisterType(int flag, char* vartype_name) {
     } else if (strcmp(vartype_name, "label") == 0) {
         HspVarLabel_Init(p);
     } else {
-        NSString* error_str =
-        [NSString stringWithFormat:@"%d", HSPERR_UNKNOWN_CODE];
+        NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_UNKNOWN_CODE];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     // func( p );
-    
 }
 
 /*------------------------------------------------------------*/
@@ -213,26 +189,19 @@ void HspVarCoreRegisterType(int flag, char* vartype_name) {
 //        指定されたポインタからのクローンになる
 //
 void HspVarCoreDupPtr(PVal* pval, int flag, void* ptr, int size) {
-    PDAT* buf;
-    HspVarProc* p;
-    p = &hspvarproc[flag];
-    buf = (PDAT*)ptr;
+    PDAT* buf = (PDAT*)ptr;
+    HspVarProc* p = &hspvarproc[flag];
     
     // HspVarCoreDispose( pval );
-    
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
         HspVarInt_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") ==
-               0) { //実数のFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") == 0) { //実数のFree
         HspVarDouble_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") ==
-               0) { //文字列のFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") == 0) { //文字列のFree
         HspVarStr_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
-               0) { //ラベルのFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") == 0) { //ラベルのFree
         HspVarLabel_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") ==
-               0) { // structのFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
         HspVarLabel_Free(pval);
     } else {
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
@@ -259,31 +228,24 @@ void HspVarCoreDupPtr(PVal* pval, int flag, void* ptr, int size) {
     
 }
 
-//        指定された変数のクローンになる
-//
+/// 指定された変数のクローンになる
+///
 void HspVarCoreDup(PVal* pval, PVal* arg, APTR aptr) {
     int size;
-    PDAT* buf;
-    HspVarProc* p;
-    p = &hspvarproc[arg->flag];
-    buf = HspVarCorePtrAPTR(arg, aptr);
+    PDAT* buf = HspVarCorePtrAPTR(arg, aptr);
+    HspVarProc* p = &hspvarproc[arg->flag];
     
     // HspVarCoreGetBlockSize( arg, buf, &size );
     void* dst;
-    if (strcmp(hspvarproc[(arg)->flag].vartype_name, "int") ==
-        0) { //整数のGetBlockSize
+    if (strcmp(hspvarproc[(arg)->flag].vartype_name, "int") == 0) { //整数のGetBlockSize
         dst = HspVarInt_GetBlockSize(arg, buf, &size);
-    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "double") ==
-               0) { //実数のGetBlockSize
+    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "double") == 0) { //実数のGetBlockSize
         dst = HspVarDouble_GetBlockSize(arg, buf, &size);
-    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "str") ==
-               0) { //文字列のGetBlockSize
+    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "str") == 0) { //文字列のGetBlockSize
         dst = HspVarStr_GetBlockSize(arg, buf, &size);
-    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "label") ==
-               0) { //ラベルのGetBlockSize
+    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "label") == 0) { //ラベルのGetBlockSize
         dst = HspVarLabel_GetBlockSize(arg, buf, &size);
-    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "struct") ==
-               0) { // structのGetBlockSize
+    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "struct") == 0) { // structのGetBlockSize
         dst = HspVarLabel_GetBlockSize(arg, buf, &size);
     } else {
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
@@ -294,32 +256,28 @@ void HspVarCoreDup(PVal* pval, PVal* arg, APTR aptr) {
     
 }
 
-//        配列を確保する
-//        (len1〜len4は、4byte単位なので注意)
-//
+/// 配列を確保する
+///
+/// (len1〜len4は、4byte単位なので注意)
+///
 void HspVarCoreDim(PVal* pval, int flag, int len1, int len2, int len3, int len4) {
-    HspVarProc* p;
-    p = &hspvarproc[flag];
+    HspVarProc* p = &hspvarproc[flag];
+    
     if ((len1 < 0) || (len2 < 0) || (len3 < 0) || (len4 < 0)) {
-        NSString* error_str =
-        [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ILLEGALPRM];
+        NSString* error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ILLEGALPRM];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     
     // HspVarCoreDispose( pval );
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
         HspVarInt_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") ==
-               0) { //実数のFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") == 0) { //実数のFree
         HspVarDouble_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") ==
-               0) { //文字列のFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") == 0) { //文字列のFree
         HspVarStr_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
-               0) { //ラベルのFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") == 0) { //ラベルのFree
         HspVarLabel_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") ==
-               0) { // structのFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
         HspVarLabel_Free(pval);
     } else {
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
@@ -352,32 +310,28 @@ void HspVarCoreDim(PVal* pval, int flag, int len1, int len2, int len3, int len4)
     }
 }
 
-//        配列を確保する(可変長配列用)
-//        (len1〜len4は、4byte単位なので注意)
-//
+/// 配列を確保する(可変長配列用)
+///
+/// (len1〜len4は、4byte単位なので注意)
+///
 void HspVarCoreDimFlex(PVal* pval, int flag, int len0, int len1, int len2, int len3, int len4) {
-    HspVarProc* p;
-    p = &hspvarproc[flag];
+    HspVarProc* p = &hspvarproc[flag];
+    
     if ((len1 < 0) || (len2 < 0) || (len3 < 0) || (len4 < 0)) {
-        NSString* error_str =
-        [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ILLEGALPRM];
+        NSString* error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ILLEGALPRM];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    // HspVarCoreDispose( pval );
     
+    // HspVarCoreDispose( pval );
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
         HspVarInt_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") ==
-               0) { //実数のFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") == 0) { //実数のFree
         HspVarDouble_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") ==
-               0) { //文字列のFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") == 0) { //文字列のFree
         HspVarStr_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") ==
-               0) { //ラベルのFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") == 0) { //ラベルのFree
         HspVarLabel_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") ==
-               0) { // structのFree
+    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
         HspVarLabel_Free(pval);
     } else {
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
@@ -412,11 +366,10 @@ void HspVarCoreDimFlex(PVal* pval, int flag, int len0, int len1, int len2, int l
     pval->len[0] = 1;
 }
 
-//        配列を拡張する
-//
+/// 配列を拡張する
+///
 void HspVarCoreReDim(PVal* pval, int lenid, int len) {
-    HspVarProc* p;
-    p = &hspvarproc[pval->flag];
+    HspVarProc* p = &hspvarproc[pval->flag];
     pval->len[lenid] = len;
     if (strcmp(p->vartype_name, "int") == 0) { //整数のAlloc
         HspVarInt_Alloc(pval, pval);
@@ -435,37 +388,33 @@ void HspVarCoreReDim(PVal* pval, int lenid, int len) {
     
 }
 
-//        指定タイプの変数を最小メモリで初期化する
-//
+/// 指定タイプの変数を最小メモリで初期化する
+///
 void HspVarCoreClear(PVal* pval, int flag) {
     HspVarCoreDim(pval, flag, 1, 0, 0, 0); // 最小サイズのメモリを確保
 }
 
-//        指定タイプの変数を最小メモリで初期化する(テンポラリ用)
-//
+/// 指定タイプの変数を最小メモリで初期化する(テンポラリ用)
+///
 void HspVarCoreClearTemp(PVal* pval, int flag) {
     HspVarCoreDim(pval, flag, 1, 0, 0, 0); // 最小サイズのメモリを確保
     pval->support |= HSPVAR_SUPPORT_TEMPVAR;
 }
 
-//        指定されたtypeフラグに変換された値のポインタを得る
-//
+/// 指定されたtypeフラグに変換された値のポインタを得る
+///
 void* HspVarCoreCnvPtr(PVal* pval, int flag) {
     PDAT* dst;
     if (pval->flag == flag) {
         if (strcmp(hspvarproc[flag].vartype_name, "int") == 0) { //整数のFree
             dst = HspVarInt_GetPtr(pval);
-        } else if (strcmp(hspvarproc[flag].vartype_name, "double") ==
-                   0) { //実数のFree
+        } else if (strcmp(hspvarproc[flag].vartype_name, "double") == 0) { //実数のFree
             dst = HspVarDouble_GetPtr(pval);
-        } else if (strcmp(hspvarproc[flag].vartype_name, "str") ==
-                   0) { //文字列のFree
+        } else if (strcmp(hspvarproc[flag].vartype_name, "str") == 0) { //文字列のFree
             dst = HspVarStr_GetPtr(pval);
-        } else if (strcmp(hspvarproc[flag].vartype_name, "label") ==
-                   0) { //ラベルのFree
+        } else if (strcmp(hspvarproc[flag].vartype_name, "label") == 0) { //ラベルのFree
             dst = HspVarLabel_GetPtr(pval);
-        } else if (strcmp(hspvarproc[flag].vartype_name, "struct") ==
-                   0) { // structのFree
+        } else if (strcmp(hspvarproc[flag].vartype_name, "struct") == 0) { // structのFree
             dst = HspVarLabel_GetPtr(pval);
         } else {
             NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
@@ -473,23 +422,19 @@ void* HspVarCoreCnvPtr(PVal* pval, int flag) {
         }
         return (void*)dst; // hspvarproc[ flag ].GetPtr( pval );
     }
-    //		型変換をする
+    // 型変換をする
     void* buf;
     
     // buf = hspvarproc[ pval->flag ].GetPtr( pval );
     if (strcmp(hspvarproc[pval->flag].vartype_name, "int") == 0) { //整数のFree
         dst = HspVarInt_GetPtr(pval);
-    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "double") ==
-               0) { //実数のFree
+    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "double") == 0) { //実数のFree
         dst = HspVarDouble_GetPtr(pval);
-    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "str") ==
-               0) { //文字列のFree
+    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "str") == 0) { //文字列のFree
         dst = HspVarStr_GetPtr(pval);
-    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "label") ==
-               0) { //ラベルのFree
+    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "label") == 0) { //ラベルのFree
         dst = HspVarLabel_GetPtr(pval);
-    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "struct") ==
-               0) { // structのFree
+    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "struct") == 0) { // structのFree
         dst = HspVarLabel_GetPtr(pval);
     } else {
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
@@ -551,9 +496,8 @@ PDAT * HspVarCorePtrAPTR( PVal *pv, APTR ofs ) {
 #endif
 
 HspVarProc* HspVarCoreSeekProc(const char* name) {
-    int i;
     HspVarProc* p;
-    for (i = 0; i < hspvartype_max; i++) {
+    for (int i = 0; i < hspvartype_max; i++) {
         p = &hspvarproc[i];
         if (p->flag) {
             if (strcmp(p->vartype_name, name) == 0) {
@@ -564,13 +508,13 @@ HspVarProc* HspVarCoreSeekProc(const char* name) {
     return NULL;
 }
 
-//        配列要素の指定 (index)
-//        ( Reset後に次元数だけ連続で呼ばれます )
-//
+/// 配列要素の指定 (index)
+///
+/// ( Reset後に次元数だけ連続で呼ばれます )
+///
 void HspVarCoreArray(PVal* pval, int offset) {
     if (pval->arraycnt >= 5) {
-        NSString* error_str =
-        [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ARRAYOVER];
+        NSString* error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ARRAYOVER];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     if (pval->arraycnt == 0) {
@@ -580,18 +524,15 @@ void HspVarCoreArray(PVal* pval, int offset) {
     }
     pval->arraycnt++;
     if (offset < 0) {
-        NSString* error_str =
-        [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ARRAYOVER];
+        NSString* error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ARRAYOVER];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     if (offset >= (pval->len[pval->arraycnt])) {
-        NSString* error_str =
-        [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ARRAYOVER];
+        NSString* error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ARRAYOVER];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     pval->offset += offset * pval->arraymul;
     
 }
 
-//=============================================================================<<<hspvar_core
 @end

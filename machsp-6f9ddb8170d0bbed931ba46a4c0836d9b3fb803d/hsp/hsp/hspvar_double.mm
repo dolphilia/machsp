@@ -3,7 +3,7 @@
 //	HSPVAR core module
 //	onion software/onitama 2003/4
 //
-//=============================================================================>>>hspvar_double
+
 #import "hspvar_double.h"
 #import "debug_message.h"
 #import "hsp3struct_debug.h"
@@ -15,30 +15,29 @@
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
-//=============================================================================<<<hspvar_double
 
 @implementation ViewController (hspvar_double)
-//=============================================================================>>>hspvar_double
-/*------------------------------------------------------------*/
-/*
- HSPVAR core interface (double)
- */
-/*------------------------------------------------------------*/
+
+//------------------------------------------------------------
+// HSPVAR core interface (double)
+//------------------------------------------------------------
 
 #define hspvar_double_GetPtr(pval) ((double*)pval)
 
 double hspvar_double_conv;
 short* hspvar_double_aftertype;
 
-// Core
+/// Core
+///
 PDAT* HspVarDouble_GetPtr(PVal* pval) {
     return (PDAT*)(((double*)(pval->pt)) + pval->offset);
 }
 
-//        リクエストされた型 -> 自分の型への変換を行なう
-//        (組み込み型にのみ対応でOK)
-//        (参照元のデータを破壊しないこと)
-//
+/// リクエストされた型 -> 自分の型への変換を行なう
+///
+/// (組み込み型にのみ対応でOK)
+/// (参照元のデータを破壊しないこと)
+///
 void* HspVarDouble_Cnv(const void* buffer, int flag) {
     switch (flag) {
         case HSPVAR_FLAG_STR:
@@ -69,12 +68,12 @@ void* HspVarDouble_Cnv(const void* buffer, int flag) {
  }
  */
 
-//        PVALポインタの変数が必要とするサイズを取得する
-//        (sizeフィールドに設定される)
-//
+/// PVALポインタの変数が必要とするサイズを取得する
+///
+/// (sizeフィールドに設定される)
+///
 int HspVarDouble_GetVarSize(PVal* pval) {
-    int size;
-    size = pval->len[1];
+    int size = pval->len[1];
     if (pval->len[2])
         size *= pval->len[2];
     if (pval->len[3])
@@ -85,8 +84,8 @@ int HspVarDouble_GetVarSize(PVal* pval) {
     return size;
 }
 
-//        PVALポインタの変数メモリを解放する
-//
+/// PVALポインタの変数メモリを解放する
+///
 void HspVarDouble_Free(PVal* pval) {
     if (pval->mode == HSPVAR_MODE_MALLOC) {
         sbFree(pval->pt);
@@ -96,14 +95,15 @@ void HspVarDouble_Free(PVal* pval) {
     
 }
 
-//        pval変数が必要とするサイズを確保する。
-//        (pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
-//        (flagの設定は呼び出し側が行なう)
-//        (pval2がNULLの場合は、新規データ)
-//        (pval2が指定されている場合は、pval2の内容を継承して再確保)
-//
+/// pval変数が必要とするサイズを確保する。
+///
+/// (pvalがすでに確保されているメモリ解放は呼び出し側が行なう)
+/// (flagの設定は呼び出し側が行なう)
+/// (pval2がNULLの場合は、新規データ)
+/// (pval2が指定されている場合は、pval2の内容を継承して再確保)
+///
 void HspVarDouble_Alloc(PVal* pval, const PVal* pval2) {
-    int i, size;
+    int size;
     char* pt;
     double* fv;
     if (pval->len[1] < 1)
@@ -112,7 +112,7 @@ void HspVarDouble_Alloc(PVal* pval, const PVal* pval2) {
     pval->mode = HSPVAR_MODE_MALLOC;
     pt = sbAlloc(size);
     fv = (double*)pt;
-    for (i = 0; i < (int)(size / sizeof(double)); i++) {
+    for (int i = 0; i < (int)(size / sizeof(double)); i++) {
         fv[i] = 0.0;
     }
     if (pval2 != NULL) {
@@ -133,54 +133,52 @@ void HspVarDouble_Alloc(PVal* pval, const PVal* pval2) {
  }
  */
 
-// Size
+/// Size
 int HspVarDouble_GetSize(const PDAT* pval) {
     return sizeof(double);
 }
 
-// Set
+/// Set
 void HspVarDouble_Set(PVal* pval, PDAT* pdat, const void* in) {
     //*hspvar_double_GetPtr(pdat) = *((double *)(in));
     memcpy(pdat, in, sizeof(double));
 }
 
-// Add
+/// Add
 void HspVarDouble_AddI(PDAT* pval, const void* val) {
     *hspvar_double_GetPtr(pval) += *((double*)(val));
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
 
-// Sub
+/// Sub
 void HspVarDouble_SubI(PDAT* pval, const void* val) {
     *hspvar_double_GetPtr(pval) -= *((double*)(val));
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
 
-// Mul
+/// Mul
 void HspVarDouble_MulI(PDAT* pval, const void* val) {
     *hspvar_double_GetPtr(pval) *= *((double*)(val));
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
 
-// Div
+/// Div
 void HspVarDouble_DivI(PDAT* pval, const void* val) {
     double p = *((double*)(val));
     if (p == 0.0) {
-        NSString* error_str =
-        [NSString stringWithFormat:@"%d", HSPVAR_ERROR_DIVZERO];
+        NSString* error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_DIVZERO];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     *hspvar_double_GetPtr(pval) /= p;
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
 
-// Mod
+/// Mod
 void HspVarDouble_ModI(PDAT* pval, const void* val) {
     double p = *((double*)(val));
     double dval;
     if (p == 0.0) {
-        NSString* error_str =
-        [NSString stringWithFormat:@"%d", HSPVAR_ERROR_DIVZERO];
+        NSString* error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_DIVZERO];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     dval = *hspvar_double_GetPtr(pval);
@@ -188,37 +186,37 @@ void HspVarDouble_ModI(PDAT* pval, const void* val) {
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
 
-// Eq
+/// Eq
 void HspVarDouble_EqI(PDAT* pval, const void* val) {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) == *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
 
-// Ne
+/// Ne
 void HspVarDouble_NeI(PDAT* pval, const void* val) {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) != *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
 
-// Gt
+/// Gt
 void HspVarDouble_GtI(PDAT* pval, const void* val) {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) > *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
 
-// Lt
+/// Lt
 void HspVarDouble_LtI(PDAT* pval, const void* val) {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) < *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
 
-// GtEq
+/// GtEq
 void HspVarDouble_GtEqI(PDAT* pval, const void* val) {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) >= *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
 
-// LtEq
+/// LtEq
 void HspVarDouble_LtEqI(PDAT* pval, const void* val) {
     *((int*)pval) = (*hspvar_double_GetPtr(pval) <= *((double*)(val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
@@ -240,7 +238,7 @@ void* HspVarDouble_GetBlockSize(PVal* pval, PDAT* pdat, int* size) {
 void HspVarDouble_AllocBlock(PVal* pval, PDAT* pdat, int size) {
 }
 
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
 
 void HspVarDouble_Init(HspVarProc* p) {
     hspvar_double_aftertype = &p->aftertype;
@@ -281,10 +279,7 @@ void HspVarDouble_Init(HspVarProc* p) {
     p->version = 0x001; // 型タイプランタイムバージョン(0x100 = 1.0)
     p->support = HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY;
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
-    p->basesize =
-    sizeof(double); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
+    p->basesize = sizeof(double); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
 
-/*------------------------------------------------------------*/
-//=============================================================================<<<hspvar_double
 @end

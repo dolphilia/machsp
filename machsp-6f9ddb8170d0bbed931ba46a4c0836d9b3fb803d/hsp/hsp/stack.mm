@@ -65,7 +65,6 @@
             stm->ival = *(int *)data;
             //		stm->ptr = (char *)&(stm->ival);
             stack_stm_cur++;
-            
             return;
         case HSPVAR_FLAG_DOUBLE:
             // dptr = (double *)&stm->ival;
@@ -74,7 +73,6 @@
             //		stm->mode = STMMODE_SELF;
             //		stm->ptr = (char *)dptr;
             stack_stm_cur++;
-            
             return;
         default:
             break;
@@ -82,17 +80,13 @@
     [self StackAlloc:stm size:size];
     memcpy(stm->ptr, data, size);
     stack_stm_cur++;
-    
 }
 
 - (void)StackPush:(int)type str:(char *)str {
-    
     [self StackPush:type data:str size:(int)strlen(str) + 1];
-    
 }
 
 - (void *)StackPushSize:(int)type size:(int)size {
-    
     StackManagerData *stm;
     if (stack_stm_cur >= stack_stm_maxptr) {
         NSString *error_str =
@@ -104,17 +98,13 @@
     [self StackAlloc:stm size:size];
     stack_stm_cur++;
     return (void *)stm->ptr;
-    
 }
 
 - (void)StackPushStr:(char *)str {
-    
     [self StackPush:HSPVAR_FLAG_STR data:str size:(int)strlen(str) + 1];
-    
 }
 
 - (void)StackPushTypeVal:(int)type val:(int)val val2:(int)val2 {
-    
     StackManagerData *stm;
     int *iptr;
     //	if ( stack_stm_cur >= stack_stm_maxptr ) throw HSPERR_STACK_OVERFLOW;
@@ -125,11 +115,9 @@
     iptr = (int *)stm->itemp;
     *iptr = val2;
     stack_stm_cur++;
-    
 }
 
 - (void)StackPushVar:(void *)pval aptr:(int)aptr {
-    
     StackManagerData *stm;
     //	if ( stack_stm_cur >= stack_stm_maxptr ) throw HSPERR_STACK_OVERFLOW;
     stm = stack_stm_cur;
@@ -138,21 +126,16 @@
     stm->pval = pval;
     stm->ival = aptr;
     stack_stm_cur++;
-    
 }
 
 - (void)StackPushType:(int)type {
-    
     [self StackPushTypeVal:type val:0 val2:0];
-    
 }
 
 - (void)StackPopFree {
-    
     free(stack_stm_cur->ptr);
     stack_stm_cur->mode = STMMODE_SELF;
     stack_stm_cur->ptr = (char *)&(stack_stm_cur->ival);
-    
 }
 
 //void

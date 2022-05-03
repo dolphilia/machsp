@@ -20,11 +20,9 @@
 #define MALLOC malloc
 #define FREE free
 
-/*------------------------------------------------------------*/
-/*
- system data
- */
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
+// system data
+//------------------------------------------------------------
 
 typedef struct {
     STRBUF* mem;
@@ -43,11 +41,9 @@ static STRBUF* freelist;
 
 @implementation ViewController (strbuf)
 
-/*------------------------------------------------------------*/
-/*
- internal function
- */
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
+// internal function
+//------------------------------------------------------------
 
 static void BlockPtrPrepare(void) {
     STRBUF* sb;
@@ -80,8 +76,8 @@ static void BlockPtrPrepare(void) {
     }
 }
 
-//        空きエントリーブロックを探す
-//
+/// 空きエントリーブロックを探す
+///
 static STRBUF* BlockEntry(void) {
     if (freelist == NULL) {
         BlockPtrPrepare();
@@ -93,11 +89,9 @@ static STRBUF* BlockEntry(void) {
 
 static char* BlockAlloc(int size) {
     int* p;
-    STRBUF* st;
+    STRBUF* st = BlockEntry();
     STRBUF* st2;
-    STRINF* inf;
-    st = BlockEntry();
-    inf = &(st->inf);
+    STRINF* inf = &(st->inf);
     if (size <= STRBUF_BLOCKSIZE) {
         inf->flag = STRINF_FLAG_USEINT;
         inf->size = STRBUF_BLOCKSIZE;
@@ -156,11 +150,9 @@ void BlockInfo(STRINF* inf) {
     }
 }
 
-/*------------------------------------------------------------*/
-/*
- interface
- */
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
+// interface
+//------------------------------------------------------------
 
 void sbInit(void) {
     str_blockcur = 0;
@@ -170,8 +162,7 @@ void sbInit(void) {
 }
 
 void sbBye(void) {
-    int i;
-    for (i = 0; i < str_blockcur; i++) {
+    for (int i = 0; i < str_blockcur; i++) {
         STRBUF* mem = mem_sb[i].mem;
         STRBUF* p = mem;
         STRBUF* pend = p + mem_sb[i].len;
@@ -189,27 +180,22 @@ STRINF* sbGetSTRINF(char* ptr) {
 }
 
 char* sbAlloc(int size) {
-    int sz;
-    sz = size;
+    int sz = size;
     if (size < STRBUF_BLOCKSIZE)
         sz = STRBUF_BLOCKSIZE;
     return BlockAlloc(sz);
 }
 
 char* sbAllocClear(int size) {
-    char* p;
-    p = sbAlloc(size);
+    char* p = sbAlloc(size);
     memset(p, 0, size);
     return p;
 }
 
 void sbFree(void* ptr) {
-    char* p;
-    STRBUF* st;
-    STRINF* inf;
-    p = (char*)ptr;
-    st = (STRBUF*)(p - sizeof(STRINF));
-    inf = GET_INTINF(st);
+    char* p = (char*)ptr;
+    STRBUF* st = (STRBUF*)(p - sizeof(STRINF));
+    STRINF* inf = GET_INTINF(st);
     if (p != (inf->ptr)) {
         return;
     }
@@ -217,20 +203,15 @@ void sbFree(void* ptr) {
 }
 
 char* sbExpand(char* ptr, int size) {
-    STRBUF* st;
-    st = (STRBUF*)(ptr - sizeof(STRINF));
+    STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
     return BlockRealloc(st, size);
 }
 
 void sbCopy(char** pptr, char* data, int size) {
-    int sz;
-    char* ptr;
-    char* p;
-    STRBUF* st;
-    ptr = *pptr;
-    st = (STRBUF*)(ptr - sizeof(STRINF));
-    sz = st->inf.size;
-    p = st->inf.ptr;
+    char* ptr = *pptr;
+    STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
+    int sz = st->inf.size;
+    char* p = st->inf.ptr;
     if (size > sz) {
         p = BlockRealloc(st, size);
         *pptr = p;
@@ -240,13 +221,11 @@ void sbCopy(char** pptr, char* data, int size) {
 
 void sbAdd(char** pptr, char* data, int size, int mode) {
     //		mode:0=normal/1=string
-    int sz, newsize;
-    STRBUF* st;
-    char* ptr;
-    char* p;
-    ptr = *pptr;
-    st = (STRBUF*)(ptr - sizeof(STRINF));
-    p = st->inf.ptr;
+    int sz;
+    int newsize;
+    char* ptr = *pptr;
+    STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
+    char* p = st->inf.ptr;
     if (mode) {
         sz = (int)strlen(p); // 文字列データ
     } else {
@@ -277,9 +256,8 @@ void* sbGetOption(char* ptr) {
 }
 
 void sbSetOption(char* ptr, void* option) {
-    STRBUF* st;
+    STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
     STRINF* inf;
-    st = (STRBUF*)(ptr - sizeof(STRINF));
     st->inf.opt = option;
     inf = GET_INTINF(st);
     inf->opt = option;
@@ -295,5 +273,3 @@ void sbSetOption(char* ptr, void* option) {
  Alertf( "size:%d (%x)",st->inf.size, st->inf.ptr );
  }
  */
-
-//@end

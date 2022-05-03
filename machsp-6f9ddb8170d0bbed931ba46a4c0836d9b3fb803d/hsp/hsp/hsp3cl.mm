@@ -222,11 +222,9 @@ rerun:
 
 //================================================================================>>>HSP3
 
-/*------------------------------------------------------------*/
-/*
- interface
- */
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
+// interface
+//------------------------------------------------------------
 
 - (void)SetFileName:(char *)name {
     if (*name == 0) {
@@ -236,30 +234,24 @@ rerun:
     hsp3cl_axname = name;
 }
 
-//        axを破棄
-//
+/// axを破棄
+///
 - (void)Dispose {
     if (abc_hspctx.mem_mcs == NULL) {
         return;
     }
     if (abc_hspctx.mem_var != NULL) {
-        int i;
-        for (i = 0; i < hsp3cl_maxvar; i++) {
-            // HspVarCoreDispose( &abc_hspctx.mem_var[i] );
-            if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
-                       "int") == 0) {  //整数のFree
+        for (int i = 0; i < hsp3cl_maxvar; i++) {
+            char *vartype_name = hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name;
+            if (strcmp(vartype_name, "int") == 0) {  //整数のFree
                 HspVarInt_Free(&abc_hspctx.mem_var[i]);
-            } else if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
-                              "double") == 0) {  //実数のFree
+            } else if (strcmp(vartype_name, "double") == 0) {  //実数のFree
                 HspVarDouble_Free(&abc_hspctx.mem_var[i]);
-            } else if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
-                              "str") == 0) {  //文字列のFree
+            } else if (strcmp(vartype_name, "str") == 0) {  //文字列のFree
                 HspVarStr_Free(&abc_hspctx.mem_var[i]);
-            } else if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
-                              "label") == 0) {  //ラベルのFree
+            } else if (strcmp(vartype_name, "label") == 0) {  //ラベルのFree
                 HspVarLabel_Free(&abc_hspctx.mem_var[i]);
-            } else if (strcmp(hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name,
-                              "struct") == 0) {  // structのFree
+            } else if (strcmp(vartype_name, "struct") == 0) {  // structのFree
                 HspVarLabel_Free(&abc_hspctx.mem_var[i]);
             } else {
                  @throw [self make_nsexception:HSPERR_SYNTAX];
@@ -275,47 +267,38 @@ rerun:
     }
 }
 
-//        axを初期化
-//        mode: 0 = normal(debug) mode
-//              other = packfile PTR
-//
+/// axを初期化
+///
+/// mode:
+/// 0 = normal(debug) mode
+/// other = packfile PTR
+///
 - (int)Reset:(int)mode {
     int i;
     char *ptr;
     char fname[512];
     HSPHED *hsphed;
-    char startax[] = {'S' - 40, 'T' - 40, 'A' - 40, 'R' - 40, 'T' - 40,
-        '.' - 40, 'A' - 40, 'X' - 40, 0};
+    char startax[] = {'S' - 40, 'T' - 40, 'A' - 40, 'R' - 40, 'T' - 40, '.' - 40, 'A' - 40, 'X' - 40, 0};
     
     if (abc_hspctx.mem_mcs != NULL) {
         [self Dispose];
     }
     
-    //		load HSP execute object
+    // load HSP execute object
     //
     hsp3cl_axtype = HSP3_AXTYPE_NONE;
     if (mode) {  // "start.ax"を呼び出す
-        i = [self dpm_ini:(char *)""
-                   dpmofs:mode
-                   chksum:hsp3cl_hsp_sum
-                   deckey:hsp3cl_hsp_dec];  // customized EXE mode
-        // hsp3cl_axname = NULL;
+        i = [self dpm_ini:(char *)"" dpmofs:mode chksum:hsp3cl_hsp_sum deckey:hsp3cl_hsp_dec];  // customized EXE mode
     } else {
-        [self dpm_ini:(char *)"data.dpm"
-               dpmofs:0
-               chksum:-1
-               deckey:-1];  // original EXE mode
+        [self dpm_ini:(char *)"data.dpm" dpmofs:0 chksum:-1 deckey:-1];  // original EXE mode
     }
     
     //		start.ax読み込み
     if (hsp3cl_axname == NULL) {
-        unsigned char *p;
-        unsigned char *s;
+        unsigned char *p = (unsigned char *)fname;
+        unsigned char *s = (unsigned char *)startax;
         unsigned char ap;
-        int sum;
-        sum = 0;
-        p = (unsigned char *)fname;
-        s = (unsigned char *)startax;
+        int sum = 0;
         while (1) {
             ap = *s++;
             if (ap == 0) break;
@@ -325,12 +308,10 @@ rerun:
         }
         *p = 0;
         if (sum != 0x6cced385) {
-            
             return -1;
         }
         if (mode) {
             if ([self dpm_filebase:fname] != 1) {
-                
                 return -1;  // DPM,packfileからのみstart.axを読み込む
             }
         }
@@ -340,7 +321,6 @@ rerun:
     
     ptr = [self dpm_readalloc:fname];
     if (ptr == NULL) {
-        
         return -1;
     }
     
@@ -359,23 +339,13 @@ rerun:
     
     hsp3cl_maxvar = hsphed->max_val;
     abc_hspctx.hsphed = hsphed;
-    abc_hspctx.mem_mcs =
-    (unsigned short *)[self copy_DAT:ptr + hsphed->pt_cs size:hsphed->max_cs];
+    abc_hspctx.mem_mcs = (unsigned short *)[self copy_DAT:ptr + hsphed->pt_cs size:hsphed->max_cs];
     abc_hspctx.mem_mds = (char *)(ptr + hsphed->pt_ds);
-    abc_hspctx.mem_ot =
-    (int *)[self copy_DAT:ptr + hsphed->pt_ot size:hsphed->max_ot];
-    abc_hspctx.mem_di = (unsigned char *)[self copy_DAT:ptr + hsphed->pt_dinfo
-                                                   size:hsphed->max_dinfo];
-    
-    abc_hspctx.mem_linfo = (LIBDAT *)[self copy_LIBDAT:hsphed
-                                                   ptr:ptr + hsphed->pt_linfo
-                                                  size:hsphed->max_linfo];
-    abc_hspctx.mem_minfo = (STRUCTPRM *)[self copy_DAT:ptr + hsphed->pt_minfo
-                                                  size:hsphed->max_minfo];
-    abc_hspctx.mem_finfo =
-    (STRUCTDAT *)[self copy_STRUCTDAT:hsphed
-                                  ptr:ptr + hsphed->pt_finfo
-                                 size:hsphed->max_finfo];
+    abc_hspctx.mem_ot = (int *)[self copy_DAT:ptr + hsphed->pt_ot size:hsphed->max_ot];
+    abc_hspctx.mem_di = (unsigned char *)[self copy_DAT:ptr + hsphed->pt_dinfo size:hsphed->max_dinfo];
+    abc_hspctx.mem_linfo = (LIBDAT *)[self copy_LIBDAT:hsphed ptr:ptr + hsphed->pt_linfo size:hsphed->max_linfo];
+    abc_hspctx.mem_minfo = (STRUCTPRM *)[self copy_DAT:ptr + hsphed->pt_minfo size:hsphed->max_minfo];
+    abc_hspctx.mem_finfo = (STRUCTDAT *)[self copy_STRUCTDAT:hsphed ptr:ptr + hsphed->pt_finfo size:hsphed->max_finfo];
     
     HspVarCoreResetVartype(hsphed->max_varhpi);  // 型の初期化
     [self code_resetctx:&abc_hspctx];            // hsp3code setup
