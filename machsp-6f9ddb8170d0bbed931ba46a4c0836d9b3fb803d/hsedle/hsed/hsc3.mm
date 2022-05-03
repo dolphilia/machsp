@@ -91,7 +91,6 @@ void CHsc3::AddSystemMacros(CToken *tk, int option) {
 ///
 int CHsc3::PreProcessAht(char *fname, void *ahtoption, int mode) {
     int res;
-    //char mm[512];
     CToken tk;
     
     lb_info = NULL;
@@ -110,21 +109,13 @@ int CHsc3::PreProcessAht(char *fname, void *ahtoption, int mode) {
         AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
         global.logString = [global.logString stringByAppendingFormat:@"#AHT processor ver%s / onion software 1997-2015(c)\n", hspver];
     }
-    
-    //sprintf( mm,"#AHT processor ver%s / onion software 1997-2015(c)", hspver );
-    //tk.Mes( mm );
+
     res = tk.ExpandFile(outbuf, fname, fname);
     if (res < 0)
         return -1;
     return 0;
 }
 
-
-/*
-	rev 54
-	mingw : warning : packbuf は未初期化で使用されうる
-	問題なさそう、一応対処。
- */
 /// Preprocess execute
 /// (終了時にPreProcessEndを呼ぶこと)
 /// option :
@@ -157,15 +148,14 @@ int CHsc3::PreProcess(char *fname, char *outname, int option, char *rname, void 
         tk.SetAHT((AHTMODEL *)ahtoption);
     }
     if (option & HSC3_OPT_UTF8IN) {
-        tk.SetUTF8Input( 1 );
+        tk.SetUTF8Input(1);
     }
     
     @autoreleasepool {
         AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
         global.logString = [global.logString stringByAppendingFormat:@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE, hspver];
     }
-    //sprintf( mm,"#%s ver%s / onion software 1997-2015(c)", HSC3TITLE, hspver );
-    //tk.Mes( mm );
+    
     tk.SetAdditionMode(1);
     
     res = tk.ExpandFile(outbuf, (char *)"hspdef.as", (char *)"hspdef.as");
@@ -186,7 +176,6 @@ int CHsc3::PreProcess(char *fname, char *outname, int option, char *rname, void 
                 AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
                 global.logString = [global.logString stringByAppendingString:@"#プリプロセッサファイルの出力に失敗しました\n"];
             }
-            //tk.Mes( (char *)"#プリプロセッサファイルの出力に失敗しました" );
 #else
             tk.Mes("#Can't write output file.");
 #endif
@@ -205,9 +194,6 @@ int CHsc3::PreProcess(char *fname, char *outname, int option, char *rname, void 
     tk.LabelDump(addkw, DUMPMODE_DLLCMD);
 #endif
     
-    //sprintf( mm,"#Macro buffer %x.", tk.GetLabelBufferSize() );
-    //tk.Mes( mm );
-    
     if (option & HSC3_OPT_MAKEPACK) {
         tk.AddPackfile((char *)"start.ax", 1);
         res = packbuf->SaveFile((char *)"packfile");
@@ -218,13 +204,11 @@ int CHsc3::PreProcess(char *fname, char *outname, int option, char *rname, void 
                 AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
                 global.logString = [global.logString stringByAppendingString:@"#packfileの出力に失敗しました\n"];
             }
-            //tk.Mes( (char *)"#packfileの出力に失敗しました" );
 #else
             tk.Mes("#Can't write packfile.");
 #endif
             return -3;
         }
-        //tk.Mes( (char *)"#packfile generated." );
         @autoreleasepool {
             AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
             global.logString = [global.logString stringByAppendingString:@"#packfile generated.\n"];
@@ -257,8 +241,6 @@ void CHsc3::PreProcessEnd(void) {
 /// Compile
 ///
 int CHsc3::Compile(char *fname, char *outname, int mode) {
-    //int res;
-    //res = tcomp_main( fname, outname, errbuf, mode, "" );
     int res;
     CToken tk;
     if (lb_info != NULL)
@@ -278,8 +260,6 @@ int CHsc3::Compile(char *fname, char *outname, int mode) {
         AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
         global.logString = [global.logString stringByAppendingFormat:@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE2, hspver];
     }
-    //sprintf( mm,"#%s ver%s / onion software 1997-2015(c)", HSC3TITLE2, hspver );
-    //tk.Mes( mm );
     
     if (outbuf != NULL) {
         res = tk.GenerateCode(outbuf, outname, mode);
@@ -310,11 +290,8 @@ int CHsc3::GetCmdList(int option) {
     AddSystemMacros(&tk, option);
     
     res = tk.ExpandFile(&outbuf, (char *)"hspdef.as", (char *)"hspdef.as");
-    //	if ( res<-1 ) return -1;
     tk.LabelDump(errbuf, DUMPMODE_ALL);
-    
-    //errbuf->PutStr("-----¥r¥n");
-    //if ( addkw != NULL ) errbuf->PutStr( addkw->GetBuffer() );
+
     return 0;
 }
 

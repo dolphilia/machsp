@@ -24,19 +24,19 @@ CLocalInfo::~CLocalInfo() {
 //		Routines
 //-------------------------------------------------------------
 
+/*
+ Get system time entries
+ index :
+    0 wYear
+    1 wMonth
+    2 wDayOfWeek
+    3 wDay
+    4 wHour
+    5 wMinute
+    6 wSecond
+    7 wMilliseconds
+ */
 int CLocalInfo::GetTime(int index) {
-    /*
-     Get system time entries
-     index :
-	    0 wYear
-	    1 wMonth
-	    2 wDayOfWeek
-	    3 wDay
-	    4 wHour
-	    5 wMinute
-	    6 wSecond
-	    7 wMilliseconds
-     */
     struct timeval tv;
     struct tm *lt;
     
@@ -67,7 +67,7 @@ int CLocalInfo::GetTime(int index) {
     return 0;
 }
 
-char *CLocalInfo::CurrentTime( void ) {
+char *CLocalInfo::CurrentTime(void) {
     sprintf(curtime, "\"%02d:%02d:%02d\"", GetTime(4), GetTime(5), GetTime(6));
     return curtime;
 }

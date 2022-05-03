@@ -59,7 +59,7 @@ static void _splitpath(const char *path, char *p_drive, char *dir, char *fname, 
         *p = 0;
     }
     p = strchr2(pathtmp, '/');
-    if ( p == NULL ) {
+    if (p == NULL) {
         dir[0] = 0;
         strcpy(fname, pathtmp);
     } else {
@@ -76,7 +76,7 @@ static void _splitpath(const char *path, char *p_drive, char *dir, char *fname, 
 ///
 /// @return yes 1, no 0
 ///
-static int wildcard( char *text, char *wc ) {
+static int wildcard(char *text, char *wc) {
     if (wc[0] == '\0' && *text == '\0') {
         return 1;
     }
@@ -142,20 +142,22 @@ int mem_save(const char *fname, const void *mem, int msize, int seekofs) {
 /// string case to lower
 ///
 void strcase(char *str) {
-    unsigned char a1;
-    unsigned char *ss;
-    ss = (unsigned char *)str;
+    unsigned char cur_char;
+    unsigned char *ptr = (unsigned char *)str;
     while(1) {
-        a1 = *ss;
-        if (a1 == 0) break;
-        if (a1 >= 0x80) {
-            *ss++;
-            a1 = *ss++;
-            if (a1 == 0)
+        cur_char = *ptr;
+        if (cur_char == 0)
+            break;
+        if (cur_char >= 0x80) {
+            *ptr += 1;
+            cur_char = *ptr;
+            *ptr += 1;
+            if (cur_char == 0)
                 break;
         }
         else {
-            *ss++ = tolower(a1);
+            *ptr = tolower(cur_char);
+            *ptr += 1;
         }
     }
 }
@@ -163,25 +165,25 @@ void strcase(char *str) {
 /// string case to lower and copy
 ///
 void strcase2(char *str, char *str2) {
-    unsigned char a1;
+    unsigned char cur_char;
     unsigned char *ss = (unsigned char *)str;
     unsigned char *ss2 = (unsigned char *)str2;
     while(1) {
-        a1 = *ss;
-        if (a1 == 0)
+        cur_char = *ss;
+        if (cur_char == 0)
             break;
-        if (a1 >= 0x80) {
+        if (cur_char >= 0x80) {
             *ss++;
-            *ss2++ = a1;
-            a1 = *ss++;
-            if (a1 == 0)
+            *ss2++ = cur_char;
+            cur_char = *ss++;
+            if (cur_char == 0)
                 break;
-            *ss2++ = a1;
+            *ss2++ = cur_char;
         }
         else {
-            a1 = tolower(a1);
-            *ss++ = a1;
-            *ss2++ = a1;
+            cur_char = tolower(cur_char);
+            *ss++ = cur_char;
+            *ss2++ = cur_char;
         }
     }
     *ss2 = 0;
@@ -239,7 +241,7 @@ void getpath(const char *src, char *outbuf, int p2) {
 /// strcpy2の解説
 ///
 void strcpy2(char *dest, const char *src, size_t size) {
-    if(size == 0) {
+    if (size == 0) {
         return;
     }
     char *d = dest;
@@ -256,107 +258,107 @@ void strcpy2(char *dest, const char *src, size_t size) {
 
 /// add extension of filenamez
 ///
-void addext(char *st, const char *exstr) {
+void addext(char *str, const char *exstr) {
     int i = 0;
     while(1) {
-        if (st[i] == 0)
+        if (str[i] == 0)
             break;
-        if (st[i] == '.')
+        if (str[i] == '.')
             return;
         i++;
     }
-    st[i] = '.';
-    st[i + 1] = 0;
-    strcat(st, exstr);
+    str[i] = '.';
+    str[i + 1] = 0;
+    strcat(str, exstr);
 }
 
 /// cut extension of filename
 ///
-void cutext(char *st) {
+void cutext(char *str) {
     int i = 0;
     while(1) {
-        if (st[i] == 0)
+        if (str[i] == 0)
             break;
-        if (st[i] == '.')
+        if (str[i] == '.')
             break;
         i++;
     }
-    st[i] = 0;
+    str[i] = 0;
 }
 
 /// cut last characters
 ///
-void cutlast(char *st) {
-    unsigned char c;
+void cutlast(char *str) {
+    unsigned char cur_char;
     int i = 0;
     while(1) {
-        c = st[i];
-        if (c < 33)
+        cur_char = str[i];
+        if (cur_char < 33)
             break;
-        st[i] = tolower(c);
+        str[i] = tolower(cur_char);
         i++;
     }
-    st[i] = 0;
+    str[i] = 0;
 }
 
 /// cut last characters
 ///
-void cutlast2( char *st ) {
-    int a1 = 0;
-    char c1;
-    char ts[256];
-    strcpy(ts, st);
+void cutlast2(char *str) {
+    int i = 0;
+    char cur_char;
+    char tmp[256];
+    strcpy(tmp, str);
     while(1) {
-        c1 = ts[a1];
-        if (c1 < 33)
+        cur_char = tmp[i];
+        if (cur_char < 33)
             break;
-        ts[a1] = tolower(c1);
-        a1++;
+        tmp[i] = tolower(cur_char);
+        i++;
     }
-    ts[a1] = 0;
+    tmp[i] = 0;
     while(1) {
-        a1--;
-        c1 = ts[a1];
-        if (c1 == 0x5c) {
-            a1++;
+        i--;
+        cur_char = tmp[i];
+        if (cur_char == 0x5c) {
+            i++;
             break;
         }
-        if (a1==0)
+        if (i == 0)
             break;
     }
-    strcpy(st, ts + a1);
+    strcpy(str, tmp + i);
 }
 
 /// str中最後のcode位置を探す(全角対応版)
 ///
 char *strchr2(char *target, char code) {
-    unsigned char *p = (unsigned char *)target;
-    unsigned char a1;
-    char *res = NULL;
+    unsigned char *ptr = (unsigned char *)target;
+    unsigned char cur_char;
+    char *ret = NULL;
     while(1) {
-        a1 = *p;
-        if (a1 == 0)
+        cur_char = *ptr;
+        if (cur_char == 0)
             break;
-        if (a1 == code)
-            res = (char *)p;
-        p++;							// 検索位置を移動
-        if (a1 >= 129) {					// 全角文字チェック
-            if ((a1 <= 159) || (a1 >= 224))
-                p++;
+        if (cur_char == code)
+            ret = (char *)ptr;
+        ptr++;							// 検索位置を移動
+        if (cur_char >= 129) {					// 全角文字チェック
+            if ((cur_char <= 159) || (cur_char >= 224))
+                ptr++;
         }
     }
-    return res;
+    return ret;
 }
 
 /// Shift_JIS文字列のposバイト目が文字の先頭バイトであるか
 /// マルチバイト文字の後続バイトなら0、それ以外なら1を返す
 ///
 int is_sjis_char_head(const unsigned char *str, int pos) {
-    int result = 1;
+    int ret = 1;
     while(pos != 0 && issjisleadbyte(str[--pos])) {
-        result = ! result;
+        ret = !ret;
     }
-    return result;
+    return ret;
 }
 
 /// 文字列をHSPの文字列リテラル形式に
@@ -368,12 +370,12 @@ char *to_hsp_string_literal(const char *src) {
     size_t length = 2;
     const unsigned char *s = (unsigned char *)src;
     while(1) {
-        unsigned char c = *s;
-        if (c == '\0')
+        unsigned char cur_char = *s;
+        if (cur_char == '\0')
             break;
-        switch (c) {
+        switch (cur_char) {
             case '\r':
-                if (*(s+1) == '\n') {
+                if (*(s + 1) == '\n') {
                     s++;
                 }
                 // FALL THROUGH
@@ -385,7 +387,7 @@ char *to_hsp_string_literal(const char *src) {
             default:
                 length ++;
         }
-        if (issjisleadbyte(c) && *(s + 1) != '\0') {
+        if (issjisleadbyte(cur_char) && *(s + 1) != '\0') {
             length ++;
             s += 2;
         } else {
@@ -399,17 +401,17 @@ char *to_hsp_string_literal(const char *src) {
     unsigned char *d = (unsigned char *)dest;
     *d++ = '"';
     while(1) {
-        unsigned char c = *s;
-        if (c == '\0')
+        unsigned char cur_char = *s;
+        if (cur_char == '\0')
             break;
-        switch (c) {
+        switch (cur_char) {
             case '\t':
                 *d++ = '\\';
                 *d++ = 't';
                 break;
             case '\r':
                 *d++ = '\\';
-                if (*(s+1) == '\n') {
+                if (*(s + 1) == '\n') {
                     *d++ = 'n';
                     s ++;
                 } else {
@@ -425,12 +427,12 @@ char *to_hsp_string_literal(const char *src) {
                 *d++ = '\\';
                 break;
             default:
-                *d++ = c;
-                if(issjisleadbyte(c) && *(s + 1) != '\0') {
+                *d++ = cur_char;
+                if(issjisleadbyte(cur_char) && *(s + 1) != '\0') {
                     *d++ = *++s;
                 }
         }
-        s ++;
+        s++;
     }
     *d++ = '"';
     *d = '\0';
@@ -440,12 +442,12 @@ char *to_hsp_string_literal(const char *src) {
 /// オーバーフローチェックをしないatoi
 ///
 int atoi_allow_overflow(const char *s) {
-    int result = 0;
+    int ret = 0;
     while (isdigit(*s)) {
-        result = result * 10 + (*s - '0');
-        s ++;
+        ret = ret * 10 + (*s - '0');
+        s++;
     }
-    return result;
+    return ret;
 }
 
 /// 最後の'/'を取り除く
@@ -456,7 +458,7 @@ void CutLastChr(char *p, char code) {
     int i;
     if (ss != NULL) {
         i = (int)strlen(p);
-        ss2 = p + i -1;
+        ss2 = p + i - 1;
         if ((i > 3) && (ss == ss2))
             *ss = 0;
     }
@@ -474,21 +476,21 @@ void CutLastChr(char *p, char code) {
 ///
 char *strchr3(char *target, int code, int sw, char **findptr) {
     unsigned char *p = (unsigned char *)target;
-    unsigned char a1;
+    unsigned char cur_char;
     unsigned char code1 = (unsigned char)(code&0xff);
     unsigned char code2 = (unsigned char)(code>>8);
     char *res = NULL;
     char *pres = NULL;
     *findptr = NULL;
     while(1) {
-        a1 = *p;
-        if (a1 == 0)
+        cur_char = *p;
+        if (cur_char == 0)
             break;
-        if (a1 == code1) {
-            if (a1 < 129) {
+        if (cur_char == code1) {
+            if (cur_char < 129) {
                 res = (char *)p;
             } else {
-                if ((a1 <= 159) || (a1 >= 224)) {
+                if ((cur_char <= 159) || (cur_char >= 224)) {
                     if (p[1] == code2) {
                         res = (char *)p;
                     }
@@ -498,8 +500,8 @@ char *strchr3(char *target, int code, int sw, char **findptr) {
             }
         }
         p++;							// 検索位置を移動
-        if (a1 >= 129) {					// 全角文字チェック
-            if ((a1 <= 159) || (a1 >= 224))
+        if (cur_char >= 129) {					// 全角文字チェック
+            if ((cur_char <= 159) || (cur_char >= 224))
                 p++;
         }
         if (res != NULL) {

@@ -404,7 +404,7 @@ private:
         int len_include_modname;
         int len;
     } undefined_symbol_t;
-    std::vector<undefined_symbol_t> undefined_symbols;
+    std::vector<undefined_symbol_t> undefined_symbols; /// @warning cpp
     int cs_lastptr;					// パラメーターの初期CS位置
     int cs_lasttype;				// パラメーターのタイプ(単一時)
     int calccount;					// パラメーター個数
@@ -455,8 +455,8 @@ private:
     CMemBuf *hpi_buf;
     
 #ifdef HSP_DS_POOL
-    std::map<double, int> double_literal_table; // 定数プール用
-    std::map<std::string, int> string_literal_table;
+    std::map<double, int> double_literal_table; // 定数プール用 /// @warning cpp
+    std::map<std::string, int> string_literal_table; /// @warning cpp
 #endif
     
     //		for Header info

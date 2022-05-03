@@ -45,8 +45,8 @@
 #define LAB_TYPEFIX_INT 4
 #define LAB_TYPEFIX_DOUBLE 3
 
-typedef std::set<std::string> FileNameSet;
-typedef std::multimap<std::string, int> LabelMap;
+typedef std::set<std::string> FileNameSet; /// @warning cpp
+typedef std::multimap<std::string, int> LabelMap; /// @warning cpp
 typedef struct LABREL LABREL;
 
 struct LABREL {

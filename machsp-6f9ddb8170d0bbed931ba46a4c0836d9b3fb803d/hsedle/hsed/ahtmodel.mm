@@ -248,7 +248,9 @@ AHTPROP *AHTMODEL::SetPropertyDefault( char *propname, char *value )
     vp = (unsigned char *)value;
     qmode = 0;
     while(1) {
-        a1=*vp;if ((a1!=32)&&(a1!=9)) break;
+        a1 = *vp;
+        if ((a1 != 32) && (a1 != 9))
+            break;
         vp++;
     }
     
@@ -419,7 +421,8 @@ int AHTMODEL::SetAHTPropertyString( char *propname, char *str )
     while(1) {
         //		パラメーター名を抽出
         while(1) {
-            a1=*vp;if ((a1!=32)&&(a1!=9)) break;
+            a1=*vp;
+            if ((a1!=32)&&(a1!=9)) break;
             vp++;
         }
         if ( a1 == 0 ) break;

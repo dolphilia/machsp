@@ -48,7 +48,7 @@
         if (global.globalTexts == nil) {
         }
         else {
-            if ( global.globalTexts.count < [self.window.title intValue] ) {
+            if (global.globalTexts.count < [self.window.title intValue]) {
             }
             else {
                 if ([[global.globalTexts objectAtIndex:[self.window.title intValue] - 1] isEqual:@"__NULL__=0"]) {

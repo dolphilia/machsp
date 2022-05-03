@@ -263,7 +263,8 @@ refind:
     switch( findmode ) {
         case AHTMODELFIND_MODE_START:			// 検索の初期化
             for(i=0;i<model_cnt;i++) {
-                model = GetModel( i );if ( model != NULL ) {
+                model = GetModel( i );
+                if ( model != NULL ) {
                     model->ClearFindCheck();
                 }
             }
@@ -271,7 +272,8 @@ refind:
             
         case AHTMODELFIND_MODE_ARRAYSEEK:		// リンクの先頭を調べる
             for(i=0;i<model_cnt;i++) {
-                model = GetModel( i );if ( model != NULL ) {
+                model = GetModel( i );
+                if ( model != NULL ) {
                     if (( model->GetNextID() != -1 )&&( model->GetPrevID() == -1 )) {
                         if ( model->GetFindCheck() == false ) {
                             model->SetFindCheck();
@@ -302,7 +304,8 @@ refind:
             
         case AHTMODELFIND_MODE_LEFTPICK:		// その他モデル検索
             for(i=0;i<model_cnt;i++) {
-                model = GetModel( i );if ( model != NULL ) {
+                model = GetModel( i );
+                if ( model != NULL ) {
                     if ( model->GetFindCheck() == false ) {
                         model->SetFindCheck();
                         parentid = i;
@@ -353,7 +356,8 @@ void CAht::UpdateModelProperty( int id )
                 target = p->GetValueInt();
                 break;
             case AHTTYPE_PARTS_PROP_STRING:
-                a = target;if ( *p->defval3 == 'm' ) a = id;				// 自分を参照するオプション
+                a = target;
+                if ( *p->defval3 == 'm' ) a = id;				// 自分を参照するオプション
                 m = GetModel( a );
                 if ( m != NULL ) {
                     p2 = m->GetProperty( p->defval2 );
@@ -365,7 +369,8 @@ void CAht::UpdateModelProperty( int id )
                 }
                 break;
             case AHTTYPE_PARTS_OPT_STRING:
-                a = target;if ( *p->defval3 == 'm' ) a = id;				// 自分を参照するオプション
+                a = target;
+                if ( *p->defval3 == 'm' ) a = id;				// 自分を参照するオプション
                 m = GetModel( a );
                 if ( m != NULL ) {
                     res = m->GetAHTOption( p->defval2 );

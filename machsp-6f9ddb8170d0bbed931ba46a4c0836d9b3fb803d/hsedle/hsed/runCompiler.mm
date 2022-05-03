@@ -47,31 +47,25 @@ static void usage1( void ) {
 /*----------------------------------------------------------*/
 
 -(int)runCompiler:(int)argc argv:(char **)argv {
-    int st;
-    int cmpopt, ppopt, utfopt, pponly;
+    int st = 0;
+    int cmpopt = 0;
+    int ppopt = HSC3_OPT_UTF8IN;
+    int utfopt = 1;
+    int pponly;
     char fname[HSP_MAX_PATH];
     char fname2[HSP_MAX_PATH];
     char oname[HSP_MAX_PATH];
     char compath[HSP_MAX_PATH];
     CHsc3 *hsc3 = NULL;
     
-    //	check switch and prm
-    
-    if (argc < 2) {
+    if (argc < 2) { // check switch and prm
         usage1();
         return -1;
     }
-    
-    st = 0;
-    ppopt = 0;
-    cmpopt = 0;
+
     fname[0] = 0;
     fname2[0] = 0;
     oname[0] = 0;
-    
-    ppopt = HSC3_OPT_UTF8IN;
-    //cmpopt = HSC3_MODE_UTF8;
-    utfopt = 1;
 
     strcpy(compath, "common/");
     
@@ -133,10 +127,9 @@ static void usage1( void ) {
     strcpy(fname2, fname);
     cutext(fname2);
     addext(fname2, "i");
-    addext(fname, "hsp");			// 拡張子がなければ追加する
+    addext(fname, "hsp"); // 拡張子がなければ追加する
     
-    //		call main
-    hsc3 = new CHsc3;
+    hsc3 = new CHsc3; // call main
     hsc3->SetCommonPath(compath);
     st = hsc3->PreProcess(fname, fname2, ppopt, fname);
     if ((cmpopt < 2 ) && ( st == 0)) {

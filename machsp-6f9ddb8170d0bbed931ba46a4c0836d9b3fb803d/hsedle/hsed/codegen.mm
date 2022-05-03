@@ -1234,12 +1234,13 @@ void CToken::GenerateCodePRMN(void) {
     int i,t,ex;
     ex = 0;
     while(1) {
-        if ( ttype >= TK_SEPARATE ) break;
-        
-        switch( ttype ) {
+        if (ttype >= TK_SEPARATE)
+            break;
+        switch(ttype) {
             case TK_NONE:
                 if ( val == ',' ) {
-                    if ( ex & EXFLG_2 ) PutCS( TYPE_MARK, '?', ex );
+                    if ( ex & EXFLG_2 )
+                        PutCS( TYPE_MARK, '?', ex );
                     ex |= EXFLG_2;
                 } else {
                     PutCS( TYPE_MARK, val, ex );
@@ -2826,11 +2827,8 @@ int CToken::GenerateCodeMain(CMemBuf* buf) {
 //            val=16,32bit length supported
 //
 void CToken::PutCS(int type, int value, int exflg) {
-    int a;
-    unsigned int v;
-    v = (unsigned int)value;
-    
-    a = (type & CSTYPE) | exflg;
+    unsigned int v = (unsigned int)value;
+    int a = (type & CSTYPE) | exflg;
     if (v < 0x10000) { // when 16bit encode
         cs_buf->Put((short)(a));
         cs_buf->Put((short)(v));
@@ -2881,7 +2879,7 @@ int CToken::PutDS(double value) {
 #ifdef HSP_DS_POOL
     if (CG_optCode()) {
         int i_cache =
-        double_literal_table.insert(std::make_pair(value, i)).first->second;
+        double_literal_table.insert(std::make_pair(value, i)).first->second; /// @warning cpp
         if (i != i_cache) {
             if (CG_optInfo()) {
                 Mesf("#実数リテラルプール %f", value);
@@ -2922,7 +2920,7 @@ int CToken::PutDSStr(char* str, bool converts_to_utf8) {
     
 #ifdef HSP_DS_POOL
     if (CG_optCode()) {
-        int i_cache = string_literal_table.insert(std::make_pair(std::string(p), i))
+        int i_cache = string_literal_table.insert(std::make_pair(std::string(p), i)) /// @warning cpp
         .first->second;
         if (i != i_cache) {
             if (CG_optInfo()) {

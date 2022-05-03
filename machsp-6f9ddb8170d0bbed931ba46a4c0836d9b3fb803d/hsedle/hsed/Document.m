@@ -127,7 +127,7 @@
                                     options:dic
                          documentAttributes:&attr
                                       error:&error];
-    if ( error != NULL ) {
+    if (error != NULL) {
         NSLog(@"Error readFromData: %@",[error localizedDescription]);
         return NO;
     }

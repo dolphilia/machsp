@@ -31,8 +31,8 @@ void CMemBuf::InitMemBuf(int sz) {
     mem_buf[0] = 0;
     name[0] = 0;
     cur = 0;
-    //	Indexバッファ初期化
-    idxflag = 0;
+    
+    idxflag = 0; // Indexバッファ初期化
     idxmax = -1;
     curidx = 0;
     idxbuf = NULL;
@@ -61,8 +61,7 @@ char *CMemBuf::PreparePtr(int sz) {
         cur += sz;
         return p;
     }
-    //	expand buffer (VCのreallocは怖いので使わない)
-    i = size;
+    i = size; // expand buffer (VCのreallocは怖いので使わない)
     while(i <= (cur + sz))
         i += limit_size;
     p = (char *)malloc(i);
@@ -135,30 +134,30 @@ void CMemBuf::PutStr(char *data) {
 void CMemBuf::PutStrDQ(char *data) {
     unsigned char *src = (unsigned char *)data;
     unsigned char *p;
-    unsigned char a1;
+    unsigned char cur_char;
     unsigned char a2 = '\0';
     int fl;
     while(1) {
-        a1 = *src++;
-        if (a1 == 0)
+        cur_char = *src++;
+        if (cur_char == 0)
             break;
         fl = 0;
-        if (a1 == '\\') {					// ¥を¥¥に
+        if (cur_char == '\\') { // ¥を¥¥に
             p = (unsigned char *)PreparePtr(1);
-            *p = a1;
+            *p = cur_char;
         }
-        if (a1 == 13) {					// CRを¥nに
+        if (cur_char == 13) { // CRを¥nに
             fl = 1;
             a2 = 10;
             if (*src == 10)
                 src++;
         }
-        if (a1 >= 129) {						// 全角文字チェック
-            if (a1 <= 159) {
+        if (cur_char >= 129) { // 全角文字チェック
+            if (cur_char <= 159) {
                 fl = 1;
                 a2 = *src++;
             }
-            else if (a1 >= 224) {
+            else if (cur_char >= 224) {
                 fl = 1;
                 a2 = *src++;
             }
@@ -167,12 +166,12 @@ void CMemBuf::PutStrDQ(char *data) {
         }
         if (fl) {
             p = (unsigned char *)PreparePtr(2);
-            p[0] = a1;
+            p[0] = cur_char;
             p[1] = a2;
             continue;
         }
         p = (unsigned char *)PreparePtr(1);
-        *p = a1;
+        *p = cur_char;
     }
 }
 
@@ -233,7 +232,7 @@ int CMemBuf::PutFile(char *fname) {
     if (ff == NULL)
         return -1;
     fseek(ff, 0, SEEK_END);
-    length = (int)ftell(ff);			// normal file size
+    length = (int)ftell(ff); // normal file size
     fclose(ff);
     
     p = PreparePtr(length + 1);
