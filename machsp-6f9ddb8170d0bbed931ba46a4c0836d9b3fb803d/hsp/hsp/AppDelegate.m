@@ -15,43 +15,28 @@ AppDelegate ()
 
 @implementation AppDelegate
 
-- (void)applicationDidFinishLaunching:(NSNotification*)aNotification
-{
+- (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
     // Insert code here to initialize your application
-    
     //メニューバーを初期化する
     id menubar = [NSMenu new];
     id rootmenu = [NSMenuItem new];
     [menubar addItem:rootmenu];
     id appmenu = [NSMenu new];
-    id quitmenu = [[NSMenuItem alloc] initWithTitle:@"Quit"
-                                             action:@selector(terminate:)
-                                      keyEquivalent:@"q"];
+    id quitmenu = [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@"q"];
     [appmenu addItem:quitmenu];
     [rootmenu setSubmenu:appmenu];
     [NSApp setMainMenu:menubar];
-    
 }
 
-- (void)applicationWillTerminate:(NSNotification*)aNotification
-{
+- (void)applicationWillTerminate:(NSNotification*)aNotification {
     // Insert code here to tear down your application
-    
-    
 }
 
-- (void)windowWillClose:(NSNotification*)aNotification
-{
-    
+- (void)windowWillClose:(NSNotification*)aNotification {
     [NSApp terminate:self];
-    
 }
 
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:
-(NSApplication*)theApplication
-{
-    
-    
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)theApplication {
     return YES;
 }
 

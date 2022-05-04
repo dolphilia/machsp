@@ -234,31 +234,18 @@
     @autoreleasepool {
         if (global.midi_events != nil && global.is_start_midi_event == YES) {
             if (global.midi_events.count > 0 && global.midi_events.count % 4 == 0) {
-                while (global.midi_events.count > 0 &&
-                       global.midi_events.count % 4 == 0) {
+                while (global.midi_events.count > 0 && global.midi_events.count % 4 == 0) {
                     int number = [global.midi_events[1] intValue];
                     int velocity = [global.midi_events[2] intValue];
                     int channel = [global.midi_events[3] intValue];
                     
-                    [self code_setva:myMidiEventNumberPval
-                                aptr:myMidiEventNumberAptr
-                                type:TYPE_INUM
-                                 ptr:&number];
-                    [self code_setva:myMidiEventVelocityPval
-                                aptr:myMidiEventVelocityAptr
-                                type:TYPE_INUM
-                                 ptr:&velocity];
-                    [self code_setva:myMidiEventChannelPval
-                                aptr:myMidiEventChannelAptr
-                                type:TYPE_INUM
-                                 ptr:&channel];
+                    [self code_setva:myMidiEventNumberPval aptr:myMidiEventNumberAptr type:TYPE_INUM ptr:&number];
+                    [self code_setva:myMidiEventVelocityPval aptr:myMidiEventVelocityAptr type:TYPE_INUM ptr:&velocity];
+                    [self code_setva:myMidiEventChannelPval aptr:myMidiEventChannelAptr type:TYPE_INUM ptr:&channel];
                     
                     if ([global.midi_events[0] isEqual:@"noteon"]) {
                         int type = 1;
-                        [self code_setva:myMidiEventTypePval
-                                    aptr:myMidiEventTypeAptr
-                                    type:TYPE_INUM
-                                     ptr:&type];
+                        [self code_setva:myMidiEventTypePval aptr:myMidiEventTypeAptr type:TYPE_INUM ptr:&type];
                     } else if ([global.midi_events[0] isEqual:@"noteoff"]) {
                         int type = 2;
                         [self code_setva:myMidiEventTypePval
@@ -346,77 +333,49 @@
 }
 
 //テキストフィールドのイベント　関連
-- (void)controlTextDidEndEditing: (NSNotification*)notification // Enterが押された時
-{
-    
-    
+
+// Enterが押された時
+- (void)controlTextDidEndEditing: (NSNotification*)notification {
 }
 
-- (void)controlTextDidChange:(NSNotification*)notification //内容が変更された時
-{
-    
+- (void)controlTextDidChange:(NSNotification*)notification { //内容が変更された時
     NSTextField* textField = [notification object];
     NSString* identifier = [textField identifier];
     if ([identifier isEqualToString:@"TextField"]) {
         char* state = (char*)[textField.stringValue UTF8String];
-        // NSLog(@"%@",textField.stringValue);
-        [self code_setva:myTextFieldPval[textField.tag]
-                    aptr:myTextFieldAptr[textField.tag]
-                    type:TYPE_STRING
-                     ptr:state];
-        // NSLog(@"%d",(int)textField.tag);
+        [self code_setva:myTextFieldPval[textField.tag] aptr:myTextFieldAptr[textField.tag] type:TYPE_STRING ptr:state];
     }
-    
 }
 
-- (void)checkEvent:(id)sender
-{
-    
+- (void)checkEvent:(id)sender {
     int state;
     if ([sender state] == NSOnState) {
         state = 1;
-        [self code_setva:myCheckBoxPval[[sender tag]]
-                    aptr:myCheckBoxAptr[[sender tag]]
-                    type:TYPE_INUM
-                     ptr:&state];
+        [self code_setva:myCheckBoxPval[[sender tag]] aptr:myCheckBoxAptr[[sender tag]] type:TYPE_INUM ptr:&state];
     } else {
         state = 0;
-        [self code_setva:myCheckBoxPval[[sender tag]]
-                    aptr:myCheckBoxAptr[[sender tag]]
-                    type:TYPE_INUM
-                     ptr:&state];
+        [self code_setva:myCheckBoxPval[[sender tag]] aptr:myCheckBoxAptr[[sender tag]] type:TYPE_INUM ptr:&state];
     }
-    
 }
 
-- (void)sliderEvent:(id)sender
-{
-    
+- (void)sliderEvent:(id)sender {
     vc_hspctx->iparam = (int)[sender tag];
     vc_hspctx->refdval = [[mySliders objectAtIndex:[sender tag]] doubleValue];
     [self cmdfunc_gosub:mySliderLabel[[sender tag]]];
-    
 }
 
-- (void)buttonEvent:(id)sender
-{
-    
+- (void)buttonEvent:(id)sender {
     [self cmdfunc_gosub:myButtonLabel[[sender tag]]];
-    
 }
 
-- (void)runStartax
-{
-    
+- (void)runStartax {
     NSString* path; // = NSHomeDirectory();
-    //ファイルの有無の確認 順序 -> resourcePath/start.ax ->
-    //Documents/hsptmp/start.ax -> Home/start.ax -> Desktop/start.ax
+    //ファイルの有無の確認 順序 -> resourcePath/start.ax -> Documents/hsptmp/start.ax -> Home/start.ax -> Desktop/start.ax
     BOOL isDir = NO;
     BOOL isExists = NO;
     NSFileManager* filemanager = [NSFileManager defaultManager];
     // 0.
-    path = [[[[NSBundle mainBundle] bundlePath] stringByDeletingLastPathComponent]
-            stringByAppendingString:@"/start.ax"];
+    path = [[[[NSBundle mainBundle] bundlePath] stringByDeletingLastPathComponent] stringByAppendingString:@"/start.ax"];
     isExists = [filemanager fileExistsAtPath:path isDirectory:&isDir];
     if (isExists && isDir == NO) {
     } else {
@@ -427,8 +386,7 @@
         if (isExists && isDir == NO) {
         } else {
             // 2.
-            path = [NSHomeDirectory()
-                    stringByAppendingString:@"/Documents/hsptmp/start.ax"];
+            path = [NSHomeDirectory() stringByAppendingString:@"/Documents/hsptmp/start.ax"];
             isExists = [filemanager fileExistsAtPath:path isDirectory:&isDir];
             if (isExists && isDir == NO) {
             } else {

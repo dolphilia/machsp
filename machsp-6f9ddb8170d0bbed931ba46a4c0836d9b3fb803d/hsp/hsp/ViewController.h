@@ -22,10 +22,8 @@
 #define HSP3_AXTYPE_NONE 0
 #define HSP3_AXTYPE_ENCRYPT 1
 
-typedef struct
-{
-    union
-    {
+typedef struct {
+    union {
         int ikey;
         double dkey;
         char* skey;
@@ -49,8 +47,7 @@ typedef struct
     char itemp[STM_STRSIZE_DEFAULT - 4]; // data area padding
 } StackManagerData;
 
-@interface ViewController
-: NSViewController<NSTextFieldDelegate> { // NSTextFieldのデリゲートのため
+@interface ViewController : NSViewController<NSTextFieldDelegate> { // NSTextFieldのデリゲートのため
 @public
     AppDelegate* global;
     BOOL isInitialized;
