@@ -1752,7 +1752,7 @@ CAutoSbFree::~CAutoSbFree() {
             break;
         }
             
-        //================================================================================>>>MacOSX
+//>>>MacOSX
         case 0x020:  // qframe
         {
             if (qAudio->isInitialized != YES) {
@@ -1919,7 +1919,7 @@ CAutoSbFree::~CAutoSbFree() {
             
             break;
         }
-        //================================================================================<<<MacOSX
+//<<<MacOSX
             
             // str function
         case 0x100:  // str
@@ -2094,7 +2094,7 @@ CAutoSbFree::~CAutoSbFree() {
                 hsp3int_reffunc_intfunc_value = [self getEase:dval maxvalue:dval2];
             }
             break;
-            //================================================================================>>>MacOSX
+//>>>MacOSX
         case 0x190:  // qrate
         {
             if (qAudio->isInitialized != YES) {
@@ -2136,7 +2136,7 @@ CAutoSbFree::~CAutoSbFree() {
             hsp3int_reffunc_intfunc_value = global.backing_scale_factor;
             break;
         }
-            //================================================================================<<<MacOSX
+//<<<MacOSX
         default: {
              @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
@@ -2181,8 +2181,6 @@ CAutoSbFree::~CAutoSbFree() {
     info->reffuncNumber = 5;  // reffunc_intfunc;
 }
 
-//================================================================================>>>CStrNote
-
 //-------------------------------------------------------------
 //		Interfaces
 //-------------------------------------------------------------
@@ -2203,12 +2201,13 @@ CAutoSbFree::~CAutoSbFree() {
 //		Routines
 //-------------------------------------------------------------
 
-//    指定した行の先頭ポインタを求める
-//        hsp3int_nn = 先頭ポインタ
-//        hsp3int_lastcr : CR/LFで終了している
-//        line   : line number(-1=最終行)
-//        result:0=ok/1=no line
-//
+/// 指定した行の先頭ポインタを求める
+///
+/// hsp3int_nn = 先頭ポインタ
+/// hsp3int_lastcr : CR/LFで終了している
+/// line   : line number(-1=最終行)
+/// result:0=ok/1=no line
+///
 - (int)nnget:(char *)nbase line:(int)line {
     int a, i;
     char a1;
@@ -2273,9 +2272,10 @@ CAutoSbFree::~CAutoSbFree() {
     return 0;
 }
 
-//        Get specified line from note
-//                result:0=ok/1=no line
-//
+/// Get specified line from note
+///
+/// result:0=ok/1=no line
+///
 - (int)GetLine:(char *)nres line:(int)line max:(int)max {
     char a1;
     char *pp;
@@ -2305,8 +2305,8 @@ CAutoSbFree::~CAutoSbFree() {
     return 0;
 }
 
-//        Get specified line from note
-//
+/// Get specified line from note
+///
 - (char *)GetLineDirect:(int)line {
     char a1;
     if ([self nnget:hsp3int_base line:line]) hsp3int_nn = hsp3int_nulltmp;
@@ -2324,14 +2324,14 @@ CAutoSbFree::~CAutoSbFree() {
     return hsp3int_nn;
 }
 
-//        Resume last GetLineDirect function
-//
+/// Resume last GetLineDirect function
+///
 - (void)ResumeLineDirect {
     *hsp3int_lastnn = hsp3int_lastcode;
 }
 
-//        Get total lines
-//
+/// Get total lines
+///
 - (int)GetMaxLine {
     int a, b;
     char a1;
@@ -2368,9 +2368,10 @@ CAutoSbFree::~CAutoSbFree() {
     return 0;
 }
 
-//        Pet specified line to note
-//                result:0=ok/1=no line
-//
+/// Pet specified line to note
+///
+/// result:0=ok/1=no line
+///
 - (int)PutLine:(char *)nstr line:(int)line ovr:(int)ovr {
     int a = 0, ln, la, lw;
     char a1;
@@ -2449,11 +2450,12 @@ CAutoSbFree::~CAutoSbFree() {
     return 0;
 }
 
-//        Search string from note
-//                nstr:search string
-//                mode:STRNOTE_FIND_*
-//                result:line number(-1:no match)
-//
+/// Search string from note
+///
+/// nstr:search string
+/// mode:STRNOTE_FIND_*
+/// result:line number(-1:no match)
+///
 - (int)FindLine:(char *)nstr mode:(int)mode {
     char a1;
     int curline, len, res;
@@ -2517,11 +2519,13 @@ CAutoSbFree::~CAutoSbFree() {
     return -1;
 }
 
-//        全体サーチ用文字列比較
-//        mode : STRNOTE_FIND_MATCH = 完全一致
-//               STRNOTE_FIND_FIRST = 前方一致
-//               STRNOTE_FIND_INSTR = 部分一致
-//
+/// 全体サーチ用文字列比較
+///
+/// mode :
+/// STRNOTE_FIND_MATCH = 完全一致
+/// STRNOTE_FIND_FIRST = 前方一致
+/// STRNOTE_FIND_INSTR = 部分一致
+///
 - (int)FindLineSub:(char *)nstr mode:(int)mode {
     switch (mode) {
         case STRNOTE_FIND_MATCH:  // 完全一致
@@ -2549,6 +2553,5 @@ CAutoSbFree::~CAutoSbFree() {
     }
     return 0;
 }
-//================================================================================<<<CStrNote
 
 @end

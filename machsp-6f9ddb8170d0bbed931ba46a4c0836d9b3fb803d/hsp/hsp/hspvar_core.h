@@ -9,14 +9,12 @@
 #ifndef hspvar_core_h
 #define hspvar_core_h
 
-//=============================================================================>>>hspvar_core
 #import "hsp3struct_var.h"
 #import "ViewController.h"
-//=============================================================================<<<hspvar_core
+
 @interface
 ViewController (hspvar_core) {
 }
-//=============================================================================>>>hspvar_core
 
 //	typefunc
 //	基本タイプ HSPVAR_FLAG_STR 〜 HSPVAR_FLAG_DOUBLE
@@ -68,6 +66,5 @@ PDAT* HspVarCorePtrAPTR(PVal* pv, APTR ofs);
 //pv,in1,in2 )
 //#define HspVarCoreGetUsing( pv,in1 ) hspvarproc[(pv)->flag].GetUsing( in1 )
 
-//=============================================================================<<<hspvar_core
 @end
 #endif /* hspvar_core_h */

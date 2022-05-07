@@ -1,4 +1,3 @@
-
 //
 //	HSP3 graphics command
 //	(GUI関連コマンド・関数処理)
@@ -1951,20 +1950,15 @@ typedef DWORD COLORREF;
          @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
     }
     [self code_next];
-    
-    
     return ptr;
 }
 
+//        reffunc : TYPE_EXTSYSVAR
+//        (拡張システム変数)
+//
 - (void *)reffunc_sysvar:(int *)type_res arg:(int)arg {
-    
-    //		reffunc : TYPE_EXTSYSVAR
-    //		(拡張システム変数)
-    //
-    
     void *ptr;
     if (arg & 0x100) {
-        
         return [self reffunc_function:type_res arg:arg];
     }
     
@@ -2006,17 +2000,14 @@ typedef DWORD COLORREF;
     return ptr;
 }
 
+//        termfunc : TYPE_EXTCMD
+//        (内蔵GUI)
+//
 - (int)termfunc_extcmd:(int)option {
-    
-    //		termfunc : TYPE_EXTCMD
-    //		(内蔵GUI)
-    //
-    
     return 0;
 }
 
 - (void)hsp3typeinit_cl_extcmd:(HSP3TYPEINFO *)info {
-    
     HSP_ExtraInfomation *exinfo;  // Info for Plugins
     
     hsp3gr_ctx = info->hspctx;
@@ -2039,13 +2030,10 @@ typedef DWORD COLORREF;
     //		バイナリモードを設定
     //
     //_setmode( _fileno(stdin),  _O_BINARY );
-    
 }
 
 - (void)hsp3typeinit_cl_extfunc:(HSP3TYPEINFO *)info {
-    
     info->reffuncNumber = 4;  // reffunc_function;
-    
 }
 
 @end

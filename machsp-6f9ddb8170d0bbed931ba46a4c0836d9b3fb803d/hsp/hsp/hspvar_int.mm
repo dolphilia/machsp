@@ -101,15 +101,14 @@ void HspVarInt_Free(PVal* pval) {
 /// (pval2が指定されている場合は、pval2の内容を継承して再確保)
 ///
 void HspVarInt_Alloc(PVal* pval, const PVal* pval2) {
-    int size;
-    char* pt;
-    int* fv;
     if (pval->len[1] < 1)
         pval->len[1] = 1; // 配列を最低1は確保する
-    size = HspVarInt_GetVarSize(pval);
+    
+    int size = HspVarInt_GetVarSize(pval);
     pval->mode = HSPVAR_MODE_MALLOC;
-    pt = sbAlloc(size);
-    fv = (int*)pt;
+    char* pt = sbAlloc(size);
+    int* fv = (int*)pt;
+    
     for (int i = 0; i < (int)(size / sizeof(int)); i++) {
         fv[i] = 0;
     }
@@ -242,7 +241,6 @@ void HspVarInt_AllocBlock(PVal* pval, PDAT* pdat, int size) {
 //------------------------------------------------------------
 
 void HspVarInt_Init(HspVarProc* p) {
-    
     //    p->Set = HspVarInt_Set;
     //    p->Cnv = HspVarInt_Cnv;
     //    p->GetPtr = HspVarInt_GetPtr;
@@ -275,10 +273,10 @@ void HspVarInt_Init(HspVarProc* p) {
     //    p->RrI = HspVarInt_RrI;
     //    p->LrI = HspVarInt_LrI;
     
+    // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->vartype_name = (char*)"int"; // タイプ名
     p->version = 0x001; // 型タイプランタイムバージョン(0x100 = 1.0)
     p->support = HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY;
-    // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize = sizeof(int); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
 

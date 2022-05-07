@@ -61,15 +61,14 @@ void HspVarLabel_Free(PVal* pval) {
 /// (pval2が指定されている場合は、pval2の内容を継承して再確保)
 ///
 void HspVarLabel_Alloc(PVal* pval, const PVal* pval2) {
-    int size;
-    char* pt;
-    HSPVAR_LABEL* fv;
     if (pval->len[1] < 1)
         pval->len[1] = 1; // 配列を最低1は確保する
-    size = HspVarLabel_GetVarSize(pval);
+    
+    int size = HspVarLabel_GetVarSize(pval);
     pval->mode = HSPVAR_MODE_MALLOC;
-    pt = sbAlloc(size);
-    fv = (HSPVAR_LABEL*)pt;
+    char* pt = sbAlloc(size);
+    HSPVAR_LABEL* fv = (HSPVAR_LABEL*)pt;
+    
     for (int i = 0; i < (int)(size / sizeof(HSPVAR_LABEL)); i++) {
         fv[i] = NULL;
     }
@@ -118,8 +117,7 @@ void HspVarLabel_Init(HspVarProc* p) {
     //    p->Free = HspVarLabel_Free;
     p->vartype_name = (char*)"label"; // タイプ名
     p->version = 0x001; // 型タイプランタイムバージョン(0x100 = 1.0)
-    p->support =
-    HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY | HSPVAR_SUPPORT_VARUSE;
+    p->support = HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY | HSPVAR_SUPPORT_VARUSE;
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize = sizeof(HSPVAR_LABEL); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }

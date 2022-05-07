@@ -24,8 +24,8 @@ private:
     int nnget( char *nbase, int line );
     
     char *base;
-    int lastcr;
-    char *nn;
+    int lastcr; // CR/LFで終了している
+    char *nn; // 先頭ポインタ
     char *lastnn;
     char lastcode;
     char nulltmp[4];

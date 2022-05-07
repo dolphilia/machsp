@@ -9,15 +9,13 @@
 #ifndef hspvar_double_h
 #define hspvar_double_h
 
-//=============================================================================>>>hspvar_double
 #import "ViewController.h"
 #import <Foundation/Foundation.h>
-//=============================================================================<<<hspvar_double
 
 @interface
 ViewController (hspvar_double) {
 }
-//=============================================================================>>>hspvar_double
+
 PDAT* HspVarDouble_GetPtr(PVal* pval);
 void* HspVarDouble_Cnv(const void* buffer, int flag);
 int HspVarDouble_GetVarSize(PVal* pval);
@@ -39,7 +37,7 @@ void HspVarDouble_LtEqI(PDAT* pval, const void* val);
 void* HspVarDouble_GetBlockSize(PVal* pval, PDAT* pdat, int* size);
 void HspVarDouble_AllocBlock(PVal* pval, PDAT* pdat, int size);
 void HspVarDouble_Init(HspVarProc* p);
-//=============================================================================<<<hspvar_double
+
 @end
 
 #endif /* hspvar_double_h */

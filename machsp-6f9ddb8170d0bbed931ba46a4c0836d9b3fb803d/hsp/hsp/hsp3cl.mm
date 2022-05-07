@@ -17,16 +17,16 @@
 
 @implementation ViewController (hsp3cl)
 
-// すべて破棄
-//
+/// すべて破棄
+///
 - (void)dealloc {
     [self code_termfunc];
     [self Dispose];
     [self code_bye];
 }
 
-// 実行メインを呼び出す
-//
+/// 実行メインを呼び出す
+///
 - (int)hsp3cl_exec {
     int runmode;
     int endcode;
@@ -61,11 +61,12 @@ rerun:
     return endcode;
 }
 
-//        システム関連の初期化
-//        ( mode:0=debug/1=release )
-//
+/// システム関連の初期化
+///
+/// ( mode:0=debug/1=release )
+///
 - (int)hsp3cl_init:(char *)startfile {
-    int a, orgexe, mode;
+    int orgexe, mode;
     int _hsp_sum, _hsp_dec;
     char a1;
     char *ss;
@@ -94,14 +95,14 @@ rerun:
     }
 #endif
     
-    //		実行ファイルかデバッグ中かを調べる
+    // 実行ファイルかデバッグ中かを調べる
     //
     mode = 0;
     orgexe = 0;
     hsp_wd = 0;
-    for (a = 0; a < 8; a++) {
-        a1 = optmes[a] - 48;
-        if (a1 == fpas[a]) orgexe++;
+    for (int i = 0; i < 8; i++) {
+        a1 = optmes[i] - 48;
+        if (a1 == fpas[i]) orgexe++;
     }
     if (orgexe == 0) {
         mode = atoi(optmes + 9) + 0x10000;
@@ -110,7 +111,6 @@ rerun:
         _hsp_dec = *(int *)(optmes + 32);
         [self SetPackValue:_hsp_sum dec:_hsp_dec];
     }
-    
     if ([self Reset:mode]) {
         [self hsp3win_dialog:(char *)"Startup failed."];
         return -1;
@@ -141,8 +141,8 @@ rerun:
     printf("%s\n", mes);
 }
 
-//        HSP関連の解放
-//
+/// HSP関連の解放
+///
 - (void)hsp3cl_bye {
     // delete hsp;
 }
@@ -150,14 +150,12 @@ rerun:
 - (void)hsp3cl_msgfunc:(HSPContext *)_hspctx {
     while (1) {
         switch (_hspctx->runmode) {
-            case RUNMODE_STOP: {
-                // stop命令
+            case RUNMODE_STOP: { // stop命令
                 [self hsp3win_dialog:(char *)"[STOP] Press any key..."];
                 getchar();
-                 @throw [self make_nsexception:HSPERR_NONE];
+                @throw [self make_nsexception:HSPERR_NONE];
             }
-            case RUNMODE_WAIT:
-                // wait命令による時間待ち
+            case RUNMODE_WAIT: // wait命令による時間待ち
                 // (実際はcode_exec_waitにtick countを渡す)
                 // NSLog(@"wait");
                 // NSLog(@"%d",tick);
@@ -165,15 +163,13 @@ rerun:
                 // hspctx->runmode = code_exec_wait( tick );
                 break;
                 
-            case RUNMODE_AWAIT:
-                //		await命令による時間待ち
+            case RUNMODE_AWAIT: // await命令による時間待ち
                 //		(実際はcode_exec_awaitにtick countを渡す)
                 _hspctx->runmode = RUNMODE_RUN;
                 // hspctx->runmode = code_exec_await( tick );
                 break;
+            case RUNMODE_END: { // end命令
                 
-            case RUNMODE_END: {
-                //		end命令
 #if 0
                 hsp3win_dialog( "[END] Press any key..." );
                 getchar();
@@ -183,22 +179,16 @@ rerun:
             case RUNMODE_RETURN: {
                  @throw [self make_nsexception:HSPERR_RETURN_WITHOUT_GOSUB];
             }
-            case RUNMODE_ASSERT:
-                //		assertで中断
+            case RUNMODE_ASSERT: // assertで中断
                 _hspctx->runmode = RUNMODE_STOP;
                 break;
-                
-            case RUNMODE_LOGMES:
-                //		logmes命令
+            case RUNMODE_LOGMES: // logmes命令
                 _hspctx->runmode = RUNMODE_RUN;
                 break;
-                
             default:
                 return;
-                
         }
     }
-    
 }
 
 - (void)hsp3cl_error {
@@ -219,8 +209,6 @@ rerun:
     [self hsp3win_dialog:(char *)"[ERROR] Press any key..."];
     getchar();
 }
-
-//================================================================================>>>HSP3
 
 //------------------------------------------------------------
 // interface
@@ -301,7 +289,8 @@ rerun:
         int sum = 0;
         while (1) {
             ap = *s++;
-            if (ap == 0) break;
+            if (ap == 0)
+                break;
             ap += 40;
             *p++ = ap;
             sum = sum * 17 + (int)ap;
@@ -376,11 +365,9 @@ rerun:
     hsp3cl_hsp_dec = dec;
 }
 
-/*------------------------------------------------------------*/
-/*
- util
- */
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
+// util
+//------------------------------------------------------------
 
 - (void *)copy_DAT:(char *)ptr size:(size_t)size {
     if (size <= 0) {
@@ -391,8 +378,8 @@ rerun:
     return dst;
 }
 
-// libdatの準備
-//
+/// libdatの準備
+///
 - (LIBDAT *)copy_LIBDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size {
     int max;
     int newsize;
@@ -422,8 +409,8 @@ rerun:
     return mem_dst;
 }
 
-// structdatの準備
-//
+/// structdatの準備
+///
 - (STRUCTDAT *)copy_STRUCTDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size {
     int i, max;
     int newsize;
@@ -437,7 +424,6 @@ rerun:
     dst = mem_dst;
     for (i = 0; i < max; i++) {
         memcpy(&org_dat, ptr, sizeof(HED_STRUCTDAT));
-        
         dst->index = org_dat.index;
         dst->subid = org_dat.subid;
         dst->prmindex = org_dat.prmindex;
@@ -449,12 +435,11 @@ rerun:
 #ifdef PTR64BIT
         dst->proc = NULL;
 #endif
-        
         dst++;
         ptr += sizeof(HED_STRUCTDAT);
     }
     hsphed->max_finfo = newsize;
     return mem_dst;
 }
-//================================================================================<<<HSP3
+
 @end

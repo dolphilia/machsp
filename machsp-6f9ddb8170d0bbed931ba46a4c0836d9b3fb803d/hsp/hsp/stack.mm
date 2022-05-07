@@ -13,8 +13,7 @@
 - (void)StackInit {
     StackManagerData *stm;
     stack_stm_max = STM_MAX_DEFAULT;
-    stack_mem_stm =
-    (StackManagerData *)malloc(sizeof(StackManagerData) * stack_stm_max);
+    stack_mem_stm = (StackManagerData *)malloc(sizeof(StackManagerData) * stack_stm_max);
     stack_stm_maxptr = stack_mem_stm + stack_stm_max;
     stack_stm_cur = stack_mem_stm;
     stm = stack_mem_stm;
@@ -52,8 +51,7 @@
     StackManagerData *stm;
     // double *dptr;
     if (stack_stm_cur >= stack_stm_maxptr) {
-        NSString *error_str =
-        [NSString stringWithFormat:@"%d", HSPERR_STACK_OVERFLOW];
+        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_STACK_OVERFLOW];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     stm = stack_stm_cur;
@@ -89,8 +87,7 @@
 - (void *)StackPushSize:(int)type size:(int)size {
     StackManagerData *stm;
     if (stack_stm_cur >= stack_stm_maxptr) {
-        NSString *error_str =
-        [NSString stringWithFormat:@"%d", HSPERR_STACK_OVERFLOW];
+        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_STACK_OVERFLOW];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     stm = stack_stm_cur;

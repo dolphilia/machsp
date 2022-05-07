@@ -92,7 +92,6 @@ void HspVarDouble_Free(PVal* pval) {
     }
     pval->pt = NULL;
     pval->mode = HSPVAR_MODE_NONE;
-    
 }
 
 /// pval変数が必要とするサイズを確保する。
@@ -103,15 +102,14 @@ void HspVarDouble_Free(PVal* pval) {
 /// (pval2が指定されている場合は、pval2の内容を継承して再確保)
 ///
 void HspVarDouble_Alloc(PVal* pval, const PVal* pval2) {
-    int size;
-    char* pt;
-    double* fv;
     if (pval->len[1] < 1)
         pval->len[1] = 1; // 配列を最低1は確保する
-    size = HspVarDouble_GetVarSize(pval);
+    
+    int size = HspVarDouble_GetVarSize(pval);
     pval->mode = HSPVAR_MODE_MALLOC;
-    pt = sbAlloc(size);
-    fv = (double*)pt;
+    char* pt = sbAlloc(size);
+    double* fv = (double*)pt;
+    
     for (int i = 0; i < (int)(size / sizeof(double)); i++) {
         fv[i] = 0.0;
     }
@@ -176,12 +174,11 @@ void HspVarDouble_DivI(PDAT* pval, const void* val) {
 /// Mod
 void HspVarDouble_ModI(PDAT* pval, const void* val) {
     double p = *((double*)(val));
-    double dval;
     if (p == 0.0) {
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_DIVZERO];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    dval = *hspvar_double_GetPtr(pval);
+    double dval = *hspvar_double_GetPtr(pval);
     *hspvar_double_GetPtr(pval) = fmod(dval, p);
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }

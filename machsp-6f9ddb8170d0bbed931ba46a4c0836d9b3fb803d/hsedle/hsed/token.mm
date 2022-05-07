@@ -36,6 +36,7 @@ void CToken::Mes(char *mes) {
 }
 
 /// メッセージ登録
+/// 
 /// (フォーマット付き)
 ///
 void CToken::Mesf(char *format, ...) {

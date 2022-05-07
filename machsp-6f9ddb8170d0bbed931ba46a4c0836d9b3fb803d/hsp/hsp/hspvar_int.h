@@ -9,15 +9,13 @@
 #ifndef hspvar_int_h
 #define hspvar_int_h
 
-//=============================================================================>>>hspvar_int
 #import "ViewController.h"
 #import <Foundation/Foundation.h>
-//=============================================================================<<<hspvar_int
 
 @interface
 ViewController (hspvar_int) {
 }
-//=============================================================================>>>hspvar_int
+
 PDAT* HspVarInt_GetPtr(PVal* pval);
 void* HspVarInt_Cnv(const void* buffer, int flag);
 int HspVarInt_GetVarSize(PVal* pval);
@@ -44,7 +42,7 @@ void HspVarInt_LrI(PDAT* pval, const void* val);
 void* HspVarInt_GetBlockSize(PVal* pval, PDAT* pdat, int* size);
 void HspVarInt_AllocBlock(PVal* pval, PDAT* pdat, int size);
 void HspVarInt_Init(HspVarProc* p);
-//=============================================================================<<<hspvar_int
+
 @end
 
 #endif /* hspvar_int_h */

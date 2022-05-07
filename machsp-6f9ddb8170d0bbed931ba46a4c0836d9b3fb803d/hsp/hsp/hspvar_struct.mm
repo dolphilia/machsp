@@ -54,11 +54,10 @@ PDAT* HspVarStruct_GetPtr(PVal* pval) {
 /// PVALポインタの変数メモリを解放する
 ///
 void HspVarStruct_Free(PVal* pval) {
-    FlexValue* fv;
     if (pval->mode == HSPVAR_MODE_MALLOC) {
         // code_delstruct_all( pval );
         // デストラクタがあれば呼び出す
-        fv = (FlexValue*)pval->pt;
+        FlexValue* fv = (FlexValue*)pval->pt;
         for (int i = 0; i < pval->len[1]; i++) {
             if (fv->type == FLEXVAL_TYPE_ALLOC)
                 sbFree(fv->ptr);
@@ -76,15 +75,14 @@ void HspVarStruct_Free(PVal* pval) {
 /// (pval2が指定されている場合は、pval2の内容を継承して再確保)
 ///
 void HspVarStruct_Alloc(PVal* pval, const PVal* pval2) {
-    int size;
-    char* pt;
-    FlexValue* fv;
     if (pval->len[1] < 1)
         pval->len[1] = 1; // 配列を最低1は確保する
     pval->mode = HSPVAR_MODE_MALLOC;
-    size = sizeof(FlexValue) * pval->len[1];
-    pt = sbAlloc(size);
-    fv = (FlexValue*)pt;
+    
+    int size = sizeof(FlexValue) * pval->len[1];
+    char* pt = sbAlloc(size);
+    FlexValue* fv = (FlexValue*)pt;
+    
     for (int i = 0; i < pval->len[1]; i++) {
         memset(fv, 0, sizeof(FlexValue));
         fv->type = FLEXVAL_TYPE_NONE;

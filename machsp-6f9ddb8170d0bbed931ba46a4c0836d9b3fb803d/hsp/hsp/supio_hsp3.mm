@@ -5,7 +5,6 @@
 //	Special thanks to Charlotte at HSP開発wiki
 //	http://hspdev-wiki.net/?OpenHSP%2FLinux%2Fhsp3
 //
-//
 
 #include "supio_hsp3.h"
 #include "debug_message.h"
@@ -43,22 +42,23 @@
 //		Internal function support (without Windows API)
 //
 
-//        Linux用ファイルパス切り出し
-//
+/// Linux用ファイルパス切り出し
+///
 static void _splitpath(char* path, char* p_drive, char* dir, char* fname, char* ext) {
-    char* p;
     char pathtmp[256];
-    
     p_drive[0] = 0;
+    
     strcpy(pathtmp, path);
     
-    p = strchr2(pathtmp, '.');
+    char* p = strchr2(pathtmp, '.');
+    
     if (p == NULL) {
         ext[0] = 0;
     } else {
         strcpy(ext, p);
         *p = 0;
     }
+    
     p = strchr2(pathtmp, '/');
     if (p == NULL) {
         dir[0] = 0;
@@ -71,9 +71,10 @@ static void _splitpath(char* path, char* p_drive, char* dir, char* fname, char* 
     
 }
 
-//        textに対してワイルドカード処理を適応
-//        return value: yes 1, no 0
-//
+/// textに対してワイルドカード処理を適応
+///
+/// return value: yes 1, no 0
+///
 static int wildcard(char* text, char* wc) {
     if (wc[0] == '\0' && *text == '\0') {
         return 1;
@@ -96,11 +97,9 @@ static int wildcard(char* text, char* wc) {
     if ((*text != '\0') && (wc[0] == *text)) {
         return wildcard(text + 1, wc + 1);
     }
-    
     return 0;
 }
 
-//
 //		basic C I/O support
 //
 // static FILE *fp;
@@ -115,7 +114,6 @@ void mem_bye(void* ptr) {
 
 int mem_save(char* fname, void* mem, int msize, int seekofs) {
     FILE* fp;
-    int flen;
     
     if (seekofs < 0) {
         fp = fopen(fname, "wb");
@@ -126,83 +124,84 @@ int mem_save(char* fname, void* mem, int msize, int seekofs) {
         return -1;
     if (seekofs >= 0)
         fseek(fp, seekofs, SEEK_SET);
-    flen = (int)fwrite(mem, 1, msize, fp);
+    
+    int flen = (int)fwrite(mem, 1, msize, fp);
     fclose(fp);
     
     return flen;
 }
 
-//        strをすべて小文字に(全角対応版)
-//        注意! : SJISのみ対応です
-//
+/// strをすべて小文字に(全角対応版)
+///
+/// 注意! : SJISのみ対応です
+///
 void strcase(char* target) {
-    unsigned char* p;
-    unsigned char a1;
-    p = (unsigned char*)target;
+    unsigned char* p = (unsigned char*)target;
+    unsigned char cur_char;
+
     while (1) {
-        a1 = *p;
-        if (a1 == 0)
+        cur_char = *p;
+        if (cur_char == 0)
             break;
-        *p = tolower(a1);
-        p++;             // 検索位置を移動
-        if (a1 >= 129) { // 全角文字チェック
-            if ((a1 <= 159) || (a1 >= 224))
+        *p = tolower(cur_char);
+        p++; // 検索位置を移動
+        if (cur_char >= 129) { // 全角文字チェック
+            if ((cur_char <= 159) || (cur_char >= 224))
                 p++;
         }
     }
 }
 
-//    string copy (ret:length)
-//
+/// string copy (ret:length)
+///
 int strcpy2(char* str1, char* str2) {
-    char* p;
-    char* src;
-    char a1;
-    src = str2;
-    p = str1;
+    char* p = str1;
+    char* src = str2;
+    char cur_char;
+    
     while (1) {
-        a1 = *src++;
-        if (a1 == 0)
+        cur_char = *src++;
+        if (cur_char == 0)
             break;
-        *p++ = a1;
+        *p++ = cur_char;
     }
     *p++ = 0;
     return (int)(p - str1);
 }
 
-//    string cat (ret:length)
-//
+/// string cat (ret:length)
+///
 int strcat2(char* str1, char* str2) {
-    char* src;
-    char a1;
-    int i;
-    src = str1;
+    char* src = str1;
+    char cur_char;
+
     while (1) {
-        a1 = *src;
-        if (a1 == 0)
+        cur_char = *src;
+        if (cur_char == 0)
             break;
         src++;
     }
-    i = (int)(src - str1);
+    int i = (int)(src - str1);
     return (strcpy2(src, str2) + i);
 }
 
-//        strstr関数の全角対応版
-//        注意! : SJISのみ対応です
-//
+/// strstr関数の全角対応版
+///
+/// 注意! : SJISのみ対応です
+///
 char* strstr2(char* target, char* src) {
-    unsigned char* p;
+    unsigned char* p = (unsigned char*)target;
     unsigned char* s;
     unsigned char* p2;
-    unsigned char a1;
+    unsigned char cur_char;
     unsigned char a2;
     unsigned char a3;
-    p = (unsigned char*)target;
+
     if ((*src == 0) || (*target == 0))
         return NULL;
     while (1) {
-        a1 = *p;
-        if (a1 == 0)
+        cur_char = *p;
+        if (cur_char == 0)
             break;
         p2 = p;
         s = (unsigned char*)src;
@@ -216,9 +215,9 @@ char* strstr2(char* target, char* src) {
             if (a2 != a3)
                 break;
         }
-        p++;             // 検索位置を移動
-        if (a1 >= 129) { // 全角文字チェック
-            if ((a1 <= 159) || (a1 >= 224))
+        p++; // 検索位置を移動
+        if (cur_char >= 129) { // 全角文字チェック
+            if ((cur_char <= 159) || (cur_char >= 224))
                 p++;
         }
     }
@@ -226,35 +225,33 @@ char* strstr2(char* target, char* src) {
 }
 
 char* strchr2(char* target, char code) {
-    unsigned char* p;
-    unsigned char a1;
-    char* res;
-    p = (unsigned char*)target;
-    res = NULL;
+    unsigned char* p = (unsigned char*)target;
+    unsigned char cur_char;
+    char* ret = NULL;
+
     while (1) {
-        a1 = *p;
-        if (a1 == 0)
+        cur_char = *p;
+        if (cur_char == 0)
             break;
-        if (a1 == code)
-            res = (char*)p;
+        if (cur_char == code)
+            ret = (char*)p;
         p++;             // 検索位置を移動
-        if (a1 >= 129) { // 全角文字チェック
-            if ((a1 <= 159) || (a1 >= 224))
+        if (cur_char >= 129) { // 全角文字チェック
+            if ((cur_char <= 159) || (cur_char >= 224))
                 p++;
         }
     }
-    return res;
+    return ret;
 }
 
 void getpath(char* stmp, char* outbuf, int p2) {
-    char* p;
+    char* p = outbuf;
     char tmp[_MAX_PATH];
     char p_drive[_MAX_PATH];
     char p_dir[_MAX_DIR];
     char p_fname[_MAX_FNAME];
     char p_ext[_MAX_EXT];
     
-    p = outbuf;
     if (p2 & 16)
         strcase(stmp);
     _splitpath(stmp, p_drive, p_dir, p_fname, p_ext);
@@ -295,12 +292,13 @@ int delfile(char* name) {
     // return remove( name );		// ディレクトリにもファイルにも対応
 }
 
-//        Linux System
-//
+/// Linux System
+///
 int dirlist(char* fname, char** target, int p3) {
     enum {
         MASK = 3
     }; // mode 3までのビット反転用
+    
     char* p;
     unsigned int fl;
     unsigned int stat_main;
@@ -314,10 +312,9 @@ int dirlist(char* fname, char** target, int p3) {
     
     // sh = opendir( get_current_dir_name() );
     getcwd(curdir, _MAX_PATH);
-    sh =
-    opendir(curdir); // get_current_dir_nameはMinGWで通らなかったのでとりあえず
-    
+    sh = opendir(curdir); // get_current_dir_nameはMinGWで通らなかったのでとりあえず
     fd = readdir(sh);
+    
     while (fd != NULL) {
         p = fd->d_name;
         fl = 1;
@@ -365,19 +362,20 @@ int dirlist(char* fname, char** target, int p3) {
     return stat_main;
 }
 
-/*
- Get system time entries
- index :
- 0 wYear
- 1 wMonth
- 2 wDayOfWeek
- 3 wDay
- 4 wHour
- 5 wMinute
- 6 wSecond
- 7 wMilliseconds
- 8 wMicroseconds
- */
+
+/// Get system time entries
+///
+/// index :
+/// 0 wYear
+/// 1 wMonth
+/// 2 wDayOfWeek
+/// 3 wDay
+/// 4 wHour
+/// 5 wMinute
+/// 6 wSecond
+/// 7 wMilliseconds
+/// 8 wMicroseconds
+
 int gettime(int index) {
     struct timeval tv;
     struct tm* lt;
@@ -420,36 +418,35 @@ int strsp_getptr(void) {
     return splc;
 }
 
-//        split string with parameters
-//
+/// split string with parameters
+///
 int strsp_get(char* srcstr, char* dststr, char splitchr, int len) {
-    char a1;
+    char cur_char;
     char a2;
-    int a;
-    int sjflg;
-    a = 0;
-    sjflg = 0;
+    int a = 0;
+    int sjflg = 0;
+    
     while (1) {
         sjflg = 0;
-        a1 = srcstr[splc];
-        if (a1 == 0)
+        cur_char = srcstr[splc];
+        if (cur_char == 0)
             break;
         splc++;
-        if ((uint8_t)a1 >= 0x81)
-            if ((uint8_t)a1 < 0xa0)
+        if ((uint8_t)cur_char >= 0x81)
+            if ((uint8_t)cur_char < 0xa0)
                 sjflg++;
-        if ((uint8_t)a1 >= 0xe0)
+        if ((uint8_t)cur_char >= 0xe0)
             sjflg++;
         
-        if (a1 == splitchr)
+        if (cur_char == splitchr)
             break;
-        if (a1 == 13) {
+        if (cur_char == 13) {
             a2 = srcstr[splc];
             if (a2 == 10)
                 splc++;
             break;
         }
-        dststr[a++] = a1;
+        dststr[a++] = cur_char;
         if (sjflg) {
             dststr[a++] = srcstr[splc++];
         }
@@ -457,28 +454,28 @@ int strsp_get(char* srcstr, char* dststr, char splitchr, int len) {
             break;
     }
     dststr[a] = 0;
-    return (int)a1;
+    return (int)cur_char;
 }
 
-//        Skip 1parameter from command line
-//
+/// Skip 1parameter from command line
+///
 char* strsp_cmds(char* srcstr) {
-    int spmode;
-    char a1;
-    char* cmdchk;
-    cmdchk = srcstr;
-    spmode = 0;
+    int spmode = 0;
+    char* cmdchk = srcstr;
+    char cur_char;
+    
     while (1) {
-        a1 = *cmdchk;
-        if (a1 == 0)
+        cur_char = *cmdchk;
+        if (cur_char == 0)
             break;
         cmdchk++;
-        if (a1 == 32)
+        if (cur_char == 32)
             if (spmode == 0)
                 break;
-        if (a1 == 0x22)
+        if (cur_char == 0x22)
             spmode ^= 1;
     }
+    
     return cmdchk;
 }
 
@@ -490,43 +487,40 @@ int GetLimit(int num, int min, int max) {
     return num;
 }
 
-//        最後の'\\'を取り除く
-//
+/// 最後の'\\'を取り除く
+///
 void CutLastChr(char* p, char code) {
-    char* ss;
+    char* ss = strchr2(p, '\\');
     char* ss2;
-    int i;
-    ss = strchr2(p, '\\');
+
     if (ss != NULL) {
-        i = (int)strlen(p);
+        int i = (int)strlen(p);
         ss2 = p + i - 1;
         if ((i > 3) && (ss == ss2))
             *ss = 0;
     }
 }
 
-//    exchange hex to int
+/// exchange hex to int
+///
 static int htoi_sub(char hstr) {
-    char a1;
-    a1 = tolower(hstr);
-    if ((a1 >= '0') && (a1 <= '9'))
-        return a1 - '0';
-    if ((a1 >= 'a') && (a1 <= 'f'))
-        return a1 - 'a' + 10;
+    char cur_char = tolower(hstr);
+    if ((cur_char >= '0') && (cur_char <= '9'))
+        return cur_char - '0';
+    if ((cur_char >= 'a') && (cur_char <= 'f'))
+        return cur_char - 'a' + 10;
     return 0;
 }
 
 int htoi(char* str) {
-    char a1;
-    int d;
-    int conv;
-    conv = 0;
-    d = 0;
+    int d = 0;
+    int conv = 0;
+    char cur_char;
     while (1) {
-        a1 = str[d++];
-        if (a1 == 0)
+        cur_char = str[d++];
+        if (cur_char == 0)
             break;
-        conv = (conv << 4) + htoi_sub(a1);
+        conv = (conv << 4) + htoi_sub(cur_char);
     }
     return conv;
 }
@@ -535,37 +529,31 @@ int htoi(char* str) {
 //					HSP string trim support
 /*----------------------------------------------------------*/
 
-//        文字列中のcode位置を探す(2バイトコード、全角対応版)
-//        sw = 0 : findptr = 最後に見つかったcode位置
-//        sw = 1 : findptr = 最初に見つかったcode位置
-//        sw = 2 : findptr = 最初に見つかったcode位置(最初の文字のみ検索)
-//        戻り値 : 次の文字にあたる位置
-//
+/// 文字列中のcode位置を探す(2バイトコード、全角対応版)
+///
+/// sw = 0 : findptr = 最後に見つかったcode位置
+/// sw = 1 : findptr = 最初に見つかったcode位置
+/// sw = 2 : findptr = 最初に見つかったcode位置(最初の文字のみ検索)
+/// 戻り値 : 次の文字にあたる位置
+///
 char* strchr3(char* target, int code, int sw, char** findptr) {
-    unsigned char* p;
-    unsigned char a1;
-    unsigned char code1;
-    unsigned char code2;
-    char* res;
-    char* pres;
-    
-    p = (unsigned char*)target;
-    code1 = (unsigned char)(code & 0xff);
-    code2 = (unsigned char)(code >> 8);
-    
-    res = NULL;
-    pres = NULL;
+    unsigned char* p = (unsigned char*)target;
+    unsigned char code1 = (unsigned char)(code & 0xff);
+    unsigned char code2 = (unsigned char)(code >> 8);
+    unsigned char cur_char;
+    char* res = NULL;
+    char* pres = NULL;
     *findptr = NULL;
     
     while (1) {
-        a1 = *p;
-        if (a1 == 0)
+        cur_char = *p;
+        if (cur_char == 0)
             break;
-        if (a1 == code1) {
-            if (a1 < 129) {
+        if (cur_char == code1) {
+            if (cur_char < 129) {
                 res = (char*)p;
             } else {
-                if ((a1 <= 159) || (a1 >= 224)) {
+                if ((cur_char <= 159) || (cur_char >= 224)) {
                     if (p[1] == code2) {
                         res = (char*)p;
                     }
@@ -574,9 +562,9 @@ char* strchr3(char* target, int code, int sw, char** findptr) {
                 }
             }
         }
-        p++;             // 検索位置を移動
-        if (a1 >= 129) { // 全角文字チェック
-            if ((a1 <= 159) || (a1 >= 224))
+        p++; // 検索位置を移動
+        if (cur_char >= 129) { // 全角文字チェック
+            if ((cur_char <= 159) || (cur_char >= 224))
                 p++;
         }
         if (res != NULL) {
@@ -591,7 +579,6 @@ char* strchr3(char* target, int code, int sw, char** findptr) {
                     return (char*)p;
                 break;
             case 2:
-                
                 return (char*)p;
         }
     }
@@ -599,8 +586,8 @@ char* strchr3(char* target, int code, int sw, char** findptr) {
     return pres;
 }
 
-//        最後のcodeを取り除く
-//
+/// 最後のcodeを取り除く
+///
 void TrimCodeR(char* p, int code) {
     char* ss;
     char* ss2;
@@ -618,8 +605,8 @@ void TrimCodeR(char* p, int code) {
     }
 }
 
-//        すべてのcodeを取り除く
-//
+/// すべてのcodeを取り除く
+///
 void TrimCode(char* p, int code) {
     char* ss;
     char* ss2;
@@ -631,8 +618,8 @@ void TrimCode(char* p, int code) {
     }
 }
 
-//        最初のcodeを取り除く
-//
+/// 最初のcodeを取り除く
+///
 void TrimCodeL(char* p, int code) {
     char* ss;
     char* ss2;

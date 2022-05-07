@@ -122,11 +122,10 @@ void HspVarCoreResetVartype(int expand) {
 }
 
 int HspVarCoreAddType() {
-    int id;
     PVal* pval;
     if (hspvartype_max >= hspvartype_limit)
         return -1;
-    id = hspvartype_max++;
+    int id = hspvartype_max++;
     // hspvarproc = (HspVarProc *)sbExpand( (char *)hspvarproc, sizeof(HspVarProc)
     // * hspvartype_max );
     hspvarproc[id].flag = 0;
@@ -144,20 +143,18 @@ static void PutInvalid(void) {
 }
 
 void HspVarCoreRegisterType(int flag, char* vartype_name) {
-    int id;
-    void** procs;
-    HspVarProc* p;
-    
-    id = flag;
+    int id = flag;
     if (id < 0) {
         id = HspVarCoreAddType();
         if (id < 0) {
             return;
         }
     }
-    p = &hspvarproc[id];
+    
+    HspVarProc* p = &hspvarproc[id];
     p->flag = p->aftertype = id;
     
+    //void** procs;
     // procs = (void **)(&p->Cnv);
     // while(1) {
     //    *procs = (void *)(PutInvalid);
@@ -225,7 +222,6 @@ void HspVarCoreDupPtr(PVal* pval, int flag, void* ptr, int size) {
     pval->offset = 0;
     pval->arraycnt = 0;
     pval->support = HSPVAR_SUPPORT_STORAGE;
-    
 }
 
 /// 指定された変数のクローンになる
@@ -459,7 +455,6 @@ void* HspVarCoreCnvPtr(PVal* pval, int flag) {
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     return (void*)dst; //( hspvarproc[flag].Cnv( buf, pval->flag ) );
-    
 }
 
 #if 0
@@ -468,8 +463,7 @@ void* HspVarCoreCnvPtr(PVal* pval, int flag) {
 //
 PDAT * HspVarCorePtrAPTR( PVal *pv, APTR ofs ) {
     pv->offset=ofs;
-    
-    PDAT * dst;
+    PDAT* dst;
     if(strcmp(hspvarproc[(pv)->flag].vartype_name, "int") == 0) { //整数のGetPtr
         dst = HspVarInt_GetPtr(pv);
     }
@@ -489,8 +483,7 @@ PDAT * HspVarCorePtrAPTR( PVal *pv, APTR ofs ) {
         NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
-    
+
     return dst;//[(pv)->flag].GetPtr(pv);
 }
 #endif
@@ -532,7 +525,6 @@ void HspVarCoreArray(PVal* pval, int offset) {
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
     pval->offset += offset * pval->arraymul;
-    
 }
 
 @end

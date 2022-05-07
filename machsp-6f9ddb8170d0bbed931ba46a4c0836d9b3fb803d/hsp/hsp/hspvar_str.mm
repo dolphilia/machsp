@@ -30,10 +30,9 @@ HspVarProc* hspvar_str_myproc;
 /// 可変長バッファのポインタを得る
 ///
 char** HspVarStr_GetFlexBufPtr(PVal* pval, int num) {
-    char** pp;
     if (num == 0)
         return &(pval->pt); // ID#0は、ptがポインタとなる
-    pp = (char**)(pval->master);
+    char** pp = (char**)(pval->master);
     return &pp[num];
 }
 
@@ -100,9 +99,8 @@ int HspVarStr_GetVarSize(PVal* pval) {
 ///
 void HspVarStr_Free(PVal* pval) {
     char** pp;
-    int size;
     if (pval->mode == HSPVAR_MODE_MALLOC) {
-        size = HspVarStr_GetVarSize(pval);
+        int size = HspVarStr_GetVarSize(pval);
         for (int i = 0; i < (int)(size / sizeof(char*)); i++) {
             pp = HspVarStr_GetFlexBufPtr(pval, i);
             sbFree(*pp);
@@ -120,14 +118,14 @@ void HspVarStr_Free(PVal* pval) {
 ///
 void HspVarStr_Alloc(PVal* pval, const PVal* pval2) {
     char** pp;
-    int i2, size, bsize;
     PVal oldvar;
+    
     if (pval->len[1] < 1)
         pval->len[1] = 1; // 配列を最低1は確保する
     if (pval2 != NULL)
         oldvar = *pval2; // 拡張時は以前の情報を保存する
     
-    size = HspVarStr_GetVarSize(pval);
+    int size = HspVarStr_GetVarSize(pval);
     pval->mode = HSPVAR_MODE_MALLOC;
     pval->master = (char*)calloc(size, 1);
     if (pval->master == NULL) {
@@ -137,7 +135,7 @@ void HspVarStr_Alloc(PVal* pval, const PVal* pval2) {
     }
     
     if (pval2 == NULL) { // 配列拡張なし
-        bsize = pval->len[0];
+        int bsize = pval->len[0];
         if (bsize < 64)
             bsize = 64;
         for (int i = 0; i < (int)(size / sizeof(char*)); i++) {
@@ -148,10 +146,10 @@ void HspVarStr_Alloc(PVal* pval, const PVal* pval2) {
         return;
     }
     
-    i2 = oldvar.size / sizeof(char*);
+    int tmp = oldvar.size / sizeof(char*);
     for (int i = 0; i < (int)(size / sizeof(char*)); i++) {
         pp = HspVarStr_GetFlexBufPtr(pval, i);
-        if (i >= i2) {
+        if (i >= tmp) {
             *pp = sbAllocClear(64); // 新規確保分
         } else {
             *pp = *HspVarStr_GetFlexBufPtr(&oldvar, i); // 確保済みバッファ
@@ -159,7 +157,6 @@ void HspVarStr_Alloc(PVal* pval, const PVal* pval2) {
         sbSetOption(*pp, (void*)pp);
     }
     free(oldvar.master);
-    
 }
 
 /*
@@ -179,12 +176,11 @@ int HspVarStr_GetSize(const PDAT* pval) {
 
 /// Set
 void HspVarStr_Set(PVal* pval, PDAT* pdat, const void* in) {
-    char** pp;
     if (pval->mode == HSPVAR_MODE_CLONE) {
         strncpy((char*)pdat, (char*)in, pval->size);
         return;
     }
-    pp = (char**)sbGetOption((char*)pdat);
+    char** pp = (char**)sbGetOption((char*)pdat);
     sbStrCopy(pp, (char*)in);
     // strcpy( hspvar_str_GetPtr(pval), (char *)in );
 }
@@ -223,21 +219,19 @@ void HspVarStr_NeI(PDAT* pdat, const void* val) {
  */
 
 void* HspVarStr_GetBlockSize(PVal* pval, PDAT* pdat, int* size) {
-    STRINF* inf;
     if (pval->mode == HSPVAR_MODE_CLONE) {
         *size = pval->size;
         return pdat;
     }
-    inf = sbGetSTRINF((char*)pdat);
+    STRINF* inf = sbGetSTRINF((char*)pdat);
     *size = inf->size;
     return pdat;
 }
 
 void HspVarStr_AllocBlock(PVal* pval, PDAT* pdat, int size) {
-    char** pp;
     if (pval->mode == HSPVAR_MODE_CLONE)
         return;
-    pp = (char**)sbGetOption((char*)pdat);
+    char** pp = (char**)sbGetOption((char*)pdat);
     *pp = sbExpand(*pp, size);
 }
 

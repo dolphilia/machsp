@@ -46,22 +46,21 @@ static STRBUF* freelist;
 //------------------------------------------------------------
 
 static void BlockPtrPrepare(void) {
-    STRBUF* sb;
-    
     if (str_blockcur == 0) {
         mem_sb = (SLOT*)MALLOC(sizeof(SLOT));
     } else {
         mem_sb = (SLOT*)REALLOC(mem_sb, sizeof(SLOT) * (str_blockcur + 1));
     }
     
-    sb = (STRBUF*)MALLOC(sizeof(STRBUF) * slot_len);
+    STRBUF* sb = (STRBUF*)MALLOC(sizeof(STRBUF) * slot_len);
     if (sb == NULL) {
-        NSString* error_str =
-        [NSString stringWithFormat:@"%d", HSPERR_OUT_OF_MEMORY];
+        NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_OUT_OF_MEMORY];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
+    
     STRBUF* p = sb;
     STRBUF* pend = p + slot_len;
+    
     mem_sb[str_blockcur].mem = sb;
     mem_sb[str_blockcur].len = slot_len;
     str_blockcur++;
@@ -125,14 +124,13 @@ static void BlockFree(STRINF* inf) {
 }
 
 static char* BlockRealloc(STRBUF* st, int size) {
-    char* p;
-    STRINF* inf;
-    STRBUF* newst;
-    inf = GET_INTINF(st);
+    STRINF* inf = GET_INTINF(st);
+    
     if (size <= inf->size)
         return inf->ptr;
-    newst = (STRBUF*)MALLOC(size + sizeof(STRINF));
-    p = newst->data;
+    STRBUF* newst = (STRBUF*)MALLOC(size + sizeof(STRINF));
+    char* p = newst->data;
+    
     memcpy(p, inf->ptr, inf->size);
     FreeExtPtr(inf);
     inf->size = size;
@@ -221,17 +219,18 @@ void sbCopy(char** pptr, char* data, int size) {
 
 void sbAdd(char** pptr, char* data, int size, int mode) {
     //		mode:0=normal/1=string
-    int sz;
-    int newsize;
     char* ptr = *pptr;
     STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
     char* p = st->inf.ptr;
+    int sz;
+    
     if (mode) {
         sz = (int)strlen(p); // 文字列データ
     } else {
         sz = st->inf.size; // 通常データ
     }
-    newsize = sz + size;
+    
+    int newsize = sz + size;
     if (newsize > (st->inf.size)) {
         newsize = (newsize + 0xfff) & 0xfffff000; // 8K単位で確保
         // Alertf( "#Alloc%d",newsize );
@@ -250,8 +249,7 @@ void sbStrAdd(char** ptr, char* str) {
 }
 
 void* sbGetOption(char* ptr) {
-    STRBUF* st;
-    st = (STRBUF*)(ptr - sizeof(STRINF));
+    STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
     return st->inf.opt;
 }
 
