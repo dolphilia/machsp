@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MyTextView.h"
 #import "MyWindow.h"
-#import "utility_string.h"
+#import "objc_utility_string.h"
 
 @implementation MyTextView
 
@@ -94,21 +94,21 @@
         [super insertNewline:sender]; //行を挿入する
         return;
     }
-    NSString * back_char = [utility_string charAt:str index:index - 1];//[str substringWithRange:NSMakeRange(index-1, 1)]; //１つ前の文字
+    NSString * back_char = [objc_utility_string charAt:str index:index - 1];//[str substringWithRange:NSMakeRange(index-1, 1)]; //１つ前の文字
     BOOL breakFlag = NO;
     for (int i = 0; i < index; i++) {
-        if ([[utility_string charAt:str index:index - i - 1] isEqual:@"\n"]) { //最初の行以外
+        if ([[objc_utility_string charAt:str index:index - i - 1] isEqual:@"\n"]) { //最初の行以外
             [super insertNewline:sender]; //行を挿入する
             if ([back_char isEqual:@"{"]) {
                 [super insertTab:sender];
             }
-            else if([[utility_string charAt:str index:index-i] isEqual:@"*"]) { //行頭がアスタリスクだったら
+            else if([[objc_utility_string charAt:str index:index-i] isEqual:@"*"]) { //行頭がアスタリスクだったら
                 [super insertTab:sender];
                 breakFlag = YES;
                 break;
             }
             for (int n=0; n<i; n++) {
-                if ([[utility_string charAt:str index:index-i+n] isEqual:@"\t"]) {
+                if ([[objc_utility_string charAt:str index:index-i+n] isEqual:@"\t"]) {
                     [super insertTab:sender];
                 }
                 else {
@@ -124,13 +124,13 @@
             if ([back_char isEqual:@"{"]) {
                 [super insertTab:sender];
             }
-            else if([[utility_string charAt:str index:0] isEqual:@"*"]) { //行頭がアスタリスクだったら
+            else if([[objc_utility_string charAt:str index:0] isEqual:@"*"]) { //行頭がアスタリスクだったら
                 [super insertTab:sender];
                 breakFlag = YES;
                 break;
             }
             for (int n = 0; n < index; n++) {
-                if ([[utility_string charAt:str index:n] isEqual:@"\t"]) {
+                if ([[objc_utility_string charAt:str index:n] isEqual:@"\t"]) {
                     [super insertTab:sender];
                 }
                 else {

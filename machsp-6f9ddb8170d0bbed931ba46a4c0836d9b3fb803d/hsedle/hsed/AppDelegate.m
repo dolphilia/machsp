@@ -11,11 +11,11 @@
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // Insert code here to initialize your application
+    // アプリケーションを初期化するコードをここに挿入する
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    // Insert code here to tear down your application
+    // アプリケーションを破棄するコードをここに挿入する
 }
 
 @end

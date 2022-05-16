@@ -38,10 +38,9 @@
 #define _MAX_FNAME	256
 #endif
 
-
-//
-//		Internal function support (without Windows API)
-//
+//---
+// 内部関数サポート（Windows APIを使用しない）
+//---
 
 /// Linux用ファイルパス切り出し
 ///
@@ -102,7 +101,7 @@ static int wildcard(char *text, char *wc) {
 }
 
 
-/// basic C I/O support
+/// 基本的なC入出力のサポート
 ///
 char *mem_ini(int size) {
     return (char *)calloc(size, 1);
@@ -139,7 +138,7 @@ int mem_save(const char *fname, const void *mem, int msize, int seekofs) {
     return flen;
 }
 
-/// string case to lower
+/// 文字列の大文字と小文字を区別する
 ///
 void strcase(char *str) {
     unsigned char cur_char;
@@ -162,7 +161,7 @@ void strcase(char *str) {
     }
 }
 
-/// string case to lower and copy
+/// 文字列の大文字と小文字をコピーする
 ///
 void strcase2(char *str, char *str2) {
     unsigned char cur_char;
@@ -189,8 +188,9 @@ void strcase2(char *str, char *str2) {
     *ss2 = 0;
 }
 
-/// string compare
-/// (0=not same/-1=same)
+/// 文字列を比較する
+///
+/// @return 0 = 同じではない / -1 = 同じ
 ///
 int tstrcmp(const char *str1, const char *str2) {
     int i = 0;
@@ -256,7 +256,7 @@ void strcpy2(char *dest, const char *src, size_t size) {
     return;
 }
 
-/// add extension of filenamez
+/// ファイル名に拡張子を追加する
 ///
 void addext(char *str, const char *exstr) {
     int i = 0;
@@ -272,7 +272,7 @@ void addext(char *str, const char *exstr) {
     strcat(str, exstr);
 }
 
-/// cut extension of filename
+/// ファイル名の拡張子を削除する
 ///
 void cutext(char *str) {
     int i = 0;
@@ -286,7 +286,7 @@ void cutext(char *str) {
     str[i] = 0;
 }
 
-/// cut last characters
+/// 末尾の文字を削除する
 ///
 void cutlast(char *str) {
     unsigned char cur_char;
@@ -301,7 +301,7 @@ void cutlast(char *str) {
     str[i] = 0;
 }
 
-/// cut last characters
+/// 末尾の文字を削除する
 ///
 void cutlast2(char *str) {
     int i = 0;
@@ -464,9 +464,9 @@ void CutLastChr(char *p, char code) {
     }
 }
 
-/*----------------------------------------------------------*/
-//					HSP string trim support
-/*----------------------------------------------------------*/
+//----------------------------------------------------------
+// 文字列をトリミングするためのサポート
+//----------------------------------------------------------
 
 /// 文字列中のcode位置を探す(2バイトコード、全角対応版)
 /// sw = 0 : findptr = 最後に見つかったcode位置
@@ -566,9 +566,9 @@ void TrimCodeL(char *p, int code) {
     }
 }
 
-/*----------------------------------------------------------*/
-//					HSP system support
-/*----------------------------------------------------------*/
+//----------------------------------------------------------
+// システムサポート
+//----------------------------------------------------------
 
 /// dirinfo命令の内容をstmpに設定する
 ///
@@ -591,7 +591,7 @@ void dirinfo(char *p, int id) {
 
 //----------------------------------------------------------
 
-/// Memory Manager
+/// メモリーマネージャー
 ///
 char *mem_alloc(void *base, int newsize, int oldsize) {
     char *p;

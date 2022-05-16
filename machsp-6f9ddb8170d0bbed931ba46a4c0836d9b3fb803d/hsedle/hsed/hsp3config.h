@@ -1,7 +1,8 @@
 
 //
-//		Configure for HSP3
+// HSP3の設定
 //
+
 #ifndef __hsp3config_h
 #define __hsp3config_h
 
@@ -9,31 +10,28 @@
 //
 #define HSPTITLE "Hot Soup Processor ver."
 #define hspver "3.5beta3"
-#define mvscode 3		// minor version code
-#define vercode 0x3503	// version code
+#define mvscode 3		// マイナーバージョンコード
+#define vercode 0x3503	// バージョンコード
 
 #define HSPERR_HANDLE		// HSPエラー例外を有効にします
 #define SYSERR_HANDLE		// システムエラー例外を有効にします
 
-
-//
 //		移植用のラベル
 //
-#define JPN			// IME use flag
-#define JPNMSG		// japanese message flag
+#define JPN			// IME使用フラグ
+#define JPNMSG		// 日本語メッセージフラグ
 
+//	デバッグモード機能
 //
-//	Debug mode functions
-//
-#define HSPDEBUGLOG	// Debug Log Version
+#define HSPDEBUGLOG	// デバッグログのバージョン
 
-//		Debug Window Message Buffer Size
+// デバッグウィンドウのメッセージバッファサイズ
 //
 #define dbsel_size 0x10000
 #define dbmes_size 0x10000
 
-//
-//		環境フラグ:以下のラベルはコンパイルオプションで設定されます
+// 環境フラグ
+// 以下のラベルはコンパイルオプションで設定されます
 //
 //#define HSPWIN		// Windows(WIN32) version flag
 //#define HSPMAC		// Macintosh version flag

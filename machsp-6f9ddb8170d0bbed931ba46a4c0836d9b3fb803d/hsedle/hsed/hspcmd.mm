@@ -1,5 +1,5 @@
-//
-//		settings for HSP
+
+// HSPの設定
 //
 
 char s_rec[1] = "", *hsp_prestr[] = {
@@ -15,7 +15,7 @@ char s_rec[1] = "", *hsp_prestr[] = {
     //
     s_rec,
     
-    //	program control commands (ver3.0)
+    //	プログラム制御コマンド (ver3.0)
     
     (char *)"$000 15 goto",
     (char *)"$001 15 gosub",
@@ -56,7 +56,7 @@ char s_rec[1] = "", *hsp_prestr[] = {
     //	"$015 15 logmode",				// (ver2.55)
     //	"$016 15 logmes",				// (ver2.55)
     
-    //	enhanced command (ver2.6)
+    //	拡張コマンド (ver2.6)
     
     (char *)"$10000 8 onexit",
     (char *)"$10001 8 onerror",
@@ -75,12 +75,12 @@ char s_rec[1] = "", *hsp_prestr[] = {
     (char *)"$018 8 bcopy",
     (char *)"$019 8 memfile",				// (changed on ver2.6*)
     
-    //	no macro command (ver2.61)
+    //	マクロなしコマンド (ver2.61)
     //
     (char *)"$000 11 if",
     (char *)"$001 11 else",
     
-    //	normal commands
+    //	通常のコマンド
     
     (char *)"$01a 8 poke",
     (char *)"$01b 8 wpoke",
@@ -108,7 +108,7 @@ char s_rec[1] = "", *hsp_prestr[] = {
     (char *)"$030 8 sortget",				// (3.5)
 
     
-    //	enhanced command (ver2.2)
+    //	拡張コマンド (ver2.2)
     
     (char *)"$10000 9 button",
     
@@ -171,7 +171,7 @@ char s_rec[1] = "", *hsp_prestr[] = {
     (char *)"$030 9 clrobj",
     (char *)"$031 9 boxf",
     
-    //	enhanced command (ver2.3)
+    //	拡張コマンド (ver2.3)
     
     (char *)"$032 9 objprm",
     (char *)"$033 9 objmode",
@@ -258,7 +258,7 @@ char s_rec[1] = "", *hsp_prestr[] = {
     (char *)"$102 17 comevdisp",
     (char *)"$103 17 libptr",
     
-    //	3.0 system vals
+    //	3.0 システム変数
     
     (char *)"$000 14 system",
     (char *)"$001 14 hspstat",
@@ -278,7 +278,7 @@ char s_rec[1] = "", *hsp_prestr[] = {
     (char *)"$020 14 dcnt",
     //================================================================================<<<MacOSX
     
-    //	3.0 internal function
+    //	3.0 内蔵関数
     (char *)"$000 13 int",
     (char *)"$001 13 rnd",
     (char *)"$002 13 strlen",
@@ -323,7 +323,7 @@ char s_rec[1] = "", *hsp_prestr[] = {
     //regexp()
     //================================================================================<<<MacOSX
     
-    //	3.0 math function
+    //	3.0 数学関数
     (char *)"$180 13 sin",
     (char *)"$181 13 cos",
     (char *)"$182 13 tan",
@@ -346,7 +346,7 @@ char s_rec[1] = "", *hsp_prestr[] = {
     //================================================================================<<<MacOSX
     
     
-    //	3.0 external sysvar,function
+    //	3.0 拡張システム変数・関数
     
     (char *)"$000 10 mousex",
     (char *)"$001 10 mousey",
@@ -359,17 +359,14 @@ char s_rec[1] = "", *hsp_prestr[] = {
     (char *)"$101 10 objinfo",
     (char *)"$102 10 dirinfo",
     (char *)"$103 10 sysinfo",
-    
+
     (char *)"$ffffffff 5 thismod",
-    
     (char *)"*"
 };
 
 
-char 	*hsp_prepp[] =
-{
+char *hsp_prepp[] = {
     s_rec,
-    
     (char *)"$000 0 #addition",
     (char *)"$000 0 #cmd",
     (char *)"$000 0 #comfunc",
@@ -405,7 +402,5 @@ char 	*hsp_prepp[] =
     (char *)"$000 0 #defdouble",
     (char *)"$000 0 #defnone",
     (char *)"$000 0 #bootopt",					// (3.5)
-    
     (char *)"*"
 };
-

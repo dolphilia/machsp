@@ -1,9 +1,6 @@
+
 //
-//  runCompiler.c
-//  documentbasededitor
-//
-//  Created by dolphilia on 2016/02/26.
-//  Copyright © 2016年 dolphilia. All rights reserved.
+//  コンパイラを実行する
 //
 
 #include "runCompiler.h"
@@ -12,7 +9,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "hsp3config.h"
-#include "supio_linux.h"
+//#include "supio_linux.h"
 #include "hsc3.h"
 #include "token.h"
 #import "runCompiler.h"
@@ -21,8 +18,6 @@
 #import "AppDelegate.h"
 
 @implementation MyWindow(run)
-
-/*----------------------------------------------------------*/
 
 static void usage1( void ) {
     static 	char *p[] = {
@@ -43,8 +38,6 @@ static void usage1( void ) {
         }
     }
 }
-
-/*----------------------------------------------------------*/
 
 -(int)runCompiler:(int)argc argv:(char **)argv {
     int st = 0;
@@ -142,8 +135,8 @@ static void usage1( void ) {
         hsc3 = NULL;
     }
     
-    printf("!!!!!!!!!!!! \n");
-    [c_wrapper call_c];
+    //printf("!!!!!!!!!!!! \n");
+    //[cwrap call_c];
     swift_test* _swift = [[swift_test alloc] init];
     [_swift _swift_test];
     return st;

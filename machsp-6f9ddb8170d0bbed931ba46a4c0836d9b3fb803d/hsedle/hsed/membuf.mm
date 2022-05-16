@@ -1,18 +1,12 @@
 
 //
-//		Memory buffer class
-//			onion software/onitama 2002/2
+// メモリバッファ
 //
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
-#include <assert.h>
 #include "membuf.h"
 
 //-------------------------------------------------------------
-//		Routines
+// ルーチン
 //-------------------------------------------------------------
 
 /// バッファ初期化
@@ -54,14 +48,13 @@ void CMemBuf::InitIndexBuf(int sz) {
 /// @return もとのバッファ先頭ptr
 ///
 char *CMemBuf::PreparePtr(int sz) {
-    int i;
     char *p;
-    if ((cur+sz) < size) {
+    if ((cur + sz) < size) {
         p = mem_buf + cur;
         cur += sz;
         return p;
     }
-    i = size; // expand buffer (VCのreallocは怖いので使わない)
+    int i = size; // expand buffer (VCのreallocは怖いので使わない)
     while(i <= (cur + sz))
         i += limit_size;
     p = (char *)malloc(i);

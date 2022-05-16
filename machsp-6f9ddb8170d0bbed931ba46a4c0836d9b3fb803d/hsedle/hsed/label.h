@@ -5,14 +5,19 @@
 #ifndef __label_h
 #define __label_h
 
-#include <string>
-#include <map>
-#include <set>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
-#define	maxname	256				// label name max
-#define def_maxsymbol 0x10000	// Symbol Table Size (default)
-#define def_maxblock 128		// Symbol Table Block max (default)
-#define def_maxlab 4096			// label object max (default)
+#include <string> // c++
+#include <map> // c++
+#include <set> // c++
+
+#define	maxname	256				// ラベル名の最大値
+#define def_maxsymbol 0x10000	// シンボルテーブルのサイズ（デフォルト）
+#define def_maxblock 128		// シンボルテーブルブロックの最大値（デフォルト）
+#define def_maxlab 4096			// ラベルオブジェクトの最大値（デフォルト）
 
 #define LAB_TYPE_MARK 0
 #define LAB_TYPE_SYSVAL 7

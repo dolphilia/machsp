@@ -4109,7 +4109,6 @@ rerun:
     for (it = stack_mem_stm; it != stack_stm_cur; it++) {
         if (it->type == TYPE_EX_SUBROUTINE || it->type == TYPE_EX_CUSTOMFUNC) {
             routine = (HSPROUTINE *)STM_GETPTR(it);
-            
             line = [self code_getdebug_line:routine->mcsret];
             sprintf(tmp, "%s:%4d\r\n", [self code_getdebug_name], line);
             sbStrAdd(&hsp_dbgbuf, tmp);

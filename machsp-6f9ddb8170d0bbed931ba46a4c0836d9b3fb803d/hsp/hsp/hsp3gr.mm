@@ -19,74 +19,46 @@
 /// dirinfo命令の内容をstmpに設定する
 ///
 - (char *)getdir:(int)id {
-    char *p;
-    // char *ss;
-    // char fname[HSP_MAX_PATH+1];
-    p = hsp3gr_ctx->stmp;
+    char *p = hsp3gr_ctx->stmp;
     *p = 0;
-    
-    // AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication]
-    // delegate];
-    
+
     switch (id) {
-        case 0:  // カレント(現在の)ディレクトリ
-        {
+        case 0: // カレント(現在の)ディレクトリ
             p = (char *)[global.current_directory_path UTF8String];
             break;
-        }
-        case 1:  // HSPの実行ファイルがあるディレクトリ
-        {
+        case 1: // HSPの実行ファイルがあるディレクトリ
             p = (char *)[[[[NSBundle mainBundle] bundlePath] stringByDeletingLastPathComponent] UTF8String];
             break;
-        }
-        case 2:  // Homeディレクトリ
-        {
+        case 2: // Homeディレクトリ
             p = (char *)[NSHomeDirectory() UTF8String];
             break;
-        }
-        case 3:  // Desktopディレクトリ
-        {
+        case 3: // Desktopディレクトリ
             p = (char *)[[NSHomeDirectory() stringByAppendingString:@"/Desktop"] UTF8String];
             break;
-        }
-        case 4:  // Documentsディレクトリ
-        {
+        case 4: // Documentsディレクトリ
             p = (char *)[[NSHomeDirectory() stringByAppendingString:@"/Documents"] UTF8String];
             break;
-        }
-        case 5: {
+        case 5:
             break;
-        }
-        case 6: {
+        case 6:
             break;
-        }
-        case 7: {
+        case 7:
             break;
-        }
-        case 8: {
+        case 8:
             break;
-        }
-            // Windowsディレクトリ
-            //    Windowsのシステムディレクトリ
-            //    コマンドライン文字列
-            //  HSPTVディレクトリ
-        default: {
-             @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
-        }
+        default:
+            @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
-    
-    
     return p;
 }
 
 /// System strings get
 ///
 - (int)sysinfo:(int)p2 {
-    int fl = HSPVAR_FLAG_INT;
-    char *p1;
-    p1 = hsp3gr_ctx->stmp;
-    *p1 = 0;
-    return fl;
+    int f = HSPVAR_FLAG_INT;
+    char *p = hsp3gr_ctx->stmp;
+    *p = 0;
+    return f;
 }
 
 - (void *)ex_getbmscr:(int)wid {
@@ -94,13 +66,12 @@
 }
 
 - (void)ex_mref:(PVal *)pval prm:(int)prm {
-    int t, size;
+    int t = HSPVAR_FLAG_INT;
+    int size = 4;
     void *ptr;
     const int GETBM = 0x60;
-    t = HSPVAR_FLAG_INT;
-    size = 4;
     if (prm >= GETBM) {
-         @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
+        @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
     } else {
         switch (prm) {
             case 0x40:
@@ -117,7 +88,7 @@
                 break;
             }
             default: {
-                 @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
+                @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
             }
         }
     }
@@ -398,10 +369,8 @@
 }
 
 - (void)cmdfunc_button {
-    char *ps;
-    unsigned short *sbr;
-    ps = [self code_gets];
-    sbr = [self code_getlb];
+    char *ps = [self code_gets];
+    unsigned short *sbr = [self code_getlb];
     [self code_next];
     int posx = [myLayer get_current_point_x];
     int posy = [myLayer get_current_point_y];
@@ -437,9 +406,11 @@
     NSString *ns_message_string = [NSString stringWithCString:message_string encoding:NSUTF8StringEncoding];
     NSString *ns_title_string = [NSString stringWithCString:title_string encoding:NSUTF8StringEncoding];
     NSAlert *alert = [[NSAlert alloc] init];
+    
     [alert setMessageText:ns_title_string];
     [alert setInformativeText:ns_message_string];
     hsp3gr_ctx->stat = 0;
+    
     switch (alert_style) {
         case 0: {
             [alert setAlertStyle:NSAlertStyleInformational];
@@ -487,15 +458,6 @@
             [self show_alert_dialog:@"dialog命令のタイプ設定0〜3以外は未実装です"];
             break;
     }
-    
-    // シートを表示する例
-    //    [alert beginSheetModalForWindow:self.view.window
-    //    completionHandler:^(NSModalResponse returnCode) {
-    //        if (returnCode == NSAlertFirstButtonReturn) {
-    //                //デフォルトボタンが押された時の処理
-    //        }
-    //    }];
-    
 }
 
 - (void)cmdfunc_mmload {
@@ -871,26 +833,12 @@
 
 - (void)cmdfunc_getkey {
     PVal *pval;
-    APTR aptr;
-    int res;
-    aptr = [self code_getva:&pval];
+    APTR aptr = [self code_getva:&pval];
+    int res = 0;
     int p1 = [self code_getdi:0];
-    // p2 = [self code_getdi:1];
-    int ckey, cklast, cktrg;
-    ckey = 0;
-    res = 0;
-    
-    // BOOL a = ;
-    
-    // NSLog(@"%d",myView->isMouseDown);
-    
-    //            if (p2) {
-    //                if ( wnd->GetActive() < 0 ) {
-    //                    code_setva( pval, aptr, TYPE_INUM, &res );
-    //                    break;
-    //                }
-    //            }
-    
+    int ckey = 0;
+    int cklast = 0, cktrg;
+
     switch (p1) {
         case 1:
             if ([myView getIsMouseDown]) {
@@ -1230,28 +1178,7 @@
         default:
             break;
     }
-    
-    //            if ([myView getIsKeyDown_Left]){ckey = 1;}      //if (
-    //            GetAsyncKeyState(37)&0x8000 ) ckey|=1;		// [left]
-    //            if ([myView getIsKeyDown_Up]){ckey |= 2;}        //if (
-    //            GetAsyncKeyState(38)&0x8000 ) ckey|=2;		// [up]
-    //            if ([myView getIsKeyDown_Right]){ckey |= 4;}     //if (
-    //            GetAsyncKeyState(39)&0x8000 ) ckey|=4;		// [right]
-    //            if ([myView getIsKeyDown_Down]){ckey |= 8;}      //if (
-    //            GetAsyncKeyState(40)&0x8000 ) ckey|=8;		// [down]
-    //            if ([myView getIsKeyDown_Space]){ckey |= 16;}    //if (
-    //            GetAsyncKeyState(32)&0x8000 ) ckey|=16;	// [spc]
-    //            if ([myView getIsKeyDown_Enter]){ckey |= 32;}    //if (
-    //            GetAsyncKeyState(13)&0x8000 ) ckey|=32;	// [ent]
-    //            //if ( GetAsyncKeyState(17)&0x8000 ) ckey|=64;	// [ctrl]
-    //            if ([myView getIsKeyDown_Escape]){ckey |= 128;}  //if (
-    //            GetAsyncKeyState(27)&0x8000 ) ckey|=128;	// [esc]
-    //            if ([myView getIsMouseDown]){ckey |= 256;}       // mouse_l
-    //            /*GetAsyncKeyState(1)&0x8000*/
-    //            if ([myView getIsRightMouseDown]){ckey|=512;}    // mouse_r
-    //            GetAsyncKeyState(2)&0x8000
-    //            if ([myView getIsKeyDown_Tab]){ckey|=1024;}   // if (
-    //            GetAsyncKeyState(9)&0x8000 )  ckey|=1024;	// [tab]
+
     cktrg = (ckey ^ cklast) & ckey;
     cklast = ckey;
     res = cktrg;  //|(ckey&p1);
@@ -1263,9 +1190,7 @@
     int posx = [myLayer get_current_point_x];
     int posy = [myLayer get_current_point_y];
     [[myCheckBoxs objectAtIndex:myCheckBoxIndex] setFrameOrigin:NSMakePoint(posx, myLayer->buf_height[myLayer->buf_index] - posy - 18)];
-    
-    char *ps;
-    ps = [self code_gets];
+    char *ps = [self code_gets];
     [[myCheckBoxs objectAtIndex:myCheckBoxIndex] setTitle:[NSString stringWithCString:ps encoding:NSUTF8StringEncoding]];
     myCheckBoxAptr[myCheckBoxIndex] = [self code_getva:&myCheckBoxPval[myCheckBoxIndex]];
     

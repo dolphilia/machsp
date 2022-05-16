@@ -1,19 +1,19 @@
 
 //
-//		Token analysis class ( HSP3 code generator )
-//			onion software/onitama 2004/4
+// トークン解析（HSP3コード生成器）
 //
+
 #import "AppDelegate.h"
-#import "comutil.h"
-#import "errormsg.h"
+//#import "comutil.h"
+//#import "errormsg.h"
 #import "hsp3config.h"
 #import "hsp3debug.h"
 #import "hsp3struct.h"
 #import "label.h"
 #import "membuf.h"
-#import "strnote.h"
-#import "supio_linux.h"
-#import "tagstack.h"
+//#import "strnote.h"
+//#import "supio_linux.h"
+//#import "tagstack.h"
 #import "token.h"
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
@@ -21,15 +21,14 @@
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
+#import "c_wrapper.h"
 
 //-------------------------------------------------------------
-//		Routines
+// ルーチン
 //-------------------------------------------------------------
 
 /// CalcCG_token
 ///
-/// @param void setumei
-/// @return void
 void CToken::CalcCG_token(void) {
     GetTokenCG(GETTOKEN_DEFAULT);
     if (ttype == TK_NONE)
@@ -38,17 +37,16 @@ void CToken::CalcCG_token(void) {
 
 /// CalcCG_token_exprbeg
 ///
-///
 void CToken::CalcCG_token_exprbeg(void) {
     GetTokenCG(GETTOKEN_EXPRBEG);
     if (ttype == TK_NONE)
         ttype = val;
 }
 
-///        GETTOKEN_EXPRBEG でトークンを取得し直す
+/// GETTOKEN_EXPRBEG でトークンを取得し直す
 ///
-///        GetTokenCG は 文字列リテラルや文字コードリテラルの場合、
-///        cg_ptr のバッファを破壊するので常に取得し直すわけにはいかない
+/// GetTokenCG は 文字列リテラルや文字コードリテラルの場合、
+/// cg_ptr のバッファを破壊するので常に取得し直すわけにはいかない
 ///
 void CToken::CalcCG_token_exprbeg_redo(void) {
     if (ttype == TK_NONE)
@@ -63,8 +61,8 @@ static int is_statement_end(int type) {
     return (type == TK_SEPARATE) || (type == TK_EOL) || (type == TK_EOF);
 }
 
-//        演算子を登録する
-//
+/// 演算子を登録する
+///
 void CToken::CalcCG_regmark(int mark) {
     int op = 0;
     switch (mark) {
@@ -203,8 +201,8 @@ void CToken::CalcCG_factor(void) {
     CalcCG_token();
 }
 
-//        単項演算子
-//
+/// 単項演算子
+///
 void CToken::CalcCG_unary(void) {
     int op;
     if (ttype == '-') {
@@ -263,9 +261,7 @@ void CToken::CalcCG_shift(void) {
 void CToken::CalcCG_compare(void) {
     int op;
     CalcCG_shift();
-    
-    while ((ttype == '<') || (ttype == '>') || (ttype == '=') || (ttype == '!') ||
-           (ttype == 0x61) || (ttype == 0x62)) {
+    while ((ttype == '<') || (ttype == '>') || (ttype == '=') || (ttype == '!') || (ttype == 0x61) || (ttype == 0x62)) {
         op = ttype;
         CalcCG_token_exprbeg();
         if (is_statement_end(ttype))
@@ -278,7 +274,6 @@ void CToken::CalcCG_compare(void) {
 void CToken::CalcCG_bool(void) {
     int op;
     CalcCG_compare();
-    
     while ((ttype == '&') || (ttype == '|') || (ttype == '^')) {
         op = ttype;
         CalcCG_token_exprbeg();
@@ -289,14 +284,15 @@ void CToken::CalcCG_bool(void) {
     }
 }
 
-//        entry point
+/// entry point
 void CToken::CalcCG_start(void) {
     CalcCG_bool();
 }
 
-//        パラメーターの式を評価する
-//        (結果は逆ポーランドでコードを出力する)
-//
+/// パラメーターの式を評価する
+///
+/// 結果は逆ポーランドでコードを出力する
+///
 void CToken::CalcCG(int ex) {
     texflag = ex;
     cs_lastptr = cs_buf->GetSize();
@@ -310,14 +306,14 @@ void CToken::CalcCG(int ex) {
 
 //-----------------------------------------------------------------------------
 
-//        指定文字列をmembufへ展開する
-//        ( 複数行対応 {"〜"} )
-//
+/// 指定文字列をmembufへ展開する
+///
+/// 複数行対応 {"〜"}
+///
 char* CToken::PickLongStringCG(char* str) {
-    char* p;
     char* psrc;
     char* ps;
-    p = psrc = str;
+    char* p = psrc = str;
     
     while (1) {
         p = PickStringCG2(p, &psrc);
@@ -345,16 +341,14 @@ char* CToken::PickLongStringCG(char* str) {
     return psrc;
 }
 
-//        指定文字列をスキップして終端コードを付加する
-//            sep = 区切り文字
-//
+/// 指定文字列をスキップして終端コードを付加する
+///
+/// sep = 区切り文字
+///
 char* CToken::PickStringCG(char* str, int sep) {
-    unsigned char* vs;
-    unsigned char* pp;
-    int skip, i;
+    unsigned char* vs = (unsigned char*)str;
+    unsigned char* pp = vs;
     unsigned char cur_char;
-    vs = (unsigned char*)str;
-    pp = vs;
     
     while (1) {
         cur_char = *vs;
@@ -387,9 +381,9 @@ char* CToken::PickStringCG(char* str, int sep) {
         // if (cur_char>=129) {
         //    if ((cur_char<=159)||(cur_char>=224)) {
         //        NSLog(@"A:%s",str);
-        skip = SkipMultiByte(cur_char); // 全角文字チェック
+        int skip = SkipMultiByte(cur_char); // 全角文字チェック
         if (skip) {
-            for (i = 0; i < skip; i++) {
+            for (int i = 0; i < skip; i++) {
                 *pp++ = cur_char;
                 vs++;
                 cur_char = *vs;
@@ -411,16 +405,14 @@ char* CToken::PickStringCG(char* str, int sep) {
     return (char*)vs;
 }
 
-//        指定文字列をスキップして終端コードを付加する
-//            sep = 区切り文字
-//
+/// 指定文字列をスキップして終端コードを付加する
+///
+/// sep = 区切り文字
+///
 char* CToken::PickStringCG2(char* str, char** strsrc) {
-    unsigned char* vs;
-    unsigned char* pp;
+    unsigned char* vs = (unsigned char*)*strsrc;
+    unsigned char* pp = (unsigned char*)str;
     unsigned char cur_char;
-    int skip;
-    vs = (unsigned char*)*strsrc;
-    pp = (unsigned char*)str;
     
     while (1) {
         cur_char = *vs;
@@ -457,7 +449,7 @@ char* CToken::PickStringCG2(char* str, char** strsrc) {
         }
         // if (a1>=129) {					// 全角文字チェック
         //    if ((a1<=159)||(a1>=224)) {
-        skip = SkipMultiByte(cur_char); // 全角文字チェック
+        int skip = SkipMultiByte(cur_char); // 全角文字チェック
         if (skip) {
             for (int i = 0; i < skip; i++) {
                 *pp++ = cur_char;
@@ -479,15 +471,17 @@ char* CToken::GetTokenCG(int option) {
     return cg_ptr;
 }
 
-//        次のコード(１文字を返す)
-//        (終端の場合は0を返す)
-//
+/// 次のコード(１文字を返す)
+///
+/// 終端の場合は0を返す
+///
 int CToken::PickNextCodeCG(void) {
-    unsigned char* vs;
+    unsigned char* vs = (unsigned char*)cg_ptr;
     unsigned char cur_char;
-    vs = (unsigned char*)cg_ptr;
+    
     if (vs == NULL)
         return 0;
+    
     while (1) {
         cur_char = *vs;
         if ((cur_char != 32) && (cur_char != '\t')) { // space,tab以外か?
@@ -498,50 +492,49 @@ int CToken::PickNextCodeCG(void) {
     return (int)cur_char;
 }
 
-//        stringデータのタイプと内容を返す
-//        (次のptrを返す)
-//        (ttypeにタイプを、val,val_d,cg_strに内容を書き込みます)
-//
+/// stringデータのタイプと内容を返す
+///
+/// 次のptrを返す
+/// ttypeにタイプを、val,val_d,cg_strに内容を書き込みます
+///
 char* CToken::GetTokenCG(char* str, int option) {
-    unsigned char* vs;
-    unsigned char a1;
-    unsigned char a2;
+    unsigned char* vs = (unsigned char*)str;
+    unsigned char cur_char;
+    unsigned char next_char;
     int a, b, chk, labmode;
-    int skip, i;
-    
-    vs = (unsigned char*)str;
+
     if (vs == NULL) {
         ttype = TK_EOF;
         return NULL; // already end
     }
     
     while (1) {
-        a1 = *vs;
-        if ((a1 != 32) && (a1 != '\t')) { // space,tab以外か?
+        cur_char = *vs;
+        if ((cur_char != 32) && (cur_char != '\t')) { // space,tab以外か?
             break;
         }
         vs++;
     }
     
-    if (a1 == 0) { // end
+    if (cur_char == 0) { // end
         ttype = TK_EOL;
         return (char*)vs;
         // return GetLineCG();
     }
     
-    if (a1 < 0x20) { // 無効なコード
+    if (cur_char < 0x20) { // 無効なコード
         ttype = TK_ERROR;
         throw CGERROR_UNKNOWN;
     }
     
-    if (a1 == 0x22) { // "〜"
+    if (cur_char == 0x22) { // "〜"
         vs++;
         ttype = TK_STRING;
         cg_str = (char*)vs;
         return PickStringCG((char*)vs, 0x22);
     }
     
-    if (a1 == '{') { // {"〜"}
+    if (cur_char == '{') { // {"〜"}
         if (vs[1] == 0x22) {
             vs += 2;
             if (*vs == 0) {
@@ -554,7 +547,7 @@ char* CToken::GetTokenCG(char* str, int option) {
         }
     }
     
-    if (a1 == 0x27) { // '〜'
+    if (cur_char == 0x27) { // '〜'
         char* p;
         vs++;
         cg_str = (char*)vs;
@@ -564,46 +557,46 @@ char* CToken::GetTokenCG(char* str, int option) {
         return p;
     }
     
-    if ((a1 == ':') || (a1 == '{') || (a1 == '}')) { // multi statement
+    if ((cur_char == ':') || (cur_char == '{') || (cur_char == '}')) { // multi statement
         cg_str = (char*)s2;
         ttype = TK_SEPARATE;
-        cg_str[0] = a1;
+        cg_str[0] = cur_char;
         cg_str[1] = 0;
         return (char*)vs + 1;
     }
     
-    if (a1 == '0') {
-        a2 = tolower(vs[1]);
-        if (a2 == 'x') {
+    if (cur_char == '0') {
+        next_char = tolower(vs[1]);
+        if (next_char == 'x') {
             vs++;
-            a1 = '$';
+            cur_char = '$';
         } // when hex code (0x)
-        if (a2 == 'b') {
+        if (next_char == 'b') {
             vs++;
-            a1 = '%';
+            cur_char = '%';
         } // when bin code (0b)
     }
     
-    if (a1 == '$') { // when hex code ($)
+    if (cur_char == '$') { // when hex code ($)
         vs++;
         val = 0;
         cg_str = (char*)s2;
         a = 0;
         while (1) {
-            a1 = toupper(*vs);
+            cur_char = toupper(*vs);
             b = -1;
-            if (a1 == 0)
+            if (cur_char == 0)
                 break;
-            if ((a1 >= 0x30) && (a1 <= 0x39))
-                b = a1 - 0x30;
-            if ((a1 >= 0x41) && (a1 <= 0x46))
-                b = a1 - 55;
-            if (a1 == '_')
+            if ((cur_char >= 0x30) && (cur_char <= 0x39))
+                b = cur_char - 0x30;
+            if ((cur_char >= 0x41) && (cur_char <= 0x46))
+                b = cur_char - 55;
+            if (cur_char == '_')
                 b = -2;
             if (b == -1)
                 break;
             if (b >= 0) {
-                cg_str[a++] = (char)a1;
+                cg_str[a++] = (char)cur_char;
                 val = (val << 4) + b;
             }
             vs++;
@@ -613,24 +606,24 @@ char* CToken::GetTokenCG(char* str, int option) {
         return (char*)vs;
     }
     
-    if (a1 == '%') { // when bin code (%)
+    if (cur_char == '%') { // when bin code (%)
         vs++;
         val = 0;
         cg_str = (char*)s2;
         a = 0;
         while (1) {
-            a1 = *vs;
+            cur_char = *vs;
             b = -1;
-            if (a1 == 0)
+            if (cur_char == 0)
                 break;
-            if ((a1 >= 0x30) && (a1 <= 0x31))
-                b = a1 - 0x30;
-            if (a1 == '_')
+            if ((cur_char >= 0x30) && (cur_char <= 0x31))
+                b = cur_char - 0x30;
+            if (cur_char == '_')
                 b = -2;
             if (b == -1)
                 break;
             if (b >= 0) {
-                cg_str[a++] = (char)a1;
+                cg_str[a++] = (char)cur_char;
                 val = (val << 1) + b;
             }
             vs++;
@@ -642,54 +635,54 @@ char* CToken::GetTokenCG(char* str, int option) {
     
     chk = 0;
     labmode = 0;
-    if (a1 < 0x30)
+    if (cur_char < 0x30)
         chk++;
-    if ((a1 >= 0x3a) && (a1 <= 0x3f))
+    if ((cur_char >= 0x3a) && (cur_char <= 0x3f))
         chk++;
-    if ((a1 >= 0x5b) && (a1 <= 0x5e))
+    if ((cur_char >= 0x5b) && (cur_char <= 0x5e))
         chk++;
-    if ((a1 >= 0x7b) && (a1 <= 0x7f))
+    if ((cur_char >= 0x7b) && (cur_char <= 0x7f))
         chk++;
     
     if (option & (GETTOKEN_EXPRBEG | GETTOKEN_LABEL)) {
-        if (a1 == '*') { // ラベル
-            a2 = vs[1];
+        if (cur_char == '*') { // ラベル
+            next_char = vs[1];
             b = 0;
-            if (a2 < 0x30)
+            if (next_char < 0x30)
                 b++;
-            if ((a2 >= 0x30) && (a2 <= 0x3f))
+            if ((next_char >= 0x30) && (next_char <= 0x3f))
                 b++;
-            if ((a2 >= 0x5b) && (a2 <= 0x5e))
+            if ((next_char >= 0x5b) && (next_char <= 0x5e))
                 b++;
-            if ((a2 >= 0x7b) && (a2 <= 0x7f))
+            if ((next_char >= 0x7b) && (next_char <= 0x7f))
                 b++;
             if (b == 0) {
                 chk = 0;
                 labmode = 1;
                 vs++;
-                a1 = *vs;
+                cur_char = *vs;
             }
         }
     }
     
     int is_negative_number = 0;
-    if (option & GETTOKEN_EXPRBEG && a1 == '-') {
+    if (option & GETTOKEN_EXPRBEG && cur_char == '-') {
         is_negative_number = isdigit(vs[1]);
     }
     
-    if (is_negative_number || isdigit(a1)) { // when 0-9 numerical
+    if (is_negative_number || isdigit(cur_char)) { // when 0-9 numerical
         a = 0;
         chk = 0;
         if (is_negative_number) {
             vs++;
         }
         while (1) {
-            a1 = *vs;
+            cur_char = *vs;
             if (option & GETTOKEN_NOFLOAT) {
-                if ((a1 < 0x30) || (a1 > 0x39))
+                if ((cur_char < 0x30) || (cur_char > 0x39))
                     break;
             } else {
-                if (a1 == '.') {
+                if (cur_char == '.') {
                     chk++;
                     if (chk > 1) {
                         ttype = TK_ERROR;
@@ -697,31 +690,31 @@ char* CToken::GetTokenCG(char* str, int option) {
                         return (char*)vs;
                     }
                 } else {
-                    if ((a1 < 0x30) || (a1 > 0x39))
+                    if ((cur_char < 0x30) || (cur_char > 0x39))
                         break;
                 }
             }
-            s2[a++] = a1;
+            s2[a++] = cur_char;
             vs++;
         }
-        if ((a1 == 'f') || (a1 == 'd')) {
+        if ((cur_char == 'f') || (cur_char == 'd')) {
             chk = 1;
             vs++;
         }
-        if (a1 == 'e') { // 指数部を取り込む
+        if (cur_char == 'e') { // 指数部を取り込む
             chk = 1;
             s2[a++] = 'e';
             vs++;
-            a1 = *vs;
-            if ((a1 == '-') || (a1 == '+')) {
-                s2[a++] = a1;
+            cur_char = *vs;
+            if ((cur_char == '-') || (cur_char == '+')) {
+                s2[a++] = cur_char;
                 vs++;
             }
             while (1) {
-                a1 = *vs;
-                if ((a1 < 0x30) || (a1 > 0x39))
+                cur_char = *vs;
+                if ((cur_char < 0x30) || (cur_char > 0x39))
                     break;
-                s2[a++] = a1;
+                s2[a++] = cur_char;
                 vs++;
             }
         }
@@ -749,73 +742,73 @@ char* CToken::GetTokenCG(char* str, int option) {
     
     if (chk) { // 記号
         vs++;
-        a2 = *vs;
-        switch (a1) {
+        next_char = *vs;
+        switch (cur_char) {
             case '-':
-                if (a2 == '>') {
+                if (next_char == '>') {
                     vs++;
-                    a1 = 0x65;
+                    cur_char = 0x65;
                 } // '->'
                 break;
             case '!':
-                if (a2 == '=')
+                if (next_char == '=')
                     vs++;
                 break;
             case '<':
-                if (a2 == '<') {
+                if (next_char == '<') {
                     vs++;
-                    a1 = 0x63;
+                    cur_char = 0x63;
                 } // '<<'
-                if (a2 == '=') {
+                if (next_char == '=') {
                     vs++;
-                    a1 = 0x61;
+                    cur_char = 0x61;
                 } // '<='
                 break;
             case '>':
-                if (a2 == '>') {
+                if (next_char == '>') {
                     vs++;
-                    a1 = 0x64;
+                    cur_char = 0x64;
                 } // '>>'
-                if (a2 == '=') {
+                if (next_char == '=') {
                     vs++;
-                    a1 = 0x62;
+                    cur_char = 0x62;
                 } // '>='
                 break;
             case '=':
-                if (a2 == '=') {
+                if (next_char == '=') {
                     vs++;
                 } // '=='
                 break;
             case '|':
-                if (a2 == '|') {
+                if (next_char == '|') {
                     vs++;
                 } // '||'
                 break;
             case '&':
-                if (a2 == '&') {
+                if (next_char == '&') {
                     vs++;
                 } // '&&'
                 break;
         }
         ttype = TK_NONE;
-        val = (int)a1;
+        val = (int)cur_char;
         return (char*)vs;
     }
     
     a = 0;
     while (1) { // シンボル取り出し
-        a1 = *vs;
+        cur_char = *vs;
         // if (a1>=129) {
         //全角文字チェック＊
         //    if ((a1<=159)||(a1>=224)) {
-        skip = SkipMultiByte(a1); // 全角文字チェック
+        int skip = SkipMultiByte(cur_char); // 全角文字チェック
         if (skip) {
-            for (i = 0; i < (skip + 1); i++) {
+            for (int i = 0; i < (skip + 1); i++) {
                 NSLog(@"B:%s", str);
                 if (a < OBJNAME_MAX) {
-                    s2[a++] = a1;
+                    s2[a++] = cur_char;
                     vs++;
-                    a1 = *vs;
+                    cur_char = *vs;
                     // s2[a++] = a1; vs++;
                 } else {
                     // vs+=2;
@@ -844,19 +837,19 @@ char* CToken::GetTokenCG(char* str, int option) {
         //        a1=*vs; s2[a++]=a1; vs++;} else {vs+=2;} continue; }
         
         chk = 0;
-        if (a1 < 0x30)
+        if (cur_char < 0x30)
             chk++;
-        if ((a1 >= 0x3a) && (a1 <= 0x3f))
+        if ((cur_char >= 0x3a) && (cur_char <= 0x3f))
             chk++;
-        if ((a1 >= 0x5b) && (a1 <= 0x5e))
+        if ((cur_char >= 0x5b) && (cur_char <= 0x5e))
             chk++;
-        if ((a1 >= 0x7b) && (a1 <= 0x7f))
+        if ((cur_char >= 0x7b) && (cur_char <= 0x7f))
             chk++;
         if (chk)
             break;
         vs++;
         if (a < OBJNAME_MAX)
-            s2[a++] = a1;
+            s2[a++] = cur_char;
     }
     s2[a] = 0;
     
@@ -871,39 +864,37 @@ char* CToken::GetTokenCG(char* str, int option) {
     return (char*)vs;
 }
 
-//        stringデータのシンボル内容を返す
-//
+/// stringデータのシンボル内容を返す
+///
 char* CToken::GetSymbolCG(char* str) {
-    unsigned char* vs;
-    unsigned char a1;
+    unsigned char* vs = (unsigned char*)str;
+    unsigned char cur_char;
     int a, chk, labmode;
-    int skip, i;
     
-    vs = (unsigned char*)str;
     if (vs == NULL)
         return NULL; // already end
     
     while (1) {
-        a1 = *vs;
-        if ((a1 != 32) && (a1 != '\t')) { // space,tab以外か?
+        cur_char = *vs;
+        if ((cur_char != 32) && (cur_char != '\t')) { // space,tab以外か?
             break;
         }
         vs++;
     }
     
-    if (a1 < 0x20) { // 無効なコード
+    if (cur_char < 0x20) { // 無効なコード
         return NULL;
     }
     
     chk = 0;
     labmode = 0;
-    if (a1 < 0x30)
+    if (cur_char < 0x30)
         chk++;
-    if ((a1 >= 0x3a) && (a1 <= 0x3f))
+    if ((cur_char >= 0x3a) && (cur_char <= 0x3f))
         chk++;
-    if ((a1 >= 0x5b) && (a1 <= 0x5e))
+    if ((cur_char >= 0x5b) && (cur_char <= 0x5e))
         chk++;
-    if ((a1 >= 0x7b) && (a1 <= 0x7f))
+    if ((cur_char >= 0x7b) && (cur_char <= 0x7f))
         chk++;
     
     if (chk) { // 記号
@@ -912,16 +903,16 @@ char* CToken::GetSymbolCG(char* str) {
     
     a = 0;
     while (1) { // シンボル取り出し
-        a1 = *vs;
+        cur_char = *vs;
         // if (a1>=129) {				// 全角文字チェック
         //    if ((a1<=159)||(a1>=224)) {
-        skip = SkipMultiByte(a1); // 全角文字チェック
+        int skip = SkipMultiByte(cur_char); // 全角文字チェック
         if (skip) {
-            for (i = 0; i < (skip + 1); i++) {
+            for (int i = 0; i < (skip + 1); i++) {
                 if (a < OBJNAME_MAX) {
-                    s2[a++] = a1;
+                    s2[a++] = cur_char;
                     vs++;
-                    a1 = *vs;
+                    cur_char = *vs;
                     // s2[a++] = a1; vs++;
                 } else {
                     // vs+=2;
@@ -932,19 +923,19 @@ char* CToken::GetSymbolCG(char* str) {
         }
         
         chk = 0;
-        if (a1 < 0x30)
+        if (cur_char < 0x30)
             chk++;
-        if ((a1 >= 0x3a) && (a1 <= 0x3f))
+        if ((cur_char >= 0x3a) && (cur_char <= 0x3f))
             chk++;
-        if ((a1 >= 0x5b) && (a1 <= 0x5e))
+        if ((cur_char >= 0x5b) && (cur_char <= 0x5e))
             chk++;
-        if ((a1 >= 0x7b) && (a1 <= 0x7f))
+        if ((cur_char >= 0x7b) && (cur_char <= 0x7f))
             chk++;
         if (chk)
             break;
         vs++;
         if (a < OBJNAME_MAX)
-            s2[a++] = a1;
+            s2[a++] = cur_char;
     }
     s2[a] = 0;
     return (char*)s2;
@@ -952,11 +943,10 @@ char* CToken::GetSymbolCG(char* str) {
 
 //-----------------------------------------------------------------------------
 
-//        HSP3Codeを展開する(パラメーター)
-//
+/// HSP3Codeを展開する(パラメーター)
+///
 void CToken::GenerateCodePRM(void) {
-    int ex;
-    ex = 0;
+    int ex = 0;
     while (1) {
         if (ttype == TK_NONE) {
             if (val == ',') { // 先頭が','の場合は省略
@@ -1006,12 +996,12 @@ void CToken::GenerateCodePRM(void) {
     }
 }
 
-//        HSP3Codeを展開する(カッコ内のパラメーター)
-//        (戻り値 : exflg)
-//
+/// HSP3Codeを展開する(カッコ内のパラメーター)
+///
+/// 戻り値 : exflg
+///
 int CToken::GenerateCodePRMF(void) {
-    int ex;
-    ex = 0;
+    int ex = 0;
     while (1) {
         if (ttype == TK_NONE) {
             if (val == ')') { // ')'の場合は終了
@@ -1042,13 +1032,13 @@ int CToken::GenerateCodePRMF(void) {
     return 0;
 }
 
-//        HSP3Codeを展開する('.'から始まる配列内のパラメーター)
-//
+/// HSP3Codeを展開する('.'から始まる配列内のパラメーター)
+///
 void CToken::GenerateCodePRMF2(void) {
     int t;
-    int id, ex;
+    int id;
+    int ex = 0;
     int tmp;
-    ex = 0;
     while (1) {
         if (ttype >= TK_SEPARATE)
             break;
@@ -1109,11 +1099,11 @@ void CToken::GenerateCodePRMF2(void) {
     }
 }
 
-//        HSP3Codeを展開する('<'から始まる構造体参照元のパラメーター)
-//
+/// HSP3Codeを展開する('<'から始まる構造体参照元のパラメーター)
+///
 void CToken::GenerateCodePRMF3(void) {
-    int id, ex;
-    ex = 0;
+    int id;
+    int ex = 0;
     GetTokenCG(GETTOKEN_DEFAULT);
     if (ttype != TK_OBJ)
         throw CGERROR_PP_BAD_STRUCT_SOURCE;
@@ -1128,14 +1118,13 @@ void CToken::GenerateCodePRMF3(void) {
     GetTokenCG(GETTOKEN_DEFAULT);
 }
 
-//        HSP3Codeを展開する(構造体/配列指定パラメーター)
-//
+/// HSP3Codeを展開する(構造体/配列指定パラメーター)
+///
 int CToken::GenerateCodePRMF4(int t) {
     //	int t,id;
-    int ex;
+    int ex = 0;
     int tmp;
     
-    ex = 0;
     if (ttype == TK_NONE) {
         if (val == '.') {
             GetTokenCG(GETTOKEN_NOFLOAT);
@@ -1177,11 +1166,11 @@ int CToken::GenerateCodePRMF4(int t) {
     return 0;
 }
 
-//        HSP3Codeを展開する(->に続くメソッド名)
-//
+/// HSP3Codeを展開する(->に続くメソッド名)
+///
 void CToken::GenerateCodeMethod(void) {
-    int id, ex;
-    ex = 0;
+    int id;
+    int ex = 0;
     
     if (ttype >= TK_SEPARATE)
         throw CGERROR_SYNTAX;
@@ -1238,7 +1227,7 @@ void CToken::GenerateCodePRMN(void) {
             break;
         switch(ttype) {
             case TK_NONE:
-                if ( val == ',' ) {
+                if (val == ',') {
                     if ( ex & EXFLG_2 )
                         PutCS( TYPE_MARK, '?', ex );
                     ex |= EXFLG_2;
@@ -1285,14 +1274,13 @@ void CToken::GenerateCodePRMN(void) {
 }
 #endif
 
-//        HSP3Codeを展開する(ラベル)
-//
+/// HSP3Codeを展開する(ラベル)
+///
 void CToken::GenerateCodeLabel(char* keyname, int ex) {
     int id, t, i;
     char lname[128];
-    char* name;
+    char* name = keyname;
     
-    name = keyname;
     if (*name == '@') {
         switch (tolower(name[1])) {
             case 'f':
@@ -1320,15 +1308,15 @@ void CToken::GenerateCodeLabel(char* keyname, int ex) {
     PutCS(TYPE_LABEL, lb->GetOpt(id), ex);
 }
 
-//        HSP3Codeを展開する(変数ほか)
-//        (idはlabel ID)
-//
+/// HSP3Codeを展開する(変数ほか)
+///
+/// idはlabel ID
+///
 void CToken::GenerateCodeVAR(int id, int ex) {
-    int t;
-    t = lb->GetType(id);
+    int t = lb->GetType(id);
     if ((t == TYPE_XLABEL) || (t == TYPE_LABEL))
         throw CGERROR_LABELNAME;
-    //
+    
     PutCSSymbol(id, ex);
     GetTokenCG(GETTOKEN_DEFAULT);
     
@@ -1337,9 +1325,10 @@ void CToken::GenerateCodeVAR(int id, int ex) {
     GenerateCodePRMF4(t); // 構造体/配列のチェック
 }
 
-//        set 'if'&'else' command additional code
-//            mode/ 0=if 1=else
-//
+/// set 'if'&'else' command additional code
+///
+/// mode/ 0=if 1=else
+///
 void CToken::CheckCMDIF_Set(int mode) {
     if (iflev >= CG_IFLEV_MAX)
         throw CGERROR_IF_OVERFLOW;
@@ -1357,9 +1346,10 @@ void CToken::CheckCMDIF_Set(int mode) {
     // prt(tmp);
 }
 
-//        finish 'if'&'else' command
-//            mode/ 0=if 1=else
-//
+/// finish 'if'&'else' command
+///
+/// mode/ 0=if 1=else
+///
 void CToken::CheckCMDIF_Fin(int mode) {
     int a;
     short* p;
@@ -1392,8 +1382,8 @@ finag:
     }
 }
 
-//        内蔵命令生成時チェック
-//
+/// 内蔵命令生成時チェック
+///
 void CToken::CheckInternalIF(int opt) {
     if (opt) { // 'else'+offset
         if (iflev == 0)
@@ -1405,8 +1395,8 @@ void CToken::CheckInternalIF(int opt) {
     CheckCMDIF_Set(0); // normal if
 }
 
-//        命令生成時チェック(命令+命令セット)
-//
+/// 命令生成時チェック(命令+命令セット)
+///
 void CToken::CheckInternalListenerCMD(int opt) {
     int i, t, o;
     if (ttype != TK_OBJ)
@@ -1424,8 +1414,8 @@ void CToken::CheckInternalListenerCMD(int opt) {
     GetTokenCG(GETTOKEN_DEFAULT);
 }
 
-//        内蔵プログラム命令生成時チェック
-//
+/// 内蔵プログラム命令生成時チェック
+///
 void CToken::CheckInternalProgCMD(int opt, int orgcs) {
     int i;
     switch (opt) {
@@ -1508,15 +1498,15 @@ void CToken::CheckInternalProgCMD(int opt, int orgcs) {
     }
 }
 
-//        HSP3Codeを展開する(コマンド)
-//        (idはlabel ID)
-//
+/// HSP3Codeを展開する(コマンド)
+///
+/// idはlabel ID
+///
 void CToken::GenerateCodeCMD(int id) {
-    int t, opt;
-    int orgcs;
-    t = lb->GetType(id);
-    opt = lb->GetOpt(id);
-    orgcs = GetCS();
+    int t = lb->GetType(id);
+    int opt = lb->GetOpt(id);
+    int orgcs = GetCS();
+
     PutCSSymbol(id, EXFLG_1);
     if (t == TYPE_PROGCMD)
         CheckInternalProgCMD(opt, orgcs);
@@ -1533,18 +1523,18 @@ void CToken::GenerateCodeCMD(int id) {
     cg_lastval = opt;
 }
 
-//        HSP3Codeを展開する(代入)
-//        (idはlabel ID)
-//
+/// HSP3Codeを展開する(代入)
+///
+/// idはlabel ID
+///
 void CToken::GenerateCodeLET(int id) {
     int op;
-    int t;
+    int t = lb->GetType(id);
     int mcall;
     
-    t = lb->GetType(id);
     if ((t == TYPE_XLABEL) || (t == TYPE_LABEL))
         throw CGERROR_LABELNAME;
-    //
+    
     mcall = 0;
     GetTokenCG(GETTOKEN_DEFAULT);
     
@@ -1600,8 +1590,8 @@ void CToken::GenerateCodeLET(int id) {
     GenerateCodePRM();
 }
 
-//        HSP3Codeを展開する(regcmd)
-//
+/// HSP3Codeを展開する(regcmd)
+///
 void CToken::GenerateCodePP_regcmd(void) {
     char cmd[1024];
     char cmd2[1024];
@@ -1645,8 +1635,8 @@ void CToken::GenerateCodePP_regcmd(void) {
     // Mesf( "#regcmd [%d][%s]",cg_pptype, cmd );
 }
 
-//        HSP3Codeを展開する(cmd)
-//
+/// HSP3Codeを展開する(cmd)
+///
 void CToken::GenerateCodePP_cmd(void) {
     int id;
     char cmd[1024];
@@ -1670,8 +1660,8 @@ void CToken::GenerateCodePP_cmd(void) {
     // Mesf( "#%x:%d [%s]",cg_pptype, id, cmd );
 }
 
-//        HSP3Codeを展開する(uselib)
-//
+/// HSP3Codeを展開する(uselib)
+///
 void CToken::GenerateCodePP_uselib(void) {
     GetTokenCG(GETTOKEN_DEFAULT);
     cg_libname[0] = 0;
@@ -1683,8 +1673,8 @@ void CToken::GenerateCodePP_uselib(void) {
     cg_libmode = CG_LIBMODE_DLLNEW;
 }
 
-//        HSP3Codeを展開する(usecom)
-//
+/// HSP3Codeを展開する(usecom)
+///
 void CToken::GenerateCodePP_usecom(void) {
     int i, prmid;
     char libname[1024];
@@ -1731,8 +1721,8 @@ void CToken::GenerateCodePP_usecom(void) {
     // Mesf( "#usecom %s [%s][%s]",libname,clsname,iidname );
 }
 
-//        HSP3Codeを展開する(func)
-//
+/// HSP3Codeを展開する(func)
+///
 void CToken::GenerateCodePP_func(int deftype) {
     int warn, i, t, subid, otflag;
     int ref;
@@ -1885,8 +1875,8 @@ void CToken::GenerateCodePP_func(int deftype) {
     // Mesf( "#func [%s][%s][%d]",fbase, fname, i );
 }
 
-//        HSP3Codeを展開する(comfunc)
-//
+/// HSP3Codeを展開する(comfunc)
+///
 void CToken::GenerateCodePP_comfunc(void) {
     int i, t, subid, imp_index;
     char fbase[1024];
@@ -1944,8 +1934,8 @@ void CToken::GenerateCodePP_comfunc(void) {
     // Mesf( "#comfunc [%s][%d][%d]",fbase, imp_index, i );
 }
 
-//        パラメーター名を認識する(deffunc)
-//
+/// パラメーター名を認識する(deffunc)
+///
 int CToken::GetParameterTypeCG(char* name) {
     if (!strcmp(cg_str, "int"))
         return MPTYPE_INUM;
@@ -1956,10 +1946,7 @@ int CToken::GetParameterTypeCG(char* name) {
         @autoreleasepool {
             AppDelegate* global =
             (AppDelegate*)[[NSApplication sharedApplication] delegate];
-            global.logString = [global.logString
-                                stringByAppendingFormat:
-                                @"警告:古いdeffunc表記があります 行%d.[%s]\n", cg_orgline,
-                                name];
+            global.logString = [global.logString stringByAppendingFormat:@"警告:古いdeffunc表記があります 行%d.[%s]\n", cg_orgline, name];
         }
         // Mesf( (char *)"警告:古いdeffunc表記があります 行%d.[%s]", cg_orgline, name );
 #else
@@ -1987,8 +1974,8 @@ int CToken::GetParameterTypeCG(char* name) {
     return MPTYPE_NONE;
 }
 
-//        パラメーター名を認識する(struct)
-//
+/// パラメーター名を認識する(struct)
+///
 int CToken::GetParameterStructTypeCG(char* name) {
     if (!strcmp(cg_str, "int"))
         return MPTYPE_INUM;
@@ -2005,8 +1992,8 @@ int CToken::GetParameterStructTypeCG(char* name) {
     return MPTYPE_NONE;
 }
 
-//        パラメーター名を認識する(func)
-//
+/// パラメーター名を認識する(func)
+///
 int CToken::GetParameterFuncTypeCG(char* name) {
     if (!strcmp(cg_str, "int"))
         return MPTYPE_INUM;
@@ -2048,8 +2035,8 @@ int CToken::GetParameterFuncTypeCG(char* name) {
     return MPTYPE_NONE;
 }
 
-//        戻り値のパラメーター名を認識する(defcfunc)
-//
+/// 戻り値のパラメーター名を認識する(defcfunc)
+///
 int CToken::GetParameterResTypeCG(char* name) {
     if (!strcmp(cg_str, "int"))
         return MPTYPE_INUM;
@@ -2068,19 +2055,18 @@ int CToken::GetParameterResTypeCG(char* name) {
 #define GET_FI(n) (((STRUCTDAT*)fi_buf->GetBuffer()) + (n))
 #define STRUCTDAT_INDEX_DUMMY ((short)0x8000)
 
-//        HSP3Codeを展開する(deffunc / defcfunc)
-//
+/// HSP3Codeを展開する(deffunc / defcfunc)
+///
 void CToken::GenerateCodePP_deffunc0(int is_command) {
     int i, t, ot, prmid, subid;
     int index;
     int funcflag;
     int regflag;
-    int prep;
+    int prep = 0;
     char funcname[1024];
     STRUCTPRM* prm;
     STRUCTDAT* st;
     
-    prep = 0;
     GetTokenCG(GETTOKEN_DEFAULT);
     if (ttype != TK_OBJ)
         throw CGERROR_PP_NAMEREQUIRED;
@@ -2095,8 +2081,7 @@ void CToken::GenerateCodePP_deffunc0(int is_command) {
     strncpy(funcname, cg_str, 1023);
     
     for (i = 0; i < cg_localcur; i++) {
-        lb->SetFlag(cg_localstruct[i],
-                    -1); // 以前に指定されたパラメーター名を削除する
+        lb->SetFlag(cg_localstruct[i], -1); // 以前に指定されたパラメーター名を削除する
     }
     cg_localcur = 0;
     funcflag = 0;
@@ -2211,8 +2196,8 @@ void CToken::GenerateCodePP_defcfunc(void) {
     GenerateCodePP_deffunc0(0);
 }
 
-//        HSP3Codeを展開する(module)
-//
+/// HSP3Codeを展開する(module)
+///
 void CToken::GenerateCodePP_module(void) {
     int i, ref;
     char* modname;
@@ -2248,8 +2233,8 @@ void CToken::GenerateCodePP_module(void) {
     }
 }
 
-//        HSP3Codeを展開する(struct)
-//
+/// HSP3Codeを展開する(struct)
+///
 void CToken::GenerateCodePP_struct(void) {
     int i, t, prmid;
     char funcname[1024];
@@ -2302,12 +2287,12 @@ void CToken::GenerateCodePP_struct(void) {
     PutStructEnd(funcname, STRUCTDAT_INDEX_STRUCT, 0, 0);
 }
 
-//        HSP3Codeを展開する(defint,defdouble,defnone)
-//
+/// HSP3Codeを展開する(defint,defdouble,defnone)
+///
 void CToken::GenerateCodePP_defvars(int fixedvalue) {
     int id;
-    int prms;
-    prms = 0;
+    int prms = 0;
+    
     while (1) {
         GetTokenCG(GETTOKEN_DEFAULT);
         if (ttype >= TK_EOL)
@@ -2335,11 +2320,10 @@ void CToken::GenerateCodePP_defvars(int fixedvalue) {
     }
 }
 
-//        変数の固定型を設定する
-//
+/// 変数の固定型を設定する
+///
 int CToken::SetVarsFixed(char* varname, int fixedvalue) {
-    int id;
-    id = lb->Search(varname);
+    int id = lb->Search(varname);
     if (id < 0) {
         id = lb->Regist(varname, TYPE_VAR, cg_valcnt, cg_orgfile, cg_orgline);
         cg_valcnt++;
@@ -2348,10 +2332,9 @@ int CToken::SetVarsFixed(char* varname, int fixedvalue) {
     return id;
 }
 
-//        HSP3Codeを展開する(プリプロセスコマンド)
-//
+/// HSP3Codeを展開する(プリプロセスコマンド)
+///
 void CToken::GenerateCodePP(char* buf) {
-    int i;
     GetTokenCG(GETTOKEN_DEFAULT); // 最初の'#'を読み飛ばし
     GetTokenCG(GETTOKEN_DEFAULT);
     
@@ -2366,7 +2349,7 @@ void CToken::GenerateCodePP(char* buf) {
         if (ttype == TK_STRING) {
             strcpy(cg_orgfile, cg_str);
             if (cg_debug) {
-                i = PutDSBuf(cg_str);
+                int i = PutDSBuf(cg_str);
                 PutDI(254, i, cg_orgline); // ファイル名をデバッグ情報として登録
             }
         } else {
@@ -2449,9 +2432,10 @@ void CToken::GenerateCodePP(char* buf) {
     }
 }
 
-//        文字列(１行単位)からHSP3Codeを展開する
-//        (エラー発生時は例外が発生します)
-//
+/// 文字列(１行単位)からHSP3Codeを展開する
+///
+/// エラー発生時は例外が発生します
+///
 int CToken::GenerateCodeSub(void) {
     int i, t;
     //	char tmp[512];
@@ -2551,14 +2535,13 @@ int CToken::GenerateCodeSub(void) {
     return ttype;
 }
 
-//        vs_wpから１行を取得する
-//
+/// vs_wpから１行を取得する
+///
 char* CToken::GetLineCG(void) {
     char* pp;
-    unsigned char* p;
+    unsigned char* p = cg_wp;
     unsigned char a1;
-    int skip;
-    p = cg_wp;
+
     if (p == NULL)
         return NULL;
     
@@ -2578,7 +2561,7 @@ char* CToken::GetLineCG(void) {
         //        if ( *p >= 32 ) { p++; continue; }
         //    }
         //}
-        skip = SkipMultiByte(a1); // 全角文字チェック
+        int skip = SkipMultiByte(a1); // 全角文字チェック
         if (skip) {
             p += skip + 1;
             continue;
@@ -2624,14 +2607,17 @@ char* CToken::GetLineCG(void) {
     return pp;
 }
 
-//        プロック単位でHSP3Codeを展開する
-//        (エラー発生時は例外が発生します)
-//
+/// プロック単位でHSP3Codeを展開する
+///
+/// エラー発生時は例外が発生します
+///
 int CToken::GenerateCodeBlock(void) {
-    int res, id, ff;
+    int id;
+    int ff;
     char a1;
     char* p;
-    res = GenerateCodeSub();
+    int res = GenerateCodeSub();
+
     if (res == TK_EOF)
         return res;
     if (res == TK_EOL) {
@@ -2691,8 +2677,8 @@ int CToken::GenerateCodeBlock(void) {
     return res;
 }
 
-//        プリプロセス時のラベル情報から関数を定義
-//
+/// プリプロセス時のラベル情報から関数を定義
+///
 void CToken::RegisterFuncLabels(void) {
     if (tmp_lb == NULL)
         return;
@@ -2710,9 +2696,10 @@ void CToken::RegisterFuncLabels(void) {
     }
 }
 
-//        ソースをHSP3Codeに展開する
-//        (ソースのバッファを書き換えるので注意)
-//
+/// ソースをHSP3Codeに展開する
+///
+/// ソースのバッファを書き換えるので注意
+///
 int CToken::GenerateCodeMain(CMemBuf* buf) {
     int a;
     line = 0;
@@ -2821,11 +2808,12 @@ int CToken::GenerateCodeMain(CMemBuf* buf) {
     return 0;
 }
 
-//        Register command code
-//        (HSP ver3.3以降用)
-//            type=0-0xfff ( -1 to debug line info )
-//            val=16,32bit length supported
-//
+/// Register command code
+///
+/// HSP ver3.3以降用
+/// type=0-0xfff ( -1 to debug line info
+/// val=16,32bit length supported
+///
 void CToken::PutCS(int type, int value, int exflg) {
     unsigned int v = (unsigned int)value;
     int a = (type & CSTYPE) | exflg;
@@ -2838,14 +2826,14 @@ void CToken::PutCS(int type, int value, int exflg) {
     }
 }
 
-//        Register command code (double)
-//
+/// Register command code (double)
+///
 void CToken::PutCS(int type, double value, int exflg) {
     PutCS(type, PutDS(value), exflg);
 }
 
-//        まだ定義されていない関数の呼び出しがあったら仮登録する
-//
+/// まだ定義されていない関数の呼び出しがあったら仮登録する
+///
 void CToken::PutCSSymbol(int label_id, int exflag) {
     int type = lb->GetType(label_id);
     int value = lb->GetOpt(label_id);
@@ -2865,14 +2853,14 @@ void CToken::PutCSSymbol(int label_id, int exflag) {
     PutCS(type, value, exflag);
 }
 
-//        Get current CS index
-//
+/// 現在のコードセグメントのインデックスを取得する
+///
 int CToken::GetCS(void) {
     return (cs_buf->GetSize()) >> 1;
 }
 
-//        Register doubles to data segment
-//
+/// データセグメントにdoubleを登録する
+///
 int CToken::PutDS(double value) {
     int i = ds_buf->GetSize();
     
@@ -2893,19 +2881,20 @@ int CToken::PutDS(double value) {
     return i;
 }
 
-//        Register strings to data segment (script string)
-//
+/// データセグメント（スクリプト文字列）に文字列を登録する。
+///
 int CToken::PutDS(char* str) {
     return PutDSStr(str, cg_utf8out != 0);
 }
 
-//        Register strings to data segment (direct)
-//
+/// データセグメントに文字列を登録する（直接）
+///
 int CToken::PutDSBuf(char* str) {
     return PutDSStr(str, false);
 }
 
-//        Register strings to data segment (caching)
+/// データセグメントに文字列を登録する（キャッシュ）
+///
 int CToken::PutDSStr(char* str, bool converts_to_utf8) {
     char* p;
     
@@ -2942,44 +2931,40 @@ int CToken::PutDSStr(char* str, bool converts_to_utf8) {
     return i;
 }
 
-//        Register strings to data segment (direct)
-//
+/// データセグメントに文字列を登録する（直接）
+///
 int CToken::PutDSBuf(char* str, int size) {
-    int i;
-    i = ds_buf->GetSize();
+    int i = ds_buf->GetSize();
     ds_buf->PutData(str, size);
     return i;
 }
 
-//        Register object temp
-//
+/// 一時的なオブジェクトを登録する
+///
 int CToken::PutOT(int value) {
-    int i;
-    i = ot_buf->GetSize() / sizeof(int);
+    int i = ot_buf->GetSize() / sizeof(int);
     ot_buf->Put(value);
     return i;
 }
 
-//        Modify object temp
-//
+/// 一時的なオブジェクトを修正する
+///
 void CToken::SetOT(int id, int value) {
-    int* p;
-    p = (int*)(ot_buf->GetBuffer());
+    int* p = (int*)(ot_buf->GetBuffer());
     p[id] = value;
 }
 
-//        Debug code register
-//
-//        mem_di formats :
-//            0-250           = offset to old mcs
-//            252,x(16)       = big offset
-//            253,x(24),y(16) = used val (x=mds ptr.)
-//            254,x(24),y(16) = new filename accepted (x=mds ptr.)
-//            255             = end of debug data
-//
+/// デバッグコードレジスタ
+///
+/// mem_di formats :
+/// 0-250           = offset to old mcs
+/// 252,x(16)       = big offset
+/// 253,x(24),y(16) = used val (x=mds ptr.)
+/// 254,x(24),y(16) = new filename accepted (x=mds ptr.)
+/// 255             = end of debug data
+///
 void CToken::PutDI(void) {
-    int ofs;
-    ofs = (int)(GetCS() - cg_lastcs);
+    int ofs = (int)(GetCS() - cg_lastcs);
     if (ofs <= 250) {
         di_buf->Put((unsigned char)ofs);
     } else {
@@ -2990,10 +2975,11 @@ void CToken::PutDI(void) {
     cg_lastcs = GetCS();
 }
 
-//        special Debug code register
-//            in : -1=end of code
-//                254=(a=file ds ptr./subid=line num.)
-//
+/// 特殊デバッグコードレジスタ
+///
+/// in : -1=end of code
+/// 254=(a=file ds ptr./subid=line num.)
+///
 void CToken::PutDI(int dbg_code, int a, int subid) {
     if (dbg_code < 0) {
         di_buf->Put((unsigned char)255);
@@ -3008,8 +2994,8 @@ void CToken::PutDI(int dbg_code, int a, int subid) {
     }
 }
 
-//        Debug info register for vals
-//
+/// 変数用デバッグ情報レジスタ
+///
 void CToken::PutDIVars(void) {
     int a, i, id;
     LABOBJ* lab;
@@ -3044,7 +3030,8 @@ void CToken::PutDIVars(void) {
     }
 }
 
-// ラベル名の情報を出力する
+/// ラベル名の情報を出力する
+///
 void CToken::PutDILabels(void) {
     int num = ot_buf->GetSize() / sizeof(int);
     int* table = new int[num];
@@ -3067,7 +3054,8 @@ void CToken::PutDILabels(void) {
     delete[] table;
 }
 
-// 引数名の情報を出力する
+/// 引数名の情報を出力する
+///
 void CToken::PutDIParams(void) {
     di_buf->Put((unsigned char)255);
     for (int i = 0; i < lb->GetNumEntry(); i++) {
@@ -3093,12 +3081,6 @@ char* CToken::GetDS(int ptr) {
     return p;
 }
 
-/*
- rev 54
- mingw : warning : i は未初期化で使用されうる
- に対処。
- */
-
 int CToken::PutLIB(int flag, char* name) {
     int a, i = -1, p;
     LIBDAT lib;
@@ -3123,7 +3105,7 @@ int CToken::PutLIB(int flag, char* name) {
     }
     if (flag == LIBDAT_FLAG_COMOBJ) {
         COM_GUID guid;
-        if (ConvertIID(&guid, name))
+        if ([cwrap ConvertIID:&guid name:name])
             return -1;
         i = PutDSBuf((char*)&guid, sizeof(COM_GUID));
     }
@@ -3150,11 +3132,8 @@ void CToken::SetLIBIID(int id, char* clsid) {
 }
 
 int CToken::PutStructParam(short mptype, int extype) {
-    int size;
-    int i;
+    int i = mi_buf->GetSize() / sizeof(STRUCTPRM);
     STRUCTPRM prm;
-    
-    i = mi_buf->GetSize() / sizeof(STRUCTPRM);
     
     prm.mptype = mptype;
     if (extype == STRUCTPRM_SUBID_STID) {
@@ -3164,7 +3143,7 @@ int CToken::PutStructParam(short mptype, int extype) {
     }
     prm.offset = cg_stsize;
     
-    size = 0;
+    int size = 0;
     switch (mptype) {
         case MPTYPE_INUM:
         case MPTYPE_STRUCT:
@@ -3214,10 +3193,8 @@ int CToken::PutStructParam(short mptype, int extype) {
 }
 
 int CToken::PutStructParamTag(void) {
-    int i;
+    int i = mi_buf->GetSize() / sizeof(STRUCTPRM);
     STRUCTPRM prm;
-    
-    i = mi_buf->GetSize() / sizeof(STRUCTPRM);
     
     prm.mptype = MPTYPE_STRUCTTAG;
     prm.subid = (short)GET_FI_SIZE();
@@ -3234,8 +3211,8 @@ void CToken::PutStructStart(void) {
     cg_stptr = mi_buf->GetSize() / sizeof(STRUCTPRM);
 }
 
-//        STRUCTDATを登録する(モジュール用)
-//
+/// STRUCTDATを登録する(モジュール用)
+///
 int CToken::PutStructEnd(int i, char* name, int libindex, int otindex, int funcflag) {
     STRUCTDAT st;
     st.index = libindex;
@@ -3263,8 +3240,8 @@ int CToken::PutStructEnd(char* name, int libindex, int otindex, int funcflag) {
     return PutStructEnd(i, name, libindex, otindex, funcflag);
 }
 
-//        STRUCTDATを登録する(DLL用)
-//
+/// STRUCTDATを登録する(DLL用)
+///
 int CToken::PutStructEndDll(char* name, int libindex, int subid, int otindex) {
     int i;
     STRUCTDAT st;
@@ -3312,9 +3289,9 @@ int CToken::GenerateCode(char* fname, char* oname, int mode) {
     return GenerateCode(&srcbuf, oname, mode);
 }
 
-//        ファイルをHSP3Codeに展開する
-//        mode            Debug code (0=off 1=on)
-//
+/// ファイルをHSP3Codeに展開する
+/// mode            Debug code (0=off 1=on)
+///
 int CToken::GenerateCode(CMemBuf* srcbuf, char* oname, int mode) {
     int i, orgcs, res;
     int adjsize;
@@ -3344,7 +3321,7 @@ int CToken::GenerateCode(CMemBuf* srcbuf, char* oname, int mode) {
     if (res) {
         //		エラー終了
         char tmp[512];
-        CStrNote note;
+        //CStrNote note;
         CMemBuf srctmp;
         // Mesf( (char *)"%s(%d) : error %d : %s (%d行目)", cg_orgfile, cg_orgline,
         // res, cg_geterror((CGERROR)res), cg_orgline );
@@ -3408,8 +3385,12 @@ int CToken::GenerateCode(CMemBuf* srcbuf, char* oname, int mode) {
                                 nsstr_error_message, cg_orgline];
             
             if (cg_errline > 0) {
-                note.Select(bakbuf.GetBuffer());
-                note.GetLine(tmp, cg_errline - 1, 510);
+                
+                [cwrap Select:bakbuf.GetBuffer()];
+                [cwrap GetLine2:tmp line:cg_errline - 1 max:510];
+                //note.Select(bakbuf.GetBuffer());
+                //note.GetLine(tmp, cg_errline - 1, 510);
+                
                 global.logString =
                 [global.logString stringByAppendingFormat:@"--> %s\n", tmp];
                 

@@ -24,5 +24,4 @@ static void usage1( void );
 
 @end
 
-
 #endif /* runCompiler_h */

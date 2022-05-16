@@ -1,12 +1,7 @@
 
 //
-//		Label Manager class
-//			onion software/onitama 2002/2
+// ラベルマネージャー
 //
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 
 #include "label.h"
 
@@ -72,8 +67,11 @@ int CLabel::GetHash( char *str ) {
     return hash;
 }
 
-/// string compare (0=not same/-1=same)
+/// string compare
+///
+/// (0=not same/-1=same)
 /// (case sensitive)
+///
 int CLabel::StrCmp( char *str1, char *str2 ) {
     char cur_char;
     int i = 0;
@@ -139,20 +137,20 @@ int CLabel::GetEternal(int id) {
     return mem_lab[id].eternal;
 }
 
-//        set eternal flag
-//
+/// set eternal flag
+///
 void CLabel::SetFlag(int id, int val) {
     mem_lab[id].flag = val;
 }
 
-//        set option
-//
+/// set option
+///
 void CLabel::SetOpt(int id, int val) {
     mem_lab[id].opt = val;
 }
 
-//        set data
-//
+/// set data
+///
 void CLabel::SetData(int id, char *str) {
     LABOBJ *lab = &mem_lab[id];
     if (str == NULL) {
@@ -173,20 +171,20 @@ void CLabel::SetData2(int id, char *str, int size) {
     lab->data2 = RegistTable(str, size);
 }
 
-//        set init flag
-//
+/// set init flag
+///
 void CLabel::SetInitFlag(int id, int val) {
     mem_lab[id].init = (short)val;
 }
 
-//        set force type
-//
+/// set force type
+///
 void CLabel::SetForceType(int id, int val) {
     mem_lab[id].typefix = (short)val;
 }
 
-//        object name search
-//
+/// object name search
+///
 int CLabel::Search(char *oname) {
     if (cur == 0)
         return -1;
@@ -293,10 +291,9 @@ void CLabel::DisposeSymbolBuffer(void) {
 }
 
 char *CLabel::ExpandSymbolBuffer(int size) {
-    char *p;
+    char *p = symbol + symcur;
     int nsize = ((size + 7) >> 3)  << 3;
     size = nsize;
-    p = symbol + symcur;
     symcur += size;
     if (symcur >= maxsymbol) {
         MakeSymbolBuffer();
@@ -353,9 +350,9 @@ char *CLabel::RegistSymbol(char *str) {
     char *pmaster = p;
     char *src = str;
     char cur_char;
-    char a2 = *src;
-    int i = 0;
+    //char a2 = *src;
     //int hush;
+    int i = 0;
     while(1) {
         cur_char = *src++;
         *p++ = cur_char;
@@ -438,41 +435,45 @@ int CLabel::RegistList(char **list, char *modname) {
 ///
 int CLabel::RegistList2(char **list, char *modname) {
     char *p;
-    char **plist;
+    char **plist = list;
     char tmp[256];
-    int id, i, type, opt;
-    i = 1;
-    plist = list;
+    int id;
+    int i = 1;
+    int type;
+    int opt;
+    
     while(1) {
         p = tmp;
         strcpy(p, plist[i++]);
         if (p[0] != '$')
             break;
         p++;
-        p = GetListToken( p );
+        p = GetListToken(p);
         opt = HtoI();
-        p = GetListToken( p );
-        type = atoi( token );
-        p = GetListToken( p );
+        p = GetListToken(p);
+        type = atoi(token);
+        p = GetListToken(p);
         //id = Regist( token, type, opt );
 
-        id = Regist( token, LAB_TYPE_PPINTMAC, 0 );		// 内部マクロとして定義
-        strcat( token, modname );
-        SetData( id, token );
-        SetEternal( id );
+        id = Regist(token, LAB_TYPE_PPINTMAC, 0); // 内部マクロとして定義
+        strcat(token, modname);
+        SetData(id, token);
+        SetEternal(id);
     }
     return 0;
 }
 
 /// キーワードリストを色分けテーブル用に登録する
 ///
-int CLabel::RegistList3( char **list ) {
+int CLabel::RegistList3(char **list) {
     char *p;
-    char **plist;
+    char **plist = list;
     char tmp[256];
-    int id, i, type, opt;
+    int id;
+    int i = 1;
+    int type;
+    int opt;
     static int kwcnv[] = {
-        
         LAB_TYPE_PPEX_PRECMD,	//TYPE_MARK 0
         LAB_TYPE_PPMAC,			//TYPE_VAR 1
         LAB_TYPE_PPEX_INTCMD,	//TYPE_STRING 2
@@ -492,36 +493,31 @@ int CLabel::RegistList3( char **list ) {
         LAB_TYPE_PPEX_INTCMD,	//TYPE_DLLFUNC 16
         LAB_TYPE_PPEX_EXTCMD,	//TYPE_DLLCTRL 17
         LAB_TYPE_PPEX_INTCMD,	//TYPE_USERDEF 18
-        
     };
-    
-    i = 1;
-    plist = list;
     while(1) {
         p = tmp;
-        strcpy( p, plist[i++] );
+        strcpy(p, plist[i++]);
         if (p[0]!='$')
             break;
         p++;
-        p = GetListToken( p );
+        p = GetListToken(p);
         opt = HtoI();
-        p = GetListToken( p );
-        type = atoi( token );
-        p = GetListToken( p );
-        id = Regist( token, kwcnv[ type ], opt );
-        SetEternal( id );
+        p = GetListToken(p);
+        type = atoi(token);
+        p = GetListToken(p);
+        id = Regist(token, kwcnv[type], opt);
+        SetEternal(id);
     }
     return 0;
 }
-
 
 //-------------------------------------------------------------
 //		For debug
 //-------------------------------------------------------------
 
-char *CLabel::Prt( char *str, char *str2 ) {
+char *CLabel::Prt(char *str, char *str2) {
     char *p = str;
-    strcpy( str, str2 );
+    strcpy(str, str2);
     p += strlen(str2);
     *p++ = 13;
     *p++ = 10;
@@ -633,20 +629,18 @@ void CLabel::DumpHSPLabel(char *str, int option, int maxsize) {
 
 /// 参照回数を+1する
 ///
-void CLabel::AddReference( int id ) {
+void CLabel::AddReference(int id) {
     LABOBJ *lab = &mem_lab[id];
     lab->ref++;
 }
 
 /// 参照回数を取得する(依存関係も含める)
 ///
-int CLabel::GetReference( int id ) {
-    int total;
-    LABREL *rel;
-    LABOBJ *lab=&mem_lab[id];
-    total = lab->ref;
-    rel = lab->rel;
-    if ( rel != NULL ) {
+int CLabel::GetReference(int id) {
+    LABOBJ *lab = &mem_lab[id];
+    LABREL *rel = lab->rel;
+    int total = lab->ref;
+    if (rel != NULL) {
         while(1) {
             total += GetReference(rel->rel_id);
             if (rel->link == NULL)
@@ -658,12 +652,12 @@ int CLabel::GetReference( int id ) {
 }
 
 /// ラベル依存の特定IDデータがあるかを検索
-/// (0=なし/1=あり)
 ///
-int CLabel::SearchRelation( int id, int rel_id ) {
-    LABREL *tmp;
+/// 0=なし/1=あり
+///
+int CLabel::SearchRelation(int id, int rel_id) {
     LABOBJ *lab = &mem_lab[id];
-    tmp = lab->rel;
+    LABREL *tmp = lab->rel;
     if (tmp == NULL)
         return 0;
     while(1) {
@@ -678,7 +672,7 @@ int CLabel::SearchRelation( int id, int rel_id ) {
 
 /// ラベル依存のIDデータを追加する
 ///
-void CLabel::AddRelation( int id, int rel_id ) {
+void CLabel::AddRelation(int id, int rel_id) {
     LABREL *rel;
     LABREL *tmp;
     
@@ -704,7 +698,7 @@ void CLabel::AddRelation( int id, int rel_id ) {
 }
 
 void CLabel::AddRelation( char *name, int rel_id ) {
-    int i = Search( name );
+    int i = Search(name);
     if (i < 0)
         return;
     AddRelation(i, rel_id);

@@ -1,9 +1,11 @@
-// notepad object related routines
+//
+// notepadオブジェクト関連ルーチン
+//
 
 #include <string.h>
 #include "strnote.h"
 
-/// aaa
+///
 CStrNote::CStrNote() {
     base = NULL;
     nulltmp[0] = 0;

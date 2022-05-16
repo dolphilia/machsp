@@ -12,10 +12,7 @@
 #define HSPVAR_FLAG_INT 4
 #define HSPVAR_FLAG_STRUCT 5
 #define HSPVAR_FLAG_COMSTRUCT 6
-
-//	7はVARIANTで予約済み
-
-#define HSPVAR_FLAG_USERDEF 8
+#define HSPVAR_FLAG_USERDEF 8 // 7はVARIANTで予約済み
 #define HSPVAR_FLAG_MAX 8
 
 #define HSPVAR_MODE_NONE -1
@@ -45,8 +42,7 @@
 typedef void * PDAT;							// データの実態へのポインタ
 typedef int APTR;								// 配列データへのオフセット値
 
-enum
-{
+enum {
     CALCCODE_ADD = 0,
     CALCCODE_SUB,
     CALCCODE_MUL,
@@ -66,11 +62,10 @@ enum
     CALCCODE_MAX
 };
 
-//	PVAL structure
-//
-typedef struct
-{
-    //	Memory Data structure (2.5 compatible)
+///	PVAL構造体
+///
+typedef struct {
+    //	メモリデータ構造 (2.5 compatible)
     //
     short	flag;		// type of val
     short	mode;		// mode (0=normal/1=clone/2=alloced)
@@ -89,10 +84,9 @@ typedef struct
 } PVal;
 
 
-//		command execute core function
-//
-typedef struct
-{
+/// コマンド実行のコア関数
+///
+typedef struct {
     //		データフィールド
     //
     short flag;							// 型タイプ値 (親アプリケーションで設定されます)
@@ -168,14 +162,13 @@ typedef void (* HSPVAR_COREFUNC) (HspVarProc *);
 extern PVal *mem_pval;
 #define HspVarCoreGetPVal( flag ) (&mem_pval[flag])
 
-
-//	flex value define
+//	flex値の定義
 //
 #define FLEXVAL_TYPE_NONE 0
 #define FLEXVAL_TYPE_ALLOC 1
 #define FLEXVAL_TYPE_CLONE 2
-typedef struct
-{
+
+typedef struct {
     short type;			// typeID
     short myid;			// 固有ID(未使用)
     short customid;		// structure ID
@@ -184,18 +177,15 @@ typedef struct
     void *ptr;			// data ptr
 } FlexValue;
 
-
-/*
-	typefunc
- 
-	基本タイプ HSPVAR_FLAG_STR 〜 HSPVAR_FLAG_DOUBLE
-	拡張タイプ HSPVAR_FLAG_USERDEF 以降
- 
-	式の評価でpval->ptを参照するため、常に配列0のポイントはpval->ptが指し示す必要がある。
- */
+//	typefunc
+//
+//	基本タイプ HSPVAR_FLAG_STR 〜 HSPVAR_FLAG_DOUBLE
+//	拡張タイプ HSPVAR_FLAG_USERDEF 以降
+//
+//	式の評価でpval->ptを参照するため、常に配列0のポイントはpval->ptが指し示す必要がある。
 
 
-//		Core System Main Function
+//	コアシステムの主な関数
 //
 void HspVarCoreInit( void );
 void HspVarCoreBye( void );
@@ -204,7 +194,7 @@ int HspVarCoreAddType();
 void HspVarCoreRegisterType( int flag, HSPVAR_COREFUNC func );
 HspVarProc *HspVarCoreSeekProc( const char *name );
 
-//		low level support functions
+//	低レベルのサポート関数
 //
 void HspVarCoreDup( PVal *pval, PVal *arg, APTR aptr );
 void HspVarCoreDupPtr( PVal *pval, int flag, void *ptr, int size );
@@ -217,7 +207,7 @@ void *HspVarCoreCnvPtr( PVal *pval, int flag );
 PDAT *HspVarCorePtrAPTR( PVal *pv, APTR ofs );
 void HspVarCoreArray( PVal *pval, int offset );
 
-//		macro for PVal
+// PVal用マクロ
 //
 #define HspVarCoreGetProc( flag ) (&hspvarproc[flag])
 #define HspVarCoreDispose( pv ) hspvarproc[(pv)->flag].Free(pv)
@@ -237,16 +227,13 @@ void HspVarCoreArray( PVal *pval, int offset );
 #define HspVarCoreCopyArrayInfo( pv, src ) (pv)->arraycnt = (src)->arraycnt;(pv)->offset = (src)->offset;(pv)->arraymul = (src)->arraymul;
 
 
-inline PDAT *HspVarCorePtrAPTR( PVal *pv, APTR ofs )
-{
-    //		変数データの実態ポインタを得る
-    //		(APTRとpvalから実態を求める)
-    //
+/// 変数データの実態ポインタを得る
+///
+/// (APTRとpvalから実態を求める)
+///
+inline PDAT *HspVarCorePtrAPTR( PVal *pv, APTR ofs ) {
     pv->offset=ofs;
     return hspvarproc[(pv)->flag].GetPtr(pv);
 }
-
-
-
 
 #endif

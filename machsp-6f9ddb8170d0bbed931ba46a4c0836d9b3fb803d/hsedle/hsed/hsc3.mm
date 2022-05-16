@@ -1,24 +1,26 @@
 
 //
-//		HSP compiler class rev.3
-//			onion software/onitama 2002/2
+// HSPコンパイラ
 //
+
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
 #import "hsp3config.h"
 #import "hsp3debug.h"
 #import "hsp3struct.h"
-#import "supio_linux.h"
+//#import "supio_linux.h"
 #import "hsc3.h"
 #import "membuf.h"
-#import "strnote.h"
+//#import "strnote.h"
 #import "label.h"
 #import "token.h"
-#import "localinfo.h"
+//#import "localinfo.h"
 #import "AppDelegate.h"
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
+
+#import "c_wrapper.h"
 
 extern char *hsp_prestr[];
 extern char *hsp_prepp[];
@@ -74,11 +76,11 @@ CHsc3::~CHsc3(void) {
 void CHsc3::AddSystemMacros(CToken *tk, int option) {
     process_option = option;
     if ((option & HSC3_OPT_NOHSPDEF) == 0) {
-        CLocalInfo linfo;
+        //CLocalInfo linfo;
         tk->RegistExtMacro((char *)"__hspver__", vercode);
         tk->RegistExtMacro((char *)"__hsp30__", (char *)"");
-        tk->RegistExtMacro((char *)"__date__", linfo.CurrentDate());
-        tk->RegistExtMacro((char *)"__time__", linfo.CurrentTime());
+        tk->RegistExtMacro((char *)"__date__", [cwrap CurrentDate]);//linfo.CurrentDate());
+        tk->RegistExtMacro((char *)"__time__", [cwrap CurrentTime]);//linfo.CurrentTime());
         tk->RegistExtMacro((char *)"__line__", 0);
         tk->RegistExtMacro((char *)"__file__", (char *)"");
         if (option & HSC3_OPT_DEBUGMODE)
@@ -309,12 +311,15 @@ void CHsc3::GetPackfileOption(char *out, char *keyword, char *defval) {
     char tmp[512];
     char *s;
     char a1;
-    CStrNote note;
-    note.Select(pfbuf->GetBuffer());
-    max = note.GetMaxLine();
+    [cwrap Select:pfbuf->GetBuffer()];
+    max = [cwrap GetMaxLine];
+    //CStrNote note;
+    //note.Select(pfbuf->GetBuffer());
+    //max = note.GetMaxLine();
     strcpy(out, defval);
     for(int i = 0; i < max; i++) {
-        note.GetLine(tmp, i);
+        [cwrap GetLine:tmp line:i];
+        //note.GetLine(tmp, i);
         if ((tmp[0] == ';' ) && (tmp[1] == '!')) {
             s = tmp + 2;
             while(1) {

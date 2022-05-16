@@ -8,8 +8,9 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "supio_linux.h"
+//#include "supio_linux.h"
 #include "ahtmodel.h"
+#import "c_wrapper.h"
 
 //-------------------------------------------------------------
 //		Static Data
@@ -394,13 +395,6 @@ AHTPROP *AHTMODEL::SetProperty( char *propname, char *name, char *value )
     if ( SetProp( p, name, value ) < 0 ) return NULL;
     return p;
 }
-
-
-/*
-	rev 54
-	mingw : warning : 比較は常に…
-	に対処。
- */
 
 int AHTMODEL::SetAHTPropertyString( char *propname, char *str )
 {

@@ -14,7 +14,8 @@
     if (index>str.length || index+length>str.length) {
         return @"";
     }
-    if (index<0) return @"";
+    if (index<0)
+        return @"";
     return [str substringWithRange:NSMakeRange(index, length)];
 }
 
@@ -22,7 +23,7 @@
     self = [super init];
     accessNumber=0;
     if (self) {
-        // Add your subclass-specific initialization here.
+        // ここにサブクラス固有の初期化を追加する
         
         aController = [[NSStoryboard storyboardWithName:@"Main" bundle:nil] instantiateControllerWithIdentifier:@"Document Window Controller"];
         title = @"Window";
@@ -47,7 +48,7 @@
 
 - (void)windowControllerDidLoadNib:(NSWindowController *)_aController {
     [super windowControllerDidLoadNib:_aController];
-    // Add any code here that needs to be executed once the windowController has loaded the document's window.
+    // windowController がドキュメントのウィンドウを読み込んだら実行する必要のあるコードをここに追加する
     
 }
 
@@ -74,8 +75,7 @@
         [global.currentPaths addObject:path];
     }
     // タイマー
-    NSTimer *tm = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self
-                                                 selector:@selector(onTimer:) userInfo:nil repeats:YES ];
+    NSTimer *tm = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(onTimer:) userInfo:nil repeats:YES ];
     [tm fire];
 }
 
@@ -105,8 +105,7 @@
 
 //ファイルを保存する
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
-    NSDictionary * dic;
-    dic = [NSDictionary dictionaryWithObjectsAndKeys:NSPlainTextDocumentType, NSDocumentTypeDocumentAttribute,nil];
+    //NSDictionary * dic = [NSDictionary dictionaryWithObjectsAndKeys:NSPlainTextDocumentType, NSDocumentTypeDocumentAttribute,nil];
     NSString * str = [global.globalTexts objectAtIndex:accessNumber];
     NSData* data = [str dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     return data;
@@ -116,17 +115,10 @@
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
     if (outError != NULL) {
     }
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:
-                         NSPlainTextDocumentType,
-                         NSDocumentTypeDocumentAttribute,
-                         nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys: NSPlainTextDocumentType, NSDocumentTypeDocumentAttribute, nil];
     NSDictionary *attr;
     NSError *error = nil;
-    NSAttributedString * zNSAttributedStringObj =
-    [[NSAttributedString alloc]initWithData:data
-                                    options:dic
-                         documentAttributes:&attr
-                                      error:&error];
+    NSAttributedString * zNSAttributedStringObj = [[NSAttributedString alloc]initWithData:data options:dic documentAttributes:&attr error:&error];
     if (error != NULL) {
         NSLog(@"Error readFromData: %@",[error localizedDescription]);
         return NO;

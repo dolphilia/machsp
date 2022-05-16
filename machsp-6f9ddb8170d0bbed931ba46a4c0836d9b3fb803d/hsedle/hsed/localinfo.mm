@@ -1,7 +1,7 @@
 
-/*----------------------------------------------------------------*/
-//		local info related routines
-/*----------------------------------------------------------------*/
+//
+// ローカル情報関連ルーチン
+//
 
 #include <sys/time.h>
 #include <time.h>
@@ -35,11 +35,12 @@ CLocalInfo::~CLocalInfo() {
 ///    5 wMinute
 ///    6 wSecond
 ///    7 wMilliseconds
+///
 int CLocalInfo::GetTime(int index) {
     struct timeval tv;
     struct tm *lt;
     
-    gettimeofday(&tv, NULL);	// MinGWだとVerによって通りません
+    gettimeofday(&tv, NULL); // MinGWだとVerによって通りません
     lt = localtime(&tv.tv_sec);
     
     switch(index) {
@@ -60,8 +61,7 @@ int CLocalInfo::GetTime(int index) {
         case 7:
             return (int)tv.tv_usec / 10000;
         case 8:
-            /*	一応マイクロ秒まで取れる	*/
-            return (int)tv.tv_usec % 10000;
+            return (int)tv.tv_usec % 10000; // 一応マイクロ秒まで取れる
     }
     return 0;
 }

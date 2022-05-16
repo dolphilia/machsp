@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "utility_string.h"
+#import "objc_utility_string.h"
 
-@implementation utility_string
+@implementation objc_utility_string
 
 //--- 文字列操作のためのユーティリティ
 
@@ -18,7 +18,8 @@
     if (index>=str.length) {
         return @"";
     }
-    if (index<0) return @"";
+    if (index<0)
+        return @"";
     return [str substringWithRange:NSMakeRange(index, 1)];
 }
 
@@ -27,7 +28,8 @@
     if (index>=str.length || index+length>=str.length) {
         return @"";
     }
-    if (index<0) return @"";
+    if (index<0)
+        return @"";
     return [str substringWithRange:NSMakeRange(index, length)];
 }
 

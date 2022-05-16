@@ -8,8 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 //#import "MyWebKitView.h"
-#import "MyTextView.h"
-#import "MyWindow.h"
+//#import "MyTextView.h"
+//#import "MyWindow.h"
 
 @interface ViewController : NSViewController {
 }

@@ -8,9 +8,10 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "supio_linux.h"
+//#include "supio_linux.h"
 #include "strnote.h"
 #include "ahtobj.h"
+#import "c_wrapper.h"
 
 //-------------------------------------------------------------
 //		Routines
@@ -20,7 +21,8 @@ void CAht::Mesf( char *format, ... )
 {
     char textbf[1024];
     
-    if ( stdbuf == NULL ) return;
+    if ( stdbuf == NULL )
+        return;
     
     va_list args;
     va_start( args, format );

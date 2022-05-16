@@ -1,17 +1,12 @@
 
 //
-//		Structure for HSP
+// HSPの構造体
 //
+
 #ifndef __hsp3struct_h
 #define __hsp3struct_h
 
 #include "hspvar_core.h"
-
-/*
-	rev 43
-	mingw : error : HSPERROR が未定義
-	に対処
- */
 #include "hsp3debug.h"
 
 #ifdef _WIN64
@@ -20,7 +15,7 @@
 #define PTR32BIT        //  ポインタは32bit
 #endif
 
-// command type
+// コマンドの種類
 #define TYPE_MARK 0
 #define TYPE_VAR 1
 #define TYPE_STRING 2
@@ -59,52 +54,50 @@
 #define EXFLG_3 0x8000
 #define CSTYPE 0x0fff
 
-typedef struct HSPHED
-{
-    //		HSP3.0 header structure
-    //
+// HSP3.0 ヘッダー構造体
+//
+typedef struct HSPHED {
     
     char	h1;					// magic code1
     char	h2;					// magic code2
     char	h3;					// magic code3
     char	h4;					// magic code4
-    int		version;			// version number info
-    int		max_val;			// max count of VAL Object
-    int		allsize;			// total file size
+    int		version;			// バージョン番号の情報
+    int		max_val;			// VALオブジェクトの最大数
+    int		allsize;			// 合計ファイルサイズ
     
-    int		pt_cs;				// ptr to Code Segment
-    int		max_cs;				// size of CS
-    int		pt_ds;				// ptr to Data Segment
-    int		max_ds;				// size of DS
+    int		pt_cs;				// コードセグメントへのポインタ
+    int		max_cs;				// コードセグメントのサイズ
+    int		pt_ds;				// データセグメントへのポインタ
+    int		max_ds;				// データセグメントのサイズ
     
-    int		pt_ot;				// ptr to Object Temp
-    int		max_ot;				// size of OT
-    int		pt_dinfo;			// ptr to Debug Info
-    int		max_dinfo;			// size of DI
+    int		pt_ot;				// 一時的なオブジェクトへのポインタ
+    int		max_ot;				// 一時的なオブジェクトのサイズ
+    int		pt_dinfo;			// デバッグ情報へのポインタ
+    int		max_dinfo;			// デバッグ情報のサイズ
     
-    int		pt_linfo;			// ptr to LibInfo(2.3)
-    int		max_linfo;			// size of LibInfo(2.3)
-    int		pt_finfo;			// ptr to FuncInfo(2.3)
-    int		max_finfo;			// size of FuncInfo(2.3)
+    int		pt_linfo;			// ライブラリ情報へのポインタ(2.3)
+    int		max_linfo;			// ライブラリ情報のサイズ(2.3)
+    int		pt_finfo;			// 関数情報へのポインタ(2.3)
+    int		max_finfo;			// 関数情報のサイズ(2.3)
     
-    int		pt_minfo;			// ptr to ModInfo(2.5)
-    int		max_minfo;			// size of ModInfo(2.5)
-    int		pt_finfo2;			// ptr to FuncInfo2(2.5)
-    int		max_finfo2;			// size of FuncInfo2(2.5)
+    int		pt_minfo;			// モジュール情報へのポインタ(2.5)
+    int		max_minfo;			// モジュール情報のサイズ(2.5)
+    int		pt_finfo2;			// 関数情報へのポインタ2(2.5)
+    int		max_finfo2;			// 関数情報のサイズ2(2.5)
     
-    int		pt_hpidat;			// ptr to HPIDAT(3.0)
-    short		max_hpi;			// size of HPIDAT(3.0)
-    short		max_varhpi;			// Num of Vartype Plugins(3.0)
-    int		bootoption;			// bootup options
-    int		runtime;			// ptr to runtime name
+    int		pt_hpidat;			// HPIデータへのポインタ(3.0)
+    short	max_hpi;			// HPIデータのサイズ(3.0)
+    short	max_varhpi;			// 変数型プラグインの数(3.0)
+    int		bootoption;			// 起動オプション
+    int		runtime;			// ランタイム名へのポインタ
     
-    //		HSP3.5 extra header structure
+    //		HSP3.5 エクストラヘッダー構造体
     //
-    int		pt_sr;				// ptr to Option Segment
-    int		max_sr;				// size of Option Segment
-    int		opt1;				// option (reserved)
-    int		opt2;				// option (reserved)
-    
+    int		pt_sr;				// オプションセグメントへのポインタ
+    int		max_sr;				// オプションセグメントのサイズ
+    int		opt1;				// オプション (予約済み)
+    int		opt2;				// オプション (予約済み)
 } HSPHED;
 
 #define HSPHED_BOOTOPT_DEBUGWIN 1			// 起動時デバッグウインドゥ表示
@@ -124,29 +117,24 @@ typedef struct HSPHED
 #define HPIDAT_FLAG_DLLFUNC 2
 
 typedef struct MEM_HPIDAT {		// native HPIDAT
-    
-    short	flag;				// flag info
+    short	flag;				// フラグ情報
     short	option;
-    int		libname;			// lib name index (DS)
-    int		funcname;			// function name index (DS)
-    void	*libptr;			// lib handle
-    
+    int		libname;			// ファイル名インデックス (データセグメント)
+    int		funcname;			// 関数名インデックス (データセグメント)
+    void	*libptr;			// ライブラリハンドル
 } MEM_HPIDAT;
 
 #ifdef PTR64BIT
 typedef struct HPIDAT {
-    
-    short	flag;				// flag info
+    short	flag;				// フラグ情報
     short	option;
-    int		libname;			// lib name index (DS)
-    int		funcname;			// function name index (DS)
-    int		p_libptr;			// lib handle
-    
+    int		libname;			// ファイル名インデックス (データセグメント)
+    int		funcname;			// 関数名インデックス (データセグメント)
+    int		p_libptr;			// ライブラリハンドル
 } HPIDAT;
 #else
 typedef MEM_HPIDAT HPIDAT;
 #endif
-
 
 #define LIBDAT_FLAG_NONE 0
 #define LIBDAT_FLAG_DLL 1
@@ -155,31 +143,26 @@ typedef MEM_HPIDAT HPIDAT;
 #define LIBDAT_FLAG_COMOBJ 4
 
 typedef struct LIBDAT {
-    
-    int		flag;				// initalize flag
-    int		nameidx;			// function name index (DS)
-    // Interface IID ( Com Object )
-    void	*hlib;				// Lib handle
-    int		clsid;				// CLSID (DS) ( Com Object )
-    
+    int		flag;				// 初期化フラグ
+    int		nameidx;			// 関数名インデックス (データセグメント)
+    // インターフェースIID (COMオブジェクト)
+    void	*hlib;				// ライブラリハンドル
+    int		clsid;				// CLSID (データセグメント) (COMオブジェクト)
 } LIBDAT;
 
 #ifdef PTR64BIT
 typedef struct HED_LIBDAT {
-    
-    int		flag;				// initalize flag
-    int		nameidx;			// function name index (DS)
-    // Interface IID ( Com Object )
-    int		p_hlib;				// Lib handle
-    int		clsid;				// CLSID (DS) ( Com Object )
-    
+    int		flag;				// 初期化フラグ
+    int		nameidx;			// 関数名インデックス (データセグメント)
+    // インターフェースIID (COMオブジェクト)
+    int		p_hlib;				// ライブラリハンドル
+    int		clsid;				// CLSID (データセグメント) (COMオブジェクト)
 } HED_LIBDAT;
 #else
 typedef LIBDAT HED_LIBDAT;
 #endif
 
-
-// multi parameter type
+// マルチパラメータタイプ
 #define MPTYPE_NONE 0
 #define MPTYPE_VAR 1
 #define MPTYPE_STRING 2
@@ -227,80 +210,80 @@ typedef LIBDAT HED_LIBDAT;
 #define TYPE_OFFSET_COMOBJ 0x1000
 
 typedef struct STRUCTPRM {
-    short	mptype;				// Parameter type
-    short	subid;				// struct index
-    int		offset;				// offset from top
+    short	mptype;				// パラメータタイプ
+    short	subid;				// 構造体のインデックス
+    int		offset;				// トップのオフセット
 } STRUCTPRM;
 
-//	DLL function flags
+// DLL関数フラグ
 #define STRUCTDAT_OT_NONE 0
 #define STRUCTDAT_OT_CLEANUP 1
 #define STRUCTDAT_OT_STATEMENT 2
 #define STRUCTDAT_OT_FUNCTION 4
 
-//	Module function flags
+// モジュール関数フラグ
 #define STRUCTDAT_INDEX_FUNC -1
 #define STRUCTDAT_INDEX_CFUNC -2
 #define STRUCTDAT_INDEX_STRUCT -3
 #define STRUCTDAT_FUNCFLAG_CLEANUP 0x10000
 
-// function,module specific data
+// 関数・モジュール固有データ
 
 #ifdef PTR64BIT
 typedef struct STRUCTDAT {
-    short	index;				// base LIBDAT index
-    short	subid;				// struct index
-    int		prmindex;			// STRUCTPRM index(MINFO)
-    int		prmmax;				// number of STRUCTPRM
-    int		nameidx;			// name index (DS)
-    int		size;				// struct size (stack)
-    int		otindex;			// OT index(Module) / cleanup flag(Dll)
-    void	*proc;				// proc address
-    int		funcflag;			// function flags(Module)
+    short	index;				// 基本ライブラリデータのインデックス
+    short	subid;				// 構造体のインデックス
+    int		prmindex;			// 構造体パラメーターのインデックス(モジュール情報)
+    int		prmmax;				// 構造体パラメーターの数
+    int		nameidx;			// 名前のインデックス (データセグメント)
+    int		size;				// 構造体のサイズ (スタック)
+    int		otindex;			// 一時的なオブジェクトのインデックス(モジュール) / クリーンアップのフラグ(DLL)
+    void	*proc;				// プロセスのアドレス
+    int		funcflag;			// 関数のフラグ(モジュール)
 } STRUCTDAT;
 
 typedef struct HED_STRUCTDAT {
-    short	index;				// base LIBDAT index
-    short	subid;				// struct index
-    int		prmindex;			// STRUCTPRM index(MINFO)
-    int		prmmax;				// number of STRUCTPRM
-    int		nameidx;			// name index (DS)
-    int		size;				// struct size (stack)
-    int		otindex;			// OT index(Module) / cleanup flag(Dll)
-    int		funcflag;			// function flags(Module)
+    short	index;				// 基本ライブラリデータのインデックス
+    short	subid;				// 構造体のインデックス
+    int		prmindex;			// 構造体パラメーターのインデックス(モジュール情報)
+    int		prmmax;				// 構造体パラメーターの数
+    int		nameidx;			// 名前のインデックス (データセグメント)
+    int		size;				// 構造体のサイズ (スタック)
+    int		otindex;			// 一時的なオブジェクトのインデックス(モジュール) / クリーンアップのフラグ(DLL)
+    int		funcflag;			// 関数のフラグ(モジュール)
 } HED_STRUCTDAT;
 
 #else
 typedef struct STRUCTDAT {
-    short	index;				// base LIBDAT index
-    short	subid;				// struct index
-    int		prmindex;			// STRUCTPRM index(MINFO)
-    int		prmmax;				// number of STRUCTPRM
-    int		nameidx;			// name index (DS)
-    int		size;				// struct size (stack)
-    int		otindex;			// OT index(Module) / cleanup flag(Dll)
+    short	index;				// 基本ライブラリデータのインデックス
+    short	subid;				// 構造体のインデックス
+    int		prmindex;			// 構造体パラメーターのインデックス(モジュール情報)
+    int		prmmax;				// 構造体パラメーターの数
+    int		nameidx;			// 名前のインデックス (データセグメント)
+    int		size;				// 構造体のサイズ (スタック)
+    int		otindex;			// 一時的なオブジェクトのインデックス(モジュール) / クリーンアップのフラグ(DLL)
     union {
-        void	*proc;				// proc address
-        int		funcflag;			// function flags(Module)
+        void	*proc;				// プロセスのアドレス
+        int		funcflag;			// 関数のフラグ(モジュール)
     };
 } STRUCTDAT;
 typedef STRUCTDAT HED_STRUCTDAT;
 #endif
 
-
-//	Var Data for Multi Parameter
+// マルチパラメーター用変数データ
 typedef struct MPVarData {
     PVal	*pval;
     APTR	aptr;
 } MPVarData;
 
-//	Var Data for Module Function
+// モジュール関数用変数データ
 typedef struct MPModVarData {
     short subid;
     short magic;
     PVal	*pval;
     APTR	aptr;
 } MPModVarData;
+
 #define MODVAR_MAGICCODE 0x55aa
 
 #define IRQ_FLAG_NONE 0
@@ -310,33 +293,31 @@ typedef struct MPModVarData {
 #define IRQ_OPT_GOSUB 1
 #define IRQ_OPT_CALLBACK 2
 
-
 typedef struct IRQDAT {
-    short	flag;								// flag
-    short	opt;								// option value
-    int		custom;								// custom message value
-    int		custom2;							// custom message value2
+    short	flag;								// フラグ
+    short	opt;								// オプション値
+    int		custom;								// カスタムメッセージの値
+    int		custom2;							// カスタムメッセージの値2
     int		iparam;								// iparam option
-    unsigned short *ptr;						// jump ptr
-    void	(*callback)(struct IRQDAT *,int,int);		// IRQ callback function
+    unsigned short *ptr;						// ジャンプポインタ
+    void	(*callback)(struct IRQDAT *,int,int);		// IRQコールバック関数
 } IRQDAT;
 
 typedef struct HSPCTX HSPCTX;
 
-//	Plugin info data (3.0 compatible)
-typedef struct HSPEXINFO30
-{
-    //		HSP internal info data (2.6)
+//	プラグイン情報データ (3.0 compatible)
+typedef struct HSPEXINFO30 {
+    //		HSP内部情報データ (2.6)
     //
-    short ver;		// Version Code
-    short min;		// Minor Version
+    short ver;		// バージョンコード
+    short min;		// マイナーバージョン
     //
-    int *er;		// Not Use
-    char *pstr;		// String Buffer (master)
-    char *stmp;		// String Buffer (sub)
+    int *er;		// 未使用
+    char *pstr;		// 文字列バッファ（マスター）
+    char *stmp;		// 文字列バッファ (サブ)
     PVal **mpval;		// Master PVAL
     //
-    int *actscr;		// Active Window ID
+    int *actscr;		// アクティブウィンドウのID
     int *nptype;		// Next Parameter Type
     int *npval;			// Next Parameter Value
     int *strsize;		// StrSize Buffer
@@ -354,12 +335,12 @@ typedef struct HSPEXINFO30
     int (*HspFunc_getobj)( int wid, int id, void *inf );
     int (*HspFunc_setobj)( int wid, int id, const void *inf );
     
-    //		HSP internal info data (3.0)
+    // HSP内部情報データ(3.0)
     //
-    int *npexflg;	// Next Parameter ExFlg
-    HSPCTX *hspctx;	// HSP context ptr
+    int *npexflg;	// 次のパラメータのエクストラフラグ
+    HSPCTX *hspctx;	// HSPコンテキストポインタ
     
-    //		Enhanced data (3.0)
+    // 拡張データ(3.0)
     //
     int (*HspFunc_addobj)( int wid );
     void (*HspFunc_puterror)( HSPERROR error );
@@ -387,14 +368,10 @@ typedef struct HSPEXINFO30
     void (*HspFunc_dim)( PVal *pval, int flag, int len0, int len1, int len2, int len3, int len4 );
     void (*HspFunc_redim)( PVal *pval, int lenid, int len );
     void (*HspFunc_array)( PVal *pval, int offset );
-    
 } HSPEXINFO30;
 
-
-
 //	Plugin info data (3.1 or later)
-typedef struct HSPEXINFO
-{
+typedef struct HSPEXINFO {
     //		HSP internal info data (2.6)
     //
     short ver;		// Version Code
@@ -461,11 +438,10 @@ typedef struct HSPEXINFO
     //
     char *(*HspFunc_varname)( int id );
     int (*HspFunc_seekvar)( const char *name );
-    
 } HSPEXINFO;
 
-
 #define HSP3_REPEAT_MAX 32
+
 typedef struct LOOPDAT {
     int		time;				// loop times left
     int		cnt;				// count
@@ -473,10 +449,8 @@ typedef struct LOOPDAT {
     unsigned short *pt;			// loop start ptr
 } LOOPDAT;
 
-
 // 実行モード
-enum
-{
+enum {
     RUNMODE_RUN = 0,
     RUNMODE_WAIT,
     RUNMODE_AWAIT,
@@ -491,9 +465,7 @@ enum
     RUNMODE_MAX
 };
 
-
-struct HSPCTX
-{
+struct HSPCTX {
     //	HSP Context
     //
     HSPHED *hsphed;						// HSP object file header
@@ -562,10 +534,9 @@ struct HSPCTX
 #define TYPE_EX_ARRAY_VARS 0x201		// 配列要素付き変数用スタックタイプ(HSPtoC)
 #define TYPE_EX_LOCAL_VARS 0x202		// ローカル変数用スタックタイプ(HSPtoC)
 
-typedef struct
-{
-    //	Subroutine Context
-    //
+//    Subroutine Context
+//
+typedef struct {
     int stacklev;						// サブルーチン開始時のスタックレベル
     unsigned short *mcsret;				// 呼び出し元PCポインタ(復帰用)
     STRUCTDAT *param;					// 引数パラメーターリスト
@@ -573,8 +544,6 @@ typedef struct
     int oldlev;							// 以前のスタックレベル
     
 } HSPROUTINE;
-
-
 
 //		コールバックのオプション
 //
@@ -585,7 +554,6 @@ typedef struct
 #define HSPEVENT_ENABLE_MEDIA 16	// メディア入出力時
 #define HSPEVENT_ENABLE_PICLOAD 32	// picload命令実行時
 
-
 //		ファンクション型
 //
 typedef int (* HSP3_CMDFUNC) (int);
@@ -595,10 +563,10 @@ typedef int (* HSP3_MSGFUNC) (int,int,int);
 typedef int (* HSP3_EVENTFUNC) (int,int,int,void *);
 
 
+//    型ごとの情報
+//    (*の項目は、親アプリケーションで設定されます)
+//
 typedef struct {
-    //	型ごとの情報
-    //	(*の項目は、親アプリケーションで設定されます)
-    //
     short type;							// *型タイプ値
     short option;						// *オプション情報
     HSPCTX *hspctx;						// *HSP Context構造体へのポインタ
@@ -614,13 +582,11 @@ typedef struct {
     //
     int (* msgfunc) (int,int,int);				// Windowメッセージコールバック
     int (* eventfunc) (int,int,int,void *);		// HSPイベントコールバック
-    
 } HSP3TYPEINFO;
 
 
 // HSP割り込みID
-enum
-{
+enum {
     HSPIRQ_ONEXIT = 0,
     HSPIRQ_ONERROR,
     HSPIRQ_ONKEY,
@@ -630,8 +596,7 @@ enum
 };
 
 // HSPイベントID
-enum
-{
+enum {
     HSPEVENT_NONE = 0,
     HSPEVENT_COMMAND,
     HSPEVENT_HSPIRQ,
@@ -651,6 +616,5 @@ enum
     HSPEVENT_PICLOAD,
     HSPEVENT_MAX
 };
-
 
 #endif

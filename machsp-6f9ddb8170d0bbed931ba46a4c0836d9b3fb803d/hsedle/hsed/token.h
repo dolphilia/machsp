@@ -5,10 +5,18 @@
 #ifndef __token_h
 #define __token_h
 
-#include <vector>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+#include <ctype.h>
+#include <math.h>
+#include <assert.h>
 #include <string>
-#include <map>
-#include <memory>
+
+#include <vector> // c++
+#include <map> // c++
+#include <memory> // c++
 
 // token type
 #define TK_NONE 0

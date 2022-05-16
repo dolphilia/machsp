@@ -5,14 +5,14 @@
 #ifndef __membuf_h
 #define __membuf_h
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+#include <assert.h>
+
 //  growmem class
-
-/*
-	rev 53
-	mingw : warning : クラスは仮想関数を持つのに仮想デストラクタでない。
-	に対処。
- */
-
+//
 class CMemBuf {
 public:
     CMemBuf();
@@ -54,19 +54,19 @@ private:
     virtual void InitMemBuf( int sz );
     virtual void InitIndexBuf( int sz );
     
-    //		Data
+    // データ
     //
-    int		limit_size;			// Separate size
-    int		size;				// Main Buffer Size
-    int		cur;				// Current Size
-    char	*mem_buf;			// Main Buffer
+    int		limit_size;			// セパレートサイズ
+    int		size;				// メインバッファサイズ
+    int		cur;				// 現在のサイズ
+    char	*mem_buf;			// メインバッファ
     
-    int		idxflag;			// index Mode Flag
-    int		*idxbuf;			// Index Buffer
-    int		idxmax;				// Index Buffer Max
-    int		curidx;				// Current Index
+    int		idxflag;			// インデックスモードフラグ
+    int		*idxbuf;			// インデックスバッファ
+    int		idxmax;				// インデックスバッファの最大値
+    int		curidx;				// 現在のインデックス
     
-    char	name[256];			// File Name
+    char	name[256];			// ファイル名
 };
 
 

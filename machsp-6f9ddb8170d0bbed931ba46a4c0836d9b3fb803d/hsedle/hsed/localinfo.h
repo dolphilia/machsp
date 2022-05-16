@@ -4,6 +4,7 @@
 #ifndef __localinfo_h
 #define __localinfo_h
 
+
 //  class
 class CLocalInfo {
 public:
