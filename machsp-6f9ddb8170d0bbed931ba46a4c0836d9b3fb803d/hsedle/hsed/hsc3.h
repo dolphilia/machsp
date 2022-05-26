@@ -24,7 +24,7 @@ class CMemBuf;
 class CToken;
 class CLabel;
 
-// HSC3 class
+// HSC3クラス
 class CHsc3 {
 public:
     CHsc3();
@@ -38,7 +38,7 @@ public:
     int Compile( char *fname, char *outname, int mode );
     void SetCommonPath( char *path );
     
-    //		Service
+    // サービス
     int GetCmdList( int option );
     int OpenPackfile( void );
     void ClosePackfile( void );
@@ -48,7 +48,7 @@ public:
     int SaveOutbuf( char *fname );
     int SaveAHTOutbuf( char *fname );
     
-    //		Data
+    // データ
     //
     CMemBuf *errbuf;
     CMemBuf *pfbuf;
@@ -57,19 +57,19 @@ public:
     CMemBuf *ahtbuf;
     
 private:
-    //		Private Data
+    // プライベートデータ
     //
     int process_option;
     void AddSystemMacros( CToken *tk, int option );
     
-    char common_path[512];			// common path
+    char common_path[512];			// 共通path
     
-    //		for Header info
+    // ヘッダー情報用
     int hed_option;
     char hed_runtime[64];
     
-    //		for Compile Optimize
-    int cmpopt;
+    // コンパイル最適化用
+    int cmpopt; //Compile Optimize
     CLabel *lb_info;
 };
 

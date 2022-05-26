@@ -173,8 +173,7 @@ extern PVal *mem_pval;
 #define FLEXVAL_TYPE_ALLOC 1
 #define FLEXVAL_TYPE_CLONE 2
 
-typedef struct
-{
+typedef struct {
     short type;			// typeID
     short myid;			// 固有ID(未使用)
     short customid;		// structure ID

@@ -9,6 +9,8 @@
 #ifndef c_wrapper_h
 #define c_wrapper_h
 
+#include "str.h"
+#include "vec.h"
 #include "utility.h"
 #include "utility_stack.h"
 #include "utility_string.h"
@@ -17,6 +19,33 @@
 #include "utility_errmsg.h"
 
 @interface cwrap : NSObject
+
+// str
++(string)string_create:(const char*)str;
++(void)string_add_char:(string*)s c:(char)c;
++(void)string_add:(string*)s str:(const char*)str;
++(void)string_insert:(string*)s pos:(str_size)pos str:(const char*)str;
++(void)string_replace:(string*)s pos:(str_size)pos len:(str_size)len str:(const char*)str;
++(void)string_remove:(string)s pos:(str_size)pos len:(str_size)len; // removing elements does not require reallocation
++(void)string_free:(string)s;
++(str_size)string_size:(string)s;
++(str_size)string_get_alloc:(string)s;
+
+// vec
++(vector)vector_create;
++(void)vector_free:(vector)vec;
++(vector)_vector_add:(vector*)vec_addr type_size:(vec_type_t)type_size;
++(vector)_vector_insert:(vector*)vec_addr type_size:(vec_type_t)type_size pos:(vec_size_t)pos;
++(void)_vector_erase:(vector*)vec_addr type_size:(vec_type_t)type_size pos:(vec_size_t)pos  len:(vec_size_t)len;
++(void)_vector_remove:(vector*)vec_addr type_size:(vec_type_t)type_size pos:(vec_size_t) pos;
++(void)vector_pop:(vector)vec;
++(vector)_vector_copy:(vector)vec type_size:(vec_type_t)type_size;
++(vec_size_t)vector_size:(vector)vec;
++(vec_size_t)vector_get_alloc:(vector)vec;
+
+// cvec
+//+(void)vec_grow:(void**)vector i:(size_t)i s:(size_t)s;
+//+(void)vec_delete:(void*)vector;
 
 // utility
 +(int)tstrcmp:(const char*)str1 str2:(const char*)str2;

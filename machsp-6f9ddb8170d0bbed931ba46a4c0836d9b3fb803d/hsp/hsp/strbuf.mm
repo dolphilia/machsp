@@ -6,6 +6,7 @@
 //	(あとはsbCopy,sbAddで自動的にバッファの再確保を行ないます)
 //	onion software/onitama 2004/6
 //
+
 #include "strbuf.h"
 #include "debug_message.h"
 #include "hsp3struct_debug.h"
@@ -217,8 +218,9 @@ void sbCopy(char** pptr, char* data, int size) {
     memcpy(p, data, size);
 }
 
+///        mode:0=normal/1=string
+///        
 void sbAdd(char** pptr, char* data, int size, int mode) {
-    //		mode:0=normal/1=string
     char* ptr = *pptr;
     STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
     char* p = st->inf.ptr;

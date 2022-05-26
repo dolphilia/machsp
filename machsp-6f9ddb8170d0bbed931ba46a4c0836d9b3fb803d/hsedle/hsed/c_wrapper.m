@@ -11,6 +11,88 @@
 
 @implementation cwrap
 
+// str
++(string)string_create:(const char*)str {
+    return string_create(str);
+}
+
++(void)string_add_char:(string*)s c:(char)c {
+    string_add_char(s, c);
+}
+
++(void)string_add:(string*)s str:(const char*)str {
+    string_add(s, str);
+}
+
++(void)string_insert:(string*)s pos:(str_size)pos str:(const char*)str {
+    string_insert(s, pos, str);
+}
+
++(void)string_replace:(string*)s pos:(str_size)pos len:(str_size)len str:(const char*)str {
+    string_replace(s, pos, len, str);
+}
+
++(void)string_remove:(string)s pos:(str_size)pos len:(str_size)len { // removing elements does not require reallocation
+    string_remove(s, pos, len);
+}
+
++(void)string_free:(string)s {
+    string_free(s);
+}
+
++(str_size)string_size:(string)s {
+    return string_size(s);
+}
+
++(str_size)string_get_alloc:(string)s {
+    return string_get_alloc(s);
+}
+
+// vec
++(vector)vector_create {
+    return vector_create();
+}
+
++(void)vector_free:(vector)vec {
+    vector_free(vec);
+}
+
++(vector)_vector_add:(vector*)vec_addr type_size:(vec_type_t)type_size {
+    return _vector_add(vec_addr, type_size);
+}
+
++(vector)_vector_insert:(vector*)vec_addr type_size:(vec_type_t)type_size pos:(vec_size_t)pos {
+    return _vector_insert(vec_addr, type_size, pos);
+}
+
++(void)_vector_erase:(vector*)vec_addr type_size:(vec_type_t)type_size pos:(vec_size_t)pos  len:(vec_size_t)len {
+    _vector_erase(vec_addr, type_size, pos, len);
+}
++(void)_vector_remove:(vector*)vec_addr type_size:(vec_type_t)type_size pos:(vec_size_t) pos {
+    _vector_remove(vec_addr, type_size, pos);
+}
++(void)vector_pop:(vector)vec {
+    vector_pop(vec);
+}
++(vector)_vector_copy:(vector)vec type_size:(vec_type_t)type_size {
+    return _vector_copy(vec, type_size);
+}
++(vec_size_t)vector_size:(vector)vec {
+    return vector_size(vec);
+}
++(vec_size_t)vector_get_alloc:(vector)vec {
+    return vector_get_alloc(vec);
+}
+
+// cvec
+//+(void)vec_grow:(void**)vector i:(size_t)i s:(size_t)s {
+//    vec_grow(vector, i, s);
+//}
+//
+//+(void)vec_delete:(void*)vector {
+//    vec_delete(vector);
+//}
+
 // utility
 
 +(int)tstrcmp:(const char*)str1 str2:(const char*)str2 {

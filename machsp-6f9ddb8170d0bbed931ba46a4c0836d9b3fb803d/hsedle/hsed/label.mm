@@ -4,12 +4,15 @@
 //
 
 #include "label.h"
+//#import "c_wrapper.h"
+#import "AppDelegate.h"
+#import "c_wrapper.h"
 
 //-------------------------------------------------------------
-//		Routines
+// ルーチン
 //-------------------------------------------------------------
 
-/// string case to lower
+/// 文字列の大文字と小文字を区別する
 ///
 int CLabel::StrCase( char *str ) {
     int hash = 0;
@@ -67,7 +70,7 @@ int CLabel::GetHash( char *str ) {
     return hash;
 }
 
-/// string compare
+/// 文字列比較
 ///
 /// (0=not same/-1=same)
 /// (case sensitive)
@@ -125,13 +128,13 @@ int CLabel::Regist( char *name, int type, int opt, char const *filename, int lin
     return label_id;
 }
 
-/// set eternal flag
+/// エターナルフラグを立てる
 ///
 void CLabel::SetEternal(int id) {
     mem_lab[id].eternal = 1;
 }
 
-/// set eternal flag
+/// エターナルフラグを立てる
 ///
 int CLabel::GetEternal(int id) {
     return mem_lab[id].eternal;
@@ -243,6 +246,7 @@ CLabel::CLabel(void) {
     for(int i = 0; i < def_maxblock; i++) {
         symblock[i] = NULL;
     }
+    //FileNameSet = (string*)[cwrap vector_create];
     Reset();
 }
 
@@ -253,6 +257,7 @@ CLabel::CLabel(int symmax, int worksize) {
     for(int i = 0; i < def_maxblock; i++) {
         symblock[i] = NULL;
     }
+    //FileNameSet = (string*)[cwrap vector_create];
     Reset();
 }
 
@@ -263,8 +268,9 @@ CLabel::~CLabel(void) {
 
 void CLabel::Reset( void ) {
     cur = 0;
-    labels.clear();
-    filenames.clear();
+    labels.clear(); /// @warning cpp
+    //[cwrap vector_free:FileNameSet];
+    filenames.clear(); /// @warning cpp
     for(int i = 0; i < maxlab; i++) {
         mem_lab[i].flag = -1;
     }
@@ -653,7 +659,7 @@ int CLabel::GetReference(int id) {
 
 /// ラベル依存の特定IDデータがあるかを検索
 ///
-/// 0=なし/1=あり
+/// @return 0=なし/1=あり
 ///
 int CLabel::SearchRelation(int id, int rel_id) {
     LABOBJ *lab = &mem_lab[id];
@@ -712,6 +718,8 @@ void CLabel::SetDefinition(int id, char const* filename, int line) {
     if (!(filename != NULL && line >= 0))
         return;
     LABOBJ* const it = GetLabel(id);
-    it->def_file = filenames.insert(filename).first->c_str();
+    /// @warning setは重複した値を許さない。setは自動的にソートされる。
+    std::pair<std::set<std::string>::iterator,bool> _pair = filenames.insert(filename);
+    it->def_file = _pair.first->c_str(); /// @warning cpp
     it->def_line = line;
 }

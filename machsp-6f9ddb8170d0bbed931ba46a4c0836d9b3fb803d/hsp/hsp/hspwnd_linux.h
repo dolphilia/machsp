@@ -9,8 +9,7 @@
 
 //	Bmscr structure (same as Bmscr)
 //
-typedef struct BMSCR
-{
+typedef struct BMSCR {
     //
     //		Window data structure
     //

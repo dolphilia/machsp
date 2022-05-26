@@ -12,15 +12,9 @@
 - (void)dpm_close;
 - (int)dpm_fread:(void *)mem size:(int)size stream:(FILE *)stream;
 //
-- (int)dpm_ini:(char *)dpmfile
-        dpmofs:(long)dpmofs
-        chksum:(int)chksum
-        deckey:(int)deckey;
+- (int)dpm_ini:(char *)dpmfile dpmofs:(long)dpmofs chksum:(int)chksum deckey:(int)deckey;
 - (void)dpm_bye;
-- (int)dpm_read:(char *)fname
-        readmem:(void *)readmem
-           rlen:(int)rlen
-        seekofs:(int)seekofs;
+- (int)dpm_read:(char *)fname readmem:(void *)readmem rlen:(int)rlen seekofs:(int)seekofs;
 - (int)dpm_exist:(char *)fname;
 - (int)dpm_filebase:(char *)fname;
 - (void)dpm_getinf:(char *)inf;

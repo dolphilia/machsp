@@ -55,29 +55,29 @@ typedef std::multimap<std::string, int> LabelMap; /// @warning cpp
 typedef struct LABREL LABREL;
 
 struct LABREL {
-    LABREL	*link;				// link to next (NULL=end)
-    int		rel_id;				// related id
+    LABREL	*link;				// 次へのリンク (NULL=終了)
+    int		rel_id;				// 関連ID
 };
 
 typedef struct LABOBJ {
-    int		flag;				// exist flag
-    int		type;				// object type
-    int		opt;				// option code
-    short	eternal;			// eternal flag
-    short	ref;				// reference flag
-    int		hash;				// hash code
-    char	*name;				// object name (lower case)
-    char	*data;				// data field
-    char	*data2;				// data field (opt)
-    LABREL	*rel;				// relation id
-    short	init;				// initalize flag
-    short	typefix;			// force type
+    int		flag;				// 存在フラグ
+    int		type;				// オブジェクトタイプ
+    int		opt;				// オプションコード
+    short	eternal;			// エターナルフラグ
+    short	ref;				// 参照フラグ
+    int		hash;				// ハッシュコード
+    char	*name;				// オブジェクト名（小文字）
+    char	*data;				// データフィールド
+    char	*data2;				// データフィールド（オプション）
+    LABREL	*rel;				// 関係ID
+    short	init;				// 初期化フラグ
+    short	typefix;			// フォースタイプ
     
     char const* def_file;
     int def_line;
 } LABOBJ;
 
-//  label manager class
+//  ラベルマネージャクラス
 class CLabel {
 public:
     CLabel();
@@ -136,21 +136,32 @@ private:
     char *RegistTable( char *str, int size );
     
     //	data
-    char *symbol;						// Symbol Table
-    LABOBJ *mem_lab;					// Label object
+    char *symbol;						// シンボルテーブル
+    LABOBJ *mem_lab;					// ラベルオブジェクト
     
-    char *symblock[def_maxblock];		// Symbol Table Block
-    int	curblock;						// Current Block
+    char *symblock[def_maxblock];		// シンボルテーブルブロック
+    int	curblock;						// 現在のブロック
     
-    int	cur;							// Current
-    int	symcur;							// Current Symbol Index
-    int maxsymbol;						// Max Symbol Size
-    int maxlab;							// Max Label Size
-    char token[64];						// Token for RegistList
-    int casemode;						// Case sensitive (0=none/other=ON)
+    int	cur;							// 現在
+    int	symcur;							// 現在のシンボルインデックス
+    int maxsymbol;						// 最大シンボルサイズ
+    int maxlab;							// 最大ラベルサイズ
+    char token[64];						// レジストリスト用トークン
+    int casemode;						// 大文字・小文字を区別する（0=なし/その他=ON）
     
-    LabelMap labels;		    		// Lookup table
-    FileNameSet filenames;				// Pool of file names (pointed from def_file)
+    LabelMap labels;		    		// ルックアップテーブル
+    FileNameSet filenames;				/// @warning cpp ファイル名のプール (def_fileから指定)
+    
+    
+    //typedef struct _string_t {
+    //    int str;
+    //} _string_t;
+    //typedef char* string;
+
+    //typedef char* _string;
+    //typedef size_t str_size;
+    //struct _string_t* zzz;
+    //string* FileNameSet;
 };
 
 #endif

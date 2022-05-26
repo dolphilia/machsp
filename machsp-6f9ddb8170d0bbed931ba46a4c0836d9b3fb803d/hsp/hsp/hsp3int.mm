@@ -289,9 +289,8 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (double)_ease_shake:(double)t {
-    int pulse;
     double tt = t * t * 8;
-    pulse = (int)tt;
+    int pulse = (int)tt;
     tt -= (double)pulse;
     if (pulse & 1) {
         return ((double)1 - tt);

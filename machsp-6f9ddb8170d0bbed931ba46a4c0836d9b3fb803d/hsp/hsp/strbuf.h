@@ -18,10 +18,10 @@
 //
 
 typedef struct STRBUF STRBUF;
-typedef struct
-{
-    //	String Data structure
-    //
+
+//    String Data structure
+//
+typedef struct {
     short flag;     // 使用フラグ(0=none/other=busy)
     short exflag;   // 拡張フラグ(未使用)
     STRBUF* intptr; // 自身のアドレス
@@ -31,10 +31,9 @@ typedef struct
     void* opt;      // オプション(ユーザー定義用)
 } STRINF;
 
-struct STRBUF
-{
-    //	String Data structure
-    //
+//    String Data structure
+//
+struct STRBUF {
     STRINF inf;                  // バッファ情報
     char data[STRBUF_BLOCKSIZE]; // 内部バッファ
 };

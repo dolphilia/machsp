@@ -15,8 +15,7 @@
 
 @implementation MyCALayer
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     if (self) {
         g = (AppDelegate*)[[NSApplication sharedApplication] delegate];
@@ -71,17 +70,14 @@
     return self;
 }
 
-- (void)update_contents_with_cgimage:(CGImageRef)image
-{
+- (void)update_contents_with_cgimage:(CGImageRef)image {
     [CATransaction begin];
-    [CATransaction setValue:(id)kCFBooleanTrue
-                     forKey:kCATransactionDisableActions];
+    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
     self.contents = (__bridge id _Nullable)image;
     [CATransaction commit];
 }
 
-- (void)redraw
-{
+- (void)redraw {
     @autoreleasepool {
         
         if (g.backing_scale_factor == 0.0) {
@@ -99,42 +95,18 @@
             int i = 0;
             for (int y = 0; y < height * 2; y += 2) {
                 for (int x = 0; x < width * 2 * samplesPerPixel; x += 8) {
-                    memcpy(&retina_pixel_data[x + h_mul * y], &pixel_data[0][i],
-                           sizeof(unsigned char) * 4);
-                    memcpy(&retina_pixel_data[x + 4 + h_mul * y], &pixel_data[0][i],
-                           sizeof(unsigned char) * 4);
-                    memcpy(&retina_pixel_data[x + h_mul * (y + 1)], &pixel_data[0][i],
-                           sizeof(unsigned char) * 4);
-                    memcpy(&retina_pixel_data[x + 4 + h_mul * (y + 1)], &pixel_data[0][i],
-                           sizeof(unsigned char) * 4);
+                    memcpy(&retina_pixel_data[x + h_mul * y], &pixel_data[0][i], sizeof(unsigned char) * 4);
+                    memcpy(&retina_pixel_data[x + 4 + h_mul * y], &pixel_data[0][i], sizeof(unsigned char) * 4);
+                    memcpy(&retina_pixel_data[x + h_mul * (y + 1)], &pixel_data[0][i], sizeof(unsigned char) * 4);
+                    memcpy(&retina_pixel_data[x + 4 + h_mul * (y + 1)], &pixel_data[0][i], sizeof(unsigned char) * 4);
                     i += 4;
                 }
             }
             
-            bip = [[NSBitmapImageRep alloc]
-                   initWithBitmapDataPlanes:&retina_pixel_data
-                   pixelsWide:buf_width[buf_index] * 2
-                   pixelsHigh:buf_height[buf_index] * 2
-                   bitsPerSample:8
-                   samplesPerPixel:samplesPerPixel
-                   hasAlpha:YES
-                   isPlanar:NO
-                   colorSpaceName:NSDeviceRGBColorSpace
-                   bytesPerRow:buf_width[buf_index] * 2 * samplesPerPixel
-                   bitsPerPixel:samplesPerPixel * 8];
+            bip = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&retina_pixel_data pixelsWide:buf_width[buf_index] * 2 pixelsHigh:buf_height[buf_index] * 2 bitsPerSample:8 samplesPerPixel:samplesPerPixel hasAlpha:YES isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace bytesPerRow:buf_width[buf_index] * 2 * samplesPerPixel bitsPerPixel:samplesPerPixel * 8];
             free(retina_pixel_data);
         } else {
-            bip = [[NSBitmapImageRep alloc]
-                   initWithBitmapDataPlanes:&pixel_data[window_id]
-                   pixelsWide:buf_width[buf_index]
-                   pixelsHigh:buf_height[buf_index]
-                   bitsPerSample:8
-                   samplesPerPixel:samplesPerPixel
-                   hasAlpha:YES
-                   isPlanar:NO
-                   colorSpaceName:NSDeviceRGBColorSpace
-                   bytesPerRow:buf_width[buf_index] * samplesPerPixel
-                   bitsPerPixel:samplesPerPixel * 8];
+            bip = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&pixel_data[window_id] pixelsWide:buf_width[buf_index] pixelsHigh:buf_height[buf_index] bitsPerSample:8 samplesPerPixel:samplesPerPixel hasAlpha:YES isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace bytesPerRow:buf_width[buf_index] * samplesPerPixel bitsPerPixel:samplesPerPixel * 8];
         }
         
         [self update_contents_with_cgimage:[bip CGImage]];
@@ -143,149 +115,107 @@
 
 //----
 
-- (int)get_current_point_x
-{
+- (int)get_current_point_x {
     return current_point.x;
 }
 
-- (int)get_current_point_y
-{
+- (int)get_current_point_y {
     return current_point.y;
 }
 
-- (UInt8)get_current_color_r
-{
+- (UInt8)get_current_color_r {
     return current_color.red;
 }
 
-- (UInt8)get_current_color_g
-{
+- (UInt8)get_current_color_g {
     return current_color.green;
 }
 
-- (UInt8)get_current_color_b
-{
+- (UInt8)get_current_color_b {
     return current_color.blue;
 }
 
-- (UInt8)get_current_color_a
-{
+- (UInt8)get_current_color_a {
     return current_color.alpha;
 }
 
-- (void)get_pixel_color:(int)point_x point_y:(int)point_y
-{
-    Color color = get_pixel_color(pixel_data[buf_index], point_x, point_y,
-                                  buf_width[buf_index], buf_height[buf_index]);
-    [self set_color_rgba:color.red
-                   green:color.green
-                    blue:color.blue
-                   alpha:color.alpha];
+- (void)get_pixel_color:(int)point_x point_y:(int)point_y {
+    Color color = get_pixel_color(pixel_data[buf_index], point_x, point_y, buf_width[buf_index], buf_height[buf_index]);
+    [self set_color_rgba:color.red green:color.green blue:color.blue alpha:color.alpha];
 }
 
 //----
 
-- (void)set_current_blend_mode:(int32_t)blend_mode
-{
+- (void)set_current_blend_mode:(int32_t)blend_mode {
     current_blend_mode = blend_mode;
 }
 
-- (void)set_current_blend_opacity:(int32_t)blend_opacity
-{
+- (void)set_current_blend_opacity:(int32_t)blend_opacity {
     current_blend_opacity = blend_opacity;
 }
 
-- (void)set_current_copy_width:(int32_t)width
-{
+- (void)set_current_copy_width:(int32_t)width {
     current_copy_width = width;
 }
 
-- (void)set_current_copy_height:(int32_t)height
-{
+- (void)set_current_copy_height:(int32_t)height {
     current_copy_height = height;
 }
 
-- (void)set_redraw_flag:(BOOL)flag
-{
+- (void)set_redraw_flag:(BOOL)flag {
     is_redraw_just_now = flag;
 }
 
-- (void)set_window_id:(int)p1
-{
+- (void)set_window_id:(int)p1 {
     window_id = p1;
 }
 
-- (void)set_current_point:(int)point_x point_y:(int)point_y
-{
+- (void)set_current_point:(int)point_x point_y:(int)point_y {
     current_point.x = point_x;
     current_point.y = point_y;
 }
 
-- (void)set_font:(NSString*)name size:(int)size style:(int)style
-{
+- (void)set_font:(NSString*)name size:(int)size style:(int)style {
     font_name = name;
     font_size = size;
     font_style = style;
 }
 
-- (void)set_color_rgba:(int)red green:(int)green blue:(int)blue alpha:(int)alpha
-{
+- (void)set_color_rgba:(int)red green:(int)green blue:(int)blue alpha:(int)alpha {
     current_color.red = red;
     current_color.green = green;
     current_color.blue = blue;
     current_color.alpha = alpha;
 }
 
-- (void)set_color_hsv:(int)hue
-           saturation:(int)saturation
-           brightness:(int)brightness
-{
+- (void)set_color_hsv:(int)hue saturation:(int)saturation brightness:(int)brightness {
     Color color = get_color_hsv(hue, saturation, brightness);
     [self set_color_rgba:color.red green:color.green blue:color.blue alpha:255];
 }
 
-- (void)clear_canvas:(int)color_number
-{
-    clear_canvas_rgba(pixel_data[buf_index], buf_width[buf_index],
-                      buf_height[buf_index], color_number);
+- (void)clear_canvas:(int)color_number {
+    clear_canvas_rgba(pixel_data[buf_index], buf_width[buf_index], buf_height[buf_index], color_number);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)set_pixel_rgba:(int)point_x point_y:(int)point_y
-{
-    set_pixel_rgba(pixel_data[buf_index], point_x, point_y, current_color.red,
-                   current_color.green, current_color.blue, current_color.alpha,
-                   buf_width[buf_index], buf_height[buf_index]);
+- (void)set_pixel_rgba:(int)point_x point_y:(int)point_y {
+    set_pixel_rgba(pixel_data[buf_index], point_x, point_y, current_color.red, current_color.green, current_color.blue, current_color.alpha, buf_width[buf_index], buf_height[buf_index]);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)set_line_rgba:(int)start_point_x
-        start_point_y:(int)start_point_y
-          end_point_x:(int)end_point_x
-          end_point_y:(int)end_point_y
-{
-    set_line_rgba(pixel_data[buf_index], start_point_x, start_point_y,
-                  end_point_x, end_point_y, current_color.red,
-                  current_color.green, current_color.blue, current_color.alpha,
-                  buf_width[buf_index], buf_height[buf_index]);
+- (void)set_line_rgba:(int)start_point_x start_point_y:(int)start_point_y end_point_x:(int)end_point_x end_point_y:(int)end_point_y {
+    set_line_rgba(pixel_data[buf_index], start_point_x, start_point_y, end_point_x, end_point_y, current_color.red, current_color.green, current_color.blue, current_color.alpha, buf_width[buf_index], buf_height[buf_index]);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)set_line_rgba_smooth:(int)start_point_x
-               start_point_y:(int)start_point_y
-                 end_point_x:(int)end_point_x
-                 end_point_y:(int)end_point_y
-{
-    set_line_rgba_smooth_i(
-                           pixel_data[buf_index], start_point_x, start_point_y, end_point_x,
-                           end_point_y, current_color.red, current_color.green, current_color.blue,
-                           current_color.alpha, buf_width[buf_index], buf_height[buf_index]);
+- (void)set_line_rgba_smooth:(int)start_point_x start_point_y:(int)start_point_y end_point_x:(int)end_point_x end_point_y:(int)end_point_y {
+    set_line_rgba_smooth_i(pixel_data[buf_index], start_point_x, start_point_y, end_point_x, end_point_y, current_color.red, current_color.green, current_color.blue, current_color.alpha, buf_width[buf_index], buf_height[buf_index]);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
@@ -363,65 +293,49 @@
 //    }
 //}
 
-- (void)set_rect_line_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
-{
+- (void)set_rect_line_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2 {
     [self set_line_rgba:x1 start_point_y:y1 end_point_x:x1 end_point_y:y2];
     [self set_line_rgba:x1 start_point_y:y2 end_point_x:x2 end_point_y:y2];
     [self set_line_rgba:x2 start_point_y:y2 end_point_x:x2 end_point_y:y1];
     [self set_line_rgba:x2 start_point_y:y1 end_point_x:x1 end_point_y:y1];
 }
 
-- (void)set_rect_line_rgba_smooth:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
-{
+- (void)set_rect_line_rgba_smooth:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2 {
     [self set_line_rgba_smooth:x1 start_point_y:y1 end_point_x:x1 end_point_y:y2];
     [self set_line_rgba_smooth:x1 start_point_y:y2 end_point_x:x2 end_point_y:y2];
     [self set_line_rgba_smooth:x2 start_point_y:y2 end_point_x:x2 end_point_y:y1];
     [self set_line_rgba_smooth:x2 start_point_y:y1 end_point_x:x1 end_point_y:y1];
 }
 
-- (void)fill_rect_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
-{
-    fill_rect_rgba(pixel_data[buf_index], x1, y1, x2, y2, current_color.red,
-                   current_color.green, current_color.blue, current_color.alpha,
-                   buf_width[buf_index], buf_height[buf_index]);
+- (void)fill_rect_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2 {
+    fill_rect_rgba(pixel_data[buf_index], x1, y1, x2, y2, current_color.red, current_color.green, current_color.blue, current_color.alpha, buf_width[buf_index], buf_height[buf_index]);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)fill_rect_rgba_slow:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
-{
-    fill_rect_rgba_slow(pixel_data[buf_index], x1, y1, x2, y2, current_color.red,
-                        current_color.green, current_color.blue,
-                        current_color.alpha, buf_width[buf_index],
-                        buf_height[buf_index]);
+- (void)fill_rect_rgba_slow:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2 {
+    fill_rect_rgba_slow(pixel_data[buf_index], x1, y1, x2, y2, current_color.red, current_color.green, current_color.blue, current_color.alpha, buf_width[buf_index], buf_height[buf_index]);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)set_circle_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
-{
-    set_circle_rgba(pixel_data[buf_index], x1, y1, x2, y2, current_color.red,
-                    current_color.green, current_color.blue, current_color.alpha,
-                    buf_width[buf_index], buf_height[buf_index]);
+- (void)set_circle_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2 {
+    set_circle_rgba(pixel_data[buf_index], x1, y1, x2, y2, current_color.red, current_color.green, current_color.blue, current_color.alpha, buf_width[buf_index], buf_height[buf_index]);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)fill_circle_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
-{
-    fill_circle_rgba(pixel_data[buf_index], x1, y1, x2, y2, current_color.red,
-                     current_color.green, current_color.blue, current_color.alpha,
-                     buf_width[buf_index], buf_height[buf_index]);
+- (void)fill_circle_rgba:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2 {
+    fill_circle_rgba(pixel_data[buf_index], x1, y1, x2, y2, current_color.red, current_color.green, current_color.blue, current_color.alpha, buf_width[buf_index], buf_height[buf_index]);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)set_circle_rgba_smooth:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
-{
+- (void)set_circle_rgba_smooth:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2 {
     //    int r=80;
     //    double a=1.0;
     //    double b=2.0;
@@ -449,8 +363,7 @@
     //    }
 }
 
-- (void)fill_circle_rgba_smooth:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2
-{
+- (void)fill_circle_rgba_smooth:(int)x1 y1:(int)y1 x2:(int)x2 y2:(int)y2 {
     //単純な楕円塗りつぶし
     //    int ix,iy,x,y,r;
     //    r = 80;
@@ -470,37 +383,23 @@
 
 //
 
-- (void)d3setcam:(double)x1
-              y1:(double)y1
-              z1:(double)z1
-              x2:(double)x2
-              y2:(double)y2
-              z2:(double)z2
-{
+- (void)d3setcam:(double)x1 y1:(double)y1 z1:(double)z1 x2:(double)x2 y2:(double)y2 z2:(double)z2 {
     [d3m d3setcam:x1 cpy:y1 cpz:z1 tx:x2 ty:y2 tz:z2];
 }
 
-- (void)d3pos:(double)x y:(double)y z:(double)z
-{
+- (void)d3pos:(double)x y:(double)y z:(double)z {
     int px = (int)[d3m d3getposX:x y:y z:z];
     int py = (int)[d3m d3getposY:x y:y z:z];
     [self set_current_point:px point_y:py];
 }
 
-- (void)d3pset:(double)x y:(double)y z:(double)z
-{
+- (void)d3pset:(double)x y:(double)y z:(double)z {
     int px = (int)[d3m d3getposX:x y:y z:z];
     int py = (int)[d3m d3getposY:x y:y z:z];
     [self set_pixel_rgba:px point_y:py];
 }
 
-- (void)d3line:(double)sx
-            sy:(double)sy
-            sz:(double)sz
-            ex:(double)ex
-            ey:(double)ey
-            ez:(double)ez
-{
+- (void)d3line:(double)sx sy:(double)sy sz:(double)sz ex:(double)ex ey:(double)ey ez:(double)ez {
     int x1 = (int)[d3m d3getposX:sx y:sy z:sz];
     int y1 = (int)[d3m d3getposY:sx y:sy z:sz];
     int x2 = (int)[d3m d3getposX:ex y:ey z:ez];
@@ -508,13 +407,7 @@
     [self set_line_rgba:x1 start_point_y:y1 end_point_x:x2 end_point_y:y2];
 }
 
-- (void)d3lineSmooth:(double)sx
-                  sy:(double)sy
-                  sz:(double)sz
-                  ex:(double)ex
-                  ey:(double)ey
-                  ez:(double)ez
-{
+- (void)d3lineSmooth:(double)sx sy:(double)sy sz:(double)sz ex:(double)ex ey:(double)ey ez:(double)ez {
     int x1 = (int)[d3m d3getposX:sx y:sy z:sz];
     int y1 = (int)[d3m d3getposY:sx y:sy z:sz];
     int x2 = (int)[d3m d3getposX:ex y:ey z:ez];
@@ -522,13 +415,7 @@
     [self set_line_rgba_smooth:x1 start_point_y:y1 end_point_x:x2 end_point_y:y2];
 }
 
-- (void)d3box:(double)sx
-           sy:(double)sy
-           sz:(double)sz
-           ex:(double)ex
-           ey:(double)ey
-           ez:(double)ez
-{
+- (void)d3box:(double)sx sy:(double)sy sz:(double)sz ex:(double)ex ey:(double)ey ez:(double)ez {
     [self d3line:sx sy:sy sz:sz ex:sx ey:sy ez:ez];
     [self d3line:sx sy:sy sz:ez ex:sx ey:ey ez:ez];
     [self d3line:sx sy:ey sz:ez ex:sx ey:ey ez:sz];
@@ -543,13 +430,7 @@
     [self d3line:sx sy:ey sz:sz ex:ex ey:ey ez:sz];
 }
 
-- (void)d3boxSmooth:(double)sx
-                 sy:(double)sy
-                 sz:(double)sz
-                 ex:(double)ex
-                 ey:(double)ey
-                 ez:(double)ez
-{
+- (void)d3boxSmooth:(double)sx sy:(double)sy sz:(double)sz ex:(double)ex ey:(double)ey ez:(double)ez {
     [self d3lineSmooth:sx sy:sy sz:sz ex:sx ey:sy ez:ez];
     [self d3lineSmooth:sx sy:sy sz:ez ex:sx ey:ey ez:ez];
     [self d3lineSmooth:sx sy:ey sz:ez ex:sx ey:ey ez:sz];
@@ -564,29 +445,11 @@
     [self d3lineSmooth:sx sy:ey sz:sz ex:ex ey:ey ez:sz];
 }
 
-- (void)fillGradation:(int)pos_x
-                pos_y:(int)pos_y
-               size_w:(int)size_w
-               size_h:(int)size_h
-            direction:(int)direction
-          color_red_a:(int)color_red_a
-        color_green_a:(int)color_green_a
-         color_blue_a:(int)color_blue_a
-          color_red_b:(int)color_red_b
-        color_green_b:(int)color_green_b
-         color_blue_b:(int)color_blue_b
-{
-    unsigned char* plane_pixeldata =
-    malloc(sizeof(unsigned char) * buf_width[buf_index] *
-           buf_height[buf_index] * samplesPerPixel);
-    memcpy(plane_pixeldata, pixel_data[window_id],
-           sizeof(unsigned char) * buf_width[buf_index] * buf_height[buf_index] *
-           samplesPerPixel);
+- (void)fillGradation:(int)pos_x pos_y:(int)pos_y size_w:(int)size_w size_h:(int)size_h direction:(int)direction color_red_a:(int)color_red_a color_green_a:(int)color_green_a color_blue_a:(int)color_blue_a color_red_b:(int)color_red_b color_green_b:(int)color_green_b color_blue_b:(int)color_blue_b {
+    unsigned char* plane_pixeldata = malloc(sizeof(unsigned char) * buf_width[buf_index] * buf_height[buf_index] * samplesPerPixel);
+    memcpy(plane_pixeldata, pixel_data[window_id], sizeof(unsigned char) * buf_width[buf_index] * buf_height[buf_index] * samplesPerPixel);
     
-    CGContextRef context = CGBitmapContextCreate(
-                                                 plane_pixeldata, buf_width[buf_index], buf_height[buf_index], 8,
-                                                 buf_width[buf_index] * 4, CGColorSpaceCreateDeviceRGB(),
-                                                 kCGImageAlphaPremultipliedLast);
+    CGContextRef context = CGBitmapContextCreate(plane_pixeldata, buf_width[buf_index], buf_height[buf_index], 8, buf_width[buf_index] * 4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedLast);
     CGContextSaveGState(context);
     
     NSRect rect = NSMakeRect(0, 0, buf_width[buf_index], buf_height[buf_index]);
@@ -602,7 +465,6 @@
     CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
     CGFloat components[] = {
         rb, gb, bb, 1.0f, ra, ga, ba, 1.0f // R, G, B, Alpha
-        
     };
     CGFloat locations[] = { 0.0f, 1.0f };
     
@@ -617,28 +479,17 @@
         endPoint.y = rect.origin.y + rect.size.height;
     }
     
-    CGGradientRef gradientRef = CGGradientCreateWithColorComponents(
-                                                                    colorSpaceRef, components, locations, count);
+    CGGradientRef gradientRef = CGGradientCreateWithColorComponents(colorSpaceRef, components, locations, count);
     
-    CGContextDrawLinearGradient(context, gradientRef, startPoint, endPoint,
-                                kCGGradientDrawsAfterEndLocation);
+    CGContextDrawLinearGradient(context, gradientRef, startPoint, endPoint, kCGGradientDrawsAfterEndLocation);
     
     // 画像出力
     unsigned char* bitmap = CGBitmapContextGetData(context);
-    CGDataProviderRef dataProviderRef = CGDataProviderCreateWithData(
-                                                                     NULL, bitmap, buf_width[buf_index] * buf_height[buf_index] * 4, bufferFree);
+    CGDataProviderRef dataProviderRef = CGDataProviderCreateWithData(NULL, bitmap, buf_width[buf_index] * buf_height[buf_index] * 4, bufferFree);
     CGImageRef result =
-    CGImageCreate(buf_width[buf_index], buf_height[buf_index], 8, 32,
-                  buf_width[buf_index] * 4, CGColorSpaceCreateDeviceRGB(),
-                  (CGBitmapInfo)kCGImageAlphaLast, dataProviderRef, NULL, 0,
-                  kCGRenderingIntentDefault);
-    NSImage* image = [[NSImage alloc]
-                      initWithCGImage:result
-                      size:NSMakeSize(
-                                      buf_width[buf_index],
-                                      buf_height[buf_index])]; //[ initWithCGImage:result]
-    NSBitmapImageRep* bip =
-    [[NSBitmapImageRep alloc] initWithData:[image TIFFRepresentation]];
+    CGImageCreate(buf_width[buf_index], buf_height[buf_index], 8, 32, buf_width[buf_index] * 4, CGColorSpaceCreateDeviceRGB(), (CGBitmapInfo)kCGImageAlphaLast, dataProviderRef, NULL, 0, kCGRenderingIntentDefault);
+    NSImage* image = [[NSImage alloc] initWithCGImage:result size:NSMakeSize(buf_width[buf_index], buf_height[buf_index])]; //[ initWithCGImage:result]
+    NSBitmapImageRep* bip = [[NSBitmapImageRep alloc] initWithData:[image TIFFRepresentation]];
     
     CGGradientRelease(gradientRef);
     CGColorSpaceRelease(colorSpaceRef);
@@ -659,7 +510,6 @@
             pixel_data[buf_index][i + 1] = color_now[1];
             pixel_data[buf_index][i + 2] = color_now[2];
             pixel_data[buf_index][i + 3] = color_now[3];
-            
             i += samplesPerPixel;
         }
     }
@@ -669,21 +519,14 @@
     }
 }
 
-- (void)gcopy:(int)index px:(int)px py:(int)py sx:(int)sx sy:(int)sy
-{
-    copy_pixel_data(pixel_data[buf_index], pixel_data[index], current_point.x,
-                    current_point.y, px, py, sx, sy, current_copy_width,
-                    current_copy_height, current_color.red, current_color.green,
-                    current_color.blue, current_color.alpha, buf_width[buf_index],
-                    buf_height[buf_index], buf_width[index], buf_height[index],
-                    current_blend_mode, current_blend_opacity);
+- (void)gcopy:(int)index px:(int)px py:(int)py sx:(int)sx sy:(int)sy {
+    copy_pixel_data(pixel_data[buf_index], pixel_data[index], current_point.x, current_point.y, px, py, sx, sy, current_copy_width, current_copy_height, current_color.red, current_color.green, current_color.blue, current_color.alpha, buf_width[buf_index], buf_height[buf_index], buf_width[index], buf_height[index], current_blend_mode, current_blend_opacity);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)mes:(NSString*)text
-{
+- (void)mes:(NSString*)text {
     @autoreleasepool {
         // NSImageに文字を描画
         NSString* str = text;
@@ -958,62 +801,51 @@
     }
 }
 
-static void
-bufferFree(void* info, const void* data, size_t size)
-{
+static void bufferFree(void* info, const void* data, size_t size) {
     // free((unsigned char *)data);
 }
 
-- (NSSize)picload:(NSString*)filename
-{
+- (NSSize)picload:(NSString*)filename {
     return [self picload:filename mode:0];
 }
 
-- (NSSize)picload:(NSString*)filename mode:(int)mode
-{
+- (NSSize)picload:(NSString*)filename mode:(int)mode {
     NSSize pictureSize;
-    @autoreleasepool {
-        NSString* path;
-        if (g.is_startax_in_resource) { //リソース内にstart.axがある場合
-            path = [NSBundle mainBundle].resourcePath; //リソースディレクトリ
-            path = [path stringByAppendingString:@"/"];
-            path = [path stringByAppendingString:filename];
-        } else if (![g.current_script_path
-                     isEqual:@""]) { //ソースコードのあるディレクトリ
-            path = g.current_script_path;
-        } else { // hsptmp
-            path = [NSHomeDirectory() stringByAppendingString:@"/Documents/hsptmp"];
-        }
+    NSString* path;
+    if (g.is_startax_in_resource) { //リソース内にstart.axがある場合
+        path = [NSBundle mainBundle].resourcePath; //リソースディレクトリ
         path = [path stringByAppendingString:@"/"];
         path = [path stringByAppendingString:filename];
-        
-        _Size image_size;
-        if (mode == 0) {
-            //画像サイズに合わせて画面をリサイズ
-            image_size =
-            load_image_init_canvas([path UTF8String], pixel_data[buf_index]);
-            buf_width[buf_index] = image_size.width;
-            buf_height[buf_index] = image_size.height;
-        } else {
-            //画面をリサイズせず読み込み
-            image_size = load_image([path UTF8String], pixel_data[buf_index],
-                                    current_point.x, current_point.y,
-                                    buf_width[buf_index], buf_height[buf_index]);
-        }
-        pictureSize.width = image_size.width;
-        pictureSize.height = image_size.height;
-        
-        if (is_redraw_just_now && buf_index == 0) {
-            [self redraw];
-        }
+    } else if (![g.current_script_path isEqual:@""]) { //ソースコードのあるディレクトリ
+        path = g.current_script_path;
+    } else { // hsptmp
+        path = [NSHomeDirectory() stringByAppendingString:@"/Documents/hsptmp"];
+    }
+    path = [path stringByAppendingString:@"/"];
+    path = [path stringByAppendingString:filename];
+    
+    _Size image_size;
+    if (mode == 0) {
+        //画像サイズに合わせて画面をリサイズ
+        image_size = load_image_init_canvas([path UTF8String], pixel_data[buf_index]);
+        buf_width[buf_index] = image_size.width;
+        buf_height[buf_index] = image_size.height;
+    } else {
+        //画面をリサイズせず読み込み
+        image_size = load_image([path UTF8String], pixel_data[buf_index], current_point.x, current_point.y, buf_width[buf_index], buf_height[buf_index]);
+    }
+    pictureSize.width = image_size.width;
+    pictureSize.height = image_size.height;
+    
+    if (is_redraw_just_now && buf_index == 0) {
+        [self redraw];
     }
     return pictureSize;
 }
 
 //-------------------------------------->> フィルター
 
-- (void)vcopy:(int)index
-{
+- (void)vcopy:(int)index {
     //    CGAffineTransform t = CGAffineTransformMakeTranslation(200, 200);
     //    NSLog(@"%f",at.a);
     //    NSLog(@"%f",at.b);
@@ -1044,131 +876,110 @@ bufferFree(void* info, const void* data, size_t size)
     }
 }
 
-- (void)scale
-{
-    //拡大縮小する：倍率はdestのサイズで変わる
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
-    vImage_Buffer dest = { pixel_data[buf_index], 120, 160,
-        buf_width[buf_index] * 4 };
+/// 拡大縮小する：倍率はdestのサイズで変わる
+///
+- (void)scale {
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImage_Buffer dest = { pixel_data[buf_index], 120, 160, buf_width[buf_index] * 4 };
     vImageScale_ARGB8888(&source, &dest, NULL, kvImageHighQualityResampling);
 }
 
-- (void)rotate
-{
-    //回転する
+/// 回転する
+///
+- (void)rotate {
     float radians = 2.0;
     Pixel_8888 bgColor = { 0, 0, 0, 0 };
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
-    vImageRotate_ARGB8888(&source, &source, NULL, radians, bgColor,
-                          kvImageBackgroundColorFill);
+    vImage_Buffer source = {pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImageRotate_ARGB8888(&source, &source, NULL, radians, bgColor, kvImageBackgroundColorFill);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)edgedetect
-{
-    //エッジ検出
+/// エッジ検出
+- (void)edgedetect {
     static int16_t edgedetect_kernel[9] = { -1, -1, -1, -1, 8, -1, -1, -1, -1 };
     Pixel_8888 bgColor = { 0, 0, 0, 0 };
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
-    vImageConvolve_ARGB8888(&source, &source, NULL, 0, 0, edgedetect_kernel, 3, 3,
-                            1, bgColor, kvImageCopyInPlace);
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImageConvolve_ARGB8888(&source, &source, NULL, 0, 0, edgedetect_kernel, 3, 3, 1, bgColor, kvImageCopyInPlace);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)sharpen
-{
-    //先鋭化
+/// 先鋭化
+///
+- (void)sharpen {
     static int16_t sharpen_kernel[9] = { -1, -1, -1, -1, 9, -1, -1, -1, -1 };
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
-    vImageConvolve_ARGB8888(&source, &source, NULL, 0, 0, sharpen_kernel, 3, 3, 1,
-                            NULL, kvImageCopyInPlace);
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImageConvolve_ARGB8888(&source, &source, NULL, 0, 0, sharpen_kernel, 3, 3, 1, NULL, kvImageCopyInPlace);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)unsharpen
-{
+- (void)unsharpen {
     static int16_t unsharpen_kernel[9] = { -1, -1, -1, -1, 17, -1, -1, -1, -1 };
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
-    vImageConvolve_ARGB8888(&source, &source, NULL, 0, 0, unsharpen_kernel, 3, 3,
-                            9, NULL, kvImageCopyInPlace);
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImageConvolve_ARGB8888(&source, &source, NULL, 0, 0, unsharpen_kernel, 3, 3, 9, NULL, kvImageCopyInPlace);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)dilate
-{
-    //膨張
+/// 膨張
+///
+- (void)dilate {
     static unsigned char morphological_kernel[9] = {
         1, 1, 1, 1, 1, 1, 1, 1, 1,
     };
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
-    vImageDilate_ARGB8888(&source, &source, 0, 0, morphological_kernel, 3, 3,
-                          kvImageCopyInPlace);
-    vImageErode_ARGB8888(&source, &source, 0, 0, morphological_kernel, 3, 3,
-                         kvImageCopyInPlace);
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImageDilate_ARGB8888(&source, &source, 0, 0, morphological_kernel, 3, 3, kvImageCopyInPlace);
+    vImageErode_ARGB8888(&source, &source, 0, 0, morphological_kernel, 3, 3, kvImageCopyInPlace);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)erode
-{
-    //収縮
+/// 収縮
+///
+- (void)erode {
     static unsigned char morphological_kernel[9] = {
         1, 1, 1, 1, 1, 1, 1, 1, 1,
     };
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
-    vImageErode_ARGB8888(&source, &source, 0, 0, morphological_kernel, 3, 3,
-                         kvImageCopyInPlace);
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImageErode_ARGB8888(&source, &source, 0, 0, morphological_kernel, 3, 3, kvImageCopyInPlace);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
+/// ヒストグラム均一化
+///
 - (void)equalization
 {
-    //ヒストグラム均一化
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
     vImageEqualization_ARGB8888(&source, &source, kvImageNoFlags);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)emboss
-{
+- (void)emboss {
     //エンボス
     static int16_t emboss_kernel[9] = { -2, 0, 0, 0, 1, 0, 0, 0, 2 };
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
-    vImageConvolve_ARGB8888(&source, &source, NULL, 0, 0, emboss_kernel, 3, 3, 1,
-                            NULL, kvImageCopyInPlace);
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImageConvolve_ARGB8888(&source, &source, NULL, 0, 0, emboss_kernel, 3, 3, 1, NULL, kvImageCopyInPlace);
     if (is_redraw_just_now && buf_index == 0) {
         [self redraw];
     }
 }
 
-- (void)verticalReflect
-{
-    //上下反転する
+/// 上下反転する
+///
+- (void)verticalReflect {
     //直接出力する方法
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
     vImageVerticalReflect_ARGB8888(&source, &source, kvImageNoFlags);
     
     //別な方法
@@ -1189,12 +1000,11 @@ bufferFree(void* info, const void* data, size_t size)
     }
 }
 
-- (void)horizontalReflect
-{
-    //左右反転する
+/// 左右反転する
+///
+- (void)horizontalReflect {
     //直接出力する方法
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
     vImageHorizontalReflect_ARGB8888(&source, &source, kvImageNoFlags);
     
     //別な方法
@@ -1215,9 +1025,9 @@ bufferFree(void* info, const void* data, size_t size)
     }
 }
 
-- (void)gaussianblur
-{
-    //ぼかし
+/// ぼかし
+///
+- (void)gaussianblur {
     // 2次元のガウス関数を求める
     double x, y;
     double s = 5;
@@ -1247,8 +1057,7 @@ bufferFree(void* info, const void* data, size_t size)
         divisor += gaussKernel[i];
     }
     //直接出力する方法
-    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index],
-        buf_width[buf_index], buf_width[buf_index] * 4 };
+    vImage_Buffer source = { pixel_data[buf_index], buf_height[buf_index], buf_width[buf_index], buf_width[buf_index] * 4 };
     vImageConvolve_ARGB8888(&source, &source, NULL, 0, 0, gaussKernel, m, m,
                             divisor, NULL, kvImageBackgroundColorFill);
     
@@ -1270,150 +1079,74 @@ bufferFree(void* info, const void* data, size_t size)
     }
 }
 
-- (void)cifilter:(int)type
-{
+- (void)cifilter:(int)type {
     //プレーンデータからNSImageを生成
-    unsigned char* plane = malloc(sizeof(unsigned char) * buf_width[buf_index] *
-                                  buf_height[buf_index] * 4 * 2);
-    memcpy(plane, pixel_data[buf_index], sizeof(unsigned char) *
-           buf_width[buf_index] *
-           buf_height[buf_index] * 4);
-    NSBitmapImageRep* bip = [[NSBitmapImageRep alloc]
-                             initWithBitmapDataPlanes:&plane
-                             pixelsWide:buf_width[buf_index]
-                             pixelsHigh:buf_height[buf_index]
-                             bitsPerSample:8
-                             samplesPerPixel:samplesPerPixel
-                             hasAlpha:YES
-                             isPlanar:NO
-                             colorSpaceName:NSDeviceRGBColorSpace
-                             bytesPerRow:buf_width[buf_index] * samplesPerPixel
-                             bitsPerPixel:samplesPerPixel * 8];
+    unsigned char* plane = malloc(sizeof(unsigned char) * buf_width[buf_index] * buf_height[buf_index] * 4 * 2);
+    memcpy(plane, pixel_data[buf_index], sizeof(unsigned char) * buf_width[buf_index] * buf_height[buf_index] * 4);
+    NSBitmapImageRep* bip = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:&plane pixelsWide:buf_width[buf_index] pixelsHigh:buf_height[buf_index] bitsPerSample:8 samplesPerPixel:samplesPerPixel hasAlpha:YES isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace bytesPerRow:buf_width[buf_index] * samplesPerPixel bitsPerPixel:samplesPerPixel * 8];
     
     free(plane);
     
-    CIImage* ciImage = [[CIImage alloc]
-                        initWithCGImage:bip.CGImage]; // NSBitmapImageRepをCIImageに変換
+    CIImage* ciImage = [[CIImage alloc] initWithCGImage:bip.CGImage]; // NSBitmapImageRepをCIImageに変換
     
     CIFilter* filter;
     switch (type) {
-        case 0:
-            //グレースケール
-            filter = [CIFilter
-                      filterWithName:@"CIColorMonochrome"
-                      keysAndValues:kCIInputImageKey, ciImage, @"inputColor",
-                      [CIColor colorWithRed:0.75 green:0.75 blue:0.75],
-                      @"inputIntensity", [NSNumber numberWithFloat:1.0], nil];
+        case 0: //グレースケール
+            filter = [CIFilter filterWithName:@"CIColorMonochrome" keysAndValues:kCIInputImageKey, ciImage, @"inputColor", [CIColor colorWithRed:0.75 green:0.75 blue:0.75], @"inputIntensity", [NSNumber numberWithFloat:1.0], nil];
             break;
-        case 1:
-            //セピア
+        case 1: // セピア
             filter =
-            [CIFilter filterWithName:@"CISepiaTone"
-                       keysAndValues:kCIInputImageKey, ciImage, @"inputIntensity",
-             [NSNumber numberWithFloat:0.8], nil];
+            [CIFilter filterWithName:@"CISepiaTone" keysAndValues:kCIInputImageKey, ciImage, @"inputIntensity",
+            [NSNumber numberWithFloat:0.8], nil];
             break;
-        case 2:
-            //色の反転
-            filter = [CIFilter filterWithName:@"CIColorInvert"
-                                keysAndValues:kCIInputImageKey, ciImage, nil];
+        case 2: // 色の反転
+            filter = [CIFilter filterWithName:@"CIColorInvert" keysAndValues:kCIInputImageKey, ciImage, nil];
             break;
-        case 3:
-            //偽色
-            filter = [CIFilter
-                      filterWithName:@"CIFalseColor"
-                      keysAndValues:kCIInputImageKey, ciImage, @"inputColor0",
-                      [CIColor colorWithRed:0.44 green:0.5 blue:0.2 alpha:1],
-                      @"inputColor1",
-                      [CIColor colorWithRed:1 green:0.92 blue:0.50 alpha:1],
-                      nil];
+        case 3: // 偽色
+            filter = [CIFilter filterWithName:@"CIFalseColor" keysAndValues:kCIInputImageKey, ciImage, @"inputColor0", [CIColor colorWithRed:0.44 green:0.5 blue:0.2 alpha:1], @"inputColor1", [CIColor colorWithRed:1 green:0.92 blue:0.50 alpha:1], nil];
             break;
-        case 4:
-            //色調節フィルタ
-            filter = [CIFilter
-                      filterWithName:@"CIColorControls"
-                      keysAndValues:kCIInputImageKey, ciImage, @"inputSaturation",
-                      [NSNumber numberWithFloat:1.0], @"inputBrightness",
-                      [NSNumber numberWithFloat:0.5], @"inputContrast",
-                      [NSNumber numberWithFloat:3.0], nil];
+        case 4: // 色調節フィルタ
+            filter = [CIFilter filterWithName:@"CIColorControls" keysAndValues:kCIInputImageKey, ciImage, @"inputSaturation", [NSNumber numberWithFloat:1.0], @"inputBrightness", [NSNumber numberWithFloat:0.5], @"inputContrast", [NSNumber numberWithFloat:3.0], nil];
             break;
-        case 5:
-            //トーンカーブ
-            filter = [CIFilter
-                      filterWithName:@"CIToneCurve"
-                      keysAndValues:kCIInputImageKey, ciImage, @"inputPoint0",
-                      [CIVector vectorWithX:0.0 Y:0.0], @"inputPoint1",
-                      [CIVector vectorWithX:0.25 Y:0.1], @"inputPoint2",
-                      [CIVector vectorWithX:0.5 Y:0.5], @"inputPoint3",
-                      [CIVector vectorWithX:0.75 Y:0.9], @"inputPoint4",
-                      [CIVector vectorWithX:1 Y:1], nil];
+        case 5: // トーンカーブ
+            filter = [CIFilter filterWithName:@"CIToneCurve" keysAndValues:kCIInputImageKey, ciImage, @"inputPoint0", [CIVector vectorWithX:0.0 Y:0.0], @"inputPoint1", [CIVector vectorWithX:0.25 Y:0.1], @"inputPoint2", [CIVector vectorWithX:0.5 Y:0.5], @"inputPoint3", [CIVector vectorWithX:0.75 Y:0.9], @"inputPoint4", [CIVector vectorWithX:1 Y:1], nil];
             break;
-        case 6:
-            //色相調整
-            filter =
-            [CIFilter filterWithName:@"CIHueAdjust"
-                       keysAndValues:kCIInputImageKey, ciImage, @"inputAngle",
-             [NSNumber numberWithFloat:3.14], nil];
+        case 6: // 色相調整
+            filter = [CIFilter filterWithName:@"CIHueAdjust" keysAndValues:kCIInputImageKey, ciImage, @"inputAngle",
+            [NSNumber numberWithFloat:3.14], nil];
             break;
-        case 7:
-            //ビネット効果（トイカメラ風）
-            filter = [CIFilter
-                      filterWithName:@"CIVignette"
-                      keysAndValues:kCIInputImageKey, ciImage, @"inputRadius",
-                      [NSNumber numberWithFloat:200.0f], @"inputIntensity",
-                      [NSNumber numberWithFloat:2.0f], nil];
+        case 7: // ビネット効果（トイカメラ風）
+            filter = [CIFilter filterWithName:@"CIVignette" keysAndValues:kCIInputImageKey, ciImage, @"inputRadius", [NSNumber numberWithFloat:200.0f], @"inputIntensity", [NSNumber numberWithFloat:2.0f], nil];
             break;
-        case 8:
-            //アルファをマスク
-            filter = [CIFilter filterWithName:@"CIMaskToAlpha"
-                                keysAndValues:kCIInputImageKey, ciImage, nil];
+        case 8: // アルファをマスク
+            filter = [CIFilter filterWithName:@"CIMaskToAlpha" keysAndValues:kCIInputImageKey, ciImage, nil];
             break;
-        case 9:
-            //モザイク
-            filter = [CIFilter
-                      filterWithName:@"CIPixellate"
-                      keysAndValues:kCIInputImageKey, ciImage, @"inputCenter",
-                      [CIVector vectorWithX:250.0 Y:250.0], @"inputScale",
-                      [NSNumber numberWithFloat:20.0], nil];
+        case 9: // モザイク
+            filter = [CIFilter filterWithName:@"CIPixellate" keysAndValues:kCIInputImageKey, ciImage, @"inputCenter", [CIVector vectorWithX:250.0 Y:250.0], @"inputScale", [NSNumber numberWithFloat:20.0], nil];
             break;
-        case 10:
-            //写真効果1
-            filter = [CIFilter filterWithName:@"CIPhotoEffectChrome"
-                                keysAndValues:kCIInputImageKey, ciImage, nil];
+        case 10: // 写真効果1
+            filter = [CIFilter filterWithName:@"CIPhotoEffectChrome" keysAndValues:kCIInputImageKey, ciImage, nil];
             break;
-        case 11:
-            //写真効果2
-            filter = [CIFilter filterWithName:@"CIPhotoEffectFade"
-                                keysAndValues:kCIInputImageKey, ciImage, nil];
+        case 11: // 写真効果2
+            filter = [CIFilter filterWithName:@"CIPhotoEffectFade" keysAndValues:kCIInputImageKey, ciImage, nil];
             break;
-        case 12:
-            //写真効果3
-            filter = [CIFilter filterWithName:@"CIPhotoEffectInstant"
-                                keysAndValues:kCIInputImageKey, ciImage, nil];
+        case 12: //写真効果3
+            filter = [CIFilter filterWithName:@"CIPhotoEffectInstant" keysAndValues:kCIInputImageKey, ciImage, nil];
             break;
-        case 13:
-            //写真効果4
-            filter = [CIFilter filterWithName:@"CIPhotoEffectMono"
-                                keysAndValues:kCIInputImageKey, ciImage, nil];
+        case 13: //写真効果4
+            filter = [CIFilter filterWithName:@"CIPhotoEffectMono" keysAndValues:kCIInputImageKey, ciImage, nil];
             break;
-        case 14:
-            //写真効果5
-            filter = [CIFilter filterWithName:@"CIPhotoEffectNoir"
-                                keysAndValues:kCIInputImageKey, ciImage, nil];
+        case 14: //写真効果5
+            filter = [CIFilter filterWithName:@"CIPhotoEffectNoir" keysAndValues:kCIInputImageKey, ciImage, nil];
             break;
-        case 15:
-            //写真効果6
-            filter = [CIFilter filterWithName:@"CIPhotoEffectProcess"
-                                keysAndValues:kCIInputImageKey, ciImage, nil];
+        case 15: //写真効果6
+            filter = [CIFilter filterWithName:@"CIPhotoEffectProcess" keysAndValues:kCIInputImageKey, ciImage, nil];
             break;
-        case 16:
-            //写真効果7
-            filter = [CIFilter filterWithName:@"CIPhotoEffectTonal"
-                                keysAndValues:kCIInputImageKey, ciImage, nil];
+        case 16: //写真効果7
+            filter = [CIFilter filterWithName:@"CIPhotoEffectTonal" keysAndValues:kCIInputImageKey, ciImage, nil];
             break;
-        case 17:
-            //写真効果8
-            filter = [CIFilter filterWithName:@"CIPhotoEffectTransfer"
-                                keysAndValues:kCIInputImageKey, ciImage, nil];
+        case 17: //写真効果8
+            filter = [CIFilter filterWithName:@"CIPhotoEffectTransfer" keysAndValues:kCIInputImageKey, ciImage, nil];
             break;
         default:
             break;
@@ -1423,8 +1156,7 @@ bufferFree(void* info, const void* data, size_t size)
     ciImage = filter.outputImage;
     
     //描画した画像からプレーンデータを生成する
-    bip = [[NSBitmapImageRep alloc]
-           initWithCIImage:ciImage]; // CIImageからNSBitmapImageRepを生成する
+    bip = [[NSBitmapImageRep alloc] initWithCIImage:ciImage]; // CIImageからNSBitmapImageRepを生成する
     NSUInteger p[4];
     int i = 0;
     int height = (int)bip.size.height;

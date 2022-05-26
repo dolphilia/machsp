@@ -33,12 +33,12 @@ void CToken::Mes(char *mes) {
 /// フォーマット付き
 ///
 void CToken::Mesf(char *format, ...) {
-    char textbf[1024];
+    char txtbuf[1024];
     va_list args;
     va_start(args, format);
-    vsprintf(textbf, format, args);
+    vsprintf(txtbuf, format, args);
     va_end(args);
-    errbuf->PutStr(textbf);
+    errbuf->PutStr(txtbuf);
     errbuf->PutStr((char *)"\r\n");
 }
 
@@ -128,6 +128,9 @@ CToken::CToken(void) {
     ahtmodel = NULL;
     ahtbuf = NULL;
     scnvbuf = NULL;
+    
+    undefined_symbols = (undefined_symbol_t*)[cwrap vector_create];
+    
     ResetCompiler();
 }
 
@@ -143,6 +146,9 @@ CToken::CToken(char *buf) {
     ahtmodel = NULL;
     ahtbuf = NULL;
     scnvbuf = NULL;
+    
+    undefined_symbols = (undefined_symbol_t*)[cwrap vector_create];
+    
     ResetCompiler();
 }
 
@@ -1456,6 +1462,9 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
         return str;
     }
 
+//#define __vector_add_asg(vec_addr) ((typeof(*vec_addr))([cwrap _vector_add:(vector*)vec_addr vec_addr:(sizeof)(**vec_addr)]))
+//#define __vector_add(vec_addr, value) (*__vector_add_asg(vec_addr) = value)
+    
     if (wrtbuf != NULL) { // 登録されていないキーワードを展開
         if (strcmp((char *)s2, fixname)) {
             //	後ろで定義されている関数の呼び出しのために
@@ -1464,13 +1473,33 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
             sym.pos = wrtbuf->GetSize();
             sym.len_include_modname = (int)strlen(fixname);
             sym.len = (int)strlen((char *)s2);
-            undefined_symbols.push_back(sym);
+            //undefined_symbols.push_back(sym);
+            //vector_push(undefined_symbols, sym);
+            //[cwrap _vector_add:(vector*)undefined_symbols type_size:(vec_type_t)sym];
+            //__vector_add(undefined_symbols, sym);
+            //struct undefined_symbol_t* symbol = (undefined_symbol_t*)[cwrap _vector_add:(vector*)undefined_symbols type_size:sizeof(*undefined_symbols)];
+            //symbol = &sym;
+            
+            vector v = [cwrap _vector_add:(vector*)&undefined_symbols type_size:sizeof(**&undefined_symbols)];
+            (*((typeof(*&undefined_symbols))(v)) = sym);
+            //(*((typeof(*&undefined_symbols))(_vector_add((vector*)&undefined_symbols, sizeof(**&undefined_symbols)))) = sym);
+            
+            //*(typeof(*vec_addr))_vector_add((vector*)vec_addr, sizeof(**vec_addr)) = value
         }
         wrtbuf->PutStr(fixname);
     }
     *type = TK_OBJ;
     return (char *)vs;
 }
+
+
+
+
+
+//#define vector_add(vec_addr, value) (*vector_add_asg(vec_addr) = value)
+//*vector_add_asg(vec_addr) = value
+
+
 
 /// strから改行までをスキップする
 ///
@@ -3858,7 +3887,9 @@ void CToken::FinishPreprocess(CMemBuf *buf) {
     int read_pos = 0;
     int write_pos = 0;
     char *p = buf->GetBuffer();
-    size_t len = undefined_symbols.size();
+    
+    size_t len = [cwrap vector_size:undefined_symbols];
+    //size_t len = undefined_symbols.size();
     
     for (size_t i = 0; i < len; i ++) {
         undefined_symbol_t sym = undefined_symbols[i];

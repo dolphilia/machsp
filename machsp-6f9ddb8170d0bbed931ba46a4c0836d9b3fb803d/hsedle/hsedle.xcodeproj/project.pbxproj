@@ -38,11 +38,13 @@
 		8B1FAA3B28321B76003CA33B /* utility_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B1FAA3A28321B76003CA33B /* utility_time.c */; };
 		8B1FAA3E28321D7D003CA33B /* utility_com.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B1FAA3D28321D7D003CA33B /* utility_com.c */; };
 		8B1FAA4128322009003CA33B /* utility_stack.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B1FAA4028322009003CA33B /* utility_stack.c */; };
+		8B36724D2834C263002A21A6 /* vec.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B36724B2834C263002A21A6 /* vec.c */; };
 		8B3E2A1B2812A57E000089BE /* objc_utility_string.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E2A1A2812A57E000089BE /* objc_utility_string.m */; };
 		8B46993F283230C7007F126E /* utility_errmsg.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B46993E283230C7007F126E /* utility_errmsg.c */; };
 		8B472F0B280D300200541F7F /* utility.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B472F0A280D300200541F7F /* utility.c */; };
 		8B472F0D280D318D00541F7F /* c_wrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B472F0C280D318D00541F7F /* c_wrapper.m */; };
 		8B472F11280D32CF00541F7F /* swift_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B472F10280D32CF00541F7F /* swift_test.swift */; };
+		8B81A7452834DF8C000EB175 /* str.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B81A7432834DF8C000EB175 /* str.c */; };
 		8B9F82231DAE1BFD00A91F5C /* hsp.app in Resources */ = {isa = PBXBuildFile; fileRef = 8B9F82221DAE1BFD00A91F5C /* hsp.app */; };
 /* End PBXBuildFile section */
 
@@ -104,6 +106,8 @@
 		8B1FAA3D28321D7D003CA33B /* utility_com.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = utility_com.c; sourceTree = "<group>"; };
 		8B1FAA3F28322009003CA33B /* utility_stack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utility_stack.h; sourceTree = "<group>"; };
 		8B1FAA4028322009003CA33B /* utility_stack.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = utility_stack.c; sourceTree = "<group>"; };
+		8B36724B2834C263002A21A6 /* vec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vec.c; path = "../../../../../../Downloads/c-vector-master/vec.c"; sourceTree = "<group>"; };
+		8B36724C2834C263002A21A6 /* vec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vec.h; path = "../../../../../../Downloads/c-vector-master/vec.h"; sourceTree = "<group>"; };
 		8B3E2A1A2812A57E000089BE /* objc_utility_string.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = objc_utility_string.m; sourceTree = "<group>"; };
 		8B3E2A1C2812A58A000089BE /* objc_utility_string.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = objc_utility_string.h; sourceTree = "<group>"; };
 		8B46993D283230C7007F126E /* utility_errmsg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utility_errmsg.h; sourceTree = "<group>"; };
@@ -114,6 +118,8 @@
 		8B472F0E280D31A100541F7F /* c_wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = c_wrapper.h; sourceTree = "<group>"; };
 		8B472F0F280D32CF00541F7F /* hsedle-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hsedle-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B472F10280D32CF00541F7F /* swift_test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_test.swift; sourceTree = "<group>"; };
+		8B81A7432834DF8C000EB175 /* str.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = str.c; sourceTree = "<group>"; };
+		8B81A7442834DF8C000EB175 /* str.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = str.h; sourceTree = "<group>"; };
 		8B9F82221DAE1BFD00A91F5C /* hsp.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = hsp.app; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -211,6 +217,10 @@
 				74EF0C291C9409CA0085B93F /* token.h */,
 				74EF0C2A1C9409CA0085B93F /* token.mm */,
 				74EF0C2B1C9409CA0085B93F /* codegen.mm */,
+				8B81A7442834DF8C000EB175 /* str.h */,
+				8B81A7432834DF8C000EB175 /* str.c */,
+				8B36724C2834C263002A21A6 /* vec.h */,
+				8B36724B2834C263002A21A6 /* vec.c */,
 				8B472F09280D300200541F7F /* utility.h */,
 				8B472F0A280D300200541F7F /* utility.c */,
 				8B1FAA3F28322009003CA33B /* utility_stack.h */,
@@ -349,12 +359,14 @@
 				8B1FAA3B28321B76003CA33B /* utility_time.c in Sources */,
 				74EF0C2F1C9409CA0085B93F /* localinfo.mm in Sources */,
 				74EF0BF91C94093D0085B93F /* main.m in Sources */,
+				8B81A7452834DF8C000EB175 /* str.c in Sources */,
 				74EF0C5C1C9409ED0085B93F /* MyTextView.m in Sources */,
 				8B472F0B280D300200541F7F /* utility.c in Sources */,
 				74EF0C361C9409CA0085B93F /* tagstack.mm in Sources */,
 				74EF0C3B1C9409CA0085B93F /* codegen.mm in Sources */,
 				8B472F0D280D318D00541F7F /* c_wrapper.m in Sources */,
 				74EF0BF61C94093D0085B93F /* AppDelegate.m in Sources */,
+				8B36724D2834C263002A21A6 /* vec.c in Sources */,
 				74EF0C341C9409CA0085B93F /* strnote.mm in Sources */,
 				74EF0C2E1C9409CA0085B93F /* hspcmd.mm in Sources */,
 				74EF0C371C9409CA0085B93F /* errormsg.mm in Sources */,

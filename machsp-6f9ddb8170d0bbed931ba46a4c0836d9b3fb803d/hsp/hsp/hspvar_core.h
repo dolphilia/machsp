@@ -34,10 +34,8 @@ void HspVarCoreDup(PVal* pval, PVal* arg, APTR aptr);
 void HspVarCoreDupPtr(PVal* pval, int flag, void* ptr, int size);
 void HspVarCoreClear(PVal* pval, int flag);
 void HspVarCoreClearTemp(PVal* pval, int flag);
-void HspVarCoreDim(PVal* pval, int flag, int len1, int len2, int len3,
-                   int len4);
-void HspVarCoreDimFlex(PVal* pval, int flag, int len0, int len1, int len2,
-                       int len3, int len4);
+void HspVarCoreDim(PVal* pval, int flag, int len1, int len2, int len3, int len4);
+void HspVarCoreDimFlex(PVal* pval, int flag, int len0, int len1, int len2, int len3, int len4);
 void HspVarCoreReDim(PVal* pval, int lenid, int len);
 void* HspVarCoreCnvPtr(PVal* pval, int flag);
 PDAT* HspVarCorePtrAPTR(PVal* pv, APTR ofs);

@@ -11,8 +11,7 @@
 
 @implementation MyView
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {
         mylayer = [[MyCALayer alloc] init];
@@ -24,40 +23,33 @@
 }
 
 //keyDown keyUpを受け取れるようにする
-- (BOOL)acceptsFirstResponder
-{
+- (BOOL)acceptsFirstResponder {
     [[self window] makeFirstResponder:self];
     return YES;
 }
 
-- (BOOL)becomeFirstResponder
-{
+- (BOOL)becomeFirstResponder {
     return YES;
 }
 
--(void)awakeFromNib
-{
-    
+-(void)awakeFromNib {
 }
 
 -(MyCALayer*)getMyCALayer {
     return mylayer;
 }
 
--(int)getScreenWidth
-{
+-(int)getScreenWidth {
     NSScreen *mainScreen = [NSScreen mainScreen];
     return (int)mainScreen.frame.size.width;
 }
 
--(int)getScreenHeight
-{
+-(int)getScreenHeight {
     NSScreen *mainScreen = [NSScreen mainScreen];
     return (int)mainScreen.frame.size.height;
 }
 
--(int)getMouseX
-{
+-(int)getMouseX {
     NSPoint screenPoint = [NSEvent mouseLocation];
     NSRect rect = [[self window] convertRectFromScreen:NSMakeRect(screenPoint.x, screenPoint.y, 0, 0)];
     NSPoint windowPoint = rect.origin;
@@ -65,8 +57,7 @@
     return (int)point.x;
 }
 
--(int)getMouseY
-{
+-(int)getMouseY {
     NSPoint screenPoint = [NSEvent mouseLocation];
     NSRect rect = [[self window] convertRectFromScreen:NSMakeRect(screenPoint.x, screenPoint.y, 0, 0)];
     NSPoint windowPoint = rect.origin;
@@ -158,8 +149,8 @@
 -(BOOL)getIsKeyDown_X{return isKeyDown_X;}
 -(BOOL)getIsKeyDown_Y{return isKeyDown_Y;}
 -(BOOL)getIsKeyDown_Z{return isKeyDown_Z;}
--(void)keyDown:(NSEvent *)theEvent
-{
+
+-(void)keyDown:(NSEvent *)theEvent {
     switch([theEvent keyCode]) {
         case 123:isKeyDown_Left=YES;break;
         case 126:isKeyDown_Up=YES;break;
@@ -243,8 +234,7 @@
     }
 }
 
--(void)keyUp:(NSEvent *)theEvent
-{
+-(void)keyUp:(NSEvent *)theEvent {
     switch([theEvent keyCode]) {
         case 123:isKeyDown_Left=NO;break;
         case 126:isKeyDown_Up=NO;break;
@@ -327,28 +317,36 @@
         case 6:isKeyDown_Z=NO;break;
     }
 }
--(void)mouseEntered:(NSEvent *)theEvent {}
--(void)mouseMoved:(NSEvent *)theEvent {}
-- (void)mouseDown:(NSEvent *)theEvent
-{
+
+-(void)mouseEntered:(NSEvent *)theEvent {
+}
+
+-(void)mouseMoved:(NSEvent *)theEvent {
+}
+
+- (void)mouseDown:(NSEvent *)theEvent {
     isMouseDown = YES;
     isMouseUp = NO;
 }
-- (void)mouseUp:(NSEvent*)theEvent
-{
+
+- (void)mouseUp:(NSEvent*)theEvent {
     isMouseUp = YES;
     isMouseDown = NO;
     isMouseDragged = NO;
-    if([theEvent clickCount] == 2) {} //DoubleClick
+    if([theEvent clickCount] == 2) { //DoubleClick
+        
+    }
 }
-- (void)mouseDragged:(NSEvent*)theEvent
-{
+
+- (void)mouseDragged:(NSEvent*)theEvent {
     isMouseDragged = YES;
 }
+
 -(void)rightMouseDown:(NSEvent *)theEvent {
     isRightMouseDown = YES;
     isRightMouseUp = NO;
 }
+
 -(void)rightMouseUp:(NSEvent *)theEvent {
     isRightMouseUp = YES;
     isRightMouseDown = NO;
@@ -358,15 +356,19 @@
         // Double click
     }
 }
--(void)rightMouseDragged:(NSEvent *)theEvent {}
-- (void)layout
-{
+
+-(void)rightMouseDragged:(NSEvent *)theEvent {
+}
+
+- (void)layout {
     [super layout];
 }
+
 //- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 //{
 //    [super drawLayer:layer inContext:ctx];
 //}
+
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
 }

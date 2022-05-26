@@ -12,11 +12,12 @@
 #include <ctype.h>
 #include <math.h>
 #include <assert.h>
-#include <string>
+//#include "vec.h"
 
-#include <vector> // c++
-#include <map> // c++
-#include <memory> // c++
+//#include <vector> // c++
+//#include <string>
+//#include <map> // c++
+//#include <memory> // c++
 
 // token type
 #define TK_NONE 0
@@ -88,13 +89,13 @@
 #define LMODE_COMMENT 2
 #define LMODE_OFF 3
 
-// macro default data storage
+// マクロデフォルトデータストレージ
 typedef struct MACDEF {
-    int		index[32];				// offset to data
+    int		index[32];				// データへのオフセット
     char	data[1];
 } MACDEF;
 
-// module related define
+// モジュール関連定義
 #define OBJNAME_MAX 60
 #define MODNAME_MAX 20
 
@@ -129,7 +130,7 @@ class AHTMODEL;
 #define SCNV_OPT_NONE 0
 #define SCNV_OPT_SJISUTF8 1
 
-//  token analysis class
+//  トークン分析クラス
 class CToken {
 public:
     CToken();
@@ -156,7 +157,7 @@ public:
     int Calc( CALCVAR &val );
     char *CheckValidWord( void );
     
-    //		For preprocess
+    //		プリプロセス用
     //
     ppresult_t Preprocess( char *str );
     ppresult_t PreprocessNM( char *str );
@@ -190,7 +191,7 @@ public:
     int SkipMultiByte( unsigned char byte );
     
     
-    //		For Code Generate
+    //		コード生成用
     //
     int GenerateCode( char *fname, char *oname, int mode );
     int GenerateCode( CMemBuf *srcbuf, char *oname, int mode );
@@ -232,7 +233,7 @@ public:
     void SetUTF8Input( int utf8mode ) { pp_utf8 = utf8mode; }
     
 private:
-    //		For preprocess
+    //		プリプロセス用
     //
     void Pickstr( void );
     char *Pickstr2( char *str );
@@ -293,7 +294,7 @@ private:
     
     void SetErrorSymbolOverdefined(char* keyword, int label_id);
     
-    //		For Code Generate
+    //		コード生成用
     //
     int GenerateCodeMain( CMemBuf *src );
     void RegisterFuncLabels( void );
@@ -363,37 +364,37 @@ private:
     bool CG_optInfo() const { return (hed_cmpmode & CMPMODE_OPTINFO) != 0; }
     void CG_MesLabelDefinition(int label_id);
     
-    //		Data
+    //		データ
     //
-    CLabel *lb;						// label object
-    CLabel *tmp_lb;					// label object (preprocessor reference)
-    CTagStack *tstack;				// tag stack object
+    CLabel *lb;						// ラベルオブジェクト
+    CLabel *tmp_lb;					// ラベルオブジェクト(プリプロセッサー参照)
+    CTagStack *tstack;				// タグスタックオブジェクト
     CMemBuf *errbuf;
     CMemBuf *wrtbuf;
     CMemBuf *packbuf;
     CMemBuf *ahtbuf;
     CStrNote *note;
-    AHTMODEL *ahtmodel;				// AHT process data
-    char common_path[HSP_MAX_PATH];	// common path
-    char search_path[HSP_MAX_PATH];	// search path
+    AHTMODEL *ahtmodel;				// AHTプロセスデータ
+    char common_path[HSP_MAX_PATH];	// 共通path
+    char search_path[HSP_MAX_PATH];	// 検索パス
     
     int line;
     int val;
-    int ttype;						// last token type
+    int ttype;						// 最後のトークンタイプ
     int texflag;
-    char *lasttoken;				// last token point
+    char *lasttoken;				// 最後のトークンポイント
     float val_f;
     double val_d;
     double fpbit;
     unsigned char *wp;
     unsigned char s2[1024];
     unsigned char *s3;
-    char linebuf[LINEBUF_MAX];		// Line expand buffer
-    char linetmp[LINEBUF_MAX];		// Line expand temp
-    char errtmp[128];				// temp for error message
-    char mestmp[128];				// meseage temp
-    int incinf;						// include level
-    int mulstr;						// multiline string flag
+    char linebuf[LINEBUF_MAX];		// 行展開バッファ
+    char linetmp[LINEBUF_MAX];		// 一時的な行展開バッファ
+    char errtmp[128];				// 一時的なエラーメッセージ
+    char mestmp[128];				// 一時的なメッセージ
+    int incinf;						// インクルードレベル
+    int mulstr;						// 複数行の文字列フラグ
     short swstack[SWSTACK_MAX];		// generator sw stack (flag)
     short swstack2[SWSTACK_MAX];	// generator sw stack (mode)
     short swstack3[SWSTACK_MAX];	// generator sw stack (sw)
@@ -404,15 +405,18 @@ private:
     int swflag;						// generator sw enable flag
     char *ahtkeyword;				// keyword for AHT
     
-    char modname[MODNAME_MAX+2];	// Module Name Prefix
-    int	modgc;						// Global counter for Module
-    int enumgc;						// Global counter for Enum
+    char modname[MODNAME_MAX+2];	// モジュール名の接頭辞
+    int	modgc;						// モジュール用グローバルカウンタ
+    int enumgc;						// Enum用グローバルカウンタ
     typedef struct undefined_symbol_t {
         int pos;
         int len_include_modname;
         int len;
     } undefined_symbol_t;
-    std::vector<undefined_symbol_t> undefined_symbols; /// @warning cpp
+    
+    struct undefined_symbol_t* undefined_symbols;
+    //std::vector<undefined_symbol_t> undefined_symbols; /// @warning cpp
+    
     int cs_lastptr;					// パラメーターの初期CS位置
     int cs_lasttype;				// パラメーターのタイプ(単一時)
     int calccount;					// パラメーター個数
@@ -462,11 +466,11 @@ private:
     CMemBuf *fi2_buf;
     CMemBuf *hpi_buf;
     
-#ifdef HSP_DS_POOL
-    std::map<double, int> double_literal_table; // 定数プール用 /// @warning cpp
-    std::map<std::string, int> string_literal_table; /// @warning cpp
-#endif
-    
+//#ifdef HSP_DS_POOL
+//    std::map<double, int> double_literal_table; /// @warning cpp // 定数プール用
+//    std::map<std::string, int> string_literal_table; /// @warning cpp
+//#endif
+
     //		for Header info
     int hed_option;
     char hed_runtime[64];

@@ -64,38 +64,28 @@
     BOOL isDir = NO;
     BOOL isExists = NO;
     NSFileManager* filemanager = [NSFileManager defaultManager];
-    NSString* path =
-    [[NSBundle mainBundle].resourcePath stringByAppendingString:@"/start.ax"];
+    NSString* path = [[NSBundle mainBundle].resourcePath stringByAppendingString:@"/start.ax"];
     isExists = [filemanager fileExistsAtPath:path isDirectory:&isDir];
     if (isExists && isDir == NO) { // start.axがリソースに存在する
         global.is_startax_in_resource = YES;
         global.current_script_path = [NSBundle mainBundle].resourcePath;
-        global.current_script_url =
-        [NSURL URLWithString:global.current_script_path];
+        global.current_script_url = [NSURL URLWithString:global.current_script_path];
     } else {
         path = [[[[NSBundle mainBundle] bundlePath] stringByDeletingLastPathComponent] stringByAppendingString:@"/start.ax"];
         isExists = [filemanager fileExistsAtPath:path isDirectory:&isDir];
         if (isExists && isDir == NO) {
             global.is_startax_in_resource = NO;
-            global.current_script_path =
-            [[[NSBundle mainBundle] bundlePath] stringByDeletingLastPathComponent];
-            global.current_script_url =
-            [NSURL URLWithString:global.current_script_path];
+            global.current_script_path = [[[NSBundle mainBundle] bundlePath] stringByDeletingLastPathComponent];
+            global.current_script_url = [NSURL URLWithString:global.current_script_path];
         } else {
-            path = [NSHomeDirectory()
-                    stringByAppendingString:@"/Documents/hsptmp/path.txt"];
+            path = [NSHomeDirectory() stringByAppendingString:@"/Documents/hsptmp/path.txt"];
             isExists = [filemanager fileExistsAtPath:path isDirectory:&isDir];
             if (isExists && isDir == NO) { // path.txtファイルが存在する
-                global.current_script_path =
-                [NSString stringWithContentsOfFile:path
-                                          encoding:NSUTF8StringEncoding
-                                             error:NULL];
-                global.current_script_url =
-                [NSURL URLWithString:global.current_script_path];
+                global.current_script_path = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+                global.current_script_url = [NSURL URLWithString:global.current_script_path];
             } else {
                 global.current_script_path = @"";
-                global.current_script_url =
-                [NSURL URLWithString:global.current_script_path];
+                global.current_script_url = [NSURL URLWithString:global.current_script_path];
             }
         }
     }
@@ -211,8 +201,7 @@
     [myTimer fire];
     
     // MIDIの変更を監視
-    NSTimer* myTimerMidiEvent =
-    [NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(onTimerMidiEvent:) userInfo:nil repeats:YES];
+    NSTimer* myTimerMidiEvent = [NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(onTimerMidiEvent:) userInfo:nil repeats:YES];
     [myTimerMidiEvent fire];
     
     global.is_app_run = YES;
@@ -228,8 +217,7 @@
 - (void)awakeFromNib {
 }
 
-- (void)onTimerMidiEvent:(NSTimer*)timer
-{
+- (void)onTimerMidiEvent:(NSTimer*)timer {
     DEBUG_TIMER_IN;
     @autoreleasepool {
         if (global.midi_events != nil && global.is_start_midi_event == YES) {
@@ -248,22 +236,13 @@
                         [self code_setva:myMidiEventTypePval aptr:myMidiEventTypeAptr type:TYPE_INUM ptr:&type];
                     } else if ([global.midi_events[0] isEqual:@"noteoff"]) {
                         int type = 2;
-                        [self code_setva:myMidiEventTypePval
-                                    aptr:myMidiEventTypeAptr
-                                    type:TYPE_INUM
-                                     ptr:&type];
+                        [self code_setva:myMidiEventTypePval aptr:myMidiEventTypeAptr type:TYPE_INUM ptr:&type];
                     } else if ([global.midi_events[0] isEqual:@"cc"]) {
                         int type = 3;
-                        [self code_setva:myMidiEventTypePval
-                                    aptr:myMidiEventTypeAptr
-                                    type:TYPE_INUM
-                                     ptr:&type];
+                        [self code_setva:myMidiEventTypePval aptr:myMidiEventTypeAptr type:TYPE_INUM ptr:&type];
                     } else {
                         int type = 0;
-                        [self code_setva:myMidiEventTypePval
-                                    aptr:myMidiEventTypeAptr
-                                    type:TYPE_INUM
-                                     ptr:&type];
+                        [self code_setva:myMidiEventTypePval aptr:myMidiEventTypeAptr type:TYPE_INUM ptr:&type];
                     }
                     
                     [global.midi_events removeObjectAtIndex:0];

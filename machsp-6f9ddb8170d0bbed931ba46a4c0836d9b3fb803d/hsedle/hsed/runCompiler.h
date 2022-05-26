@@ -1,9 +1,5 @@
 //
-//  runCompiler.h
-//  documentbasededitor
-//
-//  Created by dolphilia on 2016/02/26.
-//  Copyright © 2016年 dolphilia. All rights reserved.
+// runCompiler.h
 //
 
 #ifndef runCompiler_h

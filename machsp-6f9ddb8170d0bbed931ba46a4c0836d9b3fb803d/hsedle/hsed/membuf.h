@@ -11,7 +11,7 @@
 #include <stdarg.h>
 #include <assert.h>
 
-//  growmem class
+//  メモリ生成クラス
 //
 class CMemBuf {
 public:
