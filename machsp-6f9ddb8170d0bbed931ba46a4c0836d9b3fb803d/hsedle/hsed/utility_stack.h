@@ -18,17 +18,19 @@
 #define TAGSTK_TAGMAX 256
 #define TAGSTK_TAGSIZE 56
 
-// tag info storage
+/// tag info storage
+///
 typedef struct TAGINF {
-    char    name[TAGSTK_TAGSIZE];    // tag name
-    int        check;                    // resolve check flag
-    int        uid;                    // unique ID
+    char name[TAGSTK_TAGSIZE];    // tag name
+    int check;                    // resolve check flag
+    int uid;                    // unique ID
 } TAGINF;
 
-// tag data storage
+/// tag data storage
+/// 
 typedef struct TAGDATA {
-    int        tagid;                    // tag ID
-    char    data[TAGSTK_SIZE];        // data
+    int tagid;                    // tag ID
+    char data[TAGSTK_SIZE];        // data
 } TAGDATA;
 
 void stack_init(void);

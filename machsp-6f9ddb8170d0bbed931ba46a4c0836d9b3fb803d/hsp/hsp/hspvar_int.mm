@@ -1,5 +1,5 @@
 //
-//	HSPVAR core module
+//	HSPVARコアモジュール
 //	onion software/onitama 2003/4
 
 #import "hspvar_int.h"

@@ -9,7 +9,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "hsp3config.h"
-//#include "supio_linux.h"
 #include "hsc3.h"
 #include "token.h"
 #import "runCompiler.h"

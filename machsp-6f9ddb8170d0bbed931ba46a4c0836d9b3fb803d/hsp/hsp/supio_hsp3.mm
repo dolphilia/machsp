@@ -1,5 +1,5 @@
 //
-//	supio.cpp functions (for Linux)
+//	supio.cpp 関数 (for Linux)
 //	Linux用のsupio.cppを別ファイルとして作成しました。
 //
 //	Special thanks to Charlotte at HSP開発wiki
@@ -68,7 +68,6 @@ static void _splitpath(char* path, char* p_drive, char* dir, char* fname, char* 
         p[1] = 0;
         strcpy(dir, pathtmp);
     }
-    
 }
 
 /// textに対してワイルドカード処理を適応
@@ -525,9 +524,9 @@ int htoi(char* str) {
     return conv;
 }
 
-/*----------------------------------------------------------*/
+//----------------------------------------------------------
 //					HSP string trim support
-/*----------------------------------------------------------*/
+//----------------------------------------------------------
 
 /// 文字列中のcode位置を探す(2バイトコード、全角対応版)
 ///

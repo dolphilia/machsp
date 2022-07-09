@@ -1,6 +1,6 @@
 
 //
-//	HSP3 debug support
+//	HSP3デバッグサポート
 //	(エラー処理およびデバッグ支援)
 //	onion software/onitama 2004/6
 //
@@ -16,18 +16,13 @@
 
 @implementation ViewController (hsp3debug)
 
-/*------------------------------------------------------------*/
-/*
- system data
- */
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
+// system data
+//------------------------------------------------------------
 
-
-/*------------------------------------------------------------*/
-/*
- interface
- */
-/*------------------------------------------------------------*/
+//------------------------------------------------------------
+// interface
+//------------------------------------------------------------
 
 #ifdef FLAG_HSPDEBUG
 static char *error_message[] = {
@@ -78,10 +73,7 @@ static char *error_message[] = {
 
 static char errmsg[256];
 
-char *
-hspd_geterror( HSPERROR error )
-{
-    
+char * hspd_geterror(HSPERROR error) {
     NSAlert *alert = [[NSAlert alloc] init];
     [alert setMessageText:@"内部エラーが発生しました"];
     NSString* nsstr_error_message = [NSString stringWithCString:error_message[(int)error] encoding:NSUTF8StringEncoding];
@@ -89,18 +81,13 @@ hspd_geterror( HSPERROR error )
     [alert addButtonWithTitle:@"OK"];
     [alert runModal];
     sprintf( errmsg, "内部エラーが発生しました(%d)", (int)error );
-    
     return errmsg;
 }
 #else
 static char errmsg[256];
 
-char *
-hspd_geterror( HSPERROR error )
-{
-    
+char * hspd_geterror(HSPERROR error) {
     sprintf( errmsg, "内部エラーが発生しました(%d)", (int)error );
-    
     return errmsg;
 }
 #endif

@@ -1,6 +1,7 @@
 
 //
-//	HSP3 string support
+//	HSP3文字列サポート
+//
 //	(おおらかなメモリ管理をするバッファマネージャー)
 //	(sbAllocでSTRBUF_BLOCKSIZEのバッファを確保します)
 //	(あとはsbCopy,sbAddで自動的にバッファの再確保を行ないます)
@@ -218,7 +219,7 @@ void sbCopy(char** pptr, char* data, int size) {
     memcpy(p, data, size);
 }
 
-///        mode:0=normal/1=string
+/// mode:0=normal/1=string
 ///        
 void sbAdd(char** pptr, char* data, int size, int mode) {
     char* ptr = *pptr;

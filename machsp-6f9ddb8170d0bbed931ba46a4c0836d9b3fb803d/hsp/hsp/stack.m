@@ -1,6 +1,7 @@
 
 //
-//	HSP3 stack support
+//	HSP3スタックサポート
+//
 //	(汎用スタックマネージャー)
 //	(int,double,stringなどの可変長データをpush,popできます)
 //	onion software/onitama 2004/6

@@ -10,11 +10,6 @@
 #import "AppDelegate.h"
 #import "c_wrapper.h"
 
-//#include "supio_linux.h"
-//#include "tagstack.h"
-//#include "strnote.h"
-//#include "ahtobj.h"
-
 #define s3size 0x8000
 
 //-------------------------------------------------------------

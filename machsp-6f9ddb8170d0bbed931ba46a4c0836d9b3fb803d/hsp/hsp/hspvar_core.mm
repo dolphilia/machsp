@@ -1,5 +1,5 @@
 //
-//	HSPVAR manager
+//	HSPVARマネージャー
 //	onion software/onitama 2003/4
 //
 //関数ポインタの使用箇所あり
@@ -183,8 +183,8 @@ void HspVarCoreRegisterType(int flag, char* vartype_name) {
 
 /*------------------------------------------------------------*/
 
-//        指定されたポインタからのクローンになる
-//
+/// 指定されたポインタからのクローンになる
+///
 void HspVarCoreDupPtr(PVal* pval, int flag, void* ptr, int size) {
     PDAT* buf = (PDAT*)ptr;
     HspVarProc* p = &hspvarproc[flag];
@@ -381,7 +381,6 @@ void HspVarCoreReDim(PVal* pval, int lenid, int len) {
         NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
 }
 
 /// 指定タイプの変数を最小メモリで初期化する

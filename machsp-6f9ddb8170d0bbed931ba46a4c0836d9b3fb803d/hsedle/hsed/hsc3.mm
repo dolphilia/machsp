@@ -9,13 +9,10 @@
 #import "hsp3config.h"
 #import "hsp3debug.h"
 #import "hsp3struct.h"
-//#import "supio_linux.h"
 #import "hsc3.h"
 #import "membuf.h"
-//#import "strnote.h"
 #import "label.h"
 #import "token.h"
-//#import "localinfo.h"
 #import "AppDelegate.h"
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>

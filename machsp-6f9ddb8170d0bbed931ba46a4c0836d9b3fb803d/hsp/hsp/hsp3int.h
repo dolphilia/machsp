@@ -2,6 +2,7 @@
 //
 //	hsp3int.cpp header
 //
+
 #ifndef __hsp3int_h
 #define __hsp3int_h
 

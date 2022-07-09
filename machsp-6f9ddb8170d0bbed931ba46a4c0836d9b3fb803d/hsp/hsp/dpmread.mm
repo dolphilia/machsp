@@ -1,11 +1,12 @@
-//-----------------------------------------------------
-//	Datafile Pack Manager service
-//	( No encryption for OpenHSP )
+//
+//	データファイルパックマネージャーサービス
+//
+//	( OpenHSPは暗号化されていません )
 //			onion software 1996/6
 //			Modified for win32 in 1997/8
 //			Modified for HSP2.6 in 2000/7
 //			Modified for HSP3.0 in 2004/11
-//-----------------------------------------------------
+//
 
 #import "dpmread.h"
 #import <ctype.h>
@@ -396,7 +397,7 @@ static FILE *fp;
      mingw : warning : 仮引数:int 実引数:long
      に対処
      */
-    sprintf(inf, "%s,%d", dpm_file, static_cast<int>(a));
+    sprintf(inf, "%s,%d", dpm_file, (int)(a));
 }
 
 - (int)dpm_filecopy:(char *)fname sname:(char *)sname {

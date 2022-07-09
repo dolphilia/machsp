@@ -1,6 +1,6 @@
 
 //
-//	HSPVAR core module
+//	HSPVARコアモジュール
 //	onion software/onitama 2007/1
 //
 

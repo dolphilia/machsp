@@ -4,7 +4,6 @@
 //
 
 #include "label.h"
-//#import "c_wrapper.h"
 #import "AppDelegate.h"
 #import "c_wrapper.h"
 

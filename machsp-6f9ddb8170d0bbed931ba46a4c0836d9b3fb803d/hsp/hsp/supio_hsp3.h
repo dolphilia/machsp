@@ -1,6 +1,6 @@
 
 //
-//	supio.cpp functions (linux)
+//	supio.cpp 関数 (linux)
 //
 
 //#import "hsp.h"

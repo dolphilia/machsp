@@ -1,6 +1,6 @@
 
 //
-//	HSP3 internal command
+//	HSP3内蔵コマンド
 //	(内蔵コマンド・関数処理)
 //	onion software/onitama 2004/6
 //

@@ -1,5 +1,6 @@
 //
-//	HSP3 graphics command
+//	HSP3グラフィックコマンド
+//
 //	(GUI関連コマンド・関数処理)
 //	onion software/onitama 2004/6
 //
@@ -55,10 +56,9 @@
 /// System strings get
 ///
 - (int)sysinfo:(int)p2 {
-    int f = HSPVAR_FLAG_INT;
     char *p = hsp3gr_ctx->stmp;
     *p = 0;
-    return f;
+    return HSPVAR_FLAG_INT;
 }
 
 - (void *)ex_getbmscr:(int)wid {

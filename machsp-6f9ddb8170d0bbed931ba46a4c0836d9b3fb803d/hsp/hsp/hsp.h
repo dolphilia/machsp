@@ -1,9 +1,5 @@
 //
 //  hsp.h
-//  hsp3cl
-//
-//  Created by dolphilia on 2016/01/18.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 
 #ifndef hsp_h

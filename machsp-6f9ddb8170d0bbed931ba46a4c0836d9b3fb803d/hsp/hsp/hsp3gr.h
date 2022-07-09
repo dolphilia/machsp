@@ -2,6 +2,7 @@
 //
 //	hsp3gr_linux.cpp header
 //
+
 #ifndef __hsp3gr_linux_h
 #define __hsp3gr_linux_h
 

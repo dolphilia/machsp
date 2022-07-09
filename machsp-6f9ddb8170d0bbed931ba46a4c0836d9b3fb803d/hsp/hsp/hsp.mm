@@ -1,21 +1,5 @@
 //
-//  hsp.m
-//  hsp3cl
-//
-//  Created by dolphilia on 2016/01/18.
-//  Copyright © 2016年 dolphilia. All rights reserved.
-
-//  2375,2565,2978,3717,3975,4200,4736 ::
-//  474,663,683,779,1045,1555,1557,1714,1747,1753,... \-\>[a-zA-Z_0-9]+\(
-//
-
-// 例外の置き換え
-//
-//Find:
-//NSString\s*\*\s*error\_str\s*\=\s*\[NSString\s*stringWithFormat\s*\:\s*\@\"\%d\"\,\s*(.*)\]\;\s*@throw \[NSException\s+exceptionWithName\:\@\"\"\s+reason\:error\_str\s+userInfo\:nil\]\;
-//
-//Replace:
-//@throw \[self make_nsexception:$1\];
+//  hsp.mm
 //
 
 #import "hsp.h"
@@ -44,7 +28,6 @@
 /// (ver3.0以降用)
 ///
 - (void)code_next {
-    //	register unsigned short hsp_csvalue;
     hsp_mcsbak = hsp_mcs;
     hsp_csvalue = *hsp_mcs++;
     hsp_exflg = hsp_csvalue & (EXFLG_1 | EXFLG_2);
@@ -698,7 +681,7 @@
     FlexValue *fv;
     char *out;
     STRUCTPRM *prm;
-    char *ptr = nullptr;
+    char *ptr = NULL;
     int tflag = 0;
     int basesize;
     int tmpval;
@@ -2193,7 +2176,7 @@ APTR code_newstruct(PVal *pval) {
             abc_hspctx.refdval = *(double *)mpval->pt;
             break;
         default:
-            throw HSPERR_TYPE_MISMATCH;
+            @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
 }
 
@@ -2655,7 +2638,7 @@ APTR code_newstruct(PVal *pval) {
                     label = [self code_getlb2];
                     break;
                 default:
-                    throw HSPERR_TYPE_MISMATCH;
+                    @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
             }
             [self code_setva:pval aptr:aptr type:HSPVAR_FLAG_LABEL ptr:&label];
             break;
@@ -3834,7 +3817,7 @@ rerun:
     while (adr < size) {
         sprintf(tline, "%04X", adr);
         for (int i = 0; i < 8 && adr < size; ++i, ++adr) {
-            sprintf(t, " %02X", static_cast<unsigned char>(mem[adr]));
+            sprintf(t, " %02X", (unsigned char)(mem[adr]));
             strcat(tline, t);
         }
         strcat(tline, "\r\n");
@@ -3928,7 +3911,7 @@ rerun:
 ///
 - (char *)code_dbgvarinf:(char *)target option:(int)option {
     int i, id, max;
-    char *name = nullptr;
+    char *name = NULL;
     HspVarProc *proc;
     PVal *pv;
     PDAT *src;

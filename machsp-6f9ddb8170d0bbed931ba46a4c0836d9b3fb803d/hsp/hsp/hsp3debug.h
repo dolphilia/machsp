@@ -2,6 +2,7 @@
 //
 //	hsp3debug.cpp header
 //
+
 #ifndef __hsp3debug_h
 #define __hsp3debug_h
 
