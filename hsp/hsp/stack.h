@@ -31,18 +31,30 @@
 @interface ViewController (stack) {
 }
 - (void)StackInit;
+
 - (void)StackTerm;
+
 - (void)StackAlloc:(StackManagerData *)stm size:(int)size;  // private
 - (void)StackReset;
+
 - (void)StackPush:(int)type data:(char *)data size:(int)size;
+
 - (void)StackPush:(int)type str:(char *)str;
+
 - (void)StackPushStr:(char *)str;
+
 - (void)StackPushTypeVal:(int)type val:(int)val val2:(int)val2;
+
 - (void)StackPushVar:(void *)pval aptr:(int)aptr;
+
 - (void)StackPushType:(int)type;
+
 - (void)StackPopFree;
+
 - (void)StackPushi:(int)val;
+
 - (void)StackPop;
+
 - (void *)StackPushSize:(int)type size:(int)size;
 @end
 

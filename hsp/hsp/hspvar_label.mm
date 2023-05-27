@@ -23,15 +23,15 @@
 #define hspvar_label_GetPtr(pval) ((HSPVAR_LABEL*)pval)
 
 /// Core
-PDAT* HspVarLabel_GetPtr(PVal* pval) {
-    return (PDAT*)(((HSPVAR_LABEL*)(pval->pt)) + pval->offset);
+PDAT *HspVarLabel_GetPtr(PVal *pval) {
+    return (PDAT *) (((HSPVAR_LABEL * )(pval->pt)) + pval->offset);
 }
 
 /// PVALポインタの変数が必要とするサイズを取得する
 ///
 /// (sizeフィールドに設定される)
 ///
-int HspVarLabel_GetVarSize(PVal* pval) {
+int HspVarLabel_GetVarSize(PVal *pval) {
     int size = pval->len[1];
     if (pval->len[2])
         size *= pval->len[2];
@@ -45,7 +45,7 @@ int HspVarLabel_GetVarSize(PVal* pval) {
 
 /// PVALポインタの変数メモリを解放する
 ///
-void HspVarLabel_Free(PVal* pval) {
+void HspVarLabel_Free(PVal *pval) {
     if (pval->mode == HSPVAR_MODE_MALLOC) {
         sbFree(pval->pt);
     }
@@ -60,16 +60,16 @@ void HspVarLabel_Free(PVal* pval) {
 /// (pval2がNULLの場合は、新規データ)
 /// (pval2が指定されている場合は、pval2の内容を継承して再確保)
 ///
-void HspVarLabel_Alloc(PVal* pval, const PVal* pval2) {
+void HspVarLabel_Alloc(PVal *pval, const PVal *pval2) {
     if (pval->len[1] < 1)
         pval->len[1] = 1; // 配列を最低1は確保する
-    
+
     int size = HspVarLabel_GetVarSize(pval);
     pval->mode = HSPVAR_MODE_MALLOC;
-    char* pt = sbAlloc(size);
-    HSPVAR_LABEL* fv = (HSPVAR_LABEL*)pt;
-    
-    for (int i = 0; i < (int)(size / sizeof(HSPVAR_LABEL)); i++) {
+    char *pt = sbAlloc(size);
+    HSPVAR_LABEL *fv = (HSPVAR_LABEL *) pt;
+
+    for (int i = 0; i < (int) (size / sizeof(HSPVAR_LABEL)); i++) {
         fv[i] = NULL;
     }
     if (pval2 != NULL) {
@@ -81,32 +81,32 @@ void HspVarLabel_Alloc(PVal* pval, const PVal* pval2) {
 }
 
 /// Size
-int HspVarLabel_GetSize(const PDAT* pval) {
+int HspVarLabel_GetSize(const PDAT *pval) {
     return sizeof(HSPVAR_LABEL);
 }
 
 /// Using
-int HspVarLabel_GetUsing(const PDAT* pdat) {
+int HspVarLabel_GetUsing(const PDAT *pdat) {
     // (実態のポインタが渡されます)
     return (*pdat != NULL);
 }
 
 /// Set
-void HspVarLabel_Set(PVal* pval, PDAT* pdat, const void* in) {
-    *hspvar_label_GetPtr(pdat) = *((HSPVAR_LABEL*)(in));
+void HspVarLabel_Set(PVal *pval, PDAT *pdat, const void *in) {
+    *hspvar_label_GetPtr(pdat) = *((HSPVAR_LABEL * )(in));
 }
 
-void* HspVarLabel_GetBlockSize(PVal* pval, PDAT* pdat, int* size) {
-    *size = pval->size - (int)(((char*)pdat) - pval->pt);
+void *HspVarLabel_GetBlockSize(PVal *pval, PDAT *pdat, int *size) {
+    *size = pval->size - (int) (((char *) pdat) - pval->pt);
     return (pdat);
 }
 
-void HspVarLabel_AllocBlock(PVal* pval, PDAT* pdat, int size) {
+void HspVarLabel_AllocBlock(PVal *pval, PDAT *pdat, int size) {
 }
 
 //------------------------------------------------------------
 
-void HspVarLabel_Init(HspVarProc* p) {
+void HspVarLabel_Init(HspVarProc *p) {
     //    p->Set = HspVarLabel_Set;
     //    p->GetPtr = HspVarLabel_GetPtr;
     //    p->GetSize = HspVarLabel_GetSize;
@@ -115,7 +115,7 @@ void HspVarLabel_Init(HspVarProc* p) {
     //    p->AllocBlock = HspVarLabel_AllocBlock;
     //    p->Alloc = HspVarLabel_Alloc;
     //    p->Free = HspVarLabel_Free;
-    p->vartype_name = (char*)"label"; // タイプ名
+    p->vartype_name = (char *) "label"; // タイプ名
     p->version = 0x001; // 型タイプランタイムバージョン(0x100 = 1.0)
     p->support = HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY | HSPVAR_SUPPORT_VARUSE;
     // サポート状況フラグ(HSPVAR_SUPPORT_*)

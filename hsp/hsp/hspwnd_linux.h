@@ -17,20 +17,20 @@ typedef struct BMSCR {
     int sx;        // X-size
     int sy;        // Y-size
     int palmode;   // palmode
-    void* hdc;     // buffer HDC
-    void* pBit;    // bitmap pointer
-    void* pbi;     // infoheader
-    void* dib;     // bitmap handle(DIB)
-    void* old;     // bitmap handle(OLD)
-    void* pal;     // palette table
-    void* hpal;    // palette handle
-    void* holdpal; // palette handle (old)
+    void *hdc;     // buffer HDC
+    void *pBit;    // bitmap pointer
+    void *pbi;     // infoheader
+    void *dib;     // bitmap handle(DIB)
+    void *old;     // bitmap handle(OLD)
+    void *pal;     // palette table
+    void *hpal;    // palette handle
+    void *holdpal; // palette handle (old)
     int pals;      // palette entries
-    void* hwnd;    // window handle
-    void* hInst;   // Instance of program
+    void *hwnd;    // window handle
+    void *hInst;   // Instance of program
     int infsize;   // *pbi alloc memory size
     int bmpsize;   // *pBit alloc memory size
-    
+
     //		Window object setting
     //
     int type;          // setting type
@@ -44,15 +44,15 @@ typedef struct BMSCR {
     int ox, oy, py;    // object size x,y,py
     int texty;         // text Y-axis size
     int gx, gy, gmode; // gcopy size
-    void* hbr;         // BRUSH handle
-    void* hpn;         // PEN handle
-    void* hfont;       // FONT handle
-    void* holdfon;     // FONT handle (old)
+    void *hbr;         // BRUSH handle
+    void *hpn;         // PEN handle
+    void *hfont;       // FONT handle
+    void *holdfon;     // FONT handle (old)
     int color;         // text color code
     int textspeed;     // slow text speed
     int cx2, cy2;      // slow text cursor x,y
     int tex, tey;      // slow text limit x,y
-    char* prtmes;      // slow message ptr
+    char *prtmes;      // slow message ptr
     int focflg;        // focus set flag
     int objmode;       // object set mode
     //	LOGFONT	logfont;			// logical font
@@ -61,7 +61,7 @@ typedef struct BMSCR {
     int tabmove; // object TAB move mode
     int sx2;     // actual bitmap X size
     //	SIZE	printsize;			// print,mes extent size
-    
+
     //		Class depend data
     //
     int objstyle; // objects style

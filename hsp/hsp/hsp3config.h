@@ -11,8 +11,8 @@
 #define HSP_MAX_PATH 256
 
 //コンパイルフラグ
-#define FLAG_HSP_ERROR_HANDLE		// HSPエラー例外を有効にします
-#define FLAG_SYSTEM_ERROR_HANDLE		// システムエラー例外を有効にします
+#define FLAG_HSP_ERROR_HANDLE        // HSPエラー例外を有効にします
+#define FLAG_SYSTEM_ERROR_HANDLE        // システムエラー例外を有効にします
 #define FLAG_HSPDEBUG                // Debug version flag
 
 #endif

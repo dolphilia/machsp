@@ -27,14 +27,14 @@
 //------------------------------------------------------------
 
 typedef struct {
-    STRBUF* mem;
+    STRBUF *mem;
     int len;
 } SLOT;
 
-static SLOT* mem_sb;
+static SLOT *mem_sb;
 static int str_blockcur;
 static int slot_len;
-static STRBUF* freelist;
+static STRBUF *freelist;
 
 // STRINF_FLAG_NONE のとき STRINF::extptr を free list の次のポインタに使う
 #define STRINF_NEXT(inf) ((inf).extptr)
@@ -49,25 +49,25 @@ static STRBUF* freelist;
 
 static void BlockPtrPrepare(void) {
     if (str_blockcur == 0) {
-        mem_sb = (SLOT*)MALLOC(sizeof(SLOT));
+        mem_sb = (SLOT *) MALLOC(sizeof(SLOT));
     } else {
-        mem_sb = (SLOT*)REALLOC(mem_sb, sizeof(SLOT) * (str_blockcur + 1));
+        mem_sb = (SLOT *) REALLOC(mem_sb, sizeof(SLOT) * (str_blockcur + 1));
     }
-    
-    STRBUF* sb = (STRBUF*)MALLOC(sizeof(STRBUF) * slot_len);
+
+    STRBUF *sb = (STRBUF *) MALLOC(sizeof(STRBUF) * slot_len);
     if (sb == NULL) {
-        NSString* error_str = [NSString stringWithFormat:@"%d", HSPERR_OUT_OF_MEMORY];
+        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_OUT_OF_MEMORY];
         @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
     }
-    
-    STRBUF* p = sb;
-    STRBUF* pend = p + slot_len;
-    
+
+    STRBUF *p = sb;
+    STRBUF *pend = p + slot_len;
+
     mem_sb[str_blockcur].mem = sb;
     mem_sb[str_blockcur].len = slot_len;
     str_blockcur++;
-    slot_len = (int)(slot_len * 1.8);
-    
+    slot_len = (int) (slot_len * 1.8);
+
     while (p < pend) {
         p->inf.intptr = p;
         p->inf.flag = STRINF_FLAG_NONE;
@@ -79,60 +79,60 @@ static void BlockPtrPrepare(void) {
 
 /// 空きエントリーブロックを探す
 ///
-static STRBUF* BlockEntry(void) {
+static STRBUF *BlockEntry(void) {
     if (freelist == NULL) {
         BlockPtrPrepare();
     }
-    STRBUF* buf = freelist;
+    STRBUF *buf = freelist;
     freelist = STRBUF_NEXT(freelist);
     return buf;
 }
 
-static char* BlockAlloc(int size) {
-    int* p;
-    STRBUF* st = BlockEntry();
-    STRBUF* st2;
-    STRINF* inf = &(st->inf);
+static char *BlockAlloc(int size) {
+    int *p;
+    STRBUF *st = BlockEntry();
+    STRBUF *st2;
+    STRINF *inf = &(st->inf);
     if (size <= STRBUF_BLOCKSIZE) {
         inf->flag = STRINF_FLAG_USEINT;
         inf->size = STRBUF_BLOCKSIZE;
-        p = (int*)st->data;
-        inf->ptr = (char*)p;
+        p = (int *) st->data;
+        inf->ptr = (char *) p;
     } else {
         inf->flag = STRINF_FLAG_USEEXT;
         inf->size = size;
-        st2 = (STRBUF*)MALLOC(size + sizeof(STRINF));
-        p = (int*)(st2->data);
+        st2 = (STRBUF *) MALLOC(size + sizeof(STRINF));
+        p = (int *) (st2->data);
         inf->extptr = st2;
-        inf->ptr = (char*)p;
+        inf->ptr = (char *) p;
         st2->inf = *inf;
     }
     *p = 0;
     // return inf->ptr;
-    return (char*)p;
+    return (char *) p;
 }
 
-static void FreeExtPtr(STRINF* inf) {
+static void FreeExtPtr(STRINF *inf) {
     if (inf->flag == STRINF_FLAG_USEEXT) {
         FREE(inf->extptr);
     }
 }
 
-static void BlockFree(STRINF* inf) {
+static void BlockFree(STRINF *inf) {
     FreeExtPtr(inf);
     STRINF_NEXT(*inf) = freelist;
-    freelist = (STRBUF*)inf;
+    freelist = (STRBUF *) inf;
     inf->flag = STRINF_FLAG_NONE;
 }
 
-static char* BlockRealloc(STRBUF* st, int size) {
-    STRINF* inf = GET_INTINF(st);
-    
+static char *BlockRealloc(STRBUF *st, int size) {
+    STRINF *inf = GET_INTINF(st);
+
     if (size <= inf->size)
         return inf->ptr;
-    STRBUF* newst = (STRBUF*)MALLOC(size + sizeof(STRINF));
-    char* p = newst->data;
-    
+    STRBUF *newst = (STRBUF *) MALLOC(size + sizeof(STRINF));
+    char *p = newst->data;
+
     memcpy(p, inf->ptr, inf->size);
     FreeExtPtr(inf);
     inf->size = size;
@@ -143,10 +143,10 @@ static char* BlockRealloc(STRBUF* st, int size) {
     return p;
 }
 
-void BlockInfo(STRINF* inf) {
-    STRBUF* newst;
+void BlockInfo(STRINF *inf) {
+    STRBUF *newst;
     if (inf->flag == STRINF_FLAG_USEEXT) {
-        newst = (STRBUF*)inf->extptr;
+        newst = (STRBUF *) inf->extptr;
     }
 }
 
@@ -163,9 +163,9 @@ void sbInit(void) {
 
 void sbBye(void) {
     for (int i = 0; i < str_blockcur; i++) {
-        STRBUF* mem = mem_sb[i].mem;
-        STRBUF* p = mem;
-        STRBUF* pend = p + mem_sb[i].len;
+        STRBUF *mem = mem_sb[i].mem;
+        STRBUF *p = mem;
+        STRBUF *pend = p + mem_sb[i].len;
         while (p < pend) {
             FreeExtPtr(&p->inf);
             p++;
@@ -175,43 +175,43 @@ void sbBye(void) {
     FREE(mem_sb);
 }
 
-STRINF* sbGetSTRINF(char* ptr) {
-    return (STRINF*)(ptr - sizeof(STRINF));
+STRINF *sbGetSTRINF(char *ptr) {
+    return (STRINF *) (ptr - sizeof(STRINF));
 }
 
-char* sbAlloc(int size) {
+char *sbAlloc(int size) {
     int sz = size;
     if (size < STRBUF_BLOCKSIZE)
         sz = STRBUF_BLOCKSIZE;
     return BlockAlloc(sz);
 }
 
-char* sbAllocClear(int size) {
-    char* p = sbAlloc(size);
+char *sbAllocClear(int size) {
+    char *p = sbAlloc(size);
     memset(p, 0, size);
     return p;
 }
 
-void sbFree(void* ptr) {
-    char* p = (char*)ptr;
-    STRBUF* st = (STRBUF*)(p - sizeof(STRINF));
-    STRINF* inf = GET_INTINF(st);
+void sbFree(void *ptr) {
+    char *p = (char *) ptr;
+    STRBUF *st = (STRBUF *) (p - sizeof(STRINF));
+    STRINF *inf = GET_INTINF(st);
     if (p != (inf->ptr)) {
         return;
     }
     BlockFree(inf);
 }
 
-char* sbExpand(char* ptr, int size) {
-    STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
+char *sbExpand(char *ptr, int size) {
+    STRBUF *st = (STRBUF *) (ptr - sizeof(STRINF));
     return BlockRealloc(st, size);
 }
 
-void sbCopy(char** pptr, char* data, int size) {
-    char* ptr = *pptr;
-    STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
+void sbCopy(char **pptr, char *data, int size) {
+    char *ptr = *pptr;
+    STRBUF *st = (STRBUF *) (ptr - sizeof(STRINF));
     int sz = st->inf.size;
-    char* p = st->inf.ptr;
+    char *p = st->inf.ptr;
     if (size > sz) {
         p = BlockRealloc(st, size);
         *pptr = p;
@@ -221,18 +221,18 @@ void sbCopy(char** pptr, char* data, int size) {
 
 /// mode:0=normal/1=string
 ///        
-void sbAdd(char** pptr, char* data, int size, int mode) {
-    char* ptr = *pptr;
-    STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
-    char* p = st->inf.ptr;
+void sbAdd(char **pptr, char *data, int size, int mode) {
+    char *ptr = *pptr;
+    STRBUF *st = (STRBUF *) (ptr - sizeof(STRINF));
+    char *p = st->inf.ptr;
     int sz;
-    
+
     if (mode) {
-        sz = (int)strlen(p); // 文字列データ
+        sz = (int) strlen(p); // 文字列データ
     } else {
         sz = st->inf.size; // 通常データ
     }
-    
+
     int newsize = sz + size;
     if (newsize > (st->inf.size)) {
         newsize = (newsize + 0xfff) & 0xfffff000; // 8K単位で確保
@@ -243,22 +243,22 @@ void sbAdd(char** pptr, char* data, int size, int mode) {
     memcpy(p + sz, data, size);
 }
 
-void sbStrCopy(char** ptr, char* str) {
-    sbCopy(ptr, str, (int)strlen(str) + 1);
+void sbStrCopy(char **ptr, char *str) {
+    sbCopy(ptr, str, (int) strlen(str) + 1);
 }
 
-void sbStrAdd(char** ptr, char* str) {
-    sbAdd(ptr, str, (int)strlen(str) + 1, 1);
+void sbStrAdd(char **ptr, char *str) {
+    sbAdd(ptr, str, (int) strlen(str) + 1, 1);
 }
 
-void* sbGetOption(char* ptr) {
-    STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
+void *sbGetOption(char *ptr) {
+    STRBUF *st = (STRBUF *) (ptr - sizeof(STRINF));
     return st->inf.opt;
 }
 
-void sbSetOption(char* ptr, void* option) {
-    STRBUF* st = (STRBUF*)(ptr - sizeof(STRINF));
-    STRINF* inf;
+void sbSetOption(char *ptr, void *option) {
+    STRBUF *st = (STRBUF *) (ptr - sizeof(STRINF));
+    STRINF *inf;
     st->inf.opt = option;
     inf = GET_INTINF(st);
     inf->opt = option;

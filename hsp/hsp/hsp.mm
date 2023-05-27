@@ -37,7 +37,7 @@
         hsp_mcs += 2;
         return;
     }
-    hsp_val_tmp = (int)(*hsp_mcs++); // 16bit val code
+    hsp_val_tmp = (int) (*hsp_mcs++); // 16bit val code
 }
 
 //void code_next( void ) {
@@ -70,7 +70,7 @@
             } else if (strcmp(proc->vartype_name, "str") == 0) {  //文字列の足し算
                 HspVarStr_AddI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -80,7 +80,7 @@
             } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数の引き算
                 HspVarDouble_SubI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -90,7 +90,7 @@
             } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数の掛け算
                 HspVarDouble_MulI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -100,7 +100,7 @@
             } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数の割り算
                 HspVarDouble_DivI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -111,7 +111,7 @@
             } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のMOD
                 HspVarDouble_ModI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -119,7 +119,7 @@
             if (strcmp(proc->vartype_name, "int") == 0) {  //整数のAND
                 HspVarInt_AndI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -127,7 +127,7 @@
             if (strcmp(proc->vartype_name, "int") == 0) {  //整数のOR
                 HspVarInt_OrI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -135,7 +135,7 @@
             if (strcmp(proc->vartype_name, "int") == 0) {  //整数のXOR
                 HspVarInt_XorI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -147,7 +147,7 @@
             } else if (strcmp(proc->vartype_name, "str") == 0) {  //文字列の=
                 HspVarStr_EqI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -159,7 +159,7 @@
             } else if (strcmp(proc->vartype_name, "str") == 0) {  //文字列の!=
                 HspVarStr_NeI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -169,7 +169,7 @@
             } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数の>
                 HspVarDouble_GtI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -179,7 +179,7 @@
             } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数の<
                 HspVarDouble_LtI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -190,7 +190,7 @@
             } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数の>=
                 HspVarDouble_GtEqI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -201,7 +201,7 @@
             } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数の<=
                 HspVarDouble_LtEqI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -210,7 +210,7 @@
             if (strcmp(proc->vartype_name, "int") == 0) {  //整数の>>
                 HspVarInt_RrI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
@@ -219,18 +219,18 @@
             if (strcmp(proc->vartype_name, "int") == 0) {  //整数の<<
                 HspVarInt_LrI(pval, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             break;
         }
         case '(': {
-             @throw [self make_nsexception:HSPERR_INVALID_ARRAY];
+            @throw [self make_nsexception:HSPERR_INVALID_ARRAY];
         }
         default: {
-             @throw [self make_nsexception:HSPVAR_ERROR_INVALID];
+            @throw [self make_nsexception:HSPVAR_ERROR_INVALID];
         }
     }
-    
+
 }
 
 /// Caluculate parameter args (int)
@@ -248,7 +248,7 @@
             break;
         case CALCCODE_DIV: {
             if (p == 0) {
-                 @throw [self make_nsexception:HSPVAR_ERROR_DIVZERO];
+                @throw [self make_nsexception:HSPVAR_ERROR_DIVZERO];
             }
             *mval /= p;
             break;
@@ -256,7 +256,7 @@
         case CALCCODE_MOD:  // '%'
         {
             if (p == 0) {
-                 @throw [self make_nsexception:HSPVAR_ERROR_DIVZERO];
+                @throw [self make_nsexception:HSPVAR_ERROR_DIVZERO];
             }
             *mval %= p;
             break;
@@ -288,7 +288,7 @@
         case CALCCODE_LTEQ:  // '<='
             *mval = (*mval <= p);
             break;
-            
+
         case CALCCODE_RR:  // '>>'
             *mval >>= p;
             break;
@@ -296,10 +296,10 @@
             *mval <<= p;
             break;
         case '(': {
-             @throw [self make_nsexception:HSPERR_INVALID_ARRAY];
+            @throw [self make_nsexception:HSPERR_INVALID_ARRAY];
         }
         default: {
-             @throw [self make_nsexception:HSPVAR_ERROR_INVALID];
+            @throw [self make_nsexception:HSPVAR_ERROR_INVALID];
         }
     }
 }
@@ -313,12 +313,12 @@
     char *ptr;
     int tflag = stm1->type;
     int basesize;
-    
+
     // stm1 = stm2-1;
-    
+
     // if ( tflag > HSP3_FUNC_MAX ) throw HSPERR_UNKNOWN_CODE;
     // Alertf( "(%d) %d %d %d",tflag, stm1->ival, op, stm2->ival );
-    
+
     if (tflag == HSPVAR_FLAG_INT) {
         if (stm2->type == HSPVAR_FLAG_INT) {  // HSPVAR_FLAG_INT のみ高速化
             [self calcprmf:&stm1->ival exp:op p:stm2->ival];  // 高速化された演算(intのみ)
@@ -327,32 +327,32 @@
             return;
         }
     }
-    
+
     mpval = HspVarCoreGetPVal(tflag);
     varproc = HspVarCoreGetProc(tflag);
-    
+
     if (mpval->mode == HSPVAR_MODE_NONE) {  // 型に合わせたテンポラリ変数を初期化
         if (varproc->flag == 0) {
-             @throw [self make_nsexception:HSPERR_TYPE_INITALIZATION_FAILED];
+            @throw [self make_nsexception:HSPERR_TYPE_INITALIZATION_FAILED];
         }
         HspVarCoreClearTemp(mpval, tflag);  // 最小サイズのメモリを確保
     }
-    
+
     // テンポラリ変数に初期値を設定
     if (strcmp(varproc->vartype_name, "int") == 0) {  //整数のSet
-        HspVarInt_Set(mpval, (PDAT *)mpval->pt, STM_GETPTR(stm1));
+        HspVarInt_Set(mpval, (PDAT *) mpval->pt, STM_GETPTR(stm1));
     } else if (strcmp(varproc->vartype_name, "double") == 0) {  //実数のSet
-        HspVarDouble_Set(mpval, (PDAT *)mpval->pt, STM_GETPTR(stm1));
+        HspVarDouble_Set(mpval, (PDAT *) mpval->pt, STM_GETPTR(stm1));
     } else if (strcmp(varproc->vartype_name, "str") == 0) {  //文字列のSet
-        HspVarStr_Set(mpval, (PDAT *)mpval->pt, STM_GETPTR(stm1));
+        HspVarStr_Set(mpval, (PDAT *) mpval->pt, STM_GETPTR(stm1));
     } else if (strcmp(varproc->vartype_name, "label") == 0) {  //ラベルのSet
-        HspVarLabel_Set(mpval, (PDAT *)mpval->pt, STM_GETPTR(stm1));
+        HspVarLabel_Set(mpval, (PDAT *) mpval->pt, STM_GETPTR(stm1));
     } else if (strcmp(varproc->vartype_name, "struct") == 0) {  // structのSet
-        HspVarLabel_Set(mpval, (PDAT *)mpval->pt, STM_GETPTR(stm1));
+        HspVarLabel_Set(mpval, (PDAT *) mpval->pt, STM_GETPTR(stm1));
     } else {
-         @throw [self make_nsexception:HSPERR_SYNTAX];
+        @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
+
     ptr = STM_GETPTR(stm2);
     if (tflag != stm2->type) {  // 型が一致しない場合は変換
         if (stm2->type >= HSPVAR_FLAG_USERDEF) {
@@ -360,20 +360,20 @@
             // ptr = (char *)HspVarCoreGetProc(stm2->type)->CnvCustom( ptr, tflag );
         } else {
             if (strcmp(varproc->vartype_name, "int") == 0) {  //整数のCnv
-                ptr = (char *)HspVarInt_Cnv(ptr, stm2->type);
+                ptr = (char *) HspVarInt_Cnv(ptr, stm2->type);
             } else if (strcmp(varproc->vartype_name, "double") == 0) {  //実数のCnv
-                ptr = (char *)HspVarDouble_Cnv(ptr, stm2->type);
+                ptr = (char *) HspVarDouble_Cnv(ptr, stm2->type);
             } else if (strcmp(varproc->vartype_name, "str") == 0) {  //文字列のCnv
-                ptr = (char *)HspVarStr_Cnv(ptr, stm2->type);
+                ptr = (char *) HspVarStr_Cnv(ptr, stm2->type);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
         }
     }
-    [self calcprm:varproc pval:(PDAT *)mpval->pt exp:op ptr:ptr];  // 計算を行なう
+    [self calcprm:varproc pval:(PDAT *) mpval->pt exp:op ptr:ptr];  // 計算を行なう
     [self StackPop];
     [self StackPop];
-    
+
     if (varproc->aftertype != tflag) {  // 演算後に型が変わる場合
         tflag = varproc->aftertype;
         varproc = HspVarCoreGetProc(tflag);
@@ -381,21 +381,21 @@
     basesize = varproc->basesize;
     if (basesize < 0) {
         if (strcmp(varproc->vartype_name, "int") == 0) {  //整数のGetSize
-            basesize = HspVarInt_GetSize((PDAT *)mpval->pt);
+            basesize = HspVarInt_GetSize((PDAT *) mpval->pt);
         } else if (strcmp(varproc->vartype_name, "double") == 0) {  //実数のGetSize
-            basesize = HspVarDouble_GetSize((PDAT *)mpval->pt);
+            basesize = HspVarDouble_GetSize((PDAT *) mpval->pt);
         } else if (strcmp(varproc->vartype_name, "str") == 0) {  //文字列のGetSize
-            basesize = HspVarStr_GetSize((PDAT *)mpval->pt);
+            basesize = HspVarStr_GetSize((PDAT *) mpval->pt);
         } else if (strcmp(varproc->vartype_name, "label") == 0) {  //ラベルのGetSize
-            basesize = HspVarLabel_GetSize((PDAT *)mpval->pt);
+            basesize = HspVarLabel_GetSize((PDAT *) mpval->pt);
         } else if (strcmp(varproc->vartype_name, "struct") == 0) {  // structのGetSize
-            basesize = HspVarLabel_GetSize((PDAT *)mpval->pt);
+            basesize = HspVarLabel_GetSize((PDAT *) mpval->pt);
         } else {
-             @throw [self make_nsexception:HSPERR_SYNTAX];
+            @throw [self make_nsexception:HSPERR_SYNTAX];
         }
     }
     [self StackPush:tflag data:mpval->pt size:basesize];
-    
+
 }
 
 /// Check PVal Array information
@@ -407,7 +407,7 @@
     int i;
     PVal temp;
     HspVarCoreReset(pval);  // 配列ポインタをリセットする
-    
+
     if (hsp_type_tmp == TYPE_MARK) {
         if (hsp_val_tmp == '(') {
             [self code_next];
@@ -416,13 +416,13 @@
                 HspVarCoreCopyArrayInfo(&temp, pval);  // 状態を保存
                 chk = [self code_get];  // パラメーターを取り出す
                 if (chk <= PARAM_END) {
-                     @throw [self make_nsexception:HSPERR_BAD_ARRAY_EXPRESSION];
+                    @throw [self make_nsexception:HSPERR_BAD_ARRAY_EXPRESSION];
                 }
                 if (mpval->flag != HSPVAR_FLAG_INT) {
-                     @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+                    @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
                 }
                 HspVarCoreCopyArrayInfo(pval, &temp);  // 状態を復帰
-                i = *(int *)(mpval->pt);
+                i = *(int *) (mpval->pt);
                 HspVarCoreArray(pval, i);  // 配列要素指定(整数)
                 if (chk == PARAM_SPLIT) break;
             }
@@ -438,7 +438,7 @@
 ///
 - (void)code_arrayint2:(PVal *)pval offset:(int)offset {
     if (pval->arraycnt >= 5) {
-         @throw [self make_nsexception:HSPVAR_ERROR_ARRAYOVER];
+        @throw [self make_nsexception:HSPVAR_ERROR_ARRAYOVER];
     }
     if (pval->arraycnt == 0) {
         pval->arraymul = 1;  // 最初の値
@@ -447,7 +447,7 @@
     }
     pval->arraycnt++;
     if (offset < 0) {
-         @throw [self make_nsexception:HSPVAR_ERROR_ARRAYOVER];
+        @throw [self make_nsexception:HSPVAR_ERROR_ARRAYOVER];
     }
     if (offset >= (pval->len[pval->arraycnt])) {
         if ((pval->arraycnt >= 4) || (pval->len[pval->arraycnt + 1] == 0)) {
@@ -470,7 +470,7 @@
     int chk, i;
     PVal temp;
     HspVarCoreReset(pval);  // 配列ポインタをリセットする
-    
+
     if (hsp_type_tmp == TYPE_MARK) {
         if (hsp_val_tmp == '(') {
             [self code_next];
@@ -479,13 +479,13 @@
                 HspVarCoreCopyArrayInfo(&temp, pval);  // 状態を保存
                 chk = [self code_get];  // パラメーターを取り出す
                 if (chk <= PARAM_END) {
-                     @throw [self make_nsexception:HSPERR_BAD_ARRAY_EXPRESSION];
+                    @throw [self make_nsexception:HSPERR_BAD_ARRAY_EXPRESSION];
                 }
                 if (mpval->flag != HSPVAR_FLAG_INT) {
-                     @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+                    @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
                 }
                 HspVarCoreCopyArrayInfo(pval, &temp);  // 状態を復帰
-                i = *(int *)(mpval->pt);
+                i = *(int *) (mpval->pt);
                 [self code_arrayint2:pval offset:i];
                 if (chk == PARAM_SPLIT) break;
             }
@@ -531,10 +531,10 @@
      return (fv->ptr);
      }
      */
-    
+
     *mptype = pval->flag;
     HspVarCoreReset(pval);  // 配列ポインタをリセットする
-    
+
     if (hsp_type_tmp == TYPE_MARK) {
         if (hsp_val_tmp == '(') {  // 配列がある場合
             [self code_next];
@@ -548,7 +548,7 @@
             //			code_checkarray( pval );
         }
     }
-    
+
     PDAT *dst;
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) {  //整数のGetPtr
         dst = HspVarInt_GetPtr(pval);
@@ -563,8 +563,8 @@
     } else {
         @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
-    return (char *)dst;  //(char *)HspVarCorePtr( pval );
+
+    return (char *) dst;  //(char *)HspVarCorePtr( pval );
 }
 
 /*
@@ -586,24 +586,24 @@
     PVal *getv_pval;
     switch (*mptype) {  // マルチパラメーターを取得
         case MPTYPE_SINGLEVAR:
-            var = (MPVarData *)ptr;
+            var = (MPVarData *) ptr;
             getv_pval = var->pval;
             getv_pval->offset = var->aptr;
             if (hsp_type_tmp == TYPE_MARK) {
                 if (hsp_val_tmp == '(') {
-                     @throw [self make_nsexception:HSPERR_INVALID_ARRAY];
+                    @throw [self make_nsexception:HSPERR_INVALID_ARRAY];
                 }
             }
             // HspVarCoreReset( getv_pval );
             break;
         case MPTYPE_LOCALSTRING:
             *mptype = MPTYPE_STRING;
-            return *(char **)ptr;
+            return *(char **) ptr;
         case MPTYPE_LABEL:
             *mptype = HSPVAR_FLAG_LABEL;
             return ptr;
         case MPTYPE_ARRAYVAR:
-            var = (MPVarData *)ptr;
+            var = (MPVarData *) ptr;
             getv_pval = var->pval;
             if (getv_pval->support & HSPVAR_SUPPORT_MISCTYPE) {
                 return [self code_checkarray_obj:getv_pval mptype:mptype];
@@ -612,7 +612,7 @@
             }
             break;
         case MPTYPE_LOCALVAR:
-            getv_pval = (PVal *)ptr;
+            getv_pval = (PVal *) ptr;
             if (getv_pval->support & HSPVAR_SUPPORT_MISCTYPE) {
                 return [self code_checkarray_obj:getv_pval mptype:mptype];
             } else {
@@ -623,7 +623,7 @@
             return ptr;
     }
     *mptype = getv_pval->flag;
-    
+
     PDAT *dst;
     if (strcmp(hspvarproc[(getv_pval)->flag].vartype_name, "int") == 0) {  //整数のFree
         dst = HspVarInt_GetPtr(getv_pval);
@@ -638,8 +638,8 @@
     } else {
         @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
-    return (char *)dst;  // HspVarCorePtr( getv_pval );
+
+    return (char *) dst;  // HspVarCorePtr( getv_pval );
 }
 
 /// Check PVal Array object information
@@ -650,7 +650,7 @@
 - (void)code_checkarray_obj2:(PVal *)pval {
     HspVarProc *varproc;
     HspVarCoreReset(pval);  // 配列ポインタをリセットする
-    
+
     hsp_arrayobj_flag = 0;
     if (hsp_type_tmp == TYPE_MARK) {
         if (hsp_val_tmp == '(') {  // 配列がある場合
@@ -687,7 +687,7 @@
     int tmpval;
     int stack_def;
     int resval;
-    
+
     if (hsp_exflg & EXFLG_1) return PARAM_END;  // パラメーター終端
     if (hsp_exflg & EXFLG_2) {  // パラメーター区切り(デフォルト時)
         hsp_exflg ^= EXFLG_2;
@@ -704,36 +704,36 @@
             return PARAM_ENDSPLIT;
         }
     }
-    
+
     if (hsp_csvalue & EXFLG_0) {  // 単一の項目(高速化)
         switch (hsp_type_tmp) {
             case TYPE_INUM:
                 mpval = hsp_mpval_int;
-                *(int *)mpval->pt = hsp_val_tmp;
+                *(int *) mpval->pt = hsp_val_tmp;
                 break;
             case TYPE_DNUM:
             case TYPE_STRING: {
                 varproc = HspVarCoreGetProc(hsp_type_tmp);
                 mpval = HspVarCoreGetPVal(hsp_type_tmp);
                 if (mpval->mode ==
-                    HSPVAR_MODE_NONE) {  // 型に合わせたテンポラリ変数を初期化
+                        HSPVAR_MODE_NONE) {  // 型に合わせたテンポラリ変数を初期化
                     if (varproc->flag == 0) {
                         @throw [self make_nsexception:HSPERR_TYPE_INITALIZATION_FAILED];
                     }
                     HspVarCoreClearTemp(mpval, hsp_type_tmp);  // 最小サイズのメモリを確保
                 }
-                
+
                 // テンポラリ変数に初期値を設定
                 if (strcmp(varproc->vartype_name, "int") == 0) {  //整数のSet
-                    HspVarInt_Set(mpval, (PDAT *)(mpval->pt), &abc_hspctx.mem_mds[hsp_val_tmp]);
+                    HspVarInt_Set(mpval, (PDAT *) (mpval->pt), &abc_hspctx.mem_mds[hsp_val_tmp]);
                 } else if (strcmp(varproc->vartype_name, "double") == 0) {  //実数のSet
-                    HspVarDouble_Set(mpval, (PDAT *)(mpval->pt), &abc_hspctx.mem_mds[hsp_val_tmp]);
+                    HspVarDouble_Set(mpval, (PDAT *) (mpval->pt), &abc_hspctx.mem_mds[hsp_val_tmp]);
                 } else if (strcmp(varproc->vartype_name, "str") == 0) {  //文字列のSet
-                    HspVarStr_Set(mpval, (PDAT *)(mpval->pt), &abc_hspctx.mem_mds[hsp_val_tmp]);
+                    HspVarStr_Set(mpval, (PDAT *) (mpval->pt), &abc_hspctx.mem_mds[hsp_val_tmp]);
                 } else if (strcmp(varproc->vartype_name, "label") == 0) {  //ラベルのSet
-                    HspVarLabel_Set(mpval, (PDAT *)(mpval->pt), &abc_hspctx.mem_mds[hsp_val_tmp]);
+                    HspVarLabel_Set(mpval, (PDAT *) (mpval->pt), &abc_hspctx.mem_mds[hsp_val_tmp]);
                 } else if (strcmp(varproc->vartype_name, "struct") == 0) {  // structのSet
-                    HspVarLabel_Set(mpval, (PDAT *)(mpval->pt), &abc_hspctx.mem_mds[hsp_val_tmp]);
+                    HspVarLabel_Set(mpval, (PDAT *) (mpval->pt), &abc_hspctx.mem_mds[hsp_val_tmp]);
                 } else {
                     @throw [self make_nsexception:HSPERR_SYNTAX];
                 }
@@ -747,10 +747,10 @@
         hsp_exflg &= ~EXFLG_2;
         return 0;
     }
-    
+
     resval = 0;
-    stack_def = (int)StackGetLevel;  // スタックのレベルを取得
-    
+    stack_def = (int) StackGetLevel;  // スタックのレベルを取得
+
     while (1) {
         switch (hsp_type_tmp) {
             case TYPE_MARK:
@@ -770,7 +770,7 @@
                 [self code_next];
                 tflag = argpv->flag;
                 if (argpv->support & HSPVAR_SUPPORT_MISCTYPE) {
-                    ptr = (char *)[self code_checkarray_obj:argpv mptype:&tflag];
+                    ptr = (char *) [self code_checkarray_obj:argpv mptype:&tflag];
                 } else {
                     [self code_checkarray:argpv];
                     PDAT *dst;
@@ -787,21 +787,21 @@
                     } else {
                         @throw [self make_nsexception:HSPERR_SYNTAX];
                     }
-                    ptr = (char *)dst;  // HspVarCorePtr( argpv );
+                    ptr = (char *) dst;  // HspVarCorePtr( argpv );
                 }
                 varproc = HspVarCoreGetProc(tflag);
                 basesize = varproc->basesize;
                 if (basesize < 0) {
                     if (strcmp(varproc->vartype_name, "int") == 0) {  //整数のGetSize
-                        basesize = HspVarInt_GetSize((PDAT *)ptr);
+                        basesize = HspVarInt_GetSize((PDAT *) ptr);
                     } else if (strcmp(varproc->vartype_name, "double") == 0) {  //実数のGetSize
-                        basesize = HspVarDouble_GetSize((PDAT *)ptr);
+                        basesize = HspVarDouble_GetSize((PDAT *) ptr);
                     } else if (strcmp(varproc->vartype_name, "str") == 0) {  //文字列のGetSize
-                        basesize = HspVarStr_GetSize((PDAT *)ptr);
+                        basesize = HspVarStr_GetSize((PDAT *) ptr);
                     } else if (strcmp(varproc->vartype_name, "label") == 0) {  //ラベルのGetSize
-                        basesize = HspVarLabel_GetSize((PDAT *)ptr);
+                        basesize = HspVarLabel_GetSize((PDAT *) ptr);
                     } else if (strcmp(varproc->vartype_name, "struct") == 0) {  // structのGetSize
-                        basesize = HspVarLabel_GetSize((PDAT *)ptr);
+                        basesize = HspVarLabel_GetSize((PDAT *) ptr);
                     } else {
                         @throw [self make_nsexception:HSPERR_SYNTAX];
                     }
@@ -823,37 +823,37 @@
             case TYPE_STRUCT:
                 prm = &abc_hspctx.mem_minfo[hsp_val_tmp];
                 [self code_next];
-                out = ((char *)abc_hspctx.prmstack);
+                out = ((char *) abc_hspctx.prmstack);
                 if (out == NULL) {
-                     @throw [self make_nsexception:HSPERR_INVALID_PARAMETER];
+                    @throw [self make_nsexception:HSPERR_INVALID_PARAMETER];
                 }
                 if (prm->subid != STRUCTPRM_SUBID_STACK) {
-                    var = (MPModVarData *)out;
+                    var = (MPModVarData *) out;
                     if ((var->magic != MODVAR_MAGICCODE) || (var->subid != prm->subid) || (var->pval->flag != TYPE_STRUCT)) {
                         @throw [self make_nsexception:HSPERR_INVALID_STRUCT_SOURCE];
                     }
-                    fv = (FlexValue *)HspVarCorePtrAPTR(var->pval, var->aptr);
+                    fv = (FlexValue *) HspVarCorePtrAPTR(var->pval, var->aptr);
                     if (fv->type == FLEXVAL_TYPE_NONE) {
                         @throw [self make_nsexception:HSPERR_INVALID_STRUCT_SOURCE];
                     }
-                    out = (char *)fv->ptr;
+                    out = (char *) fv->ptr;
                 }
                 out += prm->offset;
                 tflag = prm->mptype;
-                ptr = (char *)[self code_get_proxyvar:out mptype:&tflag];
+                ptr = (char *) [self code_get_proxyvar:out mptype:&tflag];
                 varproc = HspVarCoreGetProc(tflag);
                 basesize = varproc->basesize;
                 if (basesize < 0) {
                     if (strcmp(varproc->vartype_name, "int") == 0) {  //整数のGetSize
-                        basesize = HspVarInt_GetSize((PDAT *)ptr);
+                        basesize = HspVarInt_GetSize((PDAT *) ptr);
                     } else if (strcmp(varproc->vartype_name, "double") == 0) {  //実数のGetSize
-                        basesize = HspVarDouble_GetSize((PDAT *)ptr);
+                        basesize = HspVarDouble_GetSize((PDAT *) ptr);
                     } else if (strcmp(varproc->vartype_name, "str") == 0) {  //文字列のGetSize
-                        basesize = HspVarStr_GetSize((PDAT *)ptr);
+                        basesize = HspVarStr_GetSize((PDAT *) ptr);
                     } else if (strcmp(varproc->vartype_name, "label") == 0) {  //ラベルのGetSize
-                        basesize = HspVarLabel_GetSize((PDAT *)ptr);
+                        basesize = HspVarLabel_GetSize((PDAT *) ptr);
                     } else if (strcmp(varproc->vartype_name, "struct") == 0) {  // structのGetSize
-                        basesize = HspVarLabel_GetSize((PDAT *)ptr);
+                        basesize = HspVarLabel_GetSize((PDAT *) ptr);
                     } else {
                         @throw [self make_nsexception:HSPERR_SYNTAX];
                     }
@@ -862,28 +862,28 @@
                 break;
             case TYPE_LABEL: {
                 unsigned short *tmpval =
-                abc_hspctx.mem_mcs + abc_hspctx.mem_ot[hsp_val_tmp];
-                [self StackPush:HSPVAR_FLAG_LABEL data:(char *)&tmpval size:sizeof(unsigned short *)];
+                        abc_hspctx.mem_mcs + abc_hspctx.mem_ot[hsp_val_tmp];
+                [self StackPush:HSPVAR_FLAG_LABEL data:(char *) &tmpval size:sizeof(unsigned short *)];
                 [self code_next];
                 break;
             }
             default:
                 //		リダイレクト(reffunc)使用チェック
                 //
-                
+
                 info = GetTypeInfoPtr(hsp_type_tmp);
                 if (info->reffuncNumber == -1) {
                     @throw [self make_nsexception:HSPERR_INVALID_PARAMETER];
                 }
                 tmpval = hsp_val_tmp;
                 [self code_next];
-                
+
                 switch (info->reffuncNumber) {
                     case 0:
-                        ptr = (char *)[self reffunc_sysvar:&tflag arg:tmpval];
+                        ptr = (char *) [self reffunc_sysvar:&tflag arg:tmpval];
                         break;
                     case 1:
-                        ptr = (char *)[self reffunc_custom:&tflag arg:tmpval];
+                        ptr = (char *) [self reffunc_custom:&tflag arg:tmpval];
                         break;
                     case 2:
                         // ptr = (char *)reffunc_dllcmd(&tflag, tmpval);
@@ -892,80 +892,80 @@
                         // ptr = (char *)reffunc_ctrlfunc(&tflag, tmpval);
                         break;
                     case 4:
-                        
-                        ptr = (char *)[self reffunc_function:&tflag arg:tmpval];
+
+                        ptr = (char *) [self reffunc_function:&tflag arg:tmpval];
                         break;
                     case 5:
-                        ptr = (char *)[self reffunc_intfunc:&tflag arg:tmpval];
+                        ptr = (char *) [self reffunc_intfunc:&tflag arg:tmpval];
                         break;
                     default:
-                        
+
                         break;
                 }
                 // ptr = (char *)info->reffunc( &tflag, tmpval );	//
                 // タイプごとの関数振り分け
                 if (strcmp(HspVarCoreGetProc(tflag)->vartype_name, "int") == 0) {  //整数のGetSize
-                    basesize = HspVarInt_GetSize((PDAT *)ptr);
+                    basesize = HspVarInt_GetSize((PDAT *) ptr);
                 } else if (strcmp(HspVarCoreGetProc(tflag)->vartype_name, "double") == 0) {  //実数のGetSize
-                    basesize = HspVarDouble_GetSize((PDAT *)ptr);
+                    basesize = HspVarDouble_GetSize((PDAT *) ptr);
                 } else if (strcmp(HspVarCoreGetProc(tflag)->vartype_name, "str") == 0) {  //文字列のGetSize
-                    basesize = HspVarStr_GetSize((PDAT *)ptr);
+                    basesize = HspVarStr_GetSize((PDAT *) ptr);
                 } else if (strcmp(HspVarCoreGetProc(tflag)->vartype_name, "label") == 0) {  //ラベルのGetSize
-                    basesize = HspVarLabel_GetSize((PDAT *)ptr);
+                    basesize = HspVarLabel_GetSize((PDAT *) ptr);
                 } else if (strcmp(HspVarCoreGetProc(tflag)->vartype_name, "struct") == 0) {  // structのGetSize
-                    basesize = HspVarLabel_GetSize((PDAT *)ptr);
+                    basesize = HspVarLabel_GetSize((PDAT *) ptr);
                 } else {
                     @throw [self make_nsexception:HSPERR_SYNTAX];
                 }
                 [self StackPush:tflag data:ptr size:basesize];
                 break;
         }
-        
+
         if (hsp_exflg) {  // パラメーター終端チェック
             hsp_exflg &= ~EXFLG_2;
             break;
         }
     }
-    
+
     stm = StackPeek;
     tflag = stm->type;
-    
+
     if (tflag == HSPVAR_FLAG_INT) {  // int型の場合は直接値を設定する(高速化)
         mpval = hsp_mpval_int;
-        *(int *)mpval->pt = stm->ival;
+        *(int *) mpval->pt = stm->ival;
     } else {
         varproc = HspVarCoreGetProc(tflag);
         mpval = HspVarCoreGetPVal(tflag);
-        
+
         if (mpval->mode ==
-            HSPVAR_MODE_NONE) {  // 型に合わせたテンポラリ変数を初期化
+                HSPVAR_MODE_NONE) {  // 型に合わせたテンポラリ変数を初期化
             if (varproc->flag == 0) {
                 @throw [self make_nsexception:HSPERR_TYPE_INITALIZATION_FAILED];
             }
             HspVarCoreClearTemp(mpval, tflag);  // 最小サイズのメモリを確保
         }
-        
+
         // テンポラリ変数に初期値を設定
         if (strcmp(varproc->vartype_name, "int") == 0) {  //整数のSet
-            HspVarInt_Set(mpval, (PDAT *)(mpval->pt), STM_GETPTR(stm));
+            HspVarInt_Set(mpval, (PDAT *) (mpval->pt), STM_GETPTR(stm));
         } else if (strcmp(varproc->vartype_name, "double") == 0) {  //実数のSet
-            HspVarDouble_Set(mpval, (PDAT *)(mpval->pt), STM_GETPTR(stm));
+            HspVarDouble_Set(mpval, (PDAT *) (mpval->pt), STM_GETPTR(stm));
         } else if (strcmp(varproc->vartype_name, "str") == 0) {  //文字列のSet
-            HspVarStr_Set(mpval, (PDAT *)(mpval->pt), STM_GETPTR(stm));
+            HspVarStr_Set(mpval, (PDAT *) (mpval->pt), STM_GETPTR(stm));
         } else if (strcmp(varproc->vartype_name, "label") == 0) {  //ラベルのSet
-            HspVarLabel_Set(mpval, (PDAT *)(mpval->pt), STM_GETPTR(stm));
+            HspVarLabel_Set(mpval, (PDAT *) (mpval->pt), STM_GETPTR(stm));
         } else if (strcmp(varproc->vartype_name, "struct") == 0) {  // structのSet
-            HspVarLabel_Set(mpval, (PDAT *)(mpval->pt), STM_GETPTR(stm));
+            HspVarLabel_Set(mpval, (PDAT *) (mpval->pt), STM_GETPTR(stm));
         } else {
-             @throw [self make_nsexception:HSPERR_SYNTAX];
+            @throw [self make_nsexception:HSPERR_SYNTAX];
         }
     }
-    
+
     [self StackPop];
     if (stack_def != StackGetLevel) {  // スタックが正常に復帰していない
-         @throw [self make_nsexception:HSPERR_STACK_OVERFLOW];
+        @throw [self make_nsexception:HSPERR_STACK_OVERFLOW];
     }
-    
+
     return resval;
 }
 
@@ -987,10 +987,10 @@
 - (char *)code_getds:(const char *)defval {
     int chk = [self code_get];
     if (chk <= PARAM_END) {
-        return (char *)defval;
+        return (char *) defval;
     }
     if (mpval->flag != HSPVAR_FLAG_STR) {
-         @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+        @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
     return (mpval->pt);
 }
@@ -1001,12 +1001,12 @@
     int chk = [self code_get];
     char *ptr;
     if (chk <= PARAM_END) {
-        return (char *)defval;
+        return (char *) defval;
     }
     ptr = mpval->pt;
     if (mpval->flag != HSPVAR_FLAG_STR) {  // 型が一致しない場合は変換
         // ptr = (char *)HspVarCoreCnv( mpval->flag, HSPVAR_FLAG_STR, ptr );
-        ptr = (char *)HspVarCoreCnvPtr(mpval, HSPVAR_FLAG_STR);
+        ptr = (char *) HspVarCoreCnvPtr(mpval, HSPVAR_FLAG_STR);
     }
     return ptr;
 }
@@ -1016,15 +1016,15 @@
 - (int)code_geti {
     int chk = [self code_get];
     if (chk <= PARAM_END) {
-         @throw [self make_nsexception:HSPERR_NO_DEFAULT];
+        @throw [self make_nsexception:HSPERR_NO_DEFAULT];
     }
     if (mpval->flag != HSPVAR_FLAG_INT) {
         if (mpval->flag != HSPVAR_FLAG_DOUBLE) {
-             @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+            @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
         }
-        return (int)(*(double *)(mpval->pt));  // doubleの時はintに変換
+        return (int) (*(double *) (mpval->pt));  // doubleの時はintに変換
     }
-    return *(int *)(mpval->pt);
+    return *(int *) (mpval->pt);
 }
 
 /// 数値パラメーターを取得(デフォルト値あり)
@@ -1036,11 +1036,11 @@
     }
     if (mpval->flag != HSPVAR_FLAG_INT) {
         if (mpval->flag != HSPVAR_FLAG_DOUBLE) {
-             @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+            @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
         }
-        return (int)(*(double *)(mpval->pt));  // doubleの時はintに変換
+        return (int) (*(double *) (mpval->pt));  // doubleの時はintに変換
     }
-    return *(int *)(mpval->pt);
+    return *(int *) (mpval->pt);
 }
 
 /// 数値(double)パラメーターを取得
@@ -1048,15 +1048,15 @@
 - (double)code_getd {
     int chk = [self code_get];
     if (chk <= PARAM_END) {
-         @throw [self make_nsexception:HSPERR_NO_DEFAULT];
+        @throw [self make_nsexception:HSPERR_NO_DEFAULT];
     }
     if (mpval->flag != HSPVAR_FLAG_DOUBLE) {
         if (mpval->flag != HSPVAR_FLAG_INT) {
-             @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+            @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
         }
-        return (double)(*(int *)(mpval->pt));  // intの時はdoubleに変換
+        return (double) (*(int *) (mpval->pt));  // intの時はdoubleに変換
     }
-    return *(double *)(mpval->pt);
+    return *(double *) (mpval->pt);
 }
 
 /// 数値(double)パラメーターを取得(デフォルト値あり)
@@ -1068,11 +1068,11 @@
     }
     if (mpval->flag != HSPVAR_FLAG_DOUBLE) {
         if (mpval->flag != HSPVAR_FLAG_INT) {
-             @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+            @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
         }
-        return (double)(*(int *)(mpval->pt));  // intの時はdoubleに変換
+        return (double) (*(int *) (mpval->pt));  // intの時はdoubleに変換
     }
-    return *(double *)(mpval->pt);
+    return *(double *) (mpval->pt);
 }
 
 /// pvalの実体を検索する(マルチパラメーターの場合があるため)
@@ -1126,7 +1126,7 @@
             aptr = var->aptr;
             if (hsp_type_tmp == TYPE_MARK) {
                 if (hsp_val_tmp == '(') {
-                     @throw [self make_nsexception:HSPERR_INVALID_ARRAY];
+                    @throw [self make_nsexception:HSPERR_INVALID_ARRAY];
                 }
             }
             break;
@@ -1135,7 +1135,7 @@
             aptr = [self code_getv_sub:&getv_pval];
             break;
         case MPTYPE_LOCALVAR:
-            getv_pval = (PVal *)var;
+            getv_pval = (PVal *) var;
             aptr = [self code_getv_sub:&getv_pval];
             break;
         default: {
@@ -1156,38 +1156,38 @@
     APTR aptr;
     char *out;
     int i = hsp_val_tmp;
-    
+
     [self code_next];
-    out = ((char *)abc_hspctx.prmstack);
+    out = ((char *) abc_hspctx.prmstack);
     if (out == NULL) {
-         @throw [self make_nsexception:HSPERR_INVALID_PARAMETER];
+        @throw [self make_nsexception:HSPERR_INVALID_PARAMETER];
     }
-    
+
     if (i == STRUCTCODE_THISMOD) {  // thismod
-        var = (MPModVarData *)out;
+        var = (MPModVarData *) out;
         if (var->magic != MODVAR_MAGICCODE) {
-             @throw [self make_nsexception:HSPERR_INVALID_STRUCT_SOURCE];
+            @throw [self make_nsexception:HSPERR_INVALID_STRUCT_SOURCE];
         }
         *pval = var->pval;
         hsp_exflg &= EXFLG_1;
         return var->aptr;
     }
-    
+
     prm = &abc_hspctx.mem_minfo[i];
     if (prm->subid != STRUCTPRM_SUBID_STACK) {
-        var = (MPModVarData *)out;
+        var = (MPModVarData *) out;
         if ((var->magic != MODVAR_MAGICCODE) || (var->subid != prm->subid) ||
-            (var->pval->flag != TYPE_STRUCT)) {
-             @throw [self make_nsexception:HSPERR_INVALID_STRUCT_SOURCE];
+                (var->pval->flag != TYPE_STRUCT)) {
+            @throw [self make_nsexception:HSPERR_INVALID_STRUCT_SOURCE];
         }
-        fv = (FlexValue *)HspVarCorePtrAPTR(var->pval, var->aptr);
+        fv = (FlexValue *) HspVarCorePtrAPTR(var->pval, var->aptr);
         if (fv->type == FLEXVAL_TYPE_NONE) {
-             @throw [self make_nsexception:HSPERR_INVALID_STRUCT_SOURCE];
+            @throw [self make_nsexception:HSPERR_INVALID_STRUCT_SOURCE];
         }
-        out = (char *)fv->ptr;
+        out = (char *) fv->ptr;
     }
     out += prm->offset;
-    aptr = [self code_getv_proxy:pval var:(MPVarData *)out mptype:prm->mptype];
+    aptr = [self code_getv_proxy:pval var:(MPVarData *) out mptype:prm->mptype];
     hsp_exflg &= EXFLG_1;  // for 2nd prm_get
     return aptr;
 }
@@ -1200,22 +1200,22 @@
     if (hsp_exflg) { // パラメーターなし(デフォルト時)
         @throw [self make_nsexception:HSPERR_VARIABLE_REQUIRED];
     }
-    
+
     if (hsp_type_tmp == TYPE_STRUCT) {  // 置き換えパラメーター時
         return [self code_getva_struct:pval];
     }
     if (hsp_type_tmp != TYPE_VAR) {
-         @throw [self make_nsexception:HSPERR_VARIABLE_REQUIRED];
+        @throw [self make_nsexception:HSPERR_VARIABLE_REQUIRED];
     }
-    
+
     getv_pval = &abc_hspctx.mem_var[hsp_val_tmp];
     [self code_next];
-    
+
     aptr = [self code_getv_sub:&getv_pval];
-    
+
     hsp_exflg &= EXFLG_1;  // for 2nd prm_get
     *pval = getv_pval;
-    
+
     return aptr;
 }
 
@@ -1226,7 +1226,7 @@
     APTR aptr;
     aptr = [self code_getva:&getv_pval];
     if (aptr != 0) {
-         @throw [self make_nsexception:HSPERR_BAD_ARRAY_EXPRESSION];
+        @throw [self make_nsexception:HSPERR_BAD_ARRAY_EXPRESSION];
     }
     return getv_pval;
 }
@@ -1238,19 +1238,19 @@
         int chk = [self code_get];
         unsigned short *p;
         if (chk <= PARAM_END) {
-             @throw [self make_nsexception:HSPERR_LABEL_REQUIRED];
+            @throw [self make_nsexception:HSPERR_LABEL_REQUIRED];
         }
         if (mpval->flag != HSPVAR_FLAG_LABEL) {
-             @throw [self make_nsexception:HSPERR_LABEL_REQUIRED];
+            @throw [self make_nsexception:HSPERR_LABEL_REQUIRED];
         }
-        p = *(unsigned short **)mpval->pt;
+        p = *(unsigned short **) mpval->pt;
         if (p == NULL) {  // ラベル型変数の初期値はエラーに
-             @throw [self make_nsexception:HSPERR_LABEL_REQUIRED];
+            @throw [self make_nsexception:HSPERR_LABEL_REQUIRED];
         }
         hsp_mcs = hsp_mcsbak;
         return p;
     }
-    return (unsigned short *)(abc_hspctx.mem_mcs + (abc_hspctx.mem_ot[hsp_val_tmp]));
+    return (unsigned short *) (abc_hspctx.mem_mcs + (abc_hspctx.mem_ot[hsp_val_tmp]));
 }
 
 - (unsigned short *)code_getlb2 {
@@ -1266,7 +1266,7 @@
 - (STRUCTPRM *)code_getstprm {
     STRUCTPRM *prm;
     if (hsp_type_tmp != TYPE_STRUCT) {
-         @throw [self make_nsexception:HSPERR_STRUCT_REQUIRED];
+        @throw [self make_nsexception:HSPERR_STRUCT_REQUIRED];
     }
     prm = &hsp_hspctx->mem_minfo[hsp_val_tmp];
     [self code_next];
@@ -1281,7 +1281,7 @@
     STRUCTPRM *prm;
     prm = [self code_getstprm];
     if (prm->mptype != MPTYPE_STRUCTTAG) {
-         @throw [self make_nsexception:HSPERR_STRUCT_REQUIRED];
+        @throw [self make_nsexception:HSPERR_STRUCT_REQUIRED];
     }
     st = &hsp_hspctx->mem_finfo[prm->subid];
     return st;
@@ -1292,11 +1292,11 @@
 - (STRUCTDAT *)code_getcomst {
     STRUCTDAT *st;
     if (hsp_type_tmp != TYPE_DLLCTRL) {
-         @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+        @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
     hsp_val_tmp -= TYPE_OFFSET_COMOBJ;
     if (hsp_val_tmp < 0) {
-         @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+        @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
     st = &hsp_hspctx->mem_finfo[hsp_val_tmp];
     [self code_next];
@@ -1336,11 +1336,11 @@
     proc = HspVarCoreGetProc(type);
     if (pval->flag != type) {
         if (aptr != 0) {
-             @throw [self make_nsexception:HSPERR_INVALID_ARRAYSTORE];
+            @throw [self make_nsexception:HSPERR_INVALID_ARRAYSTORE];
         }
         HspVarCoreClear(pval, type);  // 最小サイズのメモリを確保
     }
-    
+
     PDAT *dst;
     if (strcmp(proc->vartype_name, "int") == 0) {  //整数のGetPtr
         dst = HspVarInt_GetPtr(pval);
@@ -1355,7 +1355,7 @@
     } else {
         @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
+
     if (strcmp(proc->vartype_name, "int") == 0) {  //整数のSet
         HspVarInt_Set(pval, dst, ptr);
     } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のSet
@@ -1391,7 +1391,7 @@
     } else {
         @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    return (char *)dst;
+    return (char *) dst;
     // HspVarCoreGetBlockSize( *pval, HspVarCorePtrAPTR( *pval,aptr ), size );
 }
 
@@ -1409,20 +1409,20 @@
     for (int i = 0; i < st->prmmax; i++) {  // パラメーターを取得
         if (prm->mptype == MPTYPE_LOCALSTRING) {
             out = stackptr + prm->offset;
-            ss = *(char **)out;
+            ss = *(char **) out;
             sbFree(ss);
         } else if (prm->mptype == MPTYPE_LOCALVAR) {
             // HspVarCoreDispose( (PVal *)(stackptr + prm->offset) );
-            if (strcmp(hspvarproc[((PVal *)(stackptr + prm->offset))->flag].vartype_name, "int") == 0) {  //整数のFree
-                HspVarInt_Free((PVal *)(stackptr + prm->offset));
-            } else if (strcmp(hspvarproc[((PVal *)(stackptr + prm->offset))->flag].vartype_name, "double") == 0) {  //実数のFree
-                HspVarDouble_Free((PVal *)(stackptr + prm->offset));
-            } else if (strcmp(hspvarproc[((PVal *)(stackptr + prm->offset))->flag].vartype_name, "str") == 0) {  //文字列のFree
-                HspVarStr_Free((PVal *)(stackptr + prm->offset));
-            } else if (strcmp(hspvarproc[((PVal *)(stackptr + prm->offset))->flag].vartype_name, "label") == 0) {  //ラベルのFree
-                HspVarLabel_Free((PVal *)(stackptr + prm->offset));
-            } else if (strcmp(hspvarproc[((PVal *)(stackptr + prm->offset))->flag].vartype_name, "struct") == 0) {  // structのFree
-                HspVarLabel_Free((PVal *)(stackptr + prm->offset));
+            if (strcmp(hspvarproc[((PVal *) (stackptr + prm->offset))->flag].vartype_name, "int") == 0) {  //整数のFree
+                HspVarInt_Free((PVal *) (stackptr + prm->offset));
+            } else if (strcmp(hspvarproc[((PVal *) (stackptr + prm->offset))->flag].vartype_name, "double") == 0) {  //実数のFree
+                HspVarDouble_Free((PVal *) (stackptr + prm->offset));
+            } else if (strcmp(hspvarproc[((PVal *) (stackptr + prm->offset))->flag].vartype_name, "str") == 0) {  //文字列のFree
+                HspVarStr_Free((PVal *) (stackptr + prm->offset));
+            } else if (strcmp(hspvarproc[((PVal *) (stackptr + prm->offset))->flag].vartype_name, "label") == 0) {  //ラベルのFree
+                HspVarLabel_Free((PVal *) (stackptr + prm->offset));
+            } else if (strcmp(hspvarproc[((PVal *) (stackptr + prm->offset))->flag].vartype_name, "struct") == 0) {  // structのFree
+                HspVarLabel_Free((PVal *) (stackptr + prm->offset));
             } else {
                 @throw [self make_nsexception:HSPERR_SYNTAX];
             }
@@ -1436,18 +1436,18 @@
 - (void)cmdfunc_return {
     StackManagerData *stm;
     HSPROUTINE *r;
-    
+
     if (StackGetLevel == 0) {
         @throw [self make_nsexception:HSPERR_RETURN_WITHOUT_GOSUB];
     }
-    
+
     stm = StackPeek;
-    r = (HSPROUTINE *)STM_GETPTR(stm);
-    
+    r = (HSPROUTINE *) STM_GETPTR(stm);
+
     if (stm->type == TYPE_EX_CUSTOMFUNC) {
-        [self customstack_delete:r->param stackptr:(char *)(r + 1)];  // カスタム命令のローカルメモリを解放
+        [self customstack_delete:r->param stackptr:(char *) (r + 1)];  // カスタム命令のローカルメモリを解放
     }
-    
+
     hsp_mcs = r->mcsret;
     hsp_hspctx->prmstack = r->oldtack;  // 以前のスタックに戻す
     hsp_hspctx->sublev--;
@@ -1463,11 +1463,11 @@
     r.stacklev = abc_hspctx.sublev++;
     r.oldtack = abc_hspctx.prmstack;
     r.param = NULL;
-    [self StackPush:TYPE_EX_SUBROUTINE data:(char *)&r size:sizeof(HSPROUTINE)];
-    
+    [self StackPush:TYPE_EX_SUBROUTINE data:(char *) &r size:sizeof(HSPROUTINE)];
+
     hsp_mcs = subr;
     [self code_next];
-    
+
     //		gosub内で呼び出しを完結させる
     //
     while (1) {
@@ -1530,20 +1530,20 @@
 - (int)code_callfunc:(int)cmd {
     STRUCTDAT *st = &abc_hspctx.mem_finfo[cmd];
     int size = sizeof(HSPROUTINE) + st->size;
-    HSPROUTINE *r = (HSPROUTINE *)[self StackPushSize:TYPE_EX_CUSTOMFUNC size:size];
-    char *p = (char *)(r + 1);
+    HSPROUTINE *r = (HSPROUTINE *) [self StackPushSize:TYPE_EX_CUSTOMFUNC size:size];
+    char *p = (char *) (r + 1);
     [self code_expandstruct:p st:st option:CODE_EXPANDSTRUCT_OPT_NONE];  // スタックの内容を初期化
-    
+
     r->oldtack = abc_hspctx.prmstack;  // 以前のスタックを保存
-    abc_hspctx.prmstack = (void *)p;   // 新規スタックを設定
-    
+    abc_hspctx.prmstack = (void *) p;   // 新規スタックを設定
+
     r->mcsret = hsp_mcsbak;             // 戻り場所
     r->stacklev = abc_hspctx.sublev++;  // ネストを進める
     r->param = st;
-    
-    hsp_mcs = (unsigned short *)(abc_hspctx.mem_mcs + (abc_hspctx.mem_ot[st->otindex]));
+
+    hsp_mcs = (unsigned short *) (abc_hspctx.mem_mcs + (abc_hspctx.mem_ot[st->otindex]));
     [self code_next];
-    
+
     //		命令内で呼び出しを完結させる
     //
     while (1) {
@@ -1611,7 +1611,7 @@ APTR code_newstruct(PVal *pval) {
     FlexValue *fv;
     ofs = 0;
     if (pval->flag != TYPE_STRUCT) return 0;
-    fv = (FlexValue *)pval->pt;
+    fv = (FlexValue *) pval->pt;
     max = pval->len[1];
     for (int i = 0; i < max; i++) {
         if (fv[i].type == FLEXVAL_TYPE_NONE) return i;
@@ -1631,7 +1631,7 @@ APTR code_newstruct(PVal *pval) {
     fv.size = size;
     fv.ptr = ptr;
     [self code_setva:pval aptr:aptr type:TYPE_STRUCT ptr:&fv];
-    return (FlexValue *)HspVarCorePtrAPTR(pval, aptr);
+    return (FlexValue *) HspVarCorePtrAPTR(pval, aptr);
 }
 
 /// 構造体の項目にパラメーターを代入する
@@ -1640,20 +1640,20 @@ APTR code_newstruct(PVal *pval) {
     int chk;
     char *out;
     STRUCTPRM *prm = &abc_hspctx.mem_minfo[st->prmindex];
-    
+
     for (int i = 0; i < st->prmmax; i++) {  // パラメーターを取得
         out = p + prm->offset;
         // Alertf("(%d)hsp_type_tmp%d index%d/%d offset%d", st->subid, prm->mptype,
         // st->prmindex + i, st->prmmax, prm->offset);
         switch (prm->mptype) {
             case MPTYPE_INUM:
-                *(int *)out = [self code_getdi:0];
+                *(int *) out = [self code_getdi:0];
                 break;
             case MPTYPE_MODULEVAR: {
                 MPModVarData *var;
                 PVal *refpv;
                 APTR refap;
-                var = (MPModVarData *)out;
+                var = (MPModVarData *) out;
                 refap = [self code_getva:&refpv];
                 var->magic = MODVAR_MAGICCODE;
                 var->subid = prm->subid;
@@ -1663,21 +1663,21 @@ APTR code_newstruct(PVal *pval) {
             }
             case MPTYPE_IMODULEVAR:
             case MPTYPE_TMODULEVAR:
-                *(MPModVarData *)out = hsp_modvar_init;
+                *(MPModVarData *) out = hsp_modvar_init;
                 break;
             case MPTYPE_SINGLEVAR:
             case MPTYPE_ARRAYVAR: {
                 MPVarData *var;
                 PVal *refpv;
                 APTR refap;
-                var = (MPVarData *)out;
+                var = (MPVarData *) out;
                 refap = [self code_getva:&refpv];
                 var->pval = refpv;
                 var->aptr = refap;
                 break;
             }
             case MPTYPE_LABEL:
-                *(unsigned short **)out = [self code_getlb2];
+                *(unsigned short **) out = [self code_getlb2];
                 break;
             case MPTYPE_DNUM: {
                 //*(double *)out = code_getd();
@@ -1689,16 +1689,16 @@ APTR code_newstruct(PVal *pval) {
                 char *str;
                 char *ss;
                 str = [self code_gets];
-                ss = sbAlloc((int)strlen(str) + 1);
+                ss = sbAlloc((int) strlen(str) + 1);
                 strcpy(ss, str);
-                *(char **)out = ss;
+                *(char **) out = ss;
                 break;
             }
             case MPTYPE_LOCALVAR: {
                 PVal *pval;
                 PDAT *dst;
                 HspVarProc *proc;
-                pval = (PVal *)out;
+                pval = (PVal *) out;
                 pval->mode = HSPVAR_MODE_NONE;
                 if (option & CODE_EXPANDSTRUCT_OPT_LOCALVAR) {
                     chk = [self code_get];  // パラメーター値を取得
@@ -1706,7 +1706,7 @@ APTR code_newstruct(PVal *pval) {
                         pval->flag = mpval->flag;            // 仮の型
                         HspVarCoreClear(pval, mpval->flag);  // 最小サイズのメモリを確保
                         proc = HspVarCoreGetProc(pval->flag);
-                        
+
                         // PDATポインタを取得
                         if (strcmp(proc->vartype_name, "int") == 0) {  //整数のGetPtr
                             dst = HspVarInt_GetPtr(pval);
@@ -1721,7 +1721,7 @@ APTR code_newstruct(PVal *pval) {
                         } else {
                             @throw [self make_nsexception:HSPERR_SYNTAX];
                         }
-                        
+
                         if (strcmp(proc->vartype_name, "int") == 0) {  //整数のSet
                             HspVarInt_Set(pval, dst, mpval->pt);
                         } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のSet
@@ -1750,7 +1750,7 @@ APTR code_newstruct(PVal *pval) {
         }
         prm++;
     }
-    
+
 }
 
 /// モジュール変数を破棄する
@@ -1762,16 +1762,16 @@ APTR code_newstruct(PVal *pval) {
     STRUCTPRM *prm;
     STRUCTDAT *st;
     PVal *pval;
-    FlexValue *fv = (FlexValue *)HspVarCorePtrAPTR(in_pval, in_aptr);
-    
+    FlexValue *fv = (FlexValue *) HspVarCorePtrAPTR(in_pval, in_aptr);
+
     if (fv->type != FLEXVAL_TYPE_ALLOC) {
         return;
     }
-    
+
     prm = &abc_hspctx.mem_minfo[fv->customid];
     st = &abc_hspctx.mem_finfo[prm->subid];
-    p = (char *)fv->ptr;
-    
+    p = (char *) fv->ptr;
+
     if (fv->clonetype == 0) {
         if (st->otindex) {  // デストラクタを起動
             hsp_modvar_init.magic = MODVAR_MAGICCODE;
@@ -1780,12 +1780,12 @@ APTR code_newstruct(PVal *pval) {
             hsp_modvar_init.aptr = in_aptr;
             [self code_callfunc:st->otindex];
         }
-        
+
         for (i = 0; i < st->prmmax; i++) {  // パラメーターを取得
             out = p + prm->offset;
             switch (prm->mptype) {
                 case MPTYPE_LOCALVAR: {
-                    pval = (PVal *)out;
+                    pval = (PVal *) out;
                     // HspVarCoreDispose( pval );
                     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) {  //整数のFree
                         HspVarInt_Free(pval);
@@ -1806,7 +1806,7 @@ APTR code_newstruct(PVal *pval) {
             prm++;
         }
     }
-    
+
     sbFree(fv->ptr);
     fv->type = FLEXVAL_TYPE_NONE;
 }
@@ -1833,7 +1833,7 @@ APTR code_newstruct(PVal *pval) {
 /// stmp(文字列一時バッファ)にsrcをコピーする
 ///
 - (char *)code_stmpstr:(char *)src {
-    char *p = [self code_stmp:(int)strlen(src) + 1];
+    char *p = [self code_stmp:(int) strlen(src) + 1];
     strcpy(p, src);
     return p;
 }
@@ -1844,12 +1844,12 @@ APTR code_newstruct(PVal *pval) {
     if ([self code_get] <= PARAM_END) {
         fl = HSPVAR_FLAG_INT;
         hsp_sptr_res = 0;
-        bp = (char *)&hsp_sptr_res;
+        bp = (char *) &hsp_sptr_res;
     } else {
         fl = mpval->flag;
         bp = mpval->pt;
         if ((fl != HSPVAR_FLAG_INT) && (fl != HSPVAR_FLAG_STR)) {
-             @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+            @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
         }
     }
     *type = fl;
@@ -1883,7 +1883,7 @@ APTR code_newstruct(PVal *pval) {
     [self code_next];
     st = &abc_hspctx.mem_finfo[cmd];
     if (st->index != STRUCTDAT_INDEX_FUNC) {
-         @throw [self make_nsexception:HSPERR_SYNTAX];
+        @throw [self make_nsexception:HSPERR_SYNTAX];
     }
     return [self code_callfunc:cmd];
 }
@@ -1894,27 +1894,27 @@ APTR code_newstruct(PVal *pval) {
     STRUCTDAT *st;
     void *ptr;
     int old_funcres;
-    
+
     //		返値のタイプを設定する
     //
     st = &abc_hspctx.mem_finfo[arg];
     if (st->index != STRUCTDAT_INDEX_CFUNC) {
-         @throw [self make_nsexception:HSPERR_SYNTAX];
+        @throw [self make_nsexception:HSPERR_SYNTAX];
     }
     old_funcres = hsp_funcres;
     hsp_funcres = TYPE_ERROR;
-    
+
     //			'('で始まるかを調べる
     //
     if (hsp_type_tmp != TYPE_MARK) {
-         @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
+        @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
     }
     if (hsp_val_tmp != '(') {
-         @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
+        @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
     }
     [self code_next];
     [self code_callfunc:arg];
-    
+
     *type_res = hsp_funcres;  // 返値のタイプを指定する
     switch (hsp_funcres) {    // 返値のポインタを設定する
         case TYPE_STRING:
@@ -1928,24 +1928,24 @@ APTR code_newstruct(PVal *pval) {
             break;
         default: {
             if (abc_hspctx.runmode == RUNMODE_END) {
-                 @throw [self make_nsexception:HSPERR_NONE];
+                @throw [self make_nsexception:HSPERR_NONE];
             }
             @throw [self make_nsexception:HSPERR_NORETVAL];
         }
     }
-    
+
     //			')'で終わるかを調べる
     //
     if (hsp_type_tmp != TYPE_MARK) {
-         @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
+        @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
     }
     if (hsp_val_tmp != ')') {
-         @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
+        @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
     }
     [self code_next];
-    
+
     hsp_funcres = old_funcres;
-    
+
     return ptr;
 }
 
@@ -1961,23 +1961,23 @@ APTR code_newstruct(PVal *pval) {
     PDAT *dst;
     int chk, exp, incval;
     int baseaptr;
-    
+
 #ifdef FLAG_HSPDEBUG
     if ((hsp_exflg & EXFLG_1) == 0) {
-         @throw [self make_nsexception:HSPERR_TOO_MANY_PARAMETERS];
+        @throw [self make_nsexception:HSPERR_TOO_MANY_PARAMETERS];
     }
 #endif
-    
+
     hsp_exflg = 0;                   // code_nextを使わない時に必要
     aptr = [self code_getva:&pval];  // 変数を取得
-    
+
     if (hsp_type_tmp != TYPE_MARK) {
         hsp_mcs = hsp_mcsbak;
         @throw [self make_nsexception:HSPERR_SYNTAX];
     }
     exp = hsp_val_tmp;
     [self code_next];  // 次のコードへ
-    
+
     if (hsp_exflg) {  // インクリメント(+)・デクリメント(-)
         proc = HspVarCoreGetProc(pval->flag);
         incval = 1;
@@ -1986,11 +1986,11 @@ APTR code_newstruct(PVal *pval) {
         } else {
             // 型がINTでない場合は変換
             if (strcmp(proc->vartype_name, "int") == 0) {  //整数のCnv
-                ptr = (int *)HspVarInt_Cnv(&incval, HSPVAR_FLAG_INT);
+                ptr = (int *) HspVarInt_Cnv(&incval, HSPVAR_FLAG_INT);
             } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のCnv
-                ptr = (int *)HspVarDouble_Cnv(&incval, HSPVAR_FLAG_INT);
+                ptr = (int *) HspVarDouble_Cnv(&incval, HSPVAR_FLAG_INT);
             } else if (strcmp(proc->vartype_name, "str") == 0) {  //文字列のCnv
-                ptr = (int *)HspVarStr_Cnv(&incval, HSPVAR_FLAG_INT);
+                ptr = (int *) HspVarStr_Cnv(&incval, HSPVAR_FLAG_INT);
             } else {
                 @throw [self make_nsexception:HSPERR_SYNTAX];
             }
@@ -2023,15 +2023,15 @@ APTR code_newstruct(PVal *pval) {
                 @throw [self make_nsexception:HSPERR_SYNTAX];
             }
         }
-        
+
         return RUNMODE_RUN;
     }
-    
+
     chk = [self code_get];  // パラメーター値を取得
     if (chk != PARAM_OK) {
-         @throw [self make_nsexception:HSPERR_SYNTAX];
+        @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
+
     proc = HspVarCoreGetProc(pval->flag);
     dst = HspVarCorePtrAPTR(pval, aptr);
     ptr = mpval->pt;
@@ -2049,7 +2049,7 @@ APTR code_newstruct(PVal *pval) {
             }
             HspVarCoreClear(pval, mpval->flag);  // 最小サイズのメモリを確保
             proc = HspVarCoreGetProc(pval->flag);
-            
+
             // PDATポインタを取得
             if (strcmp(proc->vartype_name, "int") == 0) {  //整数のGetPtr
                 dst = HspVarInt_GetPtr(pval);
@@ -2062,10 +2062,10 @@ APTR code_newstruct(PVal *pval) {
             } else if (strcmp(proc->vartype_name, "struct") == 0) {  // structのGetPtr
                 dst = HspVarLabel_GetPtr(pval);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
         }
-        
+
         if (strcmp(proc->vartype_name, "int") == 0) {  //整数のSet
             HspVarInt_Set(pval, dst, ptr);
         } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のSet
@@ -2077,36 +2077,36 @@ APTR code_newstruct(PVal *pval) {
         } else if (strcmp(proc->vartype_name, "struct") == 0) {  // structのSet
             HspVarLabel_Set(pval, dst, ptr);
         } else {
-             @throw [self make_nsexception:HSPERR_SYNTAX];
+            @throw [self make_nsexception:HSPERR_SYNTAX];
         }
-        
+
         if (hsp_exflg) {
             return RUNMODE_RUN;
         }
-        
+
         chk = pval->len[1];
         if (chk == 0)
             baseaptr = aptr;
         else
             baseaptr = aptr % chk;
         aptr -= baseaptr;
-        
+
         while (1) {
             if (hsp_exflg) break;
             chk = [self code_get];  // パラメーター値を取得
             if (chk != PARAM_OK) {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             if (pval->flag != mpval->flag) {
-                 @throw [self make_nsexception:HSPERR_INVALID_ARRAYSTORE];  // 型変更はできない
+                @throw [self make_nsexception:HSPERR_INVALID_ARRAYSTORE];  // 型変更はできない
             }
             ptr = mpval->pt;
             baseaptr++;
-            
+
             pval->arraycnt = 0;  // 配列指定カウンタをリセット
             pval->offset = aptr;
             [self code_arrayint2:pval offset:baseaptr];  // 配列チェック
-            
+
             // dst = HspVarCorePtr( pval );
             // PDAT * dst;
             if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) {  //整数のFree
@@ -2122,7 +2122,7 @@ APTR code_newstruct(PVal *pval) {
             } else {
                 @throw [self make_nsexception:HSPERR_SYNTAX];
             }
-            
+
             // 次の配列にたたき込む
             if (strcmp(proc->vartype_name, "int") == 0) {  //整数のSet
                 HspVarInt_Set(pval, dst, ptr);
@@ -2135,12 +2135,12 @@ APTR code_newstruct(PVal *pval) {
             } else if (strcmp(proc->vartype_name, "struct") == 0) {  // structのSet
                 HspVarLabel_Set(pval, dst, ptr);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
         }
         return RUNMODE_RUN;
     }
-    
+
     //		変数+演算子による代入
     //
     if (pval->flag != mpval->flag) {  // 型が一致しない場合は変換
@@ -2149,9 +2149,9 @@ APTR code_newstruct(PVal *pval) {
     }
     [self calcprm:proc pval:dst exp:exp ptr:ptr];
     if (proc->aftertype != pval->flag) {  // 演算後に型が変わる場合
-         @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+        @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
     }
-    
+
     return RUNMODE_RUN;
 }
 
@@ -2161,19 +2161,19 @@ APTR code_newstruct(PVal *pval) {
     if ([self code_get] <= PARAM_END) {
         return;
     }
-    
+
     abc_hspctx.retval_level = abc_hspctx.sublev;
     hsp_funcres = mpval->flag;
-    
+
     switch (hsp_funcres) {
         case HSPVAR_FLAG_INT:
-            abc_hspctx.stat = *(int *)mpval->pt;
+            abc_hspctx.stat = *(int *) mpval->pt;
             break;
         case HSPVAR_FLAG_STR:
             sbStrCopy(&abc_hspctx.refstr, mpval->pt);
             break;
         case HSPVAR_FLAG_DOUBLE:
-            abc_hspctx.refdval = *(double *)mpval->pt;
+            abc_hspctx.refdval = *(double *) mpval->pt;
             break;
         default:
             @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
@@ -2184,7 +2184,7 @@ APTR code_newstruct(PVal *pval) {
 ///
 - (int)cmdfunc_ifcmd:(int)cmd {
     unsigned short *mcstmp;
-    int i = (int)*hsp_mcs;
+    int i = (int) *hsp_mcs;
     hsp_mcs++;  // skip offset get
     mcstmp = hsp_mcs + i;
     if (hsp_val_tmp == 0) {                      // 'if'
@@ -2202,9 +2202,9 @@ APTR code_newstruct(PVal *pval) {
     int t, size;
     char *out;
     HSP_ExtraInfomation *exinfo;
-    
+
     if (prm & 1024) {
-         @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
+        @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
     }
     if (prm >= 0x40) {
         exinfo = hsp_hspctx->exinfo2;
@@ -2216,9 +2216,9 @@ APTR code_newstruct(PVal *pval) {
     if ((prm & 0x30) || (prm >= 8)) {
         @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
     }
-    out = ((char *)hsp_hspctx->prmstack);
+    out = ((char *) hsp_hspctx->prmstack);
     if (out == NULL) {
-         @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
+        @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
     t = HSPVAR_FLAG_INT;
     size = sizeof(int);
@@ -2248,7 +2248,7 @@ APTR code_newstruct(PVal *pval) {
         case 0x03:  // break
         {
             if (abc_hspctx.looplev == 0) {
-                 @throw [self make_nsexception:HSPERR_LOOP_WITHOUT_REPEAT];
+                @throw [self make_nsexception:HSPERR_LOOP_WITHOUT_REPEAT];
             }
             abc_hspctx.looplev--;
             hsp_mcs = [self code_getlb];
@@ -2260,7 +2260,7 @@ APTR code_newstruct(PVal *pval) {
             LOOPDAT *lop;
             unsigned short *label;
             if (abc_hspctx.looplev >= (HSP3_REPEAT_MAX - 1)) {
-                 @throw [self make_nsexception:HSPERR_TOO_MANY_NEST];
+                @throw [self make_nsexception:HSPERR_TOO_MANY_NEST];
             }
             label = [self code_getlb];
             [self code_next];
@@ -2276,9 +2276,9 @@ APTR code_newstruct(PVal *pval) {
             else
                 p1 += p2;
             abc_hspctx.looplev++;
-            
+
             lop = (&(abc_hspctx
-                     .mem_loop[abc_hspctx.looplev]));  ////GETLOP(hspctx.looplev);
+                    .mem_loop[abc_hspctx.looplev]));  ////GETLOP(hspctx.looplev);
             lop->cnt = p2;
             lop->time = p1;
             lop->pt = hsp_mcsbak;
@@ -2288,10 +2288,10 @@ APTR code_newstruct(PVal *pval) {
         {
             LOOPDAT *lop;
             if (abc_hspctx.looplev == 0) {
-                 @throw [self make_nsexception:HSPERR_LOOP_WITHOUT_REPEAT];
+                @throw [self make_nsexception:HSPERR_LOOP_WITHOUT_REPEAT];
             }
             lop = (&(abc_hspctx
-                     .mem_loop[abc_hspctx.looplev]));  // GETLOP(hspctx->looplev);
+                    .mem_loop[abc_hspctx.looplev]));  // GETLOP(hspctx->looplev);
             lop->cnt++;
             if (lop->time != ETRLOOP) {  // not eternal loop
                 if (lop->cnt >= lop->time) {
@@ -2309,7 +2309,7 @@ APTR code_newstruct(PVal *pval) {
             unsigned short *label;
             label = [self code_getlb];
             lop = (&(abc_hspctx
-                     .mem_loop[abc_hspctx.looplev]));  // GETLOP(hspctx->looplev);
+                    .mem_loop[abc_hspctx.looplev]));  // GETLOP(hspctx->looplev);
             [self code_next];
             int p2 = lop->cnt + 1;
             int p1 = [self code_getdi:p2];
@@ -2355,7 +2355,7 @@ APTR code_newstruct(PVal *pval) {
                 fl = [self code_geti];
                 proc = HspVarCoreGetProc(fl);
                 if (proc->flag == 0) {
-                     @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
+                    @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
                 }
             }
             int p1 = [self code_getdi:0];
@@ -2376,13 +2376,13 @@ APTR code_newstruct(PVal *pval) {
             LOOPDAT *lop;
             unsigned short *label;
             if (abc_hspctx.looplev >= (HSP3_REPEAT_MAX - 1)) {
-                 @throw [self make_nsexception:HSPERR_TOO_MANY_NEST];
+                @throw [self make_nsexception:HSPERR_TOO_MANY_NEST];
             }
             label = [self code_getlb];
             [self code_next];
             abc_hspctx.looplev++;
             lop = (&(abc_hspctx
-                     .mem_loop[abc_hspctx.looplev]));  // GETLOP(hspctx->looplev);
+                    .mem_loop[abc_hspctx.looplev]));  // GETLOP(hspctx->looplev);
             lop->cnt = 0;
             lop->time = ETRLOOP;
             lop->pt = hsp_mcsbak;
@@ -2395,13 +2395,13 @@ APTR code_newstruct(PVal *pval) {
             LOOPDAT *lop;
             unsigned short *label;
             if (abc_hspctx.looplev == 0) {
-                 @throw [self make_nsexception:HSPERR_LOOP_WITHOUT_REPEAT];
+                @throw [self make_nsexception:HSPERR_LOOP_WITHOUT_REPEAT];
             }
             label = [self code_getlb];
             [self code_next];
             lop = (&(abc_hspctx
-                     .mem_loop[abc_hspctx.looplev]));  // GETLOP(hspctx->looplev);
-            
+                    .mem_loop[abc_hspctx.looplev]));  // GETLOP(hspctx->looplev);
+
             pval = [self code_getpval];
             if (lop->cnt >= pval->len[1]) {  // ループ終了
                 abc_hspctx.looplev--;
@@ -2411,7 +2411,7 @@ APTR code_newstruct(PVal *pval) {
             }
             if (pval->support & HSPVAR_SUPPORT_VARUSE) {
                 // i = HspVarCoreGetUsing( pval, HspVarCorePtrAPTR( pval, lop->cnt ) );
-                
+
                 if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") == 0) {  //ラベルのAllocBlock
                     i = HspVarLabel_GetUsing(HspVarCorePtrAPTR(pval, lop->cnt));
                 } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) {  // structのAllocBlock
@@ -2419,7 +2419,7 @@ APTR code_newstruct(PVal *pval) {
                 } else {
                     @throw [self make_nsexception:HSPERR_SYNTAX];
                 }
-                
+
                 if (i == 0) {  // スキップ
                     hsp_mcs = label;
                     hsp_val_tmp = 0x05;
@@ -2447,10 +2447,10 @@ APTR code_newstruct(PVal *pval) {
             int p2 = [self code_geti];
             int p3 = [self code_getdi:HSPVAR_FLAG_INT];
             if (p2 <= 0) {
-                 @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
+                @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
             }
             if (HspVarCoreGetProc(p3)->flag == 0) {
-                 @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
+                @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
             }
             HspVarCoreDupPtr(pval_m, p3, &p1, p2);
             break;
@@ -2496,10 +2496,10 @@ APTR code_newstruct(PVal *pval) {
                             subid:st->prmindex];
             fv->type = FLEXVAL_TYPE_ALLOC;
             p = sbAlloc(fv->size);
-            fv->ptr = (void *)p;
+            fv->ptr = (void *) p;
             prm = &abc_hspctx.mem_minfo[st->prmindex];
             if (prm->mptype != MPTYPE_STRUCTTAG) {
-                 @throw [self make_nsexception:HSPERR_STRUCT_REQUIRED];
+                @throw [self make_nsexception:HSPERR_STRUCT_REQUIRED];
             }
             [self code_expandstruct:p st:st option:CODE_EXPANDSTRUCT_OPT_NONE];
             if (prm->offset != -1) {
@@ -2517,7 +2517,7 @@ APTR code_newstruct(PVal *pval) {
             APTR aptr;
             aptr = [self code_getva:&pval];
             if (pval->flag != TYPE_STRUCT) {
-                 @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+                @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
             }
             [self code_delstruct:pval in_aptr:aptr];
             break;
@@ -2546,7 +2546,7 @@ APTR code_newstruct(PVal *pval) {
         {
             sbStrCopy(&abc_hspctx.refstr, [self code_gets]);
             [self code_stmpstr:[self code_getds:""]];
-             @throw [self make_nsexception:HSPERR_EXITRUN];
+            @throw [self make_nsexception:HSPERR_EXITRUN];
         }
         case 0x18:  // exgoto
         {
@@ -2557,9 +2557,9 @@ APTR code_newstruct(PVal *pval) {
             unsigned short *label;
             aptr = [self code_getva:&pval];
             if (pval->flag != HSPVAR_FLAG_INT) {
-                 @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
+                @throw [self make_nsexception:HSPERR_TYPE_MISMATCH];
             }
-            ival = (int *)HspVarCorePtrAPTR(pval, aptr);
+            ival = (int *) HspVarCorePtrAPTR(pval, aptr);
             int p1 = [self code_getdi:0];
             int p2 = [self code_getdi:0];
             label = [self code_getlb2];
@@ -2578,10 +2578,10 @@ APTR code_newstruct(PVal *pval) {
             unsigned short *otbak;
             int p1 = [self code_getdi:0];
             if (hsp_type_tmp != TYPE_PROGCMD) {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
             if (hsp_val_tmp >= 0x02) {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];  // goto/gosub以外はエラー
+                @throw [self make_nsexception:HSPERR_SYNTAX];  // goto/gosub以外はエラー
             }
             int p2 = 0;
             int p3 = hsp_val_tmp;
@@ -2601,7 +2601,7 @@ APTR code_newstruct(PVal *pval) {
             }
             if (otbak != NULL) {
                 [self code_call:otbak];
-                
+
                 return abc_hspctx.runmode;
             }
             break;
@@ -2648,7 +2648,7 @@ APTR code_newstruct(PVal *pval) {
         case 0x1f:  // yield
             break;
         default: {
-             @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
+            @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
     return RUNMODE_RUN;
@@ -2660,14 +2660,14 @@ APTR code_newstruct(PVal *pval) {
 ///
 - (void *)reffunc_sysvar:(int *)type_res arg:(int)arg {
     void *ptr;
-    
+
     //		返値のタイプを設定する
     //
     *type_res = HSPVAR_FLAG_INT;        // 返値のタイプを指定する
     ptr = &hsp_reffunc_intfunc_ivalue;  // 返値のポインタ
-    
+
     switch (arg) {
-            //	int function
+        //	int function
         case 0x000:  // system
             hsp_reffunc_intfunc_ivalue = 0;
             break;
@@ -2682,7 +2682,7 @@ APTR code_newstruct(PVal *pval) {
             break;
         case 0x004:  // cnt
             hsp_reffunc_intfunc_ivalue =
-            hsp_hspctx->mem_loop[hsp_hspctx->looplev].cnt;
+                    hsp_hspctx->mem_loop[hsp_hspctx->looplev].cnt;
             break;
         case 0x005:  // err
             hsp_reffunc_intfunc_ivalue = hsp_hspctx->err;
@@ -2707,23 +2707,23 @@ APTR code_newstruct(PVal *pval) {
             break;
         case 0x00c:  // refstr
             *type_res = HSPVAR_FLAG_STR;
-            ptr = (void *)hsp_hspctx->refstr;
+            ptr = (void *) hsp_hspctx->refstr;
             break;
         case 0x00d:  // refdval
             *type_res = HSPVAR_FLAG_DOUBLE;
-            ptr = (void *)&hsp_hspctx->refdval;
+            ptr = (void *) &hsp_hspctx->refdval;
             break;
             //>>>MacOSX
         case 0x020:  // dcnt
             *type_res = HSPVAR_FLAG_DOUBLE;
             // double hsp_reffunc_intfunc_value;
-            hsp_reffunc_intfunc_value = (double)(hsp_hspctx->mem_loop[hsp_hspctx->looplev].cnt);
+            hsp_reffunc_intfunc_value = (double) (hsp_hspctx->mem_loop[hsp_hspctx->looplev].cnt);
             ptr = &hsp_reffunc_intfunc_value;  // 返値のポインタ
             break;
             //<<<MacOSX
-            
+
         default: {
-             @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
+            @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
     return ptr;
@@ -2783,8 +2783,8 @@ APTR code_newstruct(PVal *pval) {
     id = type;
     if (id < 0) {
         id = hsp_current_type_info_id++;
-        hsp_hsp3tinfo = (HSP3TYPEINFO *)sbExpand(
-                                                 (char *)hsp_hsp3tinfo, sizeof(HSP3TYPEINFO) * hsp_current_type_info_id);
+        hsp_hsp3tinfo = (HSP3TYPEINFO *) sbExpand(
+                (char *) hsp_hsp3tinfo, sizeof(HSP3TYPEINFO) * hsp_current_type_info_id);
         [self hsp3typeinit_default:id];
     }
     info = GetTypeInfoPtr(id);
@@ -2808,7 +2808,7 @@ APTR code_newstruct(PVal *pval) {
 - (void)code_resetctx:(HSPContext *)_ctx {
     hsp_mpval_int = HspVarCoreGetPVal(HSPVAR_FLAG_INT);
     HspVarCoreClearTemp(hsp_mpval_int, HSPVAR_FLAG_INT);  // int型のテンポラリを初期化
-    
+
     _ctx->err = HSPERR_NONE;
 #ifdef FLAG_HSPDEBUG
     _ctx->hspstat = HSPSTAT_DEBUG;
@@ -2846,7 +2846,7 @@ APTR code_newstruct(PVal *pval) {
 ///
 - (void)code_setpc:(const unsigned short *)pc {
     if (hsp_hspctx->runmode == RUNMODE_END) return;
-    hsp_mcs = (unsigned short *)pc;
+    hsp_mcs = (unsigned short *) pc;
     [self code_next];
     hsp_hspctx->runmode = RUNMODE_RUN;
 }
@@ -2862,7 +2862,7 @@ APTR code_newstruct(PVal *pval) {
 ///
 - (void)code_call:(const unsigned short *)pc {
     hsp_mcs = hsp_mcsbak;
-    [self cmdfunc_gosub:(unsigned short *)pc];
+    [self cmdfunc_gosub:(unsigned short *) pc];
     if (abc_hspctx.runmode == RUNMODE_END) {
         return;
     }
@@ -2885,14 +2885,14 @@ APTR code_newstruct(PVal *pval) {
     unsigned char *mem_di;
     unsigned char ofs;
     int cl, a, tmp, curpt, debpt;
-    
+
     mem_di = hsp_hspctx->mem_di;
     debpt = 0;
-    curpt = (int)(pt - hsp_hspctx->mem_mcs);
+    curpt = (int) (pt - hsp_hspctx->mem_mcs);
     if (mem_di[0] == 255) {
         return -1;
     }
-    
+
     cl = 0;
     a = 0;
     while (1) {
@@ -2901,7 +2901,7 @@ APTR code_newstruct(PVal *pval) {
             case 252:
                 debpt += (mem_di[a + 1] << 8) + mem_di[a];
                 if (curpt <= debpt) {
-                    
+
                     return cl;
                 }
                 cl++;
@@ -2917,7 +2917,7 @@ APTR code_newstruct(PVal *pval) {
                 a += 5;
                 break;
             case 255:
-                
+
                 return -1;
             default:
                 debpt += ofs;
@@ -2972,7 +2972,7 @@ APTR code_newstruct(PVal *pval) {
     unsigned char *mm;
     int i;
     if (hsp_mem_di_val == NULL)
-        return (char *)"";
+        return (char *) "";
     mm = hsp_mem_di_val + (val_id * 6);
     i = (mm[3] << 16) + (mm[2] << 8) + mm[1];
     return strp(i);
@@ -3042,14 +3042,14 @@ APTR code_newstruct(PVal *pval) {
     int size;
     ptr = [self code_getvptr:&hsp_plugin_pval size:&size];
     abc_hspctx.exinfo.mpval = &hsp_plugin_pval;
-    return (void *)ptr;
+    return (void *) ptr;
 }
 
 /// 変数データバッファを拡張(2.61互換用)
 ///
 - (int)code_cnv_realloc:(PVal *)pv size:(int)size mode:(int)mode {
     PDAT *ptr = HspVarCorePtrAPTR(pv, 0);
-    
+
     // HspVarCoreAllocBlock( pv, ptr, size );
     if (strcmp(hspvarproc[(pv)->flag].vartype_name, "int") == 0) {  //整数のAllocBlock
         HspVarInt_AllocBlock(pv, ptr, size);
@@ -3070,17 +3070,17 @@ APTR code_newstruct(PVal *pval) {
 - (void)code_init {
     int i;
     HSP_ExtraInfomation *exinfo;
-    
+
     sbInit();  // 可変メモリバッファ初期化
     [self StackInit];
     HspVarCoreInit();  // ストレージコア初期化
     mpval = HspVarCoreGetPVal(0);
     hsp_hspevent_opt = 0;  // イベントオプションを初期化
-    
+
     //		exinfoの初期化
     //
     exinfo = &hsp_mem_exinfo;
-    
+
     //		2.61互換フィールド
     exinfo->ver = VERSION_CODE;
     exinfo->min = MINOR_VERSION_CODE;
@@ -3093,12 +3093,12 @@ APTR code_newstruct(PVal *pval) {
     // exinfo->HspFunc_val_realloc = code_cnv_realloc;
     // exinfo->HspFunc_fread = dpm_read;
     // exinfo->HspFunc_fsize = dpm_exist;
-    
+
     //		共用フィールド
     exinfo->nptype = &hsp_type_tmp;
     exinfo->npval = &hsp_val_tmp;
     exinfo->mpval = &mpval;
-    
+
     // exinfo->HspFunc_prm_geti = code_geti;
     // exinfo->HspFunc_prm_getdi = code_getdi;
     // exinfo->HspFunc_prm_gets = code_gets;
@@ -3107,7 +3107,7 @@ APTR code_newstruct(PVal *pval) {
     // exinfo->HspFunc_addobj = NULL;
     // exinfo->HspFunc_setobj = NULL;
     // exinfo->HspFunc_setobj = NULL;
-    
+
     //		3.0拡張フィールド
     exinfo->hspctx = hsp_hspctx;
     exinfo->npexflg = &hsp_exflg;
@@ -3134,24 +3134,24 @@ APTR code_newstruct(PVal *pval) {
     // exinfo->HspFunc_dim = HspVarCoreDimFlex;
     // exinfo->HspFunc_redim = HspVarCoreReDim;
     // exinfo->HspFunc_array = HspVarCoreArray;
-    
+
     //		3.1拡張フィールド
     // exinfo->HspFunc_varname = code_getdebug_varname;
     // exinfo->HspFunc_seekvar = code_getdebug_seekvar;
-    
+
     //		HSPContextにコピーする
     //
     memcpy(&hsp_hspctx->exinfo, exinfo, sizeof(HSP_ExtraInfomation_30));
     hsp_hspctx->exinfo2 = exinfo;
-    
+
     //		標準typefunc登録
     //
-    hsp_hsp3tinfo = (HSP3TYPEINFO *)sbAlloc(sizeof(HSP3TYPEINFO) * HSP3_FUNC_MAX);
+    hsp_hsp3tinfo = (HSP3TYPEINFO *) sbAlloc(sizeof(HSP3TYPEINFO) * HSP3_FUNC_MAX);
     hsp_current_type_info_id = HSP3_FUNC_MAX;
     for (i = 0; i < hsp_current_type_info_id; i++) {
         [self hsp3typeinit_default:i];
     }
-    
+
     //		内蔵タイプの登録
     //
     [self hsp3typeinit_var:GetTypeInfoPtr(TYPE_VAR)];
@@ -3163,7 +3163,7 @@ APTR code_newstruct(PVal *pval) {
     [self hsp3typeinit_intfunc:GetTypeInfoPtr(TYPE_INTFUNC)];
     [self hsp3typeinit_intfunc:GetTypeInfoPtr(TYPE_INTFUNC)];
     [self hsp3typeinit_custom:GetTypeInfoPtr(TYPE_MODCMD)];
-    
+
     //		割り込みの初期化
     //
     hsp_hspctx->mem_irq = NULL;
@@ -3172,18 +3172,18 @@ APTR code_newstruct(PVal *pval) {
         [self code_addirq];
     }                                           // 標準割り込みを確保
     [self code_enableirq:HSPIRQ_USERDEF sw:1];  // カスタムタイプのみEnable
-    
+
     //		プラグイン追加の準備
     //
     hsp_current_type_info_id = HSP3_TYPE_USER;
-    
+
     //		文字列バッファの初期化
     //
     hsp_hspctx->refstr = sbAlloc(HSPCTX_REFSTR_MAX);
     hsp_hspctx->fnbuffer = sbAlloc(HSP_MAX_PATH);
     hsp_hspctx->stmp = sbAlloc(HSPCTX_REFSTR_MAX);
     hsp_hspctx->cmdline = sbAlloc(HSPCTX_CMDLINE_MAX);
-    
+
 #ifdef FLAG_HSPDEBUG
     //		デバッグ情報の初期化
     //
@@ -3199,20 +3199,20 @@ APTR code_newstruct(PVal *pval) {
     // hsp_dbginfo.dbg_set = [self code_dbgset];
     // hsp_dbginfo.dbg_callstack = code_dbgcallstack;
 #endif
-    
+
 }
 
 //        コードの終了処理
 //
 - (void)code_termfunc {
-    
+
     // NSLog(@"code_termfunc");
     int i;
     int prmmax;
     STRUCTDAT *st;
     HSP3TYPEINFO *info;
     PVal *pval;
-    
+
     //		モジュール変数デストラクタ呼び出し
     //
     //#ifdef FLAG_HSP_ERROR_HANDLE
@@ -3230,10 +3230,10 @@ APTR code_newstruct(PVal *pval) {
         //@throw exception;
         // catch( ... ) {
     }
-    //#endif
-    
-    //		クリーンアップモジュールの呼び出し
-    //
+        //#endif
+
+        //		クリーンアップモジュールの呼び出し
+        //
 #ifdef FLAG_HSP_ERROR_HANDLE
     @try {
 #endif
@@ -3245,7 +3245,7 @@ APTR code_newstruct(PVal *pval) {
             if (i < 0) break;
             st = &abc_hspctx.mem_finfo[i];
             if ((st->index == STRUCTDAT_INDEX_FUNC) &&
-                (st->funcflag & STRUCTDAT_FUNCFLAG_CLEANUP)) {
+                    (st->funcflag & STRUCTDAT_FUNCFLAG_CLEANUP)) {
                 [self code_callfunc:i];
             }
         }
@@ -3254,7 +3254,7 @@ APTR code_newstruct(PVal *pval) {
         //@throw exception;
     }
 #endif
-    
+
     //		タイプの終了関数をすべて呼び出す
     //
     for (i = hsp_current_type_info_id - 1; i >= 0; i--) {
@@ -3263,8 +3263,8 @@ APTR code_newstruct(PVal *pval) {
         // if ( info->termfunc != NULL )
         //    info->termfunc( 0 );
     }
-    
-    
+
+
 }
 
 //        コード実行を終了
@@ -3289,12 +3289,12 @@ APTR code_newstruct(PVal *pval) {
 - (int)code_execcmd {
     int i;
     abc_hspctx.endcode = 0;
-    
-rerun:
+
+    rerun:
     abc_hspctx.looplev = 0;
     abc_hspctx.sublev = 0;
     [self StackReset];
-    
+
 #ifdef FLAG_HSP_ERROR_HANDLE
     @try {
         // NSString *error_str = [NSString stringWithFormat:@"%d",
@@ -3308,11 +3308,11 @@ rerun:
             // stack->Reset();
             // stack->StoreLevel();
             // stack->ResumeLevel();
-            
+
 #ifdef FLAG_HSPDEBUG
             if (hsp_dbgmode) [self code_dbgtrace];  // トレースモード時の処理
 #endif
-            
+
             //                int ret = 0;
             //                if (hsp_type_tmp==15) {
             //
@@ -3372,7 +3372,7 @@ rerun:
         // HSPERROR code
         // NSLog(@"error:%@",error.description);
         int code = [error.description intValue];
-        
+
         if (code == HSPERR_NONE) {
             i = RUNMODE_END;
         } else if (code == HSPERR_INTJUMP) {
@@ -3381,10 +3381,10 @@ rerun:
             i = RUNMODE_EXITRUN;
         } else {
             i = RUNMODE_ERROR;
-            abc_hspctx.err = (HSPERROR)code;
+            abc_hspctx.err = (HSPERROR) code;
             abc_hspctx.runmode = i;
             if ([self code_isirq:HSPIRQ_ONERROR]) {
-                [self code_sendirq:HSPIRQ_ONERROR iparam:0 wparam:(int)code lparam:[self code_getdebug_line]];
+                [self code_sendirq:HSPIRQ_ONERROR iparam:0 wparam:(int) code lparam:[self code_getdebug_line]];
                 if (abc_hspctx.runmode != i) goto rerun;
                 return i;
             }
@@ -3477,34 +3477,34 @@ rerun:
 ///
 - (int)code_event:(int)event prm1:(int)prm1 prm2:(int)prm2 prm3:(void *)prm3 {
     short hsp_evcategory[] = {
-        0,                        // HSPEVENT_NONE
-        HSPEVENT_ENABLE_COMMAND,  // HSPEVENT_COMMAND
-        HSPEVENT_ENABLE_HSPIRQ,   // HSPEVENT_HSPIRQ
-        HSPEVENT_ENABLE_GETKEY,   // HSPEVENT_GETKEY
-        HSPEVENT_ENABLE_GETKEY,   // HSPEVENT_STICK
-        HSPEVENT_ENABLE_FILE,     // HSPEVENT_FNAME
-        HSPEVENT_ENABLE_FILE,     // HSPEVENT_FREAD
-        HSPEVENT_ENABLE_FILE,     // HSPEVENT_FWRITE
-        HSPEVENT_ENABLE_FILE,     // HSPEVENT_FEXIST
-        HSPEVENT_ENABLE_FILE,     // HSPEVENT_FDELETE
-        HSPEVENT_ENABLE_FILE,     // HSPEVENT_FMKDIR
-        HSPEVENT_ENABLE_FILE,     // HSPEVENT_FCHDIR
-        HSPEVENT_ENABLE_FILE,     // HSPEVENT_FCOPY
-        HSPEVENT_ENABLE_FILE,     // HSPEVENT_FDIRLIST1
-        HSPEVENT_ENABLE_FILE,     // HSPEVENT_FDIRLIST2
-        HSPEVENT_ENABLE_PICLOAD,  // HSPEVENT_GETPICSIZE
-        HSPEVENT_ENABLE_PICLOAD,  // HSPEVENT_PICLOAD
+            0,                        // HSPEVENT_NONE
+            HSPEVENT_ENABLE_COMMAND,  // HSPEVENT_COMMAND
+            HSPEVENT_ENABLE_HSPIRQ,   // HSPEVENT_HSPIRQ
+            HSPEVENT_ENABLE_GETKEY,   // HSPEVENT_GETKEY
+            HSPEVENT_ENABLE_GETKEY,   // HSPEVENT_STICK
+            HSPEVENT_ENABLE_FILE,     // HSPEVENT_FNAME
+            HSPEVENT_ENABLE_FILE,     // HSPEVENT_FREAD
+            HSPEVENT_ENABLE_FILE,     // HSPEVENT_FWRITE
+            HSPEVENT_ENABLE_FILE,     // HSPEVENT_FEXIST
+            HSPEVENT_ENABLE_FILE,     // HSPEVENT_FDELETE
+            HSPEVENT_ENABLE_FILE,     // HSPEVENT_FMKDIR
+            HSPEVENT_ENABLE_FILE,     // HSPEVENT_FCHDIR
+            HSPEVENT_ENABLE_FILE,     // HSPEVENT_FCOPY
+            HSPEVENT_ENABLE_FILE,     // HSPEVENT_FDIRLIST1
+            HSPEVENT_ENABLE_FILE,     // HSPEVENT_FDIRLIST2
+            HSPEVENT_ENABLE_PICLOAD,  // HSPEVENT_GETPICSIZE
+            HSPEVENT_ENABLE_PICLOAD,  // HSPEVENT_PICLOAD
     };
     int res = [self call_eventfunc:hsp_evcategory[event] event:event prm1:prm1 prm2:prm2 prm3:prm3];
     if (res) return res;
-    
+
     switch (event) {
         case HSPEVENT_COMMAND:
             // All commands (hsp_type_tmp,val,n/a)
             break;
         case HSPEVENT_HSPIRQ:
             // HSP Interrupt (IRQid,iparam,param_ptr)
-            [self code_execirq:(IRQDAT *)prm3 wparam:prm1 lparam:prm2];
+            [self code_execirq:(IRQDAT *) prm3 wparam:prm1 lparam:prm2];
             break;
         case HSPEVENT_GETKEY:
             // Key input (IDcode,option,resval ptr)
@@ -3513,7 +3513,7 @@ rerun:
             break;
         case HSPEVENT_FNAME:
             // set FNAME (n/a,n/a,nameptr)
-            strncpy(abc_hspctx.fnbuffer, (char *)prm3, HSP_MAX_PATH - 1);
+            strncpy(abc_hspctx.fnbuffer, (char *) prm3, HSP_MAX_PATH - 1);
             break;
         case HSPEVENT_FREAD:
             // fread (fseek,size,loadptr)
@@ -3555,7 +3555,7 @@ rerun:
             break;
         case HSPEVENT_FCOPY:
             // bcopy (n/a,n/a,dst filename)
-            if ([self dpm_filecopy:abc_hspctx.fnbuffer sname:(char *)prm3]) {
+            if ([self dpm_filecopy:abc_hspctx.fnbuffer sname:(char *) prm3]) {
                 @throw [self make_nsexception:HSPERR_FILE_IO];
             }
             break;
@@ -3565,8 +3565,8 @@ rerun:
             char **p;
             hsp_dirlist_target = sbAlloc(0x1000);
             abc_hspctx.stat =
-            dirlist(abc_hspctx.fnbuffer, &hsp_dirlist_target, prm1);
-            p = (char **)prm3;
+                    dirlist(abc_hspctx.fnbuffer, &hsp_dirlist_target, prm1);
+            p = (char **) prm3;
             *p = hsp_dirlist_target;
             break;
         }
@@ -3710,10 +3710,10 @@ rerun:
     IRQDAT *irq;
     id = hsp_hspctx->irqmax++;
     if (hsp_hspctx->mem_irq == NULL) {
-        hsp_hspctx->mem_irq = (IRQDAT *)sbAlloc(sizeof(IRQDAT));
+        hsp_hspctx->mem_irq = (IRQDAT *) sbAlloc(sizeof(IRQDAT));
     } else {
-        hsp_hspctx->mem_irq = (IRQDAT *)sbExpand(
-                                                 (char *)hsp_hspctx->mem_irq, sizeof(IRQDAT) * (hsp_hspctx->irqmax));
+        hsp_hspctx->mem_irq = (IRQDAT *) sbExpand(
+                (char *) hsp_hspctx->mem_irq, sizeof(IRQDAT) * (hsp_hspctx->irqmax));
     }
     irq = [self code_getirq:id];
     irq->flag = IRQ_FLAG_DISABLE;
@@ -3736,7 +3736,7 @@ rerun:
     }
     if (irq->opt == IRQ_OPT_GOSUB) {
         hsp_mcs = hsp_mcsbak;
-        [self cmdfunc_gosub:(unsigned short *)irq->ptr];
+        [self cmdfunc_gosub:(unsigned short *) irq->ptr];
         if (abc_hspctx.runmode != RUNMODE_END) {
             abc_hspctx.runmode = RUNMODE_RUN;
         }
@@ -3792,20 +3792,20 @@ rerun:
 
 - (void)code_dbg_global {
     HSPHED *hed = hsp_hspctx->hsphed;
-    [self code_adddbg:(char *)"axサイズ" intval:hed->allsize];
-    [self code_adddbg:(char *)"コードサイズ" intval:hed->max_cs];
-    [self code_adddbg:(char *)"データサイズ" intval:hed->max_ds];
-    [self code_adddbg:(char *)"変数予約" intval:hed->max_val];
-    [self code_adddbg:(char *)"実行モード" intval:hsp_hspctx->runmode];
-    [self code_adddbg:(char *)"stat" intval:hsp_hspctx->stat];
-    [self code_adddbg:(char *)"cnt" intval:hsp_hspctx->mem_loop[hsp_hspctx->looplev].cnt];
-    [self code_adddbg:(char *)"looplev" intval:hsp_hspctx->looplev];
-    [self code_adddbg:(char *)"sublev" intval:hsp_hspctx->sublev];
-    [self code_adddbg:(char *)"iparam" intval:hsp_hspctx->iparam];
-    [self code_adddbg:(char *)"wparam" intval:hsp_hspctx->wparam];
-    [self code_adddbg:(char *)"lparam" intval:hsp_hspctx->lparam];
-    [self code_adddbg:(char *)"refstr" str:hsp_hspctx->refstr];
-    [self code_adddbg:(char *)"refdval" val:hsp_hspctx->refdval];
+    [self code_adddbg:(char *) "axサイズ" intval:hed->allsize];
+    [self code_adddbg:(char *) "コードサイズ" intval:hed->max_cs];
+    [self code_adddbg:(char *) "データサイズ" intval:hed->max_ds];
+    [self code_adddbg:(char *) "変数予約" intval:hed->max_val];
+    [self code_adddbg:(char *) "実行モード" intval:hsp_hspctx->runmode];
+    [self code_adddbg:(char *) "stat" intval:hsp_hspctx->stat];
+    [self code_adddbg:(char *) "cnt" intval:hsp_hspctx->mem_loop[hsp_hspctx->looplev].cnt];
+    [self code_adddbg:(char *) "looplev" intval:hsp_hspctx->looplev];
+    [self code_adddbg:(char *) "sublev" intval:hsp_hspctx->sublev];
+    [self code_adddbg:(char *) "iparam" intval:hsp_hspctx->iparam];
+    [self code_adddbg:(char *) "wparam" intval:hsp_hspctx->wparam];
+    [self code_adddbg:(char *) "lparam" intval:hsp_hspctx->lparam];
+    [self code_adddbg:(char *) "refstr" str:hsp_hspctx->refstr];
+    [self code_adddbg:(char *) "refdval" val:hsp_hspctx->refdval];
 }
 
 /// memory Hex dump
@@ -3817,7 +3817,7 @@ rerun:
     while (adr < size) {
         sprintf(tline, "%04X", adr);
         for (int i = 0; i < 8 && adr < size; ++i, ++adr) {
-            sprintf(t, " %02X", (unsigned char)(mem[adr]));
+            sprintf(t, " %02X", (unsigned char) (mem[adr]));
             strcat(tline, t);
         }
         strcat(tline, "\r\n");
@@ -3832,11 +3832,11 @@ rerun:
 - (void)code_dbgvarinf_ext:(PVal *)pv src:(void *)src buf:(char *)buf {
     switch (pv->flag) {
         case HSPVAR_FLAG_LABEL:
-            sprintf(buf, "LABEL $%08x", *(int *)src);
+            sprintf(buf, "LABEL $%08x", *(int *) src);
             break;
         case HSPVAR_FLAG_STRUCT: {
             FlexValue *fv;
-            fv = (FlexValue *)src;
+            fv = (FlexValue *) src;
             if (fv->type == FLEXVAL_TYPE_NONE) {
                 sprintf(buf, "STRUCT (Empty)");
             } else {
@@ -3844,7 +3844,7 @@ rerun:
             break;
         }
         case HSPVAR_FLAG_COMSTRUCT:
-            sprintf(buf, "COMPTR $%08x", *(int *)src);
+            sprintf(buf, "COMPTR $%08x", *(int *) src);
             break;
         default:
             strcpy(buf, "Unknown");
@@ -3861,24 +3861,24 @@ rerun:
     int ofs;
     int amax;
     int ok;
-    
+
     amax = pv->len[1];
     if (amax <= 1) return;
     if (amax > 16) {
-        sbStrAdd(&hsp_dbgbuf, (char *)"(配列の一部だけを表示)\r\n");
+        sbStrAdd(&hsp_dbgbuf, (char *) "(配列の一部だけを表示)\r\n");
         amax = 16;
     }
-    
+
     for (ofs = 0; ofs < amax; ofs++) {
         src = HspVarCorePtrAPTR(pv, ofs);
         ok = 1;
         @try {
             if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "int") == 0) {  //整数のCnv
-                p = (char *)HspVarInt_Cnv(src, pv->flag);
+                p = (char *) HspVarInt_Cnv(src, pv->flag);
             } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "double") == 0) {  //実数のCnv
-                p = (char *)HspVarDouble_Cnv(src, pv->flag);
+                p = (char *) HspVarDouble_Cnv(src, pv->flag);
             } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "str") == 0) {  //文字列のCnv
-                p = (char *)HspVarStr_Cnv(src, pv->flag);
+                p = (char *) HspVarStr_Cnv(src, pv->flag);
             } else {
                 @throw [self make_nsexception:HSPERR_SYNTAX];
             }
@@ -3920,25 +3920,25 @@ rerun:
     char tmp[256];
     int size;
     int orgsize;
-    
+
     [self code_inidbg];
     max = hsp_hspctx->hsphed->max_val;
-    
+
     if (target == NULL) {
         for (i = 0; i < max; i++) {
             name = [self code_getdebug_varname:i];
-            if (strstr2(name, (char *)"@") != NULL) {
+            if (strstr2(name, (char *) "@") != NULL) {
                 if (!(option & 2)) name = NULL;
             }
             if (name != NULL) {
                 sbStrAdd(&hsp_dbgbuf, name);
-                sbStrAdd(&hsp_dbgbuf, (char *)"\r\n");
+                sbStrAdd(&hsp_dbgbuf, (char *) "\r\n");
             }
         }
-        
+
         return hsp_dbgbuf;
     }
-    
+
     id = 0;
     while (1) {
         if (id >= max) break;
@@ -3946,16 +3946,16 @@ rerun:
         if (strcmp(name, target) == 0) break;
         id++;
     }
-    
+
     pv = &hsp_hspctx->mem_var[id];
     proc = HspVarCoreGetProc(pv->flag);
-    [self code_adddbg2:(char *)"変数名" str:name];
-    [self code_adddbg2:(char *)"型" str:proc->vartype_name];
+    [self code_adddbg2:(char *) "変数名" str:name];
+    [self code_adddbg2:(char *) "型" str:proc->vartype_name];
     sprintf(tmp, "(%d,%d,%d,%d)", pv->len[1], pv->len[2], pv->len[3], pv->len[4]);
-    [self code_adddbg2:(char *)"配列" str:tmp];
-    [self code_adddbg2:(char *)"モード" val:pv->mode];
-    [self code_adddbg2:(char *)"使用サイズ" val:pv->size];
-    
+    [self code_adddbg2:(char *) "配列" str:tmp];
+    [self code_adddbg2:(char *) "モード" val:pv->mode];
+    [self code_adddbg2:(char *) "使用サイズ" val:pv->size];
+
     HspVarCoreReset(pv);
     if (strcmp(proc->vartype_name, "int") == 0) {  //整数のGetPtr
         src = HspVarInt_GetPtr(pv);
@@ -3968,36 +3968,36 @@ rerun:
     } else if (strcmp(proc->vartype_name, "struct") == 0) {  // structのGetPtr
         src = HspVarLabel_GetPtr(pv);
     } else {
-         @throw [self make_nsexception:HSPERR_SYNTAX];
+        @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
+
     if (strcmp(proc->vartype_name, "int") == 0) {  //整数のGetBlockSize
-        padr = (char *)HspVarInt_GetBlockSize(pv, src, &size);
+        padr = (char *) HspVarInt_GetBlockSize(pv, src, &size);
     } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のGetBlockSize
-        padr = (char *)HspVarDouble_GetBlockSize(pv, src, &size);
+        padr = (char *) HspVarDouble_GetBlockSize(pv, src, &size);
     } else if (strcmp(proc->vartype_name, "str") == 0) {  //文字列のGetBlockSize
-        padr = (char *)HspVarStr_GetBlockSize(pv, src, &size);
+        padr = (char *) HspVarStr_GetBlockSize(pv, src, &size);
     } else if (strcmp(proc->vartype_name, "label") == 0) {  //ラベルのGetBlockSize
-        padr = (char *)HspVarLabel_GetBlockSize(pv, src, &size);
+        padr = (char *) HspVarLabel_GetBlockSize(pv, src, &size);
     } else if (strcmp(proc->vartype_name, "struct") == 0) {  // structのGetBlockSize
-        padr = (char *)HspVarLabel_GetBlockSize(pv, src, &size);
+        padr = (char *) HspVarLabel_GetBlockSize(pv, src, &size);
     } else {
         @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    
-    [self code_adddbg2:(char *)"バッファサイズ" val:size];
-    
+
+    [self code_adddbg2:(char *) "バッファサイズ" val:size];
+
     switch (pv->flag) {
         case HSPVAR_FLAG_STR:
         case HSPVAR_FLAG_DOUBLE:
         case HSPVAR_FLAG_INT:
             if (pv->flag != HSPVAR_FLAG_STR) {
                 if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "int") == 0) {  //整数のCnv
-                    p = (char *)HspVarInt_Cnv(src, pv->flag);
+                    p = (char *) HspVarInt_Cnv(src, pv->flag);
                 } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "double") == 0) {  //実数のCnv
-                    p = (char *)HspVarDouble_Cnv(src, pv->flag);
+                    p = (char *) HspVarDouble_Cnv(src, pv->flag);
                 } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "str") == 0) {  //文字列のCnv
-                    p = (char *)HspVarStr_Cnv(src, pv->flag);
+                    p = (char *) HspVarStr_Cnv(src, pv->flag);
                 } else {
                     @throw [self make_nsexception:HSPERR_SYNTAX];
                 }
@@ -4005,7 +4005,7 @@ rerun:
             } else {
                 p = padr;
             }
-            orgsize = (int)strlen(p);
+            orgsize = (int) strlen(p);
             if (orgsize >= 1024) {
                 strncpy(hsp_hspctx->stmp, p, 1023);
                 p = hsp_hspctx->stmp;
@@ -4013,17 +4013,17 @@ rerun:
                 sprintf(tmp, "(内容%dbytesの一部を表示しています)\r\n", orgsize);
                 sbStrAdd(&hsp_dbgbuf, tmp);
             }
-            [self code_adddbg:(char *)"内容:" str:p];
+            [self code_adddbg:(char *) "内容:" str:p];
             break;
         case HSPVAR_FLAG_LABEL:
         default: {
             char tmpbuf[256];
             [self code_dbgvarinf_ext:pv src:src buf:tmpbuf];
-            [self code_adddbg:(char *)"内容:" str:tmpbuf];
+            [self code_adddbg:(char *) "内容:" str:tmpbuf];
             break;
         }
     }
-    
+
     if (option & 4) {
         [self code_arraydump:pv];
     }
@@ -4031,7 +4031,7 @@ rerun:
         if (size > 0x1000) size = 0x1000;
         [self code_dbgdump:padr size:size];
     }
-    
+
     return hsp_dbgbuf;
 }
 
@@ -4091,7 +4091,7 @@ rerun:
     [self code_inidbg];
     for (it = stack_mem_stm; it != stack_stm_cur; it++) {
         if (it->type == TYPE_EX_SUBROUTINE || it->type == TYPE_EX_CUSTOMFUNC) {
-            routine = (HSPROUTINE *)STM_GETPTR(it);
+            routine = (HSPROUTINE *) STM_GETPTR(it);
             line = [self code_getdebug_line:routine->mcsret];
             sprintf(tmp, "%s:%4d\r\n", [self code_getdebug_name], line);
             sbStrAdd(&hsp_dbgbuf, tmp);
@@ -4110,8 +4110,9 @@ rerun:
         // hsp_hspctx->msgfunc( hsp_hspctx );
         [self code_def_msgfunc:hsp_hspctx];
     }
-    
+
 }
+
 #endif
 
 @end

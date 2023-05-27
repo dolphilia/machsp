@@ -15,7 +15,7 @@
 #include "debug_message.h"
 
 @interface MyMidi : NSObject {
-    AppDelegate* global;
+    AppDelegate *global;
 }
 
 @end

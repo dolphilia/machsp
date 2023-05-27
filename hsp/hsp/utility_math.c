@@ -17,7 +17,7 @@ double range2d(double x1, double y1, double x2, double y2) {
 /// ２点間の距離を求める（３次元）
 ///
 double range3d(double x1, double y1, double z1, double x2, double y2, double z2) {
-    return pow((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1), 0.5 );
+    return pow((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1), 0.5);
 }
 
 unsigned long xor128() {
@@ -27,5 +27,5 @@ unsigned long xor128() {
     x = y;
     y = z;
     z = w;
-    return (w = (w ^ (w >> 19 )) ^ (t ^ (t >> 8)));
+    return (w = (w ^ (w >> 19)) ^ (t ^ (t >> 8)));
 }

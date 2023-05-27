@@ -25,19 +25,19 @@
 
     switch (id) {
         case 0: // カレント(現在の)ディレクトリ
-            p = (char *)[global.current_directory_path UTF8String];
+            p = (char *) [global.current_directory_path UTF8String];
             break;
         case 1: // HSPの実行ファイルがあるディレクトリ
-            p = (char *)[[[[NSBundle mainBundle] bundlePath] stringByDeletingLastPathComponent] UTF8String];
+            p = (char *) [[[[NSBundle mainBundle] bundlePath] stringByDeletingLastPathComponent] UTF8String];
             break;
         case 2: // Homeディレクトリ
-            p = (char *)[NSHomeDirectory() UTF8String];
+            p = (char *) [NSHomeDirectory() UTF8String];
             break;
         case 3: // Desktopディレクトリ
-            p = (char *)[[NSHomeDirectory() stringByAppendingString:@"/Desktop"] UTF8String];
+            p = (char *) [[NSHomeDirectory() stringByAppendingString:@"/Desktop"] UTF8String];
             break;
         case 4: // Documentsディレクトリ
-            p = (char *)[[NSHomeDirectory() stringByAppendingString:@"/Documents"] UTF8String];
+            p = (char *) [[NSHomeDirectory() stringByAppendingString:@"/Documents"] UTF8String];
             break;
         case 5:
             break;
@@ -362,7 +362,7 @@
             [self cmdfunc_setcam];
             break;  // setcam //3D関連 //<<<mac版拡張
         default: {
-             @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
+            @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
     return RUNMODE_RUN;
@@ -406,11 +406,11 @@
     NSString *ns_message_string = [NSString stringWithCString:message_string encoding:NSUTF8StringEncoding];
     NSString *ns_title_string = [NSString stringWithCString:title_string encoding:NSUTF8StringEncoding];
     NSAlert *alert = [[NSAlert alloc] init];
-    
+
     [alert setMessageText:ns_title_string];
     [alert setInformativeText:ns_message_string];
     hsp3gr_ctx->stat = 0;
-    
+
     switch (alert_style) {
         case 0: {
             [alert setAlertStyle:NSAlertStyleInformational];
@@ -623,9 +623,9 @@
             break;
     }
     color = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
-    int r = (int)(color.redComponent * 255.0);
-    int g = (int)(color.greenComponent * 255.0);
-    int b = (int)(color.blueComponent * 255.0);
+    int r = (int) (color.redComponent * 255.0);
+    int g = (int) (color.greenComponent * 255.0);
+    int b = (int) (color.blueComponent * 255.0);
     [myLayer set_color_rgba:r green:g blue:b alpha:255];
 }
 
@@ -650,14 +650,14 @@
     } else {
         @throw [self make_nsexception:HSPERR_SYNTAX];
     }
-    ptr = (char *)dst;  //(HspVarCorePtr(mpval));
+    ptr = (char *) dst;  //(HspVarCorePtr(mpval));
     if (mpval->flag != HSPVAR_FLAG_STR) {
         if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "int") == 0) {  //整数のCnv
-            ptr = (char *)HspVarInt_Cnv(ptr, mpval->flag);
+            ptr = (char *) HspVarInt_Cnv(ptr, mpval->flag);
         } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "double") == 0) {  //実数のCnv
-            ptr = (char *)HspVarDouble_Cnv(ptr, mpval->flag);
+            ptr = (char *) HspVarDouble_Cnv(ptr, mpval->flag);
         } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "str") == 0) {  //文字列のCnv
-            ptr = (char *)HspVarStr_Cnv(ptr, mpval->flag);
+            ptr = (char *) HspVarStr_Cnv(ptr, mpval->flag);
         } else {
             @throw [self make_nsexception:HSPERR_SYNTAX];
         }
@@ -675,7 +675,7 @@
     //	printf( "%s\n",stmp );
     //	if ( chk == 0 ) break;
     //}
-    
+
 }
 
 - (void)cmdfunc_title {
@@ -711,7 +711,7 @@
 - (void)cmdfunc_cls {
     int p1 = [self code_getdi:0];
     [myLayer clear_canvas:p1];
-    
+
     //ボタンを画面外に
     for (int i = 0; i < 64; i++) {
         [[myButtons objectAtIndex:i] setFrameOrigin:NSMakePoint(0, -9999)];
@@ -779,7 +779,7 @@
 
 - (void)cmdfunc_redraw {
     int p1 = [self code_getdi:0];
-    [myLayer set_redraw_flag:(BOOL)p1];
+    [myLayer set_redraw_flag:(BOOL) p1];
     [myLayer redraw];
 }
 
@@ -1193,11 +1193,11 @@
     char *ps = [self code_gets];
     [[myCheckBoxs objectAtIndex:myCheckBoxIndex] setTitle:[NSString stringWithCString:ps encoding:NSUTF8StringEncoding]];
     myCheckBoxAptr[myCheckBoxIndex] = [self code_getva:&myCheckBoxPval[myCheckBoxIndex]];
-    
+
     hsp3gr_ctx->stat = myCheckBoxIndex;  //ボタンのIDを返す
-    
+
     [myLayer set_current_point:posx point_y:posy + 18];
-    
+
     myCheckBoxIndex++;  //ボタンのインデックスを次に
     if (myCheckBoxIndex >= 64) {
         myCheckBoxIndex = 64;
@@ -1215,14 +1215,14 @@
 - (void)cmdfunc_input {
     int posx = [myLayer get_current_point_x];
     int posy = [myLayer get_current_point_y];
-    
+
     // char* ps;
     // ps = [self code_gets];
     //[[myTextFields objectAtIndex:myTextFieldIndex] setTitle:[NSString
     //stringWithCString:ps encoding:NSUTF8StringEncoding]];
-    
+
     myTextFieldAptr[myTextFieldIndex] = [self code_getva:&myTextFieldPval[myTextFieldIndex]];
-    
+
     int p2 = [self code_getdi:96];
     int p3 = [self code_getdi:22];
     [self code_getdi:0];
@@ -1230,16 +1230,16 @@
     [[myTextFields objectAtIndex:myTextFieldIndex] setFrameSize:NSMakeSize(p2, p3)];
     [[myTextFields objectAtIndex:myTextFieldIndex] setEnabled:YES];
     [[myTextFields objectAtIndex:myTextFieldIndex] setEditable:YES];
-    
+
     hsp3gr_ctx->stat = myTextFieldIndex;  //ボタンのIDを返す
-    
+
     myTextFieldIndex++;  //ボタンのインデックスを次に
     if (myTextFieldIndex >= 64) {
         myTextFieldIndex = 64;
     }
-    
+
     [myLayer set_current_point:posx point_y:posy + p3];
-    
+
     /*
      PVal *pval;
      APTR aptr;
@@ -1310,7 +1310,7 @@
      [self code_setva:pval aptr:aptr type:TYPE_STRING ptr:hsp3gr_ctx->stmp];
      }
      */
-    
+
 }
 
 - (void)cmdfunc_mesbox {
@@ -1388,7 +1388,7 @@
             [myLayer d3line:p1 sy:p2 sz:p3 ex:p4 ey:p5 ez:p6];
         }
     }
-    
+
 }
 
 - (void)cmdfunc_clrobj {
@@ -1430,18 +1430,18 @@
     int ckey, cklast, cktrg;
     ckey = 0;
     res = 0;
-    
+
     // BOOL a = ;
-    
+
     // NSLog(@"%d",myView->isMouseDown);
-    
+
     //            if (p2) {
     //                if ( wnd->GetActive() < 0 ) {
     //                    code_setva( pval, aptr, TYPE_INUM, &res );
     //                    break;
     //                }
     //            }
-    
+
     if ([myView getIsKeyDown_Left]) {
         ckey |= 1;
     }  // if ( GetAsyncKeyState(37)&0x8000 ) ckey|=1;		// [left]
@@ -1510,7 +1510,7 @@ typedef DWORD COLORREF;
     int r = [myLayer get_current_color_r];
     int g = [myLayer get_current_color_g];
     int b = [myLayer get_current_color_b];
-    int color = (int)RGB(r, g, b);
+    int color = (int) RGB(r, g, b);
     int res = 0;
     res = color & 0x00ff00;
     res |= (color >> 16) & 0xff;
@@ -1522,7 +1522,7 @@ typedef DWORD COLORREF;
     memcpy(color_a, &p5, sizeof(int));
     memcpy(color_b, &p6, sizeof(int));
     [myLayer fillGradation:p1 pos_y:p2 size_w:p3 size_h:p4 direction:gradmode color_red_a:color_a[0] color_green_a:color_a[1] color_blue_a:color_a[2] color_red_b:color_b[0] color_green_b:color_b[1] color_blue_b:color_b[2]];
-    
+
 }
 
 - (void)cmdfunc_objimage {
@@ -1629,7 +1629,7 @@ typedef DWORD COLORREF;
             [global.q_audio_buffer addObject:m];
         }
     }
-    
+
 }
 
 - (void)cmdfunc_qpush {
@@ -1672,11 +1672,11 @@ typedef DWORD COLORREF;
             if (d >= 1.0) {
                 d = 1.0;
             }
-            
+
             global.q_audio_source[global.q_audio_count] =
-            [NSNumber numberWithDouble:d];
+                    [NSNumber numberWithDouble:d];
             union_pointer = union_pointer - sizeof(double);
-            
+
             global.q_audio_count++;
             if (global.q_audio_count > global.in_number_frames) {
                 global.q_audio_count = 0;
@@ -1724,12 +1724,12 @@ typedef DWORD COLORREF;
     int p4 = [self code_getdi:0];
     unsigned short *sbr;
     sbr = [self code_getlb];
-    
+
     [self code_next];
-    
+
     int posx = [myLayer get_current_point_x];
     int posy = [myLayer get_current_point_y];
-    
+
     if (p4 == 0) {
         [[mySliders objectAtIndex:mySliderIndex] setFrameOrigin:NSMakePoint(posx, myLayer->buf_height[myLayer->buf_index] - posy - 21)];
         [[mySliders objectAtIndex:mySliderIndex] setFrameSize:NSMakeSize(96, 21)];
@@ -1742,10 +1742,10 @@ typedef DWORD COLORREF;
     [[mySliders objectAtIndex:mySliderIndex] setDoubleValue:p1];
     [[mySliders objectAtIndex:mySliderIndex] setMinValue:p2];
     [[mySliders objectAtIndex:mySliderIndex] setMaxValue:p3];
-    
+
     mySliderLabel[mySliderIndex] = sbr;  //ラベルを設定する
     hsp3gr_ctx->stat = mySliderIndex;    // IDを返す
-    
+
     mySliderIndex++;  //インデックスを次に
     if (mySliderIndex >= 64) {
         mySliderIndex = 64;
@@ -1829,20 +1829,20 @@ typedef DWORD COLORREF;
         //    throw HSPERR_INVALID_FUNCPARAM;
         //}
     }
-    
+
     if (*hsp3gr_val != '(') {
         // NSLog(@"aiueo");
         // '('がない場合は拡張システム変数とみなす
-        
+
         return [self reffunc_sysvar:type_res arg:arg];
-        
+
         // throw HSPERR_INVALID_FUNCPARAM;
     }
-    
+
     [self code_next];
-    
+
     switch (arg & 0xff) {
-            //	int function
+        //	int function
         case 0x000:
             break;  // ginfo
         case 0x001:
@@ -1862,17 +1862,17 @@ typedef DWORD COLORREF;
             break;
         }
         default: {
-             @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
+            @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
-    
+
     //			')'で終わるかを調べる
     //
     if (*hsp3gr_type != TYPE_MARK) {
-         @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
+        @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
     }
     if (*hsp3gr_val != ')') {
-         @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
+        @throw [self make_nsexception:HSPERR_INVALID_FUNCPARAM];
     }
     [self code_next];
     return ptr;
@@ -1886,18 +1886,18 @@ typedef DWORD COLORREF;
     if (arg & 0x100) {
         return [self reffunc_function:type_res arg:arg];
     }
-    
+
     //		返値のタイプを設定する
     //
     *type_res = HSPVAR_FLAG_INT;           // 返値のタイプを指定する
     ptr = &hsp3gr_reffunc_intfunc_ivalue;  // 返値のポインタ
-    
+
     switch (arg) {
-            //	int function
+        //	int function
         case 0x000:  // mousex
             // NSLog(@"mousex");
             hsp3gr_reffunc_intfunc_ivalue =
-            [myView getMouseX];  // bmscr->savepos[ BMSCR_SAVEPOS_MOSUEX ];
+                    [myView getMouseX];  // bmscr->savepos[ BMSCR_SAVEPOS_MOSUEX ];
             break;
         case 0x001:  // mousey
             hsp3gr_reffunc_intfunc_ivalue = [myView getMouseY];
@@ -1916,12 +1916,12 @@ typedef DWORD COLORREF;
         case 0x005:  // hdc
             // ptr = (void *)(&(bmscr->hdc));
             break;
-            
+
         default: {
-             @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
+            @throw [self make_nsexception:HSPERR_UNSUPPORTED_FUNCTION];
         }
     }
-    
+
     return ptr;
 }
 
@@ -1934,24 +1934,24 @@ typedef DWORD COLORREF;
 
 - (void)hsp3typeinit_cl_extcmd:(HSP3TYPEINFO *)info {
     HSP_ExtraInfomation *exinfo;  // Info for Plugins
-    
+
     hsp3gr_ctx = info->hspctx;
     exinfo = info->hspexinfo;
     hsp3gr_type = exinfo->nptype;
     hsp3gr_val = exinfo->npval;
-    
+
     //		function register
     //
     // info->cmdfunc = cmdfunc_extcmd;
     info->cmdfuncNumber = 7;  //内蔵GUIコマンド memo.md
     // info->termfunc = termfunc_extcmd;
-    
+
     //		HSP_ExtraInfomationに関数を登録する
     //
     exinfo->actscr = &hsp3gr_cur_window;  // Active Window ID
     // exinfo->HspFunc_getbmscr = ex_getbmscr;
     // exinfo->HspFunc_mref = ex_mref;
-    
+
     //		バイナリモードを設定
     //
     //_setmode( _fileno(stdin),  _O_BINARY );

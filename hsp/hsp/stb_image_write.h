@@ -127,17 +127,17 @@ extern int stbi_write_tga_with_rle;
 #endif
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga(char const *filename, int w, int h, int comp, const void  *data);
+STBIWDEF int stbi_write_png(char const *filename, int w, int h, int comp, const void *data, int stride_in_bytes);
+STBIWDEF int stbi_write_bmp(char const *filename, int w, int h, int comp, const void *data);
+STBIWDEF int stbi_write_tga(char const *filename, int w, int h, int comp, const void *data);
 STBIWDEF int stbi_write_hdr(char const *filename, int w, int h, int comp, const float *data);
 #endif
 
 typedef void stbi_write_func(void *context, void *data, int size);
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
+STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void *data, int stride_in_bytes);
+STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void *data);
+STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void *data);
 STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const float *data);
 
 #ifdef __cplusplus
@@ -149,12 +149,12 @@ STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int w,
 #ifdef STB_IMAGE_WRITE_IMPLEMENTATION
 
 #ifdef _WIN32
-   #ifndef _CRT_SECURE_NO_WARNINGS
-   #define _CRT_SECURE_NO_WARNINGS
-   #endif
-   #ifndef _CRT_NONSTDC_NO_DEPRECATE
-   #define _CRT_NONSTDC_NO_DEPRECATE
-   #endif
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+#ifndef _CRT_NONSTDC_NO_DEPRECATE
+#define _CRT_NONSTDC_NO_DEPRECATE
+#endif
 #endif
 
 #ifndef STBI_WRITE_NO_STDIO

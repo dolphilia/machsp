@@ -76,17 +76,25 @@
     double GSmpz;
 }
 - (void)set_winx:(double)x;
+
 - (void)set_winy:(double)y;
 
 - (double)getdx;
+
 - (double)getdy;
+
 - (double)getdz;
+
 - (double)getex;
+
 - (double)getey;
+
 - (double)getez;
 
 - (double)d3dist:(double)p1 p2:(double)p2 p3:(double)p3;
+
 - (double)d3dist:(double)p1 p2:(double)p2;
+
 - (double)d3dist:(double)p1;
 
 - (double)d3rotateX:(double)x0 y0:(double)y0 va:(double)va; // getX
@@ -126,6 +134,7 @@
                LGm02:(double)LGm02
                LGm12:(double)LGm12
                LGm22:(double)LGm22;
+
 - (void)d3setcamx:(double)cpx
               cpy:(double)cpy
               cpz:(double)cpz
@@ -133,6 +142,7 @@
               ppy:(double)ppy
               ppz:(double)ppz
               ppv:(double)ppv;
+
 - (void)d3setcam:(double)cpx
              cpy:(double)cpy
              cpz:(double)cpz
@@ -140,21 +150,28 @@
               ty:(double)ty
               tz:(double)tz
               tv:(double)tv;
+
 - (void)d3setcam:(double)cpx
              cpy:(double)cpy
              cpz:(double)cpz
               tx:(double)tx
               ty:(double)ty
               tz:(double)tz;
+
 - (void)d3setcam:(double)cpx
              cpy:(double)cpy
              cpz:(double)cpz
               tx:(double)tx
               ty:(double)ty;
+
 - (void)d3setcam:(double)cpx cpy:(double)cpy cpz:(double)cpz tx:(double)tx;
+
 - (void)d3setcam:(double)cpx cpy:(double)cpy cpz:(double)cpz;
+
 - (void)d3setcam:(double)cpx cpy:(double)cpy;
+
 - (void)d3setcam:(double)cpx;
+
 - (void)d3setcam;
 
 - (void)d3setlocal:(double)p1
@@ -169,6 +186,7 @@
                p10:(double)p10
                p11:(double)p11
                p12:(double)p12;
+
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
                 p3:(double)p3
@@ -180,6 +198,7 @@
                 p9:(double)p9
                p10:(double)p10
                p11:(double)p11;
+
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
                 p3:(double)p3
@@ -190,6 +209,7 @@
                 p8:(double)p8
                 p9:(double)p9
                p10:(double)p10;
+
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
                 p3:(double)p3
@@ -199,6 +219,7 @@
                 p7:(double)p7
                 p8:(double)p8
                 p9:(double)p9;
+
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
                 p3:(double)p3
@@ -207,6 +228,7 @@
                 p6:(double)p6
                 p7:(double)p7
                 p8:(double)p8;
+
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
                 p3:(double)p3
@@ -214,21 +236,28 @@
                 p5:(double)p5
                 p6:(double)p6
                 p7:(double)p7;
+
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
                 p3:(double)p3
                 p4:(double)p4
                 p5:(double)p5
                 p6:(double)p6;
+
 - (void)d3setlocal:(double)p1
                 p2:(double)p2
                 p3:(double)p3
                 p4:(double)p4
                 p5:(double)p5;
+
 - (void)d3setlocal:(double)p1 p2:(double)p2 p3:(double)p3 p4:(double)p4;
+
 - (void)d3setlocal:(double)p1 p2:(double)p2 p3:(double)p3;
+
 - (void)d3setlocal:(double)p1 p2:(double)p2;
+
 - (void)d3setlocal:(double)p1;
+
 - (void)d3setlocal;
 
 - (void)d3trans:(double)inx iny:(double)iny inz:(double)inz;      // dx,dy,dz,ef
@@ -237,6 +266,7 @@
 - (void)d3vpos:(double)v01 v02:(double)v02 v03:(double)v03;
 
 - (double)d3getposX:(double)x y:(double)y z:(double)z;
+
 - (double)d3getposY:(double)x y:(double)y z:(double)z;
 
 @end

@@ -14,8 +14,8 @@
 #include "debug_message.h"
 
 @interface MyView : NSView {
-    NSImage* image;
-    MyCALayer* mylayer;
+    NSImage *image;
+    MyCALayer *mylayer;
 @public
     //mouse
     BOOL isMouseDown;
@@ -108,94 +108,177 @@
     BOOL isKeyDown_Y;
     BOOL isKeyDown_Z;
 }
--(MyCALayer*)getMyCALayer;
+- (MyCALayer *)getMyCALayer;
+
 //
--(int)getMouseX;
--(int)getMouseY;
+- (int)getMouseX;
+
+- (int)getMouseY;
+
 //
--(BOOL)getIsMouseDown;
--(BOOL)getIsRightMouseDown;
--(BOOL)getIsKeyDown_Left;
--(BOOL)getIsKeyDown_Up;
--(BOOL)getIsKeyDown_Right;
--(BOOL)getIsKeyDown_Down;
--(BOOL)getIsKeyDown_Space;
--(BOOL)getIsKeyDown_Enter;
--(BOOL)getIsKeyDown_Escape;
--(BOOL)getIsKeyDown_Tab;
+- (BOOL)getIsMouseDown;
+
+- (BOOL)getIsRightMouseDown;
+
+- (BOOL)getIsKeyDown_Left;
+
+- (BOOL)getIsKeyDown_Up;
+
+- (BOOL)getIsKeyDown_Right;
+
+- (BOOL)getIsKeyDown_Down;
+
+- (BOOL)getIsKeyDown_Space;
+
+- (BOOL)getIsKeyDown_Enter;
+
+- (BOOL)getIsKeyDown_Escape;
+
+- (BOOL)getIsKeyDown_Tab;
+
 //
--(BOOL)getIsKeyDown_BackSpace;
--(BOOL)getIsKeyDown_0;
--(BOOL)getIsKeyDown_1;
--(BOOL)getIsKeyDown_2;
--(BOOL)getIsKeyDown_3;
--(BOOL)getIsKeyDown_4;
--(BOOL)getIsKeyDown_5;
--(BOOL)getIsKeyDown_6;
--(BOOL)getIsKeyDown_7;
--(BOOL)getIsKeyDown_8;
--(BOOL)getIsKeyDown_9;
--(BOOL)getIsKeyDown_Ten0;
--(BOOL)getIsKeyDown_Ten1;
--(BOOL)getIsKeyDown_Ten2;
--(BOOL)getIsKeyDown_Ten3;
--(BOOL)getIsKeyDown_Ten4;
--(BOOL)getIsKeyDown_Ten5;
--(BOOL)getIsKeyDown_Ten6;
--(BOOL)getIsKeyDown_Ten7;
--(BOOL)getIsKeyDown_Ten8;
--(BOOL)getIsKeyDown_Ten9;
--(BOOL)getIsKeyDown_TenDot;
--(BOOL)getIsKeyDown_TenEnter;
--(BOOL)getIsKeyDown_TenPlus;
--(BOOL)getIsKeyDown_TenMinus;
--(BOOL)getIsKeyDown_TenMul;
--(BOOL)getIsKeyDown_TenDiv;
--(BOOL)getIsKeyDown_NumLock;
--(BOOL)getIsKeyDown_F1;
--(BOOL)getIsKeyDown_F2;
--(BOOL)getIsKeyDown_F3;
--(BOOL)getIsKeyDown_F4;
--(BOOL)getIsKeyDown_F5;
--(BOOL)getIsKeyDown_F6;
--(BOOL)getIsKeyDown_F7;
--(BOOL)getIsKeyDown_F8;
--(BOOL)getIsKeyDown_F9;
--(BOOL)getIsKeyDown_F10;
--(BOOL)getIsKeyDown_F11;
--(BOOL)getIsKeyDown_F12;
--(BOOL)getIsKeyDown_Delete;
--(BOOL)getIsKeyDown_Insert;
--(BOOL)getIsKeyDown_PauseBreak;
--(BOOL)getIsKeyDown_PrtScSysRq;
--(BOOL)getIsKeyDown_HankakuZenkaku;
+- (BOOL)getIsKeyDown_BackSpace;
+
+- (BOOL)getIsKeyDown_0;
+
+- (BOOL)getIsKeyDown_1;
+
+- (BOOL)getIsKeyDown_2;
+
+- (BOOL)getIsKeyDown_3;
+
+- (BOOL)getIsKeyDown_4;
+
+- (BOOL)getIsKeyDown_5;
+
+- (BOOL)getIsKeyDown_6;
+
+- (BOOL)getIsKeyDown_7;
+
+- (BOOL)getIsKeyDown_8;
+
+- (BOOL)getIsKeyDown_9;
+
+- (BOOL)getIsKeyDown_Ten0;
+
+- (BOOL)getIsKeyDown_Ten1;
+
+- (BOOL)getIsKeyDown_Ten2;
+
+- (BOOL)getIsKeyDown_Ten3;
+
+- (BOOL)getIsKeyDown_Ten4;
+
+- (BOOL)getIsKeyDown_Ten5;
+
+- (BOOL)getIsKeyDown_Ten6;
+
+- (BOOL)getIsKeyDown_Ten7;
+
+- (BOOL)getIsKeyDown_Ten8;
+
+- (BOOL)getIsKeyDown_Ten9;
+
+- (BOOL)getIsKeyDown_TenDot;
+
+- (BOOL)getIsKeyDown_TenEnter;
+
+- (BOOL)getIsKeyDown_TenPlus;
+
+- (BOOL)getIsKeyDown_TenMinus;
+
+- (BOOL)getIsKeyDown_TenMul;
+
+- (BOOL)getIsKeyDown_TenDiv;
+
+- (BOOL)getIsKeyDown_NumLock;
+
+- (BOOL)getIsKeyDown_F1;
+
+- (BOOL)getIsKeyDown_F2;
+
+- (BOOL)getIsKeyDown_F3;
+
+- (BOOL)getIsKeyDown_F4;
+
+- (BOOL)getIsKeyDown_F5;
+
+- (BOOL)getIsKeyDown_F6;
+
+- (BOOL)getIsKeyDown_F7;
+
+- (BOOL)getIsKeyDown_F8;
+
+- (BOOL)getIsKeyDown_F9;
+
+- (BOOL)getIsKeyDown_F10;
+
+- (BOOL)getIsKeyDown_F11;
+
+- (BOOL)getIsKeyDown_F12;
+
+- (BOOL)getIsKeyDown_Delete;
+
+- (BOOL)getIsKeyDown_Insert;
+
+- (BOOL)getIsKeyDown_PauseBreak;
+
+- (BOOL)getIsKeyDown_PrtScSysRq;
+
+- (BOOL)getIsKeyDown_HankakuZenkaku;
+
 //
--(BOOL)getIsKeyDown_A;
--(BOOL)getIsKeyDown_B;
--(BOOL)getIsKeyDown_C;
--(BOOL)getIsKeyDown_D;
--(BOOL)getIsKeyDown_E;
--(BOOL)getIsKeyDown_F;
--(BOOL)getIsKeyDown_G;
--(BOOL)getIsKeyDown_H;
--(BOOL)getIsKeyDown_I;
--(BOOL)getIsKeyDown_J;
--(BOOL)getIsKeyDown_K;
--(BOOL)getIsKeyDown_L;
--(BOOL)getIsKeyDown_M;
--(BOOL)getIsKeyDown_N;
--(BOOL)getIsKeyDown_O;
--(BOOL)getIsKeyDown_P;
--(BOOL)getIsKeyDown_Q;
--(BOOL)getIsKeyDown_R;
--(BOOL)getIsKeyDown_S;
--(BOOL)getIsKeyDown_T;
--(BOOL)getIsKeyDown_U;
--(BOOL)getIsKeyDown_V;
--(BOOL)getIsKeyDown_W;
--(BOOL)getIsKeyDown_X;
--(BOOL)getIsKeyDown_Y;
--(BOOL)getIsKeyDown_Z;
+- (BOOL)getIsKeyDown_A;
+
+- (BOOL)getIsKeyDown_B;
+
+- (BOOL)getIsKeyDown_C;
+
+- (BOOL)getIsKeyDown_D;
+
+- (BOOL)getIsKeyDown_E;
+
+- (BOOL)getIsKeyDown_F;
+
+- (BOOL)getIsKeyDown_G;
+
+- (BOOL)getIsKeyDown_H;
+
+- (BOOL)getIsKeyDown_I;
+
+- (BOOL)getIsKeyDown_J;
+
+- (BOOL)getIsKeyDown_K;
+
+- (BOOL)getIsKeyDown_L;
+
+- (BOOL)getIsKeyDown_M;
+
+- (BOOL)getIsKeyDown_N;
+
+- (BOOL)getIsKeyDown_O;
+
+- (BOOL)getIsKeyDown_P;
+
+- (BOOL)getIsKeyDown_Q;
+
+- (BOOL)getIsKeyDown_R;
+
+- (BOOL)getIsKeyDown_S;
+
+- (BOOL)getIsKeyDown_T;
+
+- (BOOL)getIsKeyDown_U;
+
+- (BOOL)getIsKeyDown_V;
+
+- (BOOL)getIsKeyDown_W;
+
+- (BOOL)getIsKeyDown_X;
+
+- (BOOL)getIsKeyDown_Y;
+
+- (BOOL)getIsKeyDown_Z;
 @end
 
 #endif /* MyView_h */

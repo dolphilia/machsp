@@ -23,8 +23,8 @@
 //------------------------------------------------------------
 
 /// Core
-PDAT* HspVarStruct_GetPtr(PVal* pval) {
-    return (PDAT*)(((FlexValue*)(pval->pt)) + pval->offset);
+PDAT *HspVarStruct_GetPtr(PVal *pval) {
+    return (PDAT *) (((FlexValue *) (pval->pt)) + pval->offset);
 }
 
 /*
@@ -53,11 +53,11 @@ PDAT* HspVarStruct_GetPtr(PVal* pval) {
 
 /// PVALポインタの変数メモリを解放する
 ///
-void HspVarStruct_Free(PVal* pval) {
+void HspVarStruct_Free(PVal *pval) {
     if (pval->mode == HSPVAR_MODE_MALLOC) {
         // code_delstruct_all( pval );
         // デストラクタがあれば呼び出す
-        FlexValue* fv = (FlexValue*)pval->pt;
+        FlexValue *fv = (FlexValue *) pval->pt;
         for (int i = 0; i < pval->len[1]; i++) {
             if (fv->type == FLEXVAL_TYPE_ALLOC)
                 sbFree(fv->ptr);
@@ -74,15 +74,15 @@ void HspVarStruct_Free(PVal* pval) {
 /// (pval2がNULLの場合は、新規データ)
 /// (pval2が指定されている場合は、pval2の内容を継承して再確保)
 ///
-void HspVarStruct_Alloc(PVal* pval, const PVal* pval2) {
+void HspVarStruct_Alloc(PVal *pval, const PVal *pval2) {
     if (pval->len[1] < 1)
         pval->len[1] = 1; // 配列を最低1は確保する
     pval->mode = HSPVAR_MODE_MALLOC;
-    
+
     int size = sizeof(FlexValue) * pval->len[1];
-    char* pt = sbAlloc(size);
-    FlexValue* fv = (FlexValue*)pt;
-    
+    char *pt = sbAlloc(size);
+    FlexValue *fv = (FlexValue *) pt;
+
     for (int i = 0; i < pval->len[1]; i++) {
         memset(fv, 0, sizeof(FlexValue));
         fv->type = FLEXVAL_TYPE_NONE;
@@ -107,20 +107,20 @@ void HspVarStruct_Alloc(PVal* pval, const PVal* pval2) {
  */
 
 /// Size
-int HspVarStruct_GetSize(const PDAT* pdat) {
+int HspVarStruct_GetSize(const PDAT *pdat) {
     return sizeof(FlexValue); // 実態のポインタが渡されます
 }
 
 /// Using
-int HspVarStruct_GetUsing(const PDAT* pdat) {
-    FlexValue* fv = (FlexValue*)pdat; // 実態のポインタが渡されます
+int HspVarStruct_GetUsing(const PDAT *pdat) {
+    FlexValue *fv = (FlexValue *) pdat; // 実態のポインタが渡されます
     return fv->type;
 }
 
 /// Set
-void HspVarStruct_Set(PVal* pval, PDAT* pdat, const void* in) {
-    FlexValue* fv = (FlexValue*)in;
-    FlexValue* fv_src = (FlexValue*)pdat;
+void HspVarStruct_Set(PVal *pval, PDAT *pdat, const void *in) {
+    FlexValue *fv = (FlexValue *) in;
+    FlexValue *fv_src = (FlexValue *) pdat;
     fv->type = FLEXVAL_TYPE_CLONE;
     if (fv_src->type == FLEXVAL_TYPE_ALLOC) {
         sbFree(fv_src->ptr);
@@ -137,19 +137,19 @@ void HspVarStruct_Set(PVal* pval, PDAT* pdat, const void* in) {
  }
  */
 
-void* HspVarStruct_GetBlockSize(PVal* pval, PDAT* pdat, int* size) {
-    FlexValue* fv = (FlexValue*)pdat;
+void *HspVarStruct_GetBlockSize(PVal *pval, PDAT *pdat, int *size) {
+    FlexValue *fv = (FlexValue *) pdat;
     *size = fv->size;
-    return (void*)(fv->ptr);
+    return (void *) (fv->ptr);
 }
 
-void HspVarStruct_AllocBlock(PVal* pval, PDAT* pdat, int size) {
+void HspVarStruct_AllocBlock(PVal *pval, PDAT *pdat, int size) {
 }
 
 //------------------------------------------------------------
 
-void HspVarStruct_Init(HspVarProc* p) {
-    
+void HspVarStruct_Init(HspVarProc *p) {
+
     //    p->Set = HspVarStruct_Set;
     //    p->GetPtr = HspVarStruct_GetPtr;
     //    //	p->Cnv = HspVarStruct_Cnv;
@@ -182,10 +182,10 @@ void HspVarStruct_Init(HspVarProc* p) {
     //     p->RrI = HspVarStruct_Invalid;
     //     p->LrI = HspVarStruct_Invalid;
     //     */
-    p->vartype_name = (char*)"struct"; // タイプ名
+    p->vartype_name = (char *) "struct"; // タイプ名
     p->version = 0x001; // 型タイプランタイムバージョン(0x100 = 1.0)
     p->support =
-    HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY | HSPVAR_SUPPORT_VARUSE;
+            HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY | HSPVAR_SUPPORT_VARUSE;
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize = sizeof(FlexValue); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }

@@ -23,8 +23,11 @@
 @interface ViewController (hsp3gr) {
 }
 - (void)hsp3typeinit_cl_extcmd:(HSP3TYPEINFO *)info;
+
 - (void)hsp3typeinit_cl_extfunc:(HSP3TYPEINFO *)info;
+
 - (int)cmdfunc_extcmd:(int)cmd;
+
 - (void *)reffunc_function:(int *)type_res arg:(int)arg;
 @end
 

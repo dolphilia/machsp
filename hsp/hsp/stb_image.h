@@ -390,19 +390,20 @@ publish, and distribute this file as you see fit.
 
 
 #ifndef STBI_NO_STDIO
+
 #include <stdio.h>
+
 #endif // STBI_NO_STDIO
 
 #define STBI_VERSION 1
 
-enum
-{
-   STBI_default = 0, // only used for req_comp
+enum {
+    STBI_default = 0, // only used for req_comp
 
-   STBI_grey       = 1,
-   STBI_grey_alpha = 2,
-   STBI_rgb        = 3,
-   STBI_rgb_alpha  = 4
+    STBI_grey = 1,
+    STBI_grey_alpha = 2,
+    STBI_rgb = 3,
+    STBI_rgb_alpha = 4
 };
 
 typedef unsigned char stbi_uc;
@@ -426,65 +427,64 @@ extern "C" {
 // load image by filename, open file, or memory buffer
 //
 
-typedef struct
-{
-   int      (*read)  (void *user,char *data,int size);   // fill 'data' with 'size' bytes.  return number of bytes actually read
-   void     (*skip)  (void *user,int n);                 // skip the next 'n' bytes, or 'unget' the last -n bytes if negative
-   int      (*eof)   (void *user);                       // returns nonzero if we are at end of file/data
+typedef struct {
+    int (*read)(void *user, char *data, int size);   // fill 'data' with 'size' bytes.  return number of bytes actually read
+    void (*skip)(void *user, int n);                 // skip the next 'n' bytes, or 'unget' the last -n bytes if negative
+    int (*eof)(void *user);                       // returns nonzero if we are at end of file/data
 } stbi_io_callbacks;
 
-STBIDEF stbi_uc *stbi_load               (char              const *filename,           int *x, int *y, int *comp, int req_comp);
-STBIDEF stbi_uc *stbi_load_from_memory   (stbi_uc           const *buffer, int len   , int *x, int *y, int *comp, int req_comp);
-STBIDEF stbi_uc *stbi_load_from_callbacks(stbi_io_callbacks const *clbk  , void *user, int *x, int *y, int *comp, int req_comp);
+STBIDEF stbi_uc *stbi_load(char const *filename, int *x, int *y, int *comp, int req_comp);
+STBIDEF stbi_uc *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp);
+STBIDEF stbi_uc *stbi_load_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp, int req_comp);
 
 #ifndef STBI_NO_STDIO
-STBIDEF stbi_uc *stbi_load_from_file  (FILE *f,                  int *x, int *y, int *comp, int req_comp);
+STBIDEF stbi_uc *stbi_load_from_file(FILE *f, int *x, int *y, int *comp, int req_comp);
 // for stbi_load_from_file, file pointer is left pointing immediately after image
 #endif
 
 #ifndef STBI_NO_LINEAR
-   STBIDEF float *stbi_loadf                 (char const *filename,           int *x, int *y, int *comp, int req_comp);
-   STBIDEF float *stbi_loadf_from_memory     (stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp);
-   STBIDEF float *stbi_loadf_from_callbacks  (stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp, int req_comp);
+STBIDEF float *stbi_loadf(char const *filename, int *x, int *y, int *comp, int req_comp);
+STBIDEF float *stbi_loadf_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp);
+STBIDEF float *stbi_loadf_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp, int req_comp);
 
-   #ifndef STBI_NO_STDIO
-   STBIDEF float *stbi_loadf_from_file  (FILE *f,                int *x, int *y, int *comp, int req_comp);
-   #endif
+#ifndef STBI_NO_STDIO
+STBIDEF float *stbi_loadf_from_file(FILE *f, int *x, int *y, int *comp, int req_comp);
+#endif
 #endif
 
 #ifndef STBI_NO_HDR
-   STBIDEF void   stbi_hdr_to_ldr_gamma(float gamma);
-   STBIDEF void   stbi_hdr_to_ldr_scale(float scale);
+STBIDEF void stbi_hdr_to_ldr_gamma(float gamma);
+STBIDEF void stbi_hdr_to_ldr_scale(float scale);
 #endif // STBI_NO_HDR
 
 #ifndef STBI_NO_LINEAR
-   STBIDEF void   stbi_ldr_to_hdr_gamma(float gamma);
-   STBIDEF void   stbi_ldr_to_hdr_scale(float scale);
+STBIDEF void stbi_ldr_to_hdr_gamma(float gamma);
+STBIDEF void stbi_ldr_to_hdr_scale(float scale);
 #endif // STBI_NO_LINEAR
 
 // stbi_is_hdr is always defined, but always returns false if STBI_NO_HDR
-STBIDEF int    stbi_is_hdr_from_callbacks(stbi_io_callbacks const *clbk, void *user);
-STBIDEF int    stbi_is_hdr_from_memory(stbi_uc const *buffer, int len);
+STBIDEF int stbi_is_hdr_from_callbacks(stbi_io_callbacks const *clbk, void *user);
+STBIDEF int stbi_is_hdr_from_memory(stbi_uc const *buffer, int len);
 #ifndef STBI_NO_STDIO
-STBIDEF int      stbi_is_hdr          (char const *filename);
-STBIDEF int      stbi_is_hdr_from_file(FILE *f);
+STBIDEF int stbi_is_hdr(char const *filename);
+STBIDEF int stbi_is_hdr_from_file(FILE *f);
 #endif // STBI_NO_STDIO
 
 
 // get a VERY brief reason for failure
 // NOT THREADSAFE
-STBIDEF const char *stbi_failure_reason  (void);
+STBIDEF const char *stbi_failure_reason(void);
 
 // free the loaded image -- this is just free()
-STBIDEF void     stbi_image_free      (void *retval_from_stbi_load);
+STBIDEF void stbi_image_free(void *retval_from_stbi_load);
 
 // get image dimensions & components without fully decoding
-STBIDEF int      stbi_info_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp);
-STBIDEF int      stbi_info_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp);
+STBIDEF int stbi_info_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp);
+STBIDEF int stbi_info_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp);
 
 #ifndef STBI_NO_STDIO
-STBIDEF int      stbi_info            (char const *filename,     int *x, int *y, int *comp);
-STBIDEF int      stbi_info_from_file  (FILE *f,                  int *x, int *y, int *comp);
+STBIDEF int stbi_info(char const *filename, int *x, int *y, int *comp);
+STBIDEF int stbi_info_from_file(FILE *f, int *x, int *y, int *comp);
 
 #endif
 
@@ -507,10 +507,10 @@ STBIDEF void stbi_set_flip_vertically_on_load(int flag_true_if_should_flip);
 STBIDEF char *stbi_zlib_decode_malloc_guesssize(const char *buffer, int len, int initial_size, int *outlen);
 STBIDEF char *stbi_zlib_decode_malloc_guesssize_headerflag(const char *buffer, int len, int initial_size, int *outlen, int parse_header);
 STBIDEF char *stbi_zlib_decode_malloc(const char *buffer, int len, int *outlen);
-STBIDEF int   stbi_zlib_decode_buffer(char *obuffer, int olen, const char *ibuffer, int ilen);
+STBIDEF int stbi_zlib_decode_buffer(char *obuffer, int olen, const char *ibuffer, int ilen);
 
 STBIDEF char *stbi_zlib_decode_noheader_malloc(const char *buffer, int len, int *outlen);
-STBIDEF int   stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const char *ibuffer, int ilen);
+STBIDEF int stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const char *ibuffer, int ilen);
 
 
 #ifdef __cplusplus
@@ -528,33 +528,33 @@ STBIDEF int   stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const ch
   || defined(STBI_ONLY_TGA) || defined(STBI_ONLY_GIF) || defined(STBI_ONLY_PSD) \
   || defined(STBI_ONLY_HDR) || defined(STBI_ONLY_PIC) || defined(STBI_ONLY_PNM) \
   || defined(STBI_ONLY_ZLIB)
-   #ifndef STBI_ONLY_JPEG
-   #define STBI_NO_JPEG
-   #endif
-   #ifndef STBI_ONLY_PNG
-   #define STBI_NO_PNG
-   #endif
-   #ifndef STBI_ONLY_BMP
-   #define STBI_NO_BMP
-   #endif
-   #ifndef STBI_ONLY_PSD
-   #define STBI_NO_PSD
-   #endif
-   #ifndef STBI_ONLY_TGA
-   #define STBI_NO_TGA
-   #endif
-   #ifndef STBI_ONLY_GIF
-   #define STBI_NO_GIF
-   #endif
-   #ifndef STBI_ONLY_HDR
-   #define STBI_NO_HDR
-   #endif
-   #ifndef STBI_ONLY_PIC
-   #define STBI_NO_PIC
-   #endif
-   #ifndef STBI_ONLY_PNM
-   #define STBI_NO_PNM
-   #endif
+#ifndef STBI_ONLY_JPEG
+#define STBI_NO_JPEG
+#endif
+#ifndef STBI_ONLY_PNG
+#define STBI_NO_PNG
+#endif
+#ifndef STBI_ONLY_BMP
+#define STBI_NO_BMP
+#endif
+#ifndef STBI_ONLY_PSD
+#define STBI_NO_PSD
+#endif
+#ifndef STBI_ONLY_TGA
+#define STBI_NO_TGA
+#endif
+#ifndef STBI_ONLY_GIF
+#define STBI_NO_GIF
+#endif
+#ifndef STBI_ONLY_HDR
+#define STBI_NO_HDR
+#endif
+#ifndef STBI_ONLY_PIC
+#define STBI_NO_PIC
+#endif
+#ifndef STBI_ONLY_PNM
+#define STBI_NO_PNM
+#endif
 #endif
 
 #if defined(STBI_NO_PNG) && !defined(STBI_SUPPORT_ZLIB) && !defined(STBI_NO_ZLIB)
@@ -582,13 +582,13 @@ STBIDEF int   stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const ch
 
 
 #ifndef _MSC_VER
-   #ifdef __cplusplus
-   #define stbi_inline inline
-   #else
-   #define stbi_inline
-   #endif
+#ifdef __cplusplus
+#define stbi_inline inline
 #else
-   #define stbi_inline __forceinline
+#define stbi_inline
+#endif
+#else
+#define stbi_inline __forceinline
 #endif
 
 
@@ -619,9 +619,9 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 #endif
 
 #ifdef STBI_HAS_LROTL
-   #define stbi_lrot(x,y)  _lrotl(x,y)
+#define stbi_lrot(x,y)  _lrotl(x,y)
 #else
-   #define stbi_lrot(x,y)  (((x) << (y)) | ((x) >> (32 - (y))))
+#define stbi_lrot(x,y)  (((x) << (y)) | ((x) >> (32 - (y))))
 #endif
 
 #if defined(STBI_MALLOC) && defined(STBI_FREE) && (defined(STBI_REALLOC) || defined(STBI_REALLOC_SIZED))
@@ -905,11 +905,11 @@ static void *stbi__malloc(size_t size)
 // stbi__errpuc - error returning pointer to unsigned char
 
 #ifdef STBI_NO_FAILURE_STRINGS
-   #define stbi__err(x,y)  0
+#define stbi__err(x,y)  0
 #elif defined(STBI_FAILURE_USERMSG)
-   #define stbi__err(x,y)  stbi__err(y)
+#define stbi__err(x,y)  stbi__err(y)
 #else
-   #define stbi__err(x,y)  stbi__err(x)
+#define stbi__err(x,y)  stbi__err(x)
 #endif
 
 #define stbi__errpf(x,y)   ((float *)(size_t) (stbi__err(x,y)?NULL:NULL))
@@ -937,40 +937,40 @@ STBIDEF void stbi_set_flip_vertically_on_load(int flag_true_if_should_flip)
 
 static unsigned char *stbi__load_main(stbi__context *s, int *x, int *y, int *comp, int req_comp)
 {
-   #ifndef STBI_NO_JPEG
+#ifndef STBI_NO_JPEG
    if (stbi__jpeg_test(s)) return stbi__jpeg_load(s,x,y,comp,req_comp);
-   #endif
-   #ifndef STBI_NO_PNG
+#endif
+#ifndef STBI_NO_PNG
    if (stbi__png_test(s))  return stbi__png_load(s,x,y,comp,req_comp);
-   #endif
-   #ifndef STBI_NO_BMP
+#endif
+#ifndef STBI_NO_BMP
    if (stbi__bmp_test(s))  return stbi__bmp_load(s,x,y,comp,req_comp);
-   #endif
-   #ifndef STBI_NO_GIF
+#endif
+#ifndef STBI_NO_GIF
    if (stbi__gif_test(s))  return stbi__gif_load(s,x,y,comp,req_comp);
-   #endif
-   #ifndef STBI_NO_PSD
+#endif
+#ifndef STBI_NO_PSD
    if (stbi__psd_test(s))  return stbi__psd_load(s,x,y,comp,req_comp);
-   #endif
-   #ifndef STBI_NO_PIC
+#endif
+#ifndef STBI_NO_PIC
    if (stbi__pic_test(s))  return stbi__pic_load(s,x,y,comp,req_comp);
-   #endif
-   #ifndef STBI_NO_PNM
+#endif
+#ifndef STBI_NO_PNM
    if (stbi__pnm_test(s))  return stbi__pnm_load(s,x,y,comp,req_comp);
-   #endif
+#endif
 
-   #ifndef STBI_NO_HDR
+#ifndef STBI_NO_HDR
    if (stbi__hdr_test(s)) {
       float *hdr = stbi__hdr_load(s, x,y,comp,req_comp);
       return stbi__hdr_to_ldr(hdr, *x, *y, req_comp ? req_comp : *comp);
    }
-   #endif
+#endif
 
-   #ifndef STBI_NO_TGA
+#ifndef STBI_NO_TGA
    // test tga last because it's a crappy test!
    if (stbi__tga_test(s))
       return stbi__tga_load(s,x,y,comp,req_comp);
-   #endif
+#endif
 
    return stbi__errpuc("unknown image type", "Image not of any known type, or corrupt");
 }
@@ -1080,14 +1080,14 @@ STBIDEF stbi_uc *stbi_load_from_callbacks(stbi_io_callbacks const *clbk, void *u
 static float *stbi__loadf_main(stbi__context *s, int *x, int *y, int *comp, int req_comp)
 {
    unsigned char *data;
-   #ifndef STBI_NO_HDR
+#ifndef STBI_NO_HDR
    if (stbi__hdr_test(s)) {
       float *hdr_data = stbi__hdr_load(s,x,y,comp,req_comp);
       if (hdr_data)
          stbi__float_postprocess(hdr_data,x,y,comp,req_comp);
       return hdr_data;
    }
-   #endif
+#endif
    data = stbi__load_flip(s, x, y, comp, req_comp);
    if (data)
       return stbi__ldr_to_hdr(data, *x, *y, req_comp ? req_comp : *comp);
@@ -1135,15 +1135,15 @@ STBIDEF float *stbi_loadf_from_file(FILE *f, int *x, int *y, int *comp, int req_
 
 STBIDEF int stbi_is_hdr_from_memory(stbi_uc const *buffer, int len)
 {
-   #ifndef STBI_NO_HDR
+#ifndef STBI_NO_HDR
    stbi__context s;
    stbi__start_mem(&s,buffer,len);
    return stbi__hdr_test(&s);
-   #else
+#else
    STBI_NOTUSED(buffer);
    STBI_NOTUSED(len);
    return 0;
-   #endif
+#endif
 }
 
 #ifndef STBI_NO_STDIO
@@ -1160,28 +1160,28 @@ STBIDEF int      stbi_is_hdr          (char const *filename)
 
 STBIDEF int      stbi_is_hdr_from_file(FILE *f)
 {
-   #ifndef STBI_NO_HDR
+#ifndef STBI_NO_HDR
    stbi__context s;
    stbi__start_file(&s,f);
    return stbi__hdr_test(&s);
-   #else
+#else
    STBI_NOTUSED(f);
    return 0;
-   #endif
+#endif
 }
 #endif // !STBI_NO_STDIO
 
 STBIDEF int      stbi_is_hdr_from_callbacks(stbi_io_callbacks const *clbk, void *user)
 {
-   #ifndef STBI_NO_HDR
+#ifndef STBI_NO_HDR
    stbi__context s;
    stbi__start_callbacks(&s, (stbi_io_callbacks *) clbk, user);
    return stbi__hdr_test(&s);
-   #else
+#else
    STBI_NOTUSED(clbk);
    STBI_NOTUSED(user);
    return 0;
-   #endif
+#endif
 }
 
 #ifndef STBI_NO_LINEAR
@@ -1356,8 +1356,8 @@ static unsigned char *stbi__convert_format(unsigned char *data, int img_n, int r
       unsigned char *src  = data + j * x * img_n   ;
       unsigned char *dest = good + j * x * req_comp;
 
-      #define COMBO(a,b)  ((a)*8+(b))
-      #define CASE(a,b)   case COMBO(a,b): for(i=x-1; i >= 0; --i, src += a, dest += b)
+#define COMBO(a,b)  ((a)*8+(b))
+#define CASE(a,b)   case COMBO(a,b): for(i=x-1; i >= 0; --i, src += a, dest += b)
       // convert source image with img_n components to one with req_comp components;
       // avoid switch per pixel, so use switch per scanline and massive macros
       switch (COMBO(img_n, req_comp)) {
@@ -1375,7 +1375,7 @@ static unsigned char *stbi__convert_format(unsigned char *data, int img_n, int r
          CASE(4,3) dest[0]=src[0],dest[1]=src[1],dest[2]=src[2]; break;
          default: STBI_ASSERT(0);
       }
-      #undef CASE
+#undef CASE
    }
 
    STBI_FREE(data);
@@ -2036,11 +2036,11 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
    __m128i tmp;
 
    // dot product constant: even elems=x, odd elems=y
-   #define dct_const(x,y)  _mm_setr_epi16((x),(y),(x),(y),(x),(y),(x),(y))
+#define dct_const(x,y)  _mm_setr_epi16((x),(y),(x),(y),(x),(y),(x),(y))
 
    // out(0) = c0[even]*x + c0[odd]*y   (c0, x, y 16-bit, out 32-bit)
    // out(1) = c1[even]*x + c1[odd]*y
-   #define dct_rot(out0,out1, x,y,c0,c1) \
+#define dct_rot(out0,out1, x,y,c0,c1) \
       __m128i c0##lo = _mm_unpacklo_epi16((x),(y)); \
       __m128i c0##hi = _mm_unpackhi_epi16((x),(y)); \
       __m128i out0##_l = _mm_madd_epi16(c0##lo, c0); \
@@ -2049,22 +2049,22 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
       __m128i out1##_h = _mm_madd_epi16(c0##hi, c1)
 
    // out = in << 12  (in 16-bit, out 32-bit)
-   #define dct_widen(out, in) \
+#define dct_widen(out, in) \
       __m128i out##_l = _mm_srai_epi32(_mm_unpacklo_epi16(_mm_setzero_si128(), (in)), 4); \
       __m128i out##_h = _mm_srai_epi32(_mm_unpackhi_epi16(_mm_setzero_si128(), (in)), 4)
 
    // wide add
-   #define dct_wadd(out, a, b) \
+#define dct_wadd(out, a, b) \
       __m128i out##_l = _mm_add_epi32(a##_l, b##_l); \
       __m128i out##_h = _mm_add_epi32(a##_h, b##_h)
 
    // wide sub
-   #define dct_wsub(out, a, b) \
+#define dct_wsub(out, a, b) \
       __m128i out##_l = _mm_sub_epi32(a##_l, b##_l); \
       __m128i out##_h = _mm_sub_epi32(a##_h, b##_h)
 
    // butterfly a/b, add bias, then shift by "s" and pack
-   #define dct_bfly32o(out0, out1, a,b,bias,s) \
+#define dct_bfly32o(out0, out1, a,b,bias,s) \
       { \
          __m128i abiased_l = _mm_add_epi32(a##_l, bias); \
          __m128i abiased_h = _mm_add_epi32(a##_h, bias); \
@@ -2075,18 +2075,18 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
       }
 
    // 8-bit interleave step (for transposes)
-   #define dct_interleave8(a, b) \
+#define dct_interleave8(a, b) \
       tmp = a; \
       a = _mm_unpacklo_epi8(a, b); \
       b = _mm_unpackhi_epi8(tmp, b)
 
    // 16-bit interleave step (for transposes)
-   #define dct_interleave16(a, b) \
+#define dct_interleave16(a, b) \
       tmp = a; \
       a = _mm_unpacklo_epi16(a, b); \
       b = _mm_unpackhi_epi16(tmp, b)
 
-   #define dct_pass(bias,shift) \
+#define dct_pass(bias,shift) \
       { \
          /* even part */ \
          dct_rot(t2e,t3e, row2,row6, rot0_0,rot0_1); \
@@ -3269,18 +3269,18 @@ static void stbi__setup_jpeg(stbi__jpeg *j)
 #ifdef STBI_SSE2
    if (stbi__sse2_available()) {
       j->idct_block_kernel = stbi__idct_simd;
-      #ifndef STBI_JPEG_OLD
+#ifndef STBI_JPEG_OLD
       j->YCbCr_to_RGB_kernel = stbi__YCbCr_to_RGB_simd;
-      #endif
+#endif
       j->resample_row_hv_2_kernel = stbi__resample_row_hv_2_simd;
    }
 #endif
 
 #ifdef STBI_NEON
    j->idct_block_kernel = stbi__idct_simd;
-   #ifndef STBI_JPEG_OLD
+#ifndef STBI_JPEG_OLD
    j->YCbCr_to_RGB_kernel = stbi__YCbCr_to_RGB_simd;
-   #endif
+#endif
    j->resample_row_hv_2_kernel = stbi__resample_row_hv_2_simd;
 #endif
 }
@@ -4081,7 +4081,7 @@ static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 r
       // this is a little gross, so that we don't switch per-pixel or per-component
       if (depth < 8 || img_n == out_n) {
          int nk = (width - 1)*filter_bytes;
-         #define CASE(f) \
+#define CASE(f) \
              case f:     \
                 for (k=0; k < nk; ++k)
          switch (filter) {
@@ -4094,11 +4094,11 @@ static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 r
             CASE(STBI__F_avg_first)    cur[k] = STBI__BYTECAST(raw[k] + (cur[k-filter_bytes] >> 1)); break;
             CASE(STBI__F_paeth_first)  cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k-filter_bytes],0,0)); break;
          }
-         #undef CASE
+#undef CASE
          raw += nk;
       } else {
          STBI_ASSERT(img_n+1 == out_n);
-         #define CASE(f) \
+#define CASE(f) \
              case f:     \
                 for (i=x-1; i >= 1; --i, cur[filter_bytes]=255,raw+=filter_bytes,cur+=output_bytes,prior+=output_bytes) \
                    for (k=0; k < filter_bytes; ++k)
@@ -4111,7 +4111,7 @@ static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 r
             CASE(STBI__F_avg_first)    cur[k] = STBI__BYTECAST(raw[k] + (cur[k- output_bytes] >> 1)); break;
             CASE(STBI__F_paeth_first)  cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k- output_bytes],0,0)); break;
          }
-         #undef CASE
+#undef CASE
 
          // the loop above sets the high byte of the pixels' alpha, but for
          // 16 bit png files we also need the low byte set. we'll do that here.
@@ -4451,7 +4451,7 @@ static int stbi__parse_png_file(stbi__png *z, int scan, int req_comp)
             s->img_y = stbi__get32be(s); if (s->img_y > (1 << 24)) return stbi__err("too large","Very large image (corrupt?)");
             z->depth = stbi__get8(s);  if (z->depth != 1 && z->depth != 2 && z->depth != 4 && z->depth != 8 && z->depth != 16)  return stbi__err("1/2/4/8/16-bit only","PNG not supported: 1/2/4/8/16-bit only");
             color = stbi__get8(s);  if (color > 6)         return stbi__err("bad ctype","Corrupt PNG");
-			if (color == 3 && z->depth == 16)                  return stbi__err("bad ctype","Corrupt PNG");
+            if (color == 3 && z->depth == 16)                  return stbi__err("bad ctype","Corrupt PNG");
             if (color == 3) pal_img_n = 3; else if (color & 1) return stbi__err("bad ctype","Corrupt PNG");
             comp  = stbi__get8(s);  if (comp) return stbi__err("bad comp method","Corrupt PNG");
             filter= stbi__get8(s);  if (filter) return stbi__err("bad filter method","Corrupt PNG");
@@ -4569,14 +4569,14 @@ static int stbi__parse_png_file(stbi__png *z, int scan, int req_comp)
             // if critical, fail
             if (first) return stbi__err("first not IHDR", "Corrupt PNG");
             if ((c.type & (1 << 29)) == 0) {
-               #ifndef STBI_NO_FAILURE_STRINGS
+#ifndef STBI_NO_FAILURE_STRINGS
                // not threadsafe
                static char invalid_chunk[] = "XXXX PNG chunk not known";
                invalid_chunk[0] = STBI__BYTECAST(c.type >> 24);
                invalid_chunk[1] = STBI__BYTECAST(c.type >> 16);
                invalid_chunk[2] = STBI__BYTECAST(c.type >>  8);
                invalid_chunk[3] = STBI__BYTECAST(c.type >>  0);
-               #endif
+#endif
                return stbi__err(invalid_chunk, "PNG not supported: unknown PNG chunk type");
             }
             stbi__skip(s, c.length);
@@ -4732,7 +4732,7 @@ static void *stbi__bmp_parse_header(stbi__context *s, stbi__bmp_data *info)
    info->offset = stbi__get32le(s);
    info->hsz = hsz = stbi__get32le(s);
    info->mr = info->mg = info->mb = info->ma = 0;
-   
+
    if (hsz != 12 && hsz != 40 && hsz != 56 && hsz != 108 && hsz != 124) return stbi__errpuc("unknown BMP", "BMP type not supported: unknown");
    if (hsz == 12) {
       s->img_x = stbi__get16le(s);
@@ -4816,7 +4816,7 @@ static stbi_uc *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int 
    int flip_vertically, pad, target;
    stbi__bmp_data info;
 
-   info.all_a = 255;   
+   info.all_a = 255;
    if (stbi__bmp_parse_header(s, &info) == NULL)
       return NULL; // error code already set
 
@@ -4931,7 +4931,7 @@ static stbi_uc *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int 
          stbi__skip(s, pad);
       }
    }
-   
+
    // if alpha channel is all 0s, replace with all 255s
    if (target == 4 && all_a == 0)
       for (i=4*s->img_x*s->img_y-1; i >= 0; i -= 4)
@@ -6293,7 +6293,7 @@ static int stbi__bmp_info(stbi__context *s, int *x, int *y, int *comp)
    void *p;
    stbi__bmp_data info;
 
-   info.all_a = 255;   
+   info.all_a = 255;
    p = stbi__bmp_parse_header(s, &info);
    stbi__rewind( s );
    if (p == NULL)
@@ -6512,43 +6512,43 @@ static int      stbi__pnm_info(stbi__context *s, int *x, int *y, int *comp)
 
 static int stbi__info_main(stbi__context *s, int *x, int *y, int *comp)
 {
-   #ifndef STBI_NO_JPEG
+#ifndef STBI_NO_JPEG
    if (stbi__jpeg_info(s, x, y, comp)) return 1;
-   #endif
+#endif
 
-   #ifndef STBI_NO_PNG
+#ifndef STBI_NO_PNG
    if (stbi__png_info(s, x, y, comp))  return 1;
-   #endif
+#endif
 
-   #ifndef STBI_NO_GIF
+#ifndef STBI_NO_GIF
    if (stbi__gif_info(s, x, y, comp))  return 1;
-   #endif
+#endif
 
-   #ifndef STBI_NO_BMP
+#ifndef STBI_NO_BMP
    if (stbi__bmp_info(s, x, y, comp))  return 1;
-   #endif
+#endif
 
-   #ifndef STBI_NO_PSD
+#ifndef STBI_NO_PSD
    if (stbi__psd_info(s, x, y, comp))  return 1;
-   #endif
+#endif
 
-   #ifndef STBI_NO_PIC
+#ifndef STBI_NO_PIC
    if (stbi__pic_info(s, x, y, comp))  return 1;
-   #endif
+#endif
 
-   #ifndef STBI_NO_PNM
+#ifndef STBI_NO_PNM
    if (stbi__pnm_info(s, x, y, comp))  return 1;
-   #endif
+#endif
 
-   #ifndef STBI_NO_HDR
+#ifndef STBI_NO_HDR
    if (stbi__hdr_info(s, x, y, comp))  return 1;
-   #endif
+#endif
 
    // test tga last because it's a crappy test!
-   #ifndef STBI_NO_TGA
+#ifndef STBI_NO_TGA
    if (stbi__tga_info(s, x, y, comp))
        return 1;
-   #endif
+#endif
    return stbi__err("unknown image type", "Image not of any known type, or corrupt");
 }
 

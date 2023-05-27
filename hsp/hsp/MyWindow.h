@@ -13,8 +13,8 @@
 #import "MyView.h"
 #include "debug_message.h"
 
-@interface MyWindow : NSWindow <NSWindowDelegate>{
-    AppDelegate* g; //"g"lobal
+@interface MyWindow : NSWindow <NSWindowDelegate> {
+    AppDelegate *g; //"g"lobal
 }
 @end
 

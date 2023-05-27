@@ -13,7 +13,7 @@
 #include "debug_message.h"
 
 @interface SineWaveData : NSObject {
-    
+
 }
 @end
 

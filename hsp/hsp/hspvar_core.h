@@ -23,24 +23,39 @@ ViewController (hspvar_core) {
 
 // コアシステムメイン関数
 void HspVarCoreInit(void);
+
 void HspVarCoreBye(void);
+
 void HspVarCoreResetVartype(int expand);
+
 int HspVarCoreAddType();
-void HspVarCoreRegisterType(int flag, char* vartype_name);
-HspVarProc* HspVarCoreSeekProc(const char* name);
+
+void HspVarCoreRegisterType(int flag, char *vartype_name);
+
+HspVarProc *HspVarCoreSeekProc(const char *name);
 
 // 低レベルサポート関数
-void HspVarCoreDup(PVal* pval, PVal* arg, APTR aptr);
-void HspVarCoreDupPtr(PVal* pval, int flag, void* ptr, int size);
-void HspVarCoreClear(PVal* pval, int flag);
-void HspVarCoreClearTemp(PVal* pval, int flag);
-void HspVarCoreDim(PVal* pval, int flag, int len1, int len2, int len3, int len4);
-void HspVarCoreDimFlex(PVal* pval, int flag, int len0, int len1, int len2, int len3, int len4);
-void HspVarCoreReDim(PVal* pval, int lenid, int len);
-void* HspVarCoreCnvPtr(PVal* pval, int flag);
-PDAT* HspVarCorePtrAPTR(PVal* pv, APTR ofs);
-void HspVarCoreArray(PVal* pval, int offset);
-PDAT* HspVarCorePtrAPTR(PVal* pv, APTR ofs);
+void HspVarCoreDup(PVal *pval, PVal *arg, APTR aptr);
+
+void HspVarCoreDupPtr(PVal *pval, int flag, void *ptr, int size);
+
+void HspVarCoreClear(PVal *pval, int flag);
+
+void HspVarCoreClearTemp(PVal *pval, int flag);
+
+void HspVarCoreDim(PVal *pval, int flag, int len1, int len2, int len3, int len4);
+
+void HspVarCoreDimFlex(PVal *pval, int flag, int len0, int len1, int len2, int len3, int len4);
+
+void HspVarCoreReDim(PVal *pval, int lenid, int len);
+
+void *HspVarCoreCnvPtr(PVal *pval, int flag);
+
+PDAT *HspVarCorePtrAPTR(PVal *pv, APTR ofs);
+
+void HspVarCoreArray(PVal *pval, int offset);
+
+PDAT *HspVarCorePtrAPTR(PVal *pv, APTR ofs);
 
 // PVal用マクロ
 #define HspVarCoreGetProc(flag) (&hspvarproc[flag])
@@ -65,4 +80,5 @@ PDAT* HspVarCorePtrAPTR(PVal* pv, APTR ofs);
 //#define HspVarCoreGetUsing( pv,in1 ) hspvarproc[(pv)->flag].GetUsing( in1 )
 
 @end
+
 #endif /* hspvar_core_h */

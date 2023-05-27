@@ -15,7 +15,7 @@ AppDelegate ()
 
 @implementation AppDelegate
 
-- (void)applicationDidFinishLaunching:(NSNotification*)aNotification {
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
     //メニューバーを初期化する
     id menubar = [NSMenu new];
@@ -28,15 +28,15 @@ AppDelegate ()
     [NSApp setMainMenu:menubar];
 }
 
-- (void)applicationWillTerminate:(NSNotification*)aNotification {
+- (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
 }
 
-- (void)windowWillClose:(NSNotification*)aNotification {
+- (void)windowWillClose:(NSNotification *)aNotification {
     [NSApp terminate:self];
 }
 
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)theApplication {
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication {
     return YES;
 }
 

@@ -30,7 +30,7 @@
 - (int)hsp3cl_exec {
     int runmode;
     int endcode;
-rerun:
+    rerun:
     //		実行の開始
     //
     runmode = [self code_execcmd];
@@ -82,7 +82,7 @@ rerun:
     abc_hspctx.mem_mcs = NULL;
     hsp3cl_axfile = NULL;
     hsp3cl_axname = NULL;
-    
+
 #ifdef FLAG_HSPDEBUG
     if (*startfile == 0) {
         printf("OpenHSP CL ver%s / onion software 1997-2009\n", HSP_VERSION);
@@ -94,7 +94,7 @@ rerun:
         [self SetFileName:startfile];
     }
 #endif
-    
+
     // 実行ファイルかデバッグ中かを調べる
     //
     mode = 0;
@@ -106,20 +106,20 @@ rerun:
     }
     if (orgexe == 0) {
         mode = atoi(optmes + 9) + 0x10000;
-        hsp_wd = (*(short *)(optmes + 26));
-        _hsp_sum = *(unsigned short *)(optmes + 29);
-        _hsp_dec = *(int *)(optmes + 32);
+        hsp_wd = (*(short *) (optmes + 26));
+        _hsp_sum = *(unsigned short *) (optmes + 29);
+        _hsp_dec = *(int *) (optmes + 32);
         [self SetPackValue:_hsp_sum dec:_hsp_dec];
     }
     if ([self Reset:mode]) {
-        [self hsp3win_dialog:(char *)"Startup failed."];
+        [self hsp3win_dialog:(char *) "Startup failed."];
         return -1;
     }
 
     vc_hspctx = &self->abc_hspctx;
 
     //		コマンドライン関連
-    ss = (char *)"";  // コマンドラインパラメーターを入れる
+    ss = (char *) "";  // コマンドラインパラメーターを入れる
     sbStrCopy(&vc_hspctx->cmdline, ss);  // コマンドラインパラメーターを保存
 
     //		Register Type
@@ -151,7 +151,7 @@ rerun:
     while (1) {
         switch (_hspctx->runmode) {
             case RUNMODE_STOP: { // stop命令
-                [self hsp3win_dialog:(char *)"[STOP] Press any key..."];
+                [self hsp3win_dialog:(char *) "[STOP] Press any key..."];
                 getchar();
                 @throw [self make_nsexception:HSPERR_NONE];
             }
@@ -162,22 +162,22 @@ rerun:
                 _hspctx->runmode = RUNMODE_RUN;
                 // hspctx->runmode = code_exec_wait( tick );
                 break;
-                
+
             case RUNMODE_AWAIT: // await命令による時間待ち
                 //		(実際はcode_exec_awaitにtick countを渡す)
                 _hspctx->runmode = RUNMODE_RUN;
                 // hspctx->runmode = code_exec_await( tick );
                 break;
             case RUNMODE_END: { // end命令
-                
+
 #if 0
                 hsp3win_dialog( "[END] Press any key..." );
                 getchar();
 #endif
-                 @throw [self make_nsexception:HSPERR_NONE];
+                @throw [self make_nsexception:HSPERR_NONE];
             }
             case RUNMODE_RETURN: {
-                 @throw [self make_nsexception:HSPERR_RETURN_WITHOUT_GOSUB];
+                @throw [self make_nsexception:HSPERR_RETURN_WITHOUT_GOSUB];
             }
             case RUNMODE_ASSERT: // assertで中断
                 _hspctx->runmode = RUNMODE_STOP;
@@ -197,16 +197,16 @@ rerun:
     HSPERROR err = [self code_geterror];
     char *msg = hspd_geterror(err);
     int ln = [self code_getdebug_line];
-    
+
     if (ln < 0) {
-        sprintf(errmsg, "#Error %d\n-->%s\n", (int)err, msg);
+        sprintf(errmsg, "#Error %d\n-->%s\n", (int) err, msg);
         fname = NULL;
     } else {
-        sprintf(errmsg, "#Error %d in line %d (%s)\n-->%s\n", (int)err, ln, fname, msg);
+        sprintf(errmsg, "#Error %d in line %d (%s)\n-->%s\n", (int) err, ln, fname, msg);
     }
-    
+
     [self hsp3win_dialog:errmsg];
-    [self hsp3win_dialog:(char *)"[ERROR] Press any key..."];
+    [self hsp3win_dialog:(char *) "[ERROR] Press any key..."];
     getchar();
 }
 
@@ -242,7 +242,7 @@ rerun:
             } else if (strcmp(vartype_name, "struct") == 0) {  // structのFree
                 HspVarLabel_Free(&abc_hspctx.mem_var[i]);
             } else {
-                 @throw [self make_nsexception:HSPERR_SYNTAX];
+                @throw [self make_nsexception:HSPERR_SYNTAX];
             }
         }
         delete[] abc_hspctx.mem_var;
@@ -267,24 +267,24 @@ rerun:
     char fname[512];
     HSPHED *hsphed;
     char startax[] = {'S' - 40, 'T' - 40, 'A' - 40, 'R' - 40, 'T' - 40, '.' - 40, 'A' - 40, 'X' - 40, 0};
-    
+
     if (abc_hspctx.mem_mcs != NULL) {
         [self Dispose];
     }
-    
+
     // load HSP execute object
     //
     hsp3cl_axtype = HSP3_AXTYPE_NONE;
     if (mode) {  // "start.ax"を呼び出す
-        i = [self dpm_ini:(char *)"" dpmofs:mode chksum:hsp3cl_hsp_sum deckey:hsp3cl_hsp_dec];  // customized EXE mode
+        i = [self dpm_ini:(char *) "" dpmofs:mode chksum:hsp3cl_hsp_sum deckey:hsp3cl_hsp_dec];  // customized EXE mode
     } else {
-        [self dpm_ini:(char *)"data.dpm" dpmofs:0 chksum:-1 deckey:-1];  // original EXE mode
+        [self dpm_ini:(char *) "data.dpm" dpmofs:0 chksum:-1 deckey:-1];  // original EXE mode
     }
-    
+
     //		start.ax読み込み
     if (hsp3cl_axname == NULL) {
-        unsigned char *p = (unsigned char *)fname;
-        unsigned char *s = (unsigned char *)startax;
+        unsigned char *p = (unsigned char *) fname;
+        unsigned char *s = (unsigned char *) startax;
         unsigned char ap;
         int sum = 0;
         while (1) {
@@ -293,7 +293,7 @@ rerun:
                 break;
             ap += 40;
             *p++ = ap;
-            sum = sum * 17 + (int)ap;
+            sum = sum * 17 + (int) ap;
         }
         *p = 0;
         if (sum != 0x6cced385) {
@@ -307,38 +307,38 @@ rerun:
     } else {
         strcpy(fname, hsp3cl_axname);
     }
-    
+
     ptr = [self dpm_readalloc:fname];
     if (ptr == NULL) {
         return -1;
     }
-    
+
     hsp3cl_axfile = ptr;
-    
+
     //		memory location set
     //
-    hsphed = (HSPHED *)ptr;
-    
+    hsphed = (HSPHED *) ptr;
+
     if ((hsphed->h1 != 'H') || (hsphed->h2 != 'S') || (hsphed->h3 != 'P') ||
-        (hsphed->h4 != '3')) {
+            (hsphed->h4 != '3')) {
         mem_bye(hsp3cl_axfile);
-        
+
         return -1;
     }
-    
+
     hsp3cl_maxvar = hsphed->max_val;
     abc_hspctx.hsphed = hsphed;
-    abc_hspctx.mem_mcs = (unsigned short *)[self copy_DAT:ptr + hsphed->pt_cs size:hsphed->max_cs];
-    abc_hspctx.mem_mds = (char *)(ptr + hsphed->pt_ds);
-    abc_hspctx.mem_ot = (int *)[self copy_DAT:ptr + hsphed->pt_ot size:hsphed->max_ot];
-    abc_hspctx.mem_di = (unsigned char *)[self copy_DAT:ptr + hsphed->pt_dinfo size:hsphed->max_dinfo];
-    abc_hspctx.mem_linfo = (LIBDAT *)[self copy_LIBDAT:hsphed ptr:ptr + hsphed->pt_linfo size:hsphed->max_linfo];
-    abc_hspctx.mem_minfo = (STRUCTPRM *)[self copy_DAT:ptr + hsphed->pt_minfo size:hsphed->max_minfo];
-    abc_hspctx.mem_finfo = (STRUCTDAT *)[self copy_STRUCTDAT:hsphed ptr:ptr + hsphed->pt_finfo size:hsphed->max_finfo];
-    
+    abc_hspctx.mem_mcs = (unsigned short *) [self copy_DAT:ptr + hsphed->pt_cs size:hsphed->max_cs];
+    abc_hspctx.mem_mds = (char *) (ptr + hsphed->pt_ds);
+    abc_hspctx.mem_ot = (int *) [self copy_DAT:ptr + hsphed->pt_ot size:hsphed->max_ot];
+    abc_hspctx.mem_di = (unsigned char *) [self copy_DAT:ptr + hsphed->pt_dinfo size:hsphed->max_dinfo];
+    abc_hspctx.mem_linfo = (LIBDAT *) [self copy_LIBDAT:hsphed ptr:ptr + hsphed->pt_linfo size:hsphed->max_linfo];
+    abc_hspctx.mem_minfo = (STRUCTPRM *) [self copy_DAT:ptr + hsphed->pt_minfo size:hsphed->max_minfo];
+    abc_hspctx.mem_finfo = (STRUCTDAT *) [self copy_STRUCTDAT:hsphed ptr:ptr + hsphed->pt_finfo size:hsphed->max_finfo];
+
     HspVarCoreResetVartype(hsphed->max_varhpi);  // 型の初期化
     [self code_resetctx:&abc_hspctx];            // hsp3code setup
-    
+
     //		HspVar setup
     abc_hspctx.mem_var = NULL;
     if (hsp3cl_maxvar) {
@@ -350,7 +350,7 @@ rerun:
             HspVarCoreClear(pval, HSPVAR_FLAG_INT);  // グローバル変数を0にリセット
         }
     }
-    
+
     //		debug
     // Alertf( "#HSP objcode
     // initalized.(CS=%d/DS=%d/OT=%d/VAR=%d)\n",hsphed->max_cs, hsphed->max_ds,
@@ -386,12 +386,12 @@ rerun:
     LIBDAT *mem_dst;
     LIBDAT *dst;
     HED_LIBDAT org_dat;
-    
-    max = (int)(size / sizeof(HED_LIBDAT));
+
+    max = (int) (size / sizeof(HED_LIBDAT));
     if (max <= 0)
-        return (LIBDAT *)ptr;
+        return (LIBDAT *) ptr;
     newsize = sizeof(LIBDAT) * max;
-    mem_dst = (LIBDAT *)malloc(newsize);
+    mem_dst = (LIBDAT *) malloc(newsize);
     dst = mem_dst;
     for (int i = 0; i < max; i++) {
         memcpy(&org_dat, ptr, sizeof(HED_LIBDAT));
@@ -400,12 +400,12 @@ rerun:
         dst->nameidx = org_dat.nameidx;
         dst->clsid = org_dat.clsid;
         dst->hlib = NULL;
-        
+
         dst++;
         ptr += sizeof(HED_LIBDAT);
     }
     hsphed->max_linfo = newsize;
-    
+
     return mem_dst;
 }
 
@@ -417,10 +417,10 @@ rerun:
     STRUCTDAT *mem_dst;
     STRUCTDAT *dst;
     HED_STRUCTDAT org_dat;
-    max = (int)(size / sizeof(HED_STRUCTDAT));
-    if (max <= 0) return (STRUCTDAT *)ptr;
+    max = (int) (size / sizeof(HED_STRUCTDAT));
+    if (max <= 0) return (STRUCTDAT *) ptr;
     newsize = sizeof(STRUCTDAT) * max;
-    mem_dst = (STRUCTDAT *)malloc(sizeof(STRUCTDAT) * max);
+    mem_dst = (STRUCTDAT *) malloc(sizeof(STRUCTDAT) * max);
     dst = mem_dst;
     for (i = 0; i < max; i++) {
         memcpy(&org_dat, ptr, sizeof(HED_STRUCTDAT));
