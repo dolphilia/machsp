@@ -1,7 +1,0 @@
-f = 440.0
-
-repeat qframe()*100
-    qins sin(dcnt * 2.0 * qpi() * f / qrate())
-loop
-
-qplay
