@@ -8,15 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "MySyntaxPopUpButton.h"
-#import "AppDelegate.h"
 
 @implementation MySyntaxPopUpButton
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {
-        global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
         if (global.selectedSyntaxString == nil) {
             global.selectedSyntaxString = [self title];
         }

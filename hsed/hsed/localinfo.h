@@ -8,12 +8,15 @@
 class CLocalInfo {
 public:
     CLocalInfo();
+
     ~CLocalInfo();
-    
-    int GetTime( int index );
-    char *CurrentTime( void );
-    char *CurrentDate( void );
-    
+
+    int GetTime(int index);
+
+    char *CurrentTime(void);
+
+    char *CurrentDate(void);
+
 private:
     char curtime[16];
     char curdate[16];

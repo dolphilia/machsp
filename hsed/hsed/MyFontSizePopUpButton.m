@@ -8,15 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "MyFontSizePopUpButton.h"
-#import "AppDelegate.h"
 
 @implementation MyFontSizePopUpButton
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {
-        global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
         if (global.selectedFontSizeString == nil) {
             global.selectedFontSizeString = [self title];
         }

@@ -7,8 +7,8 @@
 
 // エラーコード
 typedef enum {
-    
-    HSPERR_NONE = 0,				// スクリプト終了時
+
+    HSPERR_NONE = 0,                // スクリプト終了時
     HSPERR_UNKNOWN_CODE,
     HSPERR_SYNTAX,
     HSPERR_ILLEGAL_FUNCTION,
@@ -50,19 +50,18 @@ typedef enum {
     HSPERR_COMDLL_ERROR,
     HSPERR_NORETVAL,
     HSPERR_FUNCTION_SYNTAX,
-    
-    HSPERR_INTJUMP,					// 割り込みジャンプ時
-    HSPERR_EXITRUN,					// 外部ファイル実行
+
+    HSPERR_INTJUMP,                    // 割り込みジャンプ時
+    HSPERR_EXITRUN,                    // 外部ファイル実行
     HSPERR_MAX
-    
+
 } HSPERROR;
 
-char *hspd_geterror( HSPERROR error );
+char *hspd_geterror(HSPERROR error);
 
 
 // Debug Info ID
-enum
-{
+enum {
     DEBUGINFO_GENERAL = 0,
     DEBUGINFO_VARNAME,
     DEBUGINFO_INTINFO,
@@ -72,8 +71,7 @@ enum
 };
 
 // Debug Flag ID
-enum
-{
+enum {
     HSPDEBUG_NONE = 0,
     HSPDEBUG_RUN,
     HSPDEBUG_STOP,
@@ -82,29 +80,29 @@ enum
     HSPDEBUG_MAX
 };
 
-typedef struct HSP3DEBUG
-{
+typedef struct HSP3DEBUG {
     //	[in/out] tranfer value
     //	(システムとの通信用)
     //
-    int	flag;				// Flag ID
-    int	line;				// 行番号情報
-    char *fname;			// ファイル名情報
-    void *dbgwin;			// Debug WindowのHandle
-    char *dbgval;			// debug情報取得バッファ
-    
+    int flag;                // Flag ID
+    int line;                // 行番号情報
+    char *fname;            // ファイル名情報
+    void *dbgwin;            // Debug WindowのHandle
+    char *dbgval;            // debug情報取得バッファ
+
     //	[in] system value
     //	(初期化後に設定されます)
     //
-    struct HSPCTX 	*hspctx;
+    struct HSPCTX *hspctx;
+
     //
-    char *	(* get_value) (int);			// debug情報取得コールバック
-    char *	(* get_varinf) (char *,int);	// 変数情報取得コールバック
-    void	(* dbg_close) (char *);			// debug情報取得終了
-    void	(* dbg_curinf)( void );			// 現在行・ファイル名の取得
-    int		(* dbg_set) (int);				// debugモード設定
-    char *  (* dbg_callstack) ( void );     // コールスタックの取得
-    
+    char *(*get_value)(int);            // debug情報取得コールバック
+    char *(*get_varinf)(char *, int);    // 変数情報取得コールバック
+    void (*dbg_close)(char *);            // debug情報取得終了
+    void (*dbg_curinf)(void);            // 現在行・ファイル名の取得
+    int (*dbg_set)(int);                // debugモード設定
+    char *(*dbg_callstack)(void);     // コールスタックの取得
+
 } HSP3DEBUG;
 
 #endif

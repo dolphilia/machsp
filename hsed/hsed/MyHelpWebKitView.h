@@ -13,7 +13,7 @@
 #import <WebKit/WebKit.h>
 
 @interface MyHelpWebKitView : WebView {
-    
+
 }
 
 @end

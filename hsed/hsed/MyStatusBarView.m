@@ -11,16 +11,15 @@
 
 @implementation MyStatusBarView
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {}
     return self;
 }
 
--(void)drawRect:(NSRect)dirtyRect {
+- (void)drawRect:(NSRect)dirtyRect {
     [[NSColor colorWithDeviceWhite:0.7 alpha:1] set];
-    NSFrameRect(NSMakeRect(self.frame.origin.x,self.frame.origin.y+self.frame.size.height-1,self.frame.size.width,1));
+    NSFrameRect(NSMakeRect(self.frame.origin.x, self.frame.origin.y + self.frame.size.height - 1, self.frame.size.width, 1));
 }
 
 @end

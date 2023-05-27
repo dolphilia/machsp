@@ -1,349 +1,610 @@
 ;
-; HSP3.1 Utility macros and functions
+;HSP3
+.1
+Utility
+macros
+and
+functions
 ;
-#ifndef __hsp3util__
-#define __hsp3util__
+#
+ifndef
+__hsp3util__
+#
+define
+__hsp3util__
 
-#module "hsp3util"
+#
+module
+"hsp3util"
 
-#define WS_VISIBLE 0x10000000
-#define WS_CHILD 0x40000000
+#
+define
+WS_VISIBLE
+0x10000000
+#
+define
+WS_CHILD
+0x40000000
 
-#define PBM_SETSTEP	1028
-#define PBM_STEPIT	1029
+#
+define
+PBM_SETSTEP
+1028
+#
+define
+PBM_STEPIT
+1029
 
-#define SBM_SETPOS 224
-#define SBM_GETPOS 225
-#define SBM_SETRANGE 226
-#define SBM_SETRANGEREDRAW 230
-
-;--------------------------------------------------------------------------------
-
-#deffunc bmppalette str _fname
-
-	;	8bitBMPƒtƒ@ƒCƒ‹‚ÌƒpƒŒƒbƒg‚ğæ‚èo‚·
-	;	bmppalette "BMPƒtƒ@ƒCƒ‹–¼"
-	;
-	exist _fname :if strsize<1078 :return
-	dim a,270 : bload _fname,a,1078			;BMPƒwƒbƒ_[“Ç‚İo‚µ
-
-	if peek(a,$1c)>8	:return			;8bitBMP‚Å‚È‚©‚Á‚½‚çreturn
-	if wpeek(a,0)!$4d42	:return			;"BM"ƒ`ƒFƒbƒNF‹­§I—¹‚Í”ğ‚¯‚é
-	cols=lpeek(a,$2e)	:if cols=0:cols=256	;F”Fcols=0‚Í 256F
-
-	i=$36
-	repeat cols
-		palette cnt,peek(a,i+2),peek(a,i+1),peek(a,i),cnt=cols-1
-		i+=4
-	loop
-	dim a,0
-	return
-
-#deffunc gettimestr var _p1
-
-	;	"hh:mm:ss"‚ÌŒ`®‚Å‚ğ“¾‚Ä•Ï”‚É‘ã“ü‚·‚é
-	;	gettimestr •Ï”–¼
-	;
-	_p1 = strf("%02d:%02d:%02d",gettime(4),gettime(5),gettime(6))
-	return
-
-#deffunc getdatestr var _p1
-
-	;	"yyyy/mm/dd"‚ÌŒ`®‚Å“ú•t‚ğ“¾‚Ä•Ï”‚É‘ã“ü‚·‚é
-	;	getdatestr •Ï”–¼
-	;
-	_p1 = strf("%02d/%02d/%02d",gettime(0),gettime(1),gettime(3))
-	return
+#
+define
+SBM_SETPOS
+224
+#
+define
+SBM_GETPOS
+225
+#
+define
+SBM_SETRANGE
+226
+#
+define
+SBM_SETRANGEREDRAW
+230
 
 ;--------------------------------------------------------------------------------
 
-#deffunc text int _p1
+#
+deffunc
+bmppalette
+str
+_fname
 
-	;	emes–½—ß‚Å•\¦‚³‚ê‚é•¶š‚Ì‘Ò‚¿ŠÔ‚ğİ’è‚·‚é
-	;	text •\¦‘Ò‚¿ŠÔ(ms)
+;8
+bitBMPï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ìƒpï¿½ï¿½ï¿½bï¿½gï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½
+	;bmppalette
+"BMPï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½"
+;
+exist
+_fname :if strsize < 1078 :
+return
+dim
+a, 270
+:
+bload
+_fname, a, 1078;
+BMPï¿½wï¿½bï¿½_ï¿½[ï¿½Ç‚İoï¿½ï¿½
+
+	if peek(a, $1c) > 8    :
+return;
+8
+bitBMPï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½return
+if wpeek(a, 0)!$4d42
+:
+return;
+"BM"ï¿½`ï¿½Fï¿½bï¿½Nï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½Í”ï¿½ï¿½ï¿½ï¿½ï¿½
+	cols = lpeek(a, $2e)
+:
+if cols = 0:
+cols = 256;ï¿½Fï¿½ï¿½ï¿½Fcols = 0ï¿½ï¿½ 256ï¿½F
+
+i = $36
+repeat
+cols
+palette
+cnt, peek(a, i + 2), peek(a, i + 1), peek(a, i), cnt = cols - 1
+i += 4
+loop
+dim
+a, 0
+return
+
+#
+deffunc
+gettimestr var _p1
+
+;"hh:mm:ss"ï¿½ÌŒ`ï¿½ï¿½ï¿½Åï¿½ï¿½ï¿½ï¿½ğ“¾‚Ä•Ïï¿½ï¿½É‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	;gettimestr ï¿½Ïï¿½ï¿½ï¿½
 	;
-	stwait=_p1
-	return
+_p1 = strf("%02d:%02d:%02d", gettime(4), gettime(5), gettime(6))
+return
 
-#deffunc textmode int _p1, int _p2
+#
+deffunc
+getdatestr var _p1
 
-	;	emes–½—ß‚Å•\¦‚³‚ê‚é•¶š‚ÌCü‚ğİ’è‚·‚é
-	;	textmode ƒ‚[ƒh, ’²®ƒpƒ‰ƒ[ƒ^[
-	;		ƒ‚[ƒh0 : ’Êí‚Ì•\¦
-	;		ƒ‚[ƒh1 : ‰e•t‚«•\¦
-	;		ƒ‚[ƒh2 : —ÖŠs•t‚«•\¦
-	;		(ƒ‚[ƒh1,2‚Ìê‡‚ÍŒ»İİ’è‚³‚ê‚Ä‚¢‚éF‚ª“K—p‚³‚ê‚Ü‚·)
-	;		(’²®ƒpƒ‰ƒ[ƒ^[‚ğİ’è‚·‚é‚Æ‰e‚â—ÖŠs‚Ì‹——£‚ğC³‚·‚é
-	;		‚±‚Æ‚ª‚Å‚«‚Ü‚·)
+;"yyyy/mm/dd"ï¿½ÌŒ`ï¿½ï¿½ï¿½Å“ï¿½ï¿½tï¿½ğ“¾‚Ä•Ïï¿½ï¿½É‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	;getdatestr ï¿½Ïï¿½ï¿½ï¿½
 	;
-	stmode=_p1
-	if stmode<=0 : return
-	strval=ginfo_r
-	stgval=ginfo_g
-	stbval=ginfo_b
-	stdiff=1+_p2
-	return
+_p1 = strf("%02d/%02d/%02d", gettime(0), gettime(1), gettime(3))
+return
+    ;
+--------------------------------------------------------------------------------
 
-#deffunc emes str _p1
+#
+deffunc
+text
+int
+_p1
 
-	;	‚P•¶š‚Ã‚Â‚ä‚Á‚­‚è‚Æ•¶š—ñ‚ğ•\¦‚·‚é
-	;	(mes–½—ß‚Æ“¯—l‚Ì“®ì)
-	;	emes •\¦ƒeƒLƒXƒg
+;emesï¿½ï¿½ï¿½ß‚Å•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é•¶ï¿½ï¿½ï¿½Ì‘Ò‚ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½İ’è‚·ï¿½ï¿½
+	;text ï¿½\ï¿½ï¿½ï¿½Ò‚ï¿½ï¿½ï¿½ï¿½ï¿½(ms)
+;
+stwait = _p1
+return
+
+#
+deffunc
+textmode
+int
+_p1, int
+_p2
+
+;emesï¿½ï¿½ï¿½ß‚Å•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é•¶ï¿½ï¿½ï¿½ÌCï¿½ï¿½ï¿½ï¿½İ’è‚·ï¿½ï¿½
+	;textmode ï¿½ï¿½ï¿½[ï¿½h, ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½[
+;		ï¿½ï¿½ï¿½[ï¿½h0 : ï¿½
+Êï¿½Ì•\ï¿½ï¿½
+	;		ï¿½ï¿½ï¿½[ï¿½h1 : ï¿½
+eï¿½tï¿½ï¿½ï¿½\ï¿½ï¿½
+	;		ï¿½ï¿½ï¿½[ï¿½h2 : ï¿½ÖŠsï¿½tï¿½ï¿½ï¿½\ï¿½ï¿½
+	;(ï¿½ï¿½ï¿½[ï¿½h1, 2ï¿½Ìê‡ï¿½ÍŒï¿½ï¿½İİ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Fï¿½ï¿½ï¿½Kï¿½pï¿½ï¿½ï¿½ï¿½Ü‚ï¿½)
+;(ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½[ï¿½ï¿½İ’è‚·ï¿½ï¿½Æ‰eï¿½ï¿½ÖŠsï¿½Ì‹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	;		ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½)
+;
+stmode = _p1
+if stmode <= 0 :
+return
+strval = ginfo_r
+stgval = ginfo_g
+stbval = ginfo_b
+stdiff = 1 + _p2
+return
+
+#
+deffunc
+emes
+str
+_p1
+
+;	ï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½Ã‚Â‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	;(mesï¿½ï¿½ï¿½ß‚Æ“ï¿½ï¿½lï¿½Ì“ï¿½ï¿½ï¿½)
+;emes ï¿½\ï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½g
+;
+mesmax = strlen(_p1)
+if mesmax <= 0 :
+return
+mestmp = _p1
+messg = ""
+mescur = 0
+a = 0
+orgx = ginfo_cx
+if (stmode) {
+    strval2 = ginfo_r
+    stgval2 = ginfo_g
+    stbval2 = ginfo_b
+}
+
+if stwait <= 0 {
+    x = ginfo_cx
+:
+    y = ginfo_cy
+    messg = mestmp
+    gosub * emes_aft
+    return
+}
+
+repeat
+if mescur >= mesmax :
+break
+x = ginfo_cx
+:
+y = ginfo_cy
+a = peek(mestmp, mescur)
+mescur++
+if a < 32 {
+    if a = 13 {
+        if peek(mestmp, mescur) = 10 :
+        mescur++
+        mes
+        ""
+    :
+        pos
+        orgx
+    }
+    continue
+}
+poke
+messg, 0, a
+poke
+messg, 1, 0
+if a >= 128 {
+    poke
+    messg, 1, peek(mestmp, mescur)
+    poke
+    messg, 2, 0
+    mescur++
+}
+gosub * emes_aft
+pos
+x + ginfo_mesx, y
+await
+stwait
+loop
+
+mes
+""
+:
+pos
+orgx
+return
+
+*
+emes_aft
+if stmode = 0 {
+    mes
+    messg
+    return
+}
+if stmode = 1 {
+    pos
+    x + stdiff, y + stdiff
+    color
+    strval, stgval, stbval
+    mes
+    messg
+    pos
+    x, y
+    color
+    strval2, stgval2, stbval2
+    mes
+    messg
+    return
+}
+if stmode = 2 {
+    color
+    strval, stgval, stbval
+:
+    pos
+    x + stdiff, y
+:
+    mes
+    messg
+    pos
+    x - stdiff, y
+:
+    mes
+    messg
+    pos
+    x, y - stdiff
+:
+    mes
+    messg
+    pos
+    x, y + stdiff
+:
+    mes
+    messg
+    pos
+    x, y
+    color
+    strval2, stgval2, stbval2
+    mes
+    messg
+    return
+}
+return
+
+
+#
+deffunc
+gfade
+int
+_p1, int
+_p2, int
+_p3, int
+_p4, int
+_p5
+
+;
+;	ï¿½ï¿½Ê‚Ìƒtï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½sï¿½È‚ï¿½
+	;(colorï¿½Åİ’è‚³ï¿½ê‚½ï¿½Fï¿½Éƒtï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½)
+;gfade ï¿½ï¿½ï¿½xï¿½ï¿½,
+x, y, sx, sy
+;	ï¿½ï¿½ï¿½xï¿½ï¿½  = 0ï¿½`256ï¿½Åƒï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚·ï¿½ï¿½
+	;(x, y) = ï¿½tï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½sï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½
+	;(ï¿½È—ï¿½ï¿½ï¿½ï¿½ï¿½0, 0
+)
+;(sx, sy) = ï¿½tï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½sï¿½È‚ï¿½ï¿½Tï¿½Cï¿½Y
+;(ï¿½È—ï¿½ï¿½ï¿½ï¿½Í‰ï¿½Ê‘Sï¿½ï¿½)
+;
+x = _p4
+:
+if x = 0 :
+x = ginfo_winx
+y = _p5
+:
+if y = 0 :
+y = ginfo_winy
+gmode
+3, x, y, _p1
+x = _p2 + (x / 2)
+:
+y = _p3 + (y / 2)
+grect
+x, y, 0
+return
+
+
+#
+deffunc
+gfade2
+int
+_src, int
+_p1, int
+_p2, int
+_p3, int
+_p4, int
+_p5
+
+;
+;	ï¿½ï¿½Ê‚Ìƒtï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½sï¿½È‚ï¿½
+	;(ï¿½İ’è‚³ï¿½ê‚½ï¿½ï¿½ÊƒCï¿½ï¿½ï¿½[ï¿½Wï¿½Éƒtï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½)
+;gfade
+src,ï¿½ï¿½ï¿½xï¿½ï¿½,
+x, y, sx, sy
+;src = ï¿½tï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½Ìƒoï¿½bï¿½tï¿½@ID;    ï¿½ï¿½ï¿½xï¿½ï¿½  = 0ï¿½`256ï¿½Åƒï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚·ï¿½ï¿½
+	;(x, y) = ï¿½tï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½sï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½
+	;(ï¿½È—ï¿½ï¿½ï¿½ï¿½ï¿½0, 0
+)
+;(sx, sy) = ï¿½tï¿½Fï¿½[ï¿½hï¿½ï¿½ï¿½sï¿½È‚ï¿½ï¿½Tï¿½Cï¿½Y
+;(ï¿½È—ï¿½ï¿½ï¿½ï¿½Í‰ï¿½Ê‘Sï¿½ï¿½)
+;
+x = _p4
+:
+if x = 0 :
+x = ginfo_winx
+y = _p5
+:
+if y = 0 :
+y = ginfo_winy
+gmode
+3, x, y, _p1
+pos
+_p2, _p3
+:
+gcopy
+_src, 0, 0
+return
+    ;
+--------------------------------------------------------------------------------
+
+#
+deffunc
+statictext
+str
+_p1, int
+_p2, int
+_p3
+
+;
+;	ï¿½Xï¿½^ï¿½eï¿½Bï¿½bï¿½Nï¿½eï¿½Lï¿½Xï¿½gï¿½ï¿½zï¿½uï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Æ‚ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	;statictext
+"ï¿½eï¿½Lï¿½Xï¿½g", Xï¿½Tï¿½Cï¿½Y, Yï¿½Tï¿½Cï¿½Y
+;(posï¿½Åwï¿½è‚µï¿½ï¿½ï¿½Ê’uï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½)
+;
+winobj
+"STATIC", _p1, 0, WS_VISIBLE | WS_CHILD, _p2, _p3
+return stat
+
+#
+deffunc
+statictext_set
+int
+_p1, str
+_p2
+
+;
+;	ï¿½Xï¿½^ï¿½eï¿½Bï¿½bï¿½Nï¿½eï¿½Lï¿½Xï¿½gï¿½Ì“ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	;statictext_set ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gID, "ï¿½eï¿½Lï¿½Xï¿½g"
+;
+sendmsg
+objinfo_hwnd(_p1), $c, 0, _p2
+return stat
+
+#
+deffunc
+scrollbar
+int
+_p1, int
+_p2
+
+;
+;	ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½oï¿½[ï¿½ï¿½zï¿½uï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Æ‚ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	;scrollbar
+Xï¿½Tï¿½Cï¿½Y, Yï¿½Tï¿½Cï¿½Y
+;(posï¿½Åwï¿½è‚µï¿½ï¿½ï¿½Ê’uï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½)
+;
+winobj
+"SCROLLBAR", "", 0, WS_VISIBLE | WS_CHILD, _p1, _p2
+return stat
+
+
+#
+deffunc
+progbar
+int
+_p1, int
+_p2
+
+;
+;	ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Xï¿½oï¿½[ï¿½ï¿½zï¿½uï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½Æ‚ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	;progbar
+Xï¿½Tï¿½Cï¿½Y, Yï¿½Tï¿½Cï¿½Y
+;(posï¿½Åwï¿½è‚µï¿½ï¿½ï¿½Ê’uï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½)
+;
+winobj
+"msctls_progress32", "", 0, WS_VISIBLE | WS_CHILD, _p1, _p2
+return stat
+
+#
+deffunc
+progbar_step
+int
+_p1
+
+;
+;	ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Xï¿½oï¿½[ï¿½ï¿½1ï¿½Xï¿½eï¿½bï¿½vï¿½iï¿½ß‚ï¿½
+	;progbar_step ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gID
+;
+sendmsg
+objinfo_hwnd(_p1), PBM_STEPIT, 0, 0
+return
+
+#
+deffunc
+progbar_set
+int
+_p1, int
+_p2
+
+;
+;	ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Xï¿½oï¿½[ï¿½ÌƒXï¿½eï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’è‚·ï¿½ï¿½
+	;progbar_step ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gID, ï¿½ï¿½ï¿½ï¿½
 	;
-	mesmax=strlen(_p1)
-	if mesmax<=0 : return
-	mestmp=_p1
-	messg=""
-	mescur=0
-	a=0
-	orgx=ginfo_cx
-	if ( stmode ) {
-		strval2=ginfo_r
-		stgval2=ginfo_g
-		stbval2=ginfo_b
-	}
+sendmsg
+objinfo_hwnd(_p1), PBM_SETSTEP, _p2, 0
+return
+    ;
+--------------------------------------------------------------------------------
 
-	if stwait<=0 {
-		x=ginfo_cx:y=ginfo_cy
-		messg=mestmp
-		gosub *emes_aft
-		return
-	}
+#
+deffunc
+note2array
+array
+_p1, str
+_p2;
+,
+local
+mestmp
 
-	repeat
-		if mescur>=mesmax : break
-		x=ginfo_cx:y=ginfo_cy
-		a=peek(mestmp,mescur)
-		mescur++
-		if a<32 {
-			if a=13 {
-				if peek(mestmp,mescur)=10 : mescur++
-				mes "":pos orgx
-			}
-			continue
-		}
-		poke messg,0,a
-		poke messg,1,0
-		if a>=128 {
-			poke messg,1,peek(mestmp,mescur)
-			poke messg,2,0
-			mescur++
-		}
-		gosub *emes_aft
-		pos x+ginfo_mesx,y
-		await stwait
-	loop
+;
+;	ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Æ‚É”zï¿½ï¿½Ïï¿½ï¿½É‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	;note2array ï¿½Ïï¿½,
+"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+;("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"ï¿½Åwï¿½è‚µï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½zï¿½ï¿½Ïï¿½ï¿½É•ÏŠï¿½ï¿½ï¿½ï¿½Ü‚ï¿½)
+;(ï¿½zï¿½ï¿½Í‚Pï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½É‚È‚ï¿½Ü‚ï¿½)
+;
+;notegetï¿½ğ—˜—pï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½ï¿½getstrï¿½ğ—˜—pï¿½ï¿½ï¿½ï¿½ï¿½Ò‚É•ÏXï¿½ï¿½ï¿½ï¿½ï¿½
+	;	ï¿½ï¿½è‚ï¿½ï¿½ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½A1ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
+;	ï¿½Ç‚ï¿½ï¿½ç‚ªï¿½Ç‚ï¿½ï¿½Å‚ï¿½ï¿½å‚¤ï¿½ï¿½ï¿½H
+mestmp = _p2
+notesel
+mestmp
+_notemax = notemax
+if _notemax <= 1 :
+_p1 = _p2
+:
+return
+sdim
+_p1, 64, _notemax
+repeat
+_notemax
+noteget
+_p1(cnt), cnt
+loop
+noteunsel
+return
 
-	mes "":pos orgx
-	return
+#
+deffunc
+array2note var _p1, array
+_p2
 
-*emes_aft
-	if stmode=0 {
-		mes messg
-		return
-	}
-	if stmode=1 {
-		pos x+stdiff,y+stdiff
-		color strval,stgval,stbval
-		mes messg
-		pos x,y
-		color strval2,stgval2,stbval2
-		mes messg
-		return
-	}
-	if stmode=2 {
-		color strval,stgval,stbval:
-		pos x+stdiff,y:mes messg
-		pos x-stdiff,y:mes messg
-		pos x,y-stdiff:mes messg
-		pos x,y+stdiff:mes messg
-		pos x,y
-		color strval2,stgval2,stbval2
-		mes messg
-		return
-	}
-	return
+;
+;	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Ì”zï¿½ï¿½Ïï¿½ï¿½ğ•¡ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Äæ“¾ï¿½ï¿½ï¿½ï¿½
+	;array2note ï¿½Ïï¿½1,ï¿½Ïï¿½2
+;(ï¿½Ïï¿½2ï¿½Åwï¿½è‚µï¿½ï¿½ï¿½Pï¿½ï¿½ï¿½ï¿½ï¿½Ì”zï¿½ï¿½Ïï¿½ï¿½ï¿½Ïï¿½1(ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)ï¿½É•ÏŠï¿½ï¿½ï¿½ï¿½Ü‚ï¿½)
+;(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½Í‚Pï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½Ì‚İ‚É‚È‚ï¿½Ü‚ï¿½)
+;
+if length2(_p2) > 0 :
+dialog
+"array2note:error"
+:
+return
 
+index = 0
+:
+len = 1
+foreach
+_p2
+len += strlen(_p2(cnt)) + 2
+loop
+sdim
+_p1, len
+foreach
+_p2
+poke
+_p1, index, _p2(cnt)
+index += strsize
+poke
+_p1, index, "\n"
+index += 2
+loop
+return
 
-#deffunc gfade int _p1,int _p2,int _p3,int _p4,int _p5
+#
+deffunc
+arraysave
+str
+_p1, array
+_p2, local
+stmp
 
-	;
-	;	‰æ–Ê‚ÌƒtƒF[ƒh‚ğs‚È‚¤
-	;	(color‚Åİ’è‚³‚ê‚½F‚ÉƒtƒF[ƒh‚·‚é)
-	;	gfade ƒŒƒxƒ‹, x,y,sx,sy
-	;	ƒŒƒxƒ‹  = 0`256‚ÅƒŒƒxƒ‹‚ğw’è‚·‚é
-	;	(x,y)   = ƒtƒF[ƒh‚ğs‚È‚¤¶ã
-	;	          (È—ª‚Í0,0)
-	;	(sx,sy) = ƒtƒF[ƒh‚ğs‚È‚¤ƒTƒCƒY
-	;	          (È—ª‚Í‰æ–Ê‘S‘Ì)
-	;
-	x=_p4:if x=0 : x=ginfo_winx
-	y=_p5:if y=0 : y=ginfo_winy
-	gmode 3,x,y,_p1
-	x=_p2+(x/2):y=_p3+(y/2)
-	grect x,y,0
-	return
+;
+;	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Ì”zï¿½ï¿½Ïï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÉƒZï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½
+	;arraysave
+"ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½",ï¿½Ïï¿½
+	;(ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É•ÏŠï¿½ï¿½ï¿½ï¿½ÄƒZï¿½[ï¿½uï¿½ï¿½ï¿½Ü‚ï¿½)
+;(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½Í‚Pï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½Ì‚İ‚É‚È‚ï¿½Ü‚ï¿½)
+;
+array2note
+stmp, _p2
+notesel
+stmp
+notesave
+_p1
+noteunsel
+return
 
+#
+deffunc
+arrayload
+str
+_p1, array
+_p2, local
+stmp
 
-#deffunc gfade2 int _src,int _p1,int _p2,int _p3,int _p4,int _p5
+;
+;	ï¿½eï¿½Lï¿½Xï¿½gï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ğ•¶ï¿½ï¿½ï¿½^ï¿½Ì”zï¿½ï¿½Ïï¿½ï¿½É“Ç‚İï¿½ï¿½ï¿½
+	;arrayload
+"ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½",ï¿½Ïï¿½
+	;(ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìsï¿½ï¿½zï¿½ï¿½vï¿½fï¿½É•ÏŠï¿½ï¿½ï¿½ï¿½ÄƒZï¿½[ï¿½uï¿½ï¿½ï¿½Ü‚ï¿½)
+;(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½Í‚Pï¿½ï¿½ï¿½ï¿½ï¿½zï¿½ï¿½Ì‚İ‚É‚È‚ï¿½Ü‚ï¿½)
+;
+notesel
+stmp
+noteload
+_p1
+noteunsel
+note2array
+_p2, stmp
+return
+    ;
+--------------------------------------------------------------------------------
 
-	;
-	;	‰æ–Ê‚ÌƒtƒF[ƒh‚ğs‚È‚¤
-	;	(İ’è‚³‚ê‚½‰æ–ÊƒCƒ[ƒW‚ÉƒtƒF[ƒh‚·‚é)
-	;	gfade src,ƒŒƒxƒ‹, x,y,sx,sy
-	;	src = ƒtƒF[ƒhŒ³‚Ìƒoƒbƒtƒ@ID
-	;	ƒŒƒxƒ‹  = 0`256‚ÅƒŒƒxƒ‹‚ğw’è‚·‚é
-	;	(x,y)   = ƒtƒF[ƒh‚ğs‚È‚¤¶ã
-	;	          (È—ª‚Í0,0)
-	;	(sx,sy) = ƒtƒF[ƒh‚ğs‚È‚¤ƒTƒCƒY
-	;	          (È—ª‚Í‰æ–Ê‘S‘Ì)
-	;
-	x=_p4:if x=0 : x=ginfo_winx
-	y=_p5:if y=0 : y=ginfo_winy
-	gmode 3,x,y,_p1
-	pos _p2,_p3:gcopy _src,0,0
-	return
-
-
-;--------------------------------------------------------------------------------
-
-#deffunc statictext str _p1, int _p2, int _p3
-
-	;
-	;	ƒXƒ^ƒeƒBƒbƒNƒeƒLƒXƒg‚ğ”z’uƒIƒuƒWƒFƒNƒg‚Æ‚µ‚Ä¶¬‚·‚é
-	;	statictext "ƒeƒLƒXƒg",XƒTƒCƒY,YƒTƒCƒY
-	;	(pos‚Åw’è‚µ‚½ˆÊ’u‚É•\¦‚³‚ê‚Ü‚·)
-	;
-	winobj "STATIC",_p1,0,WS_VISIBLE|WS_CHILD,_p2,_p3
-	return stat
-
-#deffunc statictext_set int _p1, str _p2
-
-	;
-	;	ƒXƒ^ƒeƒBƒbƒNƒeƒLƒXƒg‚Ì“à—e‚ğ‘‚«Š·‚¦‚é
-	;	statictext_set ƒIƒuƒWƒFƒNƒgID,"ƒeƒLƒXƒg"
-	;
-	sendmsg objinfo_hwnd(_p1),$c,0,_p2
-	return stat
-
-#deffunc scrollbar int _p1, int _p2
-
-	;
-	;	ƒXƒNƒ[ƒ‹ƒo[‚ğ”z’uƒIƒuƒWƒFƒNƒg‚Æ‚µ‚Ä¶¬‚·‚é
-	;	scrollbar XƒTƒCƒY,YƒTƒCƒY
-	;	(pos‚Åw’è‚µ‚½ˆÊ’u‚É•\¦‚³‚ê‚Ü‚·)
-	;
-	winobj "SCROLLBAR","",0,WS_VISIBLE|WS_CHILD,_p1,_p2
-	return stat
+#
+global
 
 
-#deffunc progbar int _p1, int _p2
-
-	;
-	;	ƒvƒƒOƒŒƒXƒo[‚ğ”z’uƒIƒuƒWƒFƒNƒg‚Æ‚µ‚Ä¶¬‚·‚é
-	;	progbar XƒTƒCƒY,YƒTƒCƒY
-	;	(pos‚Åw’è‚µ‚½ˆÊ’u‚É•\¦‚³‚ê‚Ü‚·)
-	;
-	winobj "msctls_progress32","",0,WS_VISIBLE|WS_CHILD,_p1,_p2
-	return stat
-
-#deffunc progbar_step int _p1
-
-	;
-	;	ƒvƒƒOƒŒƒXƒo[‚ğ1ƒXƒeƒbƒvi‚ß‚é
-	;	progbar_step ƒIƒuƒWƒFƒNƒgID
-	;
-	sendmsg objinfo_hwnd(_p1),PBM_STEPIT,0,0
-	return
-
-#deffunc progbar_set int _p1, int _p2
-
-	;
-	;	ƒvƒƒOƒŒƒXƒo[‚ÌƒXƒeƒbƒv‘•ª‚ğİ’è‚·‚é
-	;	progbar_step ƒIƒuƒWƒFƒNƒgID, ‘•ª
-	;
-	sendmsg objinfo_hwnd(_p1),PBM_SETSTEP,_p2,0
-	return
-
-;--------------------------------------------------------------------------------
-
-#deffunc note2array array _p1, str _p2;, local mestmp
-
-	;
-	;	•¡”s‚Ì•¶š—ñ‚ğs‚²‚Æ‚É”z—ñ•Ï”‚É‘ã“ü‚·‚é
-	;	note2array •Ï”,"•¶š—ñ"
-	;	("•¶š—ñ"‚Åw’è‚µ‚½“à—e‚ğ”z—ñ•Ï”‚É•ÏŠ·‚µ‚Ü‚·)
-	;	(”z—ñ‚Í‚PŸŒ³”z—ñ‚É‚È‚è‚Ü‚·)
-	;
-	;	noteget‚ğ—˜—p‚µ‚½ƒXƒNƒŠƒvƒg‚©‚çgetstr‚ğ—˜—p‚µ‚½Ò‚É•ÏX‚·‚é‚Æ
-	;	‚æ‚è‚‘¬‚É‚È‚è‚Ü‚·‚ªA1s‚ ‚½‚è‚Ì•¶š—ñ‚Ì’·‚³‚É§ŒÀ‚ª‚©‚©‚è‚Ü‚·B
-	;	‚Ç‚¿‚ç‚ª—Ç‚¢‚Å‚µ‚å‚¤‚©H
-	mestmp = _p2
-	notesel mestmp
-	_notemax = notemax
-	if _notemax<=1 : _p1 = _p2 : return
-	sdim _p1, 64, _notemax
-	repeat _notemax
-		noteget _p1(cnt), cnt
-	loop
-	noteunsel
-	return
-
-#deffunc array2note var _p1, array _p2
-
-	;
-	;	•¶š—ñŒ^‚Ì”z—ñ•Ï”‚ğ•¡”s•¶š—ñ‚Æ‚µ‚Äæ“¾‚·‚é
-	;	array2note •Ï”1,•Ï”2
-	;	(•Ï”2‚Åw’è‚µ‚½‚PŸŒ³‚Ì”z—ñ•Ï”‚ğ•Ï”1(•¡”s•¶š—ñ)‚É•ÏŠ·‚µ‚Ü‚·)
-	;	(ˆµ‚¦‚é”z—ñ‚Í‚PŸŒ³”z—ñ‚Ì‚İ‚É‚È‚è‚Ü‚·)
-	;
-	if length2(_p2) > 0 : dialog "array2note:error" : return
-
-	index = 0 : len = 1
-	foreach _p2
-		len += strlen(_p2(cnt)) + 2
-	loop
-	sdim _p1, len
-	foreach _p2
-		poke _p1, index, _p2(cnt)
-		index += strsize
-		poke _p1, index, "\n"
-		index += 2
-	loop
-	return
-
-#deffunc arraysave str _p1, array _p2, local stmp
-
-	;
-	;	•¶š—ñŒ^‚Ì”z—ñ•Ï”‚ğƒtƒ@ƒCƒ‹‚ÉƒZ[ƒu‚·‚é
-	;	arraysave "ƒtƒ@ƒCƒ‹–¼",•Ï”
-	;	(•¡”s•¶š—ñ‚É•ÏŠ·‚µ‚ÄƒZ[ƒu‚µ‚Ü‚·)
-	;	(ˆµ‚¦‚é”z—ñ‚Í‚PŸŒ³”z—ñ‚Ì‚İ‚É‚È‚è‚Ü‚·)
-	;
-	array2note stmp, _p2
-	notesel stmp
-	notesave _p1
-	noteunsel
-	return
-
-#deffunc arrayload str _p1, array _p2, local stmp
-
-	;
-	;	ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ğ•¶š—ñŒ^‚Ì”z—ñ•Ï”‚É“Ç‚İ‚Ş
-	;	arrayload "ƒtƒ@ƒCƒ‹–¼",•Ï”
-	;	(•¡”s•¶š—ñ‚Ìs‚ğ”z—ñ—v‘f‚É•ÏŠ·‚µ‚ÄƒZ[ƒu‚µ‚Ü‚·)
-	;	(ˆµ‚¦‚é”z—ñ‚Í‚PŸŒ³”z—ñ‚Ì‚İ‚É‚È‚è‚Ü‚·)
-	;
-	notesel stmp
-	noteload _p1
-	noteunsel
-	note2array _p2,stmp
-	return
-
-
-;--------------------------------------------------------------------------------
-
-#global
-
-
-#endif
+#
+endif

@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 
 @interface MyStatusBarView : NSView {
-    AppDelegate* global;
+    AppDelegate *global;
 }
 
 @end

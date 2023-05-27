@@ -14,11 +14,13 @@
 #import <Cocoa/Cocoa.h>
 #import "MyWindow.h"
 
-@interface MyWindow(run)
+@interface MyWindow (run)
 
-static void usage1( void );
--(int)runCompiler:(int)argc argv:(char **)argv;
--(void)testCompiler;
+static void usage1(void);
+
+- (int)runCompiler:(int)argc argv:(char **)argv;
+
+- (void)testCompiler;
 
 @end
 

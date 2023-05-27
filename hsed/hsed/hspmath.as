@@ -1,58 +1,294 @@
-#ifndef INC__MATH_AS
-#define INC__MATH_AS
+#
+ifndef
+INC__MATH_AS
+#
+define
+INC__MATH_AS
 
-// ’è”
-#define M_E                     2.7182818284590452354           ; e
-#define M_LOG2E         1.4426950408889634074           ; log_2(e)
-#define M_LOG10E        0.43429448190325182765          ; log_10(e)
-#define M_LN2           0.69314718055994530942          ; log_e(2)
-#define M_LN10          2.30258509299404568402          ; log_e(10)
-#define M_SQRTPI        1.77245385090551602792981       ; ãƒÎ
-#define M_SQRT2         1.41421356237309504880          ; ã2
-#define M_SQRT3         1.73205080756887719000          ; ã3
+// ï¿½è”
+#
+define
+M_E
+2.7182818284590452354;
+e
+#
+define
+M_LOG2E
+1.4426950408889634074;
+log_2(e)
+#
+define
+M_LOG10E
+0.43429448190325182765;
+log_10(e)
+#
+define
+M_LN2
+0.69314718055994530942;
+log_e(2)
+#
+define
+M_LN10
+2.30258509299404568402;
+log_e(10)
+#
+define
+M_SQRTPI
+1.77245385090551602792981; ï¿½ï¿½ï¿½
+#
+define
+M_SQRT2
+1.41421356237309504880; ï¿½ï¿½2
+#
+define
+M_SQRT3
+1.73205080756887719000; ï¿½ï¿½3
 
-// double‚ÌŒÀ“x
-#const  DBL_DIG                 15                                              ; 10i”‚Å—LŒø‚ÈŒ…”
-#define DBL_EPSILON             0.00000000000000022204460492503131      ; 1.0‚Æ‚»‚ÌŽŸ‚É‘å‚«‚¢’l‚Æ‚Ì·
-#const  DBL_MANT_DIG    53                                              ; ‰¼”•”‚Ìbit”
-#define DBL_MAX                 double("1.7976931348623158e+308")       ; Å‘å’l
-#const  DBL_MAX_10_EXP  308                                             ; 10i”‚Å‚ÌŽw”•”‚ÌÅ‘å’l
-#const  DBL_MAX_EXP             1024                                    ; 2i”‚Å‚ÌŽw”•”‚ÌÅ‘å’l
-#define DBL_MIN                 double("2.2250738585072014e-308")       ; 0‚ð’´‚¦‚éÅ¬‚Ì’l
-#const  DBL_MIN_10_EXP  -307                                    ; 10i”‚Å‚ÌŽw”•”‚ÌÅ¬’l
-#const  DBL_MIN_EXP             -1021                                   ; 2i”‚Å‚ÌŽw”•”‚ÌÅ¬’l
+// doubleï¿½ÌŒï¿½ï¿½x
+#
+const DBL_DIG
+15;
+10ï¿½iï¿½ï¿½ï¿½Å—Lï¿½ï¿½ï¿½ÈŒï¿½ï¿½ï¿½
+#
+define
+DBL_EPSILON
+0.00000000000000022204460492503131;
+1.0ï¿½Æ‚ï¿½ï¿½ÌŽï¿½ï¿½É‘å‚«ï¿½ï¿½ï¿½lï¿½Æ‚Ìï¿½
+#
+const DBL_MANT_DIG
+53; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bitï¿½ï¿½
+#
+define
+DBL_MAX
+double("1.7976931348623158e+308"); ï¿½Å‘ï¿½l
+#
+const DBL_MAX_10_EXP
+308;
+10ï¿½iï¿½ï¿½ï¿½Å‚ÌŽwï¿½ï¿½ï¿½ï¿½ï¿½ÌÅ‘ï¿½l
+#
+const DBL_MAX_EXP
+1024;
+2ï¿½iï¿½ï¿½ï¿½Å‚ÌŽwï¿½ï¿½ï¿½ï¿½ï¿½ÌÅ‘ï¿½l
+#
+define
+DBL_MIN
+double("2.2250738585072014e-308");
+0ï¿½ð’´‚ï¿½ï¿½ï¿½Åï¿½ï¿½Ì’l
+#
+const DBL_MIN_10_EXP
+-307;
+10ï¿½iï¿½ï¿½ï¿½Å‚ÌŽwï¿½ï¿½ï¿½ï¿½ï¿½ÌÅï¿½ï¿½l
+#
+const DBL_MIN_EXP
+-1021;
+2ï¿½iï¿½ï¿½ï¿½Å‚ÌŽwï¿½ï¿½ï¿½ï¿½ï¿½ÌÅï¿½ï¿½l
 
-// int‚ÌŒÀ“x
-#const  INT_DIGIT               32                                              ; 2i”‚Å—LŒø‚ÈŒ…”
-#const  INT_DIGIT10             9                                               ; 10i”‚Å—LŒø‚ÈŒ…”
-#const  INT_MAX                 2147483647                              ; Å‘å’l
-#const  INT_MIN                 -INT_MAX-1                              ; Å¬’l
+// intï¿½ÌŒï¿½ï¿½x
+#
+const INT_DIGIT
+32;
+2ï¿½iï¿½ï¿½ï¿½Å—Lï¿½ï¿½ï¿½ÈŒï¿½ï¿½ï¿½
+#
+const INT_DIGIT10
+9;
+10ï¿½iï¿½ï¿½ï¿½Å—Lï¿½ï¿½ï¿½ÈŒï¿½ï¿½ï¿½
+#
+const INT_MAX
+2147483647; ï¿½Å‘ï¿½l
+#
+const INT_MIN
+-INT_MAX - 1; ï¿½Åï¿½ï¿½l
 
-#define ctype pow(%1,%2)        powf((%1),(%2))	; x^y
-#define ctype log10(%1)         (logf(%1)/logf(10))     ; log_10(x)
-#define ctype log2(%1)          (logf(%1)/logf(2))      ; log_2(x)
+#
+define
+ctype
+pow( % 1,
+%
+2
+)
+powf(( % 1), ( % 2
+))
+;x ^ y
+#
+define
+ctype
+log10( % 1
+)
+(logf( % 1) / logf(10)
+)
+;log_10(x)
+#
+define
+ctype
+log2( % 1
+)
+(logf( % 1) / logf(2)
+)
+;log_2(x)
 
-#define ctype asin(%1)          atan((%1),sqrt(1.0-double(%1)*(%1)))    ; sin(y)=x‚Æ‚È‚éy
-#define ctype acos(%1)          atan(sqrt(1.0-double(%1)*(%1)),(%1))    ; cos(y)=x‚Æ‚È‚éy
+#
+define
+ctype
+asin( % 1
+)
+atan(( % 1), sqrt(1.0 - double( % 1) * ( % 1
+)))
+;sin(y) = xï¿½Æ‚È‚ï¿½y
+#
+define
+ctype
+acos( % 1
+)
+atan(sqrt(1.0 - double( % 1) * ( % 1)
+),
+( % 1
+))
+;cos(y) = xï¿½Æ‚È‚ï¿½y
 
-#define ctype sinh(%1)          ((expf(%1)-expf(-(%1)))/2)              ; sinh(x)
-#define ctype cosh(%1)          ((expf(%1)+expf(-(%1)))/2)              ; cosh(x)
-#define ctype tanh(%1)          (sinh(%1)/cosh(%1))                             ; tanh(x)
+#
+define
+ctype
+sinh( % 1
+)
+((expf( % 1) - expf(-( % 1))
+)/
+2
+)
+;sinh(x)
+#
+define
+ctype
+cosh( % 1
+)
+((expf( % 1) + expf(-( % 1))
+)/
+2
+)
+;cosh(x)
+#
+define
+ctype
+tanh( % 1
+)
+(sinh( % 1) / cosh( % 1
+))
+;tanh(x)
 
-#define ctype asinh(%1)         logf(sqrt(double(%1)*(%1)+1.0)+(%1))    ; sinh(y)=x‚Æ‚È‚éy
-#define ctype acosh(%1)         logf(sqrt(double(%1)*(%1)-1.0)+(%1))    ; cosh(y)=x‚Æ‚È‚éy
-#define ctype atanh(%1)         (logf((1.0+(%1)) / (1.0-(%1)))/2.0)             ; tanh(y)=x‚Æ‚È‚éy
+#
+define
+ctype
+asinh( % 1
+)
+logf(sqrt(double( % 1) * ( % 1) + 1.0
+)
++( % 1
+))
+;sinh(y) = xï¿½Æ‚È‚ï¿½y
+#
+define
+ctype
+acosh( % 1
+)
+logf(sqrt(double( % 1) * ( % 1) - 1.0
+)
++( % 1
+))
+;cosh(y) = xï¿½Æ‚È‚ï¿½y
+#
+define
+ctype
+atanh( % 1
+)
+(logf((1.0 + ( % 1)) / (1.0 - ( % 1))
+)/
+2.0
+)
+;tanh(y) = xï¿½Æ‚È‚ï¿½y
 
-#define ctype isfinite(%1)      ((%1)*0=0)                              ; —LŒÀ^–³ŒÀ¥”ñ”‚Ì”»’è
-#define ctype isnan(%1)         ((%1)!(%1))                             ; ”ñ”‚Ì”»’è
+#
+define
+ctype
+isfinite( % 1
+)
+(( % 1) * 0 = 0
+)
+; ï¿½Lï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚Ì”ï¿½ï¿½ï¿½
+#
+define
+ctype
+isnan( % 1
+)
+(( % 1)
+!( % 1
+))
+; ï¿½ñ”‚Ì”ï¿½ï¿½ï¿½
 
-#define ctype round(%1)         double(strf("%%0.0f", %1))              ; ŽlŽÌŒÜ“ü
-#define ctype sgn(%1)           (((%1)>0) - ((%1)<0))                   ; •„†
-#define ctype intf(%1)          round((-0.5)*sgn(%1)+(%1))              ; 0‚Ì•ûŒü‚ÖŠÛ‚ß
-#define ctype floor(%1)         ((intf(%1)-((%1)<intf(%1))))    ; •‰‚Ì•ûŒü‚ÖŠÛ‚ß
-#define ctype ceil(%1)          (-floor(-(%1)))                                 ; ³‚Ì•ûŒü‚ÖŠÛ‚ß
-#define ctype fmod(%1,%2)       ((%1)\(%2))         ; ƒ‚ƒWƒ…ƒ
+#
+define
+ctype
+round( % 1
+)
+double(strf("%%0.0f", % 1)
+)
+; ï¿½lï¿½ÌŒÜ“ï¿½
+#
+define
+ctype
+sgn( % 1
+)
+((( % 1) > 0) - (( % 1) < 0
+))
+; ï¿½ï¿½ï¿½ï¿½
+#
+define
+ctype
+intf( % 1
+)
+round((-0.5) * sgn( % 1) + ( % 1
+))
+;0ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ÖŠÛ‚ï¿½
+#
+define
+ctype
+floor( % 1
+)
+((intf( % 1) - (( % 1) < intf( % 1)
+)))
+; ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ÖŠÛ‚ï¿½
+#
+define
+ctype
+ceil( % 1
+)
+(-floor(-( % 1))
+)
+; ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ÖŠÛ‚ï¿½
+#
+define
+ctype
+fmod( % 1,
+%
+2
+)
+(( % 1)\( % 2
+))
+; ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½
 
-#define ctype distance2(%1,%2)  sqrt((double(%1)-%2)*(double(%1)-%2)+(double(%1(1))-%2(1))*(double(%1(1))-%2(1)))       ; 2ŽŸŒ³‹——£
+#
+define
+ctype
+distance2( % 1,
+%
+2
+)
+sqrt((double( % 1) - % 2) * (double( % 1) - % 2
+)
++(double( % 1(1)) - % 2(1)
+)*
+(double( % 1(1)) - % 2(1)
+))
+;2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-#endif  ; !defined(INC__MATH_AS)
+#
+endif;
+!defined(INC__MATH_AS)

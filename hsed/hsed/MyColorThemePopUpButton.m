@@ -8,15 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "MyColorThemePopUpButton.h"
-#import "AppDelegate.h"
 
 @implementation MyColorThemePopUpButton
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {
-        global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
         if (global.selectedColorThemeString == nil) {
             global.selectedColorThemeString = [self title];
         }

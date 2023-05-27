@@ -11,8 +11,7 @@
 
 @implementation MyComboBox
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {
         [self selectItemAtIndex:0]; // First item is at index 0
@@ -20,9 +19,16 @@
     return self;
 }
 
--(void)comboBoxSelectionDidChange:(NSNotification *)notification {}
--(void)comboBoxSelectionIsChanging:(NSNotification *)notification {}
--(void)comboBoxWillDismiss:(NSNotification *)notification {}
--(void)comboBoxWillPopUp:(NSNotification *)notification {}
+- (void)comboBoxSelectionDidChange:(NSNotification *)notification {
+}
+
+- (void)comboBoxSelectionIsChanging:(NSNotification *)notification {
+}
+
+- (void)comboBoxWillDismiss:(NSNotification *)notification {
+}
+
+- (void)comboBoxWillPopUp:(NSNotification *)notification {
+}
 
 @end

@@ -15,12 +15,14 @@
 #import "LineNumberRulerView.h"
 
 @interface NSTextViewExtension : NSTextView {
-    LineNumberRulerView* lineNumberView;
+    LineNumberRulerView *lineNumberView;
     NSUInteger LineNumberViewAssocObjKey;
 }
--(void)lnv_setUpLineNumberView;
--(void)lnv_framDidChange:(NSNotification*)notification;
--(void)lnv_textDidChange:(NSNotification*)notification;
+- (void)lnv_setUpLineNumberView;
+
+- (void)lnv_framDidChange:(NSNotification *)notification;
+
+- (void)lnv_textDidChange:(NSNotification *)notification;
 
 @end
 

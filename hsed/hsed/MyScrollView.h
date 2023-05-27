@@ -15,7 +15,7 @@
 //#import "MyTextView.h"
 
 @interface MyScrollView : NSScrollView {
-    AppDelegate* global;
+    AppDelegate *global;
 }
 
 @end

@@ -17,9 +17,9 @@
 #import "MyScrollView.h"
 
 @interface MyTextView : NSTextViewExtension <NSTextViewDelegate> {
-    AppDelegate* global;
-    MyWindow* myWindow;
-    MyScrollView* myScrollView;
+    AppDelegate *global;
+    MyWindow *myWindow;
+    MyScrollView *myScrollView;
 @public
     int accessNumber;
     int timerCount;
@@ -35,13 +35,19 @@
     double documentVisibleWidth;
     double documentVisibleHeight;
 }
--(int)getEditorLineCount;
--(int)getEditorTextCount;
--(int)getEditorTextIndex;
--(int)getEditorSelectedTextCount;
--(NSString*)getCorsorNearString;
--(void)resetTextColor;
--(void)updateTextColor;
+- (int)getEditorLineCount;
+
+- (int)getEditorTextCount;
+
+- (int)getEditorTextIndex;
+
+- (int)getEditorSelectedTextCount;
+
+- (NSString *)getCorsorNearString;
+
+- (void)resetTextColor;
+
+- (void)updateTextColor;
 @end
 
 #endif /* MyTextView_h */

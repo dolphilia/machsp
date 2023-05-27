@@ -16,7 +16,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-    
+
 //    //---- macOS Sierra対策
 //    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
 //    BOOL isDir = NO;

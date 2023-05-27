@@ -12,14 +12,16 @@
 #import "MyWindow.h"
 
 @interface ViewController : NSViewController {
-    IBOutlet MyWebKitView* myWebKitView;
-    IBOutlet MyTextView* myTextView;
-    IBOutlet MyWindow* myWindow;
+    IBOutlet MyWebKitView *myWebKitView;
+    IBOutlet MyTextView *myTextView;
+    IBOutlet MyWindow *myWindow;
 }
 
 - (IBAction)doSomething:(id)sender;
+
 - (IBAction)onLaunchApplication:(id)sender;
--(IBAction)onTerminateApplication:(id)sender;
+
+- (IBAction)onTerminateApplication:(id)sender;
 
 @end
 

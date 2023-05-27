@@ -9,23 +9,23 @@
 //
 #define HSPTITLE "Hot Soup Processor ver."
 #define hspver "3.5beta3"
-#define mvscode 3		// minor version code
-#define vercode 0x3503	// version code
+#define mvscode 3        // minor version code
+#define vercode 0x3503    // version code
 
-#define HSPERR_HANDLE		// HSPエラー例外を有効にします
-#define SYSERR_HANDLE		// システムエラー例外を有効にします
+#define HSPERR_HANDLE        // HSPエラー例外を有効にします
+#define SYSERR_HANDLE        // システムエラー例外を有効にします
 
 
 //
 //		移植用のラベル
 //
-#define JPN			// IME use flag
-#define JPNMSG		// japanese message flag
+#define JPN            // IME use flag
+#define JPNMSG        // japanese message flag
 
 //
 //	Debug mode functions
 //
-#define HSPDEBUGLOG	// Debug Log Version
+#define HSPDEBUGLOG    // Debug Log Version
 
 //		Debug Window Message Buffer Size
 //
@@ -37,7 +37,7 @@
 //
 //#define HSPWIN		// Windows(WIN32) version flag
 //#define HSPMAC		// Macintosh version flag
-#define HSPLINUX		// Linux(CLI) version flag
+#define HSPLINUX        // Linux(CLI) version flag
 //#define HSPIOS		// iOS version flag
 //#define HSPNDK		// android NDK version flag
 //#define HSPDISH		// HSP3Dish flag
@@ -71,9 +71,9 @@
 //
 //		gcc使用のチェック
 //
-#if defined(HSPMAC)|defined(HSPIOS)|defined(HSPNDK)|defined(HSPLINUX)|defined(HSPEMSCRIPTEN)
-#define HSPGCC			// GCC使用フラグ
-#define HSPUTF8			// UTF8使用フラグ
+#if defined(HSPMAC) | defined(HSPIOS) | defined(HSPNDK) | defined(HSPLINUX) | defined(HSPEMSCRIPTEN)
+#define HSPGCC            // GCC使用フラグ
+#define HSPUTF8            // UTF8使用フラグ
 #endif
 
 #if defined(HSPEMSCRIPTEN)
@@ -94,7 +94,7 @@
 #define HSP_PATH_SEPARATOR '¥¥'
 #endif
 #ifdef HSPGCC
-#define HSP_MAX_PATH	256
+#define HSP_MAX_PATH    256
 #define HSP_PATH_SEPARATOR '/'
 #endif
 

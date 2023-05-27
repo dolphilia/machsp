@@ -10,11 +10,10 @@
 #import "MyHorizontalSplitView.h"
 
 @implementation MyHorizontalSplitView {
-    
+
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
+- (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {
         //[[[self subviews] objectAtIndex:0] ;
@@ -24,20 +23,20 @@
     return self;
 }
 
--(void)awakeFromNib {
-    
+- (void)awakeFromNib {
+
     //splitviewの下部領域を非表示にする
     //[[[self subviews] objectAtIndex:1] setHidden:YES];
     //self.dividerStyle = NSSplitViewDividerStyleThin;
-    
-    
-    
+
+
+
     //非表示の下部領域が隠されているかどうか
-    BOOL rightViewCollapsed = [self isSubviewCollapsed:[[self subviews] objectAtIndex: 1]];
+    BOOL rightViewCollapsed = [self isSubviewCollapsed:[[self subviews] objectAtIndex:1]];
     if (rightViewCollapsed) { //隠されている
     } else {//表示されている
     }
-    
+
 
 }
 

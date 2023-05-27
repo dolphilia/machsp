@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 
 @interface MySyntaxPopUpButton : NSPopUpButton {
-    AppDelegate* global;
+    AppDelegate *global;
 }
 
 @end

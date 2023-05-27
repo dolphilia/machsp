@@ -5,7 +5,6 @@
 //
 #include "tagstack.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 //-------------------------------------------------------------
@@ -13,8 +12,7 @@
 //-------------------------------------------------------------
 
 int
-CTagStack::StrCmp(char* str1, char* str2)
-{
+CTagStack::StrCmp(char *str1, char *str2) {
     //	string compare (0=not same/-1=same)
     //  (case sensitive)
     int ap;
@@ -32,8 +30,7 @@ CTagStack::StrCmp(char* str1, char* str2)
 }
 
 int
-CTagStack::SearchTagID(char* tag)
-{
+CTagStack::SearchTagID(char *tag) {
     //		É^ÉOÇåüçı
     //
     int i;
@@ -47,8 +44,7 @@ CTagStack::SearchTagID(char* tag)
 }
 
 int
-CTagStack::RegistTagID(char* tag)
-{
+CTagStack::RegistTagID(char *tag) {
     //		É^ÉOÇìoò^
     //
     int i, len;
@@ -56,7 +52,7 @@ CTagStack::RegistTagID(char* tag)
         return -1;
     i = tagent;
     tagent++;
-    len = (int)strlen(tag);
+    len = (int) strlen(tag);
     if (len >= TAGSTK_TAGSIZE)
         tag[TAGSTK_TAGSIZE - 1] = 0;
     strcpy(mem_tag[i].name, tag);
@@ -64,11 +60,10 @@ CTagStack::RegistTagID(char* tag)
 }
 
 void
-CTagStack::GetTagUniqueName(int tagid, char* outname)
-{
+CTagStack::GetTagUniqueName(int tagid, char *outname) {
     //		É^ÉOIDÇ…ëŒâûÇµÇΩÉÜÉjÅ[ÉNñºÇéÊìæ
     //
-    TAGINF* t;
+    TAGINF *t;
     if ((tagid < 0) || (tagid >= TAGSTK_TAGMAX)) {
         sprintf(outname, "TagErr%04x", gcount++);
     } else {
@@ -78,8 +73,7 @@ CTagStack::GetTagUniqueName(int tagid, char* outname)
 }
 
 int
-CTagStack::GetTagID(char* tag)
-{
+CTagStack::GetTagID(char *tag) {
     //		É^ÉOñº->É^ÉOID Ç…ïœä∑Ç∑ÇÈ
     //
     int i;
@@ -90,9 +84,8 @@ CTagStack::GetTagID(char* tag)
     return i;
 }
 
-char*
-CTagStack::GetTagName(int tagid)
-{
+char *
+CTagStack::GetTagName(int tagid) {
     //		É^ÉOID->É^ÉOñº Ç…ïœä∑Ç∑ÇÈ
     //
     if ((tagid < 0) || (tagid >= TAGSTK_TAGMAX))
@@ -101,13 +94,12 @@ CTagStack::GetTagName(int tagid)
 }
 
 int
-CTagStack::StackCheck(char* res)
-{
+CTagStack::StackCheck(char *res) {
     //		Ç∑Ç◊ÇƒÇÃÉXÉ^ÉbÉNÇ™âåàÇ≥ÇÍÇƒÇ¢ÇÈÇ©ÇÉ`ÉFÉbÉN
     //			0=OK/1>=NG (resÇ…ÉGÉâÅ[ÉXÉ^ÉbÉNÇä‹ÇﬁÉ^ÉOàÍóó)
     //
     int i, n;
-    TAGDATA* t;
+    TAGDATA *t;
     strcpy(res, "\t");
     for (i = 0; i < TAGSTK_TAGMAX; i++) {
         mem_tag[i].check = 0;
@@ -136,12 +128,11 @@ CTagStack::StackCheck(char* res)
 }
 
 int
-CTagStack::PushTag(int tagid, char* str)
-{
+CTagStack::PushTag(int tagid, char *str) {
     //		É^ÉOID,strÇÉXÉ^ÉbÉNÇ…ì¸ÇÍÇÈ
     //
     int i, len;
-    TAGDATA* t;
+    TAGDATA *t;
     if ((tagid < 0) || (tagid >= TAGSTK_TAGMAX))
         return -1;
     if (lastidx >= TAGSTK_MAX)
@@ -150,21 +141,20 @@ CTagStack::PushTag(int tagid, char* str)
     lastidx++;
     t = &mem_buf[i];
     t->tagid = tagid;
-    len = (int)strlen(str);
+    len = (int) strlen(str);
     if (len >= TAGSTK_SIZE)
         str[TAGSTK_SIZE - 1] = 0;
     strcpy(t->data, str);
     return i;
 }
 
-char*
-CTagStack::PopTag(int tagid)
-{
+char *
+CTagStack::PopTag(int tagid) {
     //		É^ÉOIDÇ…ëŒâûÇµÇΩÉXÉ^ÉbÉNstrÇéÊÇËèoÇ∑
     //
     int i;
-    TAGDATA* t;
-    char* p;
+    TAGDATA *t;
+    char *p;
     if ((tagid < 0) || (tagid >= TAGSTK_TAGMAX))
         return NULL;
     if (lastidx < 1)
@@ -192,14 +182,13 @@ CTagStack::PopTag(int tagid)
     return p;
 }
 
-char*
-CTagStack::LookupTag(int tagid, int level)
-{
+char *
+CTagStack::LookupTag(int tagid, int level) {
     //		É^ÉOIDÇ…ëŒâûÇµÇΩÉXÉ^ÉbÉNstrÇéÊÇËèoÇ∑(POPÇµÇ»Ç¢)
     //				(level=ÉXÉ^ÉbÉNíiêî0,1,2Åc)
     //
     int i, lv;
-    TAGDATA* t;
+    TAGDATA *t;
     if ((tagid < 0) || (tagid >= TAGSTK_TAGMAX))
         return NULL;
     if (lastidx < 1)
@@ -224,8 +213,7 @@ CTagStack::LookupTag(int tagid, int level)
 //		Interfaces
 //-------------------------------------------------------------
 
-CTagStack::CTagStack()
-{
+CTagStack::CTagStack() {
     int i;
     for (i = 0; i < TAGSTK_TAGMAX; i++) {
         mem_tag[i].name[0] = 0;
@@ -241,6 +229,5 @@ CTagStack::CTagStack()
     strcpy(tagerr, "%err%");
 }
 
-CTagStack::~CTagStack()
-{
+CTagStack::~CTagStack() {
 }

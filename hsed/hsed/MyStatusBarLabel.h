@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 
 @interface MyStatusBarLabel : NSTextField {
-    AppDelegate* global;
+    AppDelegate *global;
 }
 
 @end

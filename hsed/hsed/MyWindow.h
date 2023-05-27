@@ -12,9 +12,9 @@
 #import <Cocoa/Cocoa.h>
 #import "AppDelegate.h"
 
-@interface MyWindow:NSWindow {
-    AppDelegate* global;
-    IBOutlet NSButton* button;
+@interface MyWindow : NSWindow {
+    AppDelegate *global;
+    IBOutlet NSButton *button;
 @public
     int accessNumber;
     double documentVisibleX[128];
@@ -22,17 +22,23 @@
     double documentVisibleWidth[128];
     double documentVisibleHeight[128];
 }
--(void)setAccessNumber:(int)num;
--(IBAction)onButton:(id)sender;
+- (void)setAccessNumber:(int)num;
 
-- (NSString*)replace:(NSString*)str searchStr:(NSString*)searchStr replaceStr:(NSString*)replaceStr;
-- (NSString*)preg_replace:(NSString*)str patternStr:(NSString*)patternStr replaceStr:(NSString*)replaceStr;
-- (BOOL)preg_match:(NSString*)str patternStr:(NSString*)patternStr;
-- (NSString*)trim:(NSString*)str;
-- (NSString*)append:(NSString*)str append:(NSString*)append;
+- (IBAction)onButton:(id)sender;
 
--(NSString *)launchApplication_getPath;
--(void)terminateApplication;
+- (NSString *)replace:(NSString *)str searchStr:(NSString *)searchStr replaceStr:(NSString *)replaceStr;
+
+- (NSString *)preg_replace:(NSString *)str patternStr:(NSString *)patternStr replaceStr:(NSString *)replaceStr;
+
+- (BOOL)preg_match:(NSString *)str patternStr:(NSString *)patternStr;
+
+- (NSString *)trim:(NSString *)str;
+
+- (NSString *)append:(NSString *)str append:(NSString *)append;
+
+- (NSString *)launchApplication_getPath;
+
+- (void)terminateApplication;
 
 @end
 

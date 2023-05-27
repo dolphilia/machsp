@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 
 @interface MyFontSizePopUpButton : NSPopUpButton {
-    AppDelegate* global;
+    AppDelegate *global;
 }
 
 @end

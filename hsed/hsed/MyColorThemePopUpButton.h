@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 
 @interface MyColorThemePopUpButton : NSPopUpButton {
-    AppDelegate* global;
+    AppDelegate *global;
 }
 
 @end

@@ -18,20 +18,17 @@
 #endif
 
 #include <stdio.h>
-#include <string.h>
 #include "localinfo.h"
 
 //-------------------------------------------------------------
 //		Interfaces
 //-------------------------------------------------------------
 
-CLocalInfo::CLocalInfo()
-{
+CLocalInfo::CLocalInfo() {
 }
 
 
-CLocalInfo::~CLocalInfo()
-{
+CLocalInfo::~CLocalInfo() {
 }
 
 
@@ -39,8 +36,7 @@ CLocalInfo::~CLocalInfo()
 //		Routines
 //-------------------------------------------------------------
 
-int CLocalInfo::GetTime( int index )
-{
+int CLocalInfo::GetTime(int index) {
     /*
      Get system time entries
      index :
@@ -93,18 +89,16 @@ int CLocalInfo::GetTime( int index )
 }
 
 
-char *CLocalInfo::CurrentTime( void )
-{
-    sprintf( curtime, "\"%02d:%02d:%02d\"",
-            GetTime(4),GetTime(5),GetTime(6) );
+char *CLocalInfo::CurrentTime(void) {
+    sprintf(curtime, "\"%02d:%02d:%02d\"",
+            GetTime(4), GetTime(5), GetTime(6));
     return curtime;
 }
 
 
-char *CLocalInfo::CurrentDate( void )
-{
-    sprintf( curdate, "\"%04d/%02d/%02d\"",
-            GetTime(0),GetTime(1),GetTime(3) );
+char *CLocalInfo::CurrentDate(void) {
+    sprintf(curdate, "\"%04d/%02d/%02d\"",
+            GetTime(0), GetTime(1), GetTime(3));
     return curdate;
 }
 

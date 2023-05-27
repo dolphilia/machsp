@@ -13,7 +13,7 @@
 #import <AppKit/AppKit.h>
 
 @interface LineNumberRulerView : NSRulerView {
-    NSFont* myFont;
+    NSFont *myFont;
 }
 - (instancetype)init:(NSTextView *)textView;
 

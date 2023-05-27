@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 
 @interface MyLogTextView : NSTextView {
-    AppDelegate* global;
+    AppDelegate *global;
 }
 
 @end

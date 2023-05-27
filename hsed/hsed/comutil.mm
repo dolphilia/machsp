@@ -4,8 +4,6 @@
 //	onion software/onitama 2005/4
 //
 
-#include "hsp3config.h"
-
 #ifdef HSPWIN
 #define USE_WINDOWS_COM		// WindowsCOM APIを使用する
 #endif
@@ -15,10 +13,6 @@
 #include <ocidl.h>
 #include <objbase.h>
 #endif
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "comutil.h"
 
@@ -74,8 +68,7 @@ int ConvertIID( COM_GUID *guid, char *name )
  */
 /*------------------------------------------------------------*/
 
-int ConvertIID( COM_GUID *guid, char *name )
-{
+int ConvertIID(COM_GUID *guid, char *name) {
     //		SJIS文字列 IID から IID 構造体を得る
     //		(COMサポート場合は変換が必要)
     return 0;
