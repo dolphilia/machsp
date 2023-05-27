@@ -20,6 +20,7 @@ void Select(char *str) {
 }
 
 ///
+///
 int GetSize(void) {
     return (int)strlen(base);
 }

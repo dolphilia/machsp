@@ -15,19 +15,23 @@
 /// Linux用ファイルパス切り出し
 ///
 static void _splitpath(const char *path, char *p_drive, char *dir, char *fname, char *ext) {
-    char *p, pathtmp[256];
+    char *p;
+    char pathtmp[256]; // パスの一時変数
     
     p_drive[0] = 0;
     strcpy(pathtmp, path);
     
     p = strchr2(pathtmp, '.');
+    
     if (p == NULL) {
         ext[0] = 0;
     } else {
         strcpy(ext, p);
         *p = 0;
     }
+    
     p = strchr2(pathtmp, '/');
+    
     if (p == NULL) {
         dir[0] = 0;
         strcpy(fname, pathtmp);
