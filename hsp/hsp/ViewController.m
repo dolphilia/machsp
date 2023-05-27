@@ -9,7 +9,6 @@
 #import "ViewController.h"
 #import "hsp.h"
 #import "hsp3cl.h"
-#import <Foundation/Foundation.h>
 
 @implementation ViewController
 

@@ -367,14 +367,10 @@ extern void stbi_install_YCbCr_to_RGB(stbi_YCbCr_to_RGB_run func);
 
 #ifndef STBI_NO_STDIO
 
-#include <stdio.h>
-
 #endif
 
 #include <stdlib.h>
-#include <memory.h>
 #include <assert.h>
-#include <stdarg.h>
 #include <stddef.h> // ptrdiff_t on osx
 
 #ifndef _MSC_VER
@@ -395,8 +391,6 @@ typedef   signed short stbi__int16;
 typedef unsigned int   stbi__uint32;
 typedef   signed int   stbi__int32;
 #else
-
-#include <stdint.h>
 
 typedef uint8_t stbi__uint8;
 typedef uint16_t stbi__uint16;

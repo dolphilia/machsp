@@ -12,13 +12,12 @@
 #import <Cocoa/Cocoa.h>
 #import "AppDelegate.h"
 
-@interface MyWindow:NSWindow {
-    AppDelegate* global;
+@interface MyWindow : NSWindow {
+    AppDelegate *global;
 @public
     int accessNumber;
 }
--(void)setAccessNumber:(int)num;
-
+- (void)setAccessNumber:(int)num;
 
 
 @end

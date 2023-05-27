@@ -7,15 +7,12 @@
 #import <stdlib.h>
 #import <string.h>
 #import "hsp3config.h"
-#import "hsp3debug.h"
 #import "hsp3struct.h"
 #import "hsc3.h"
 #import "membuf.h"
 #import "label.h"
 #import "token.h"
 #import "AppDelegate.h"
-#import <Cocoa/Cocoa.h>
-#import <Foundation/Foundation.h>
 
 #import "c_wrapper.h"
 
@@ -74,14 +71,14 @@ void CHsc3::AddSystemMacros(CToken *tk, int option) {
     process_option = option;
     if ((option & HSC3_OPT_NOHSPDEF) == 0) {
         //CLocalInfo linfo;
-        tk->RegistExtMacro((char *)"__hspver__", vercode);
-        tk->RegistExtMacro((char *)"__hsp30__", (char *)"");
-        tk->RegistExtMacro((char *)"__date__", [cwrap CurrentDate]);//linfo.CurrentDate());
-        tk->RegistExtMacro((char *)"__time__", [cwrap CurrentTime]);//linfo.CurrentTime());
-        tk->RegistExtMacro((char *)"__line__", 0);
-        tk->RegistExtMacro((char *)"__file__", (char *)"");
+        tk->RegistExtMacro((char *) "__hspver__", vercode);
+        tk->RegistExtMacro((char *) "__hsp30__", (char *) "");
+        tk->RegistExtMacro((char *) "__date__", [cwrap CurrentDate]);//linfo.CurrentDate());
+        tk->RegistExtMacro((char *) "__time__", [cwrap CurrentTime]);//linfo.CurrentTime());
+        tk->RegistExtMacro((char *) "__line__", 0);
+        tk->RegistExtMacro((char *) "__file__", (char *) "");
         if (option & HSC3_OPT_DEBUGMODE)
-            tk->RegistExtMacro((char *)"_debug", (char *)"");
+            tk->RegistExtMacro((char *) "_debug", (char *) "");
     }
 }
 
@@ -91,21 +88,21 @@ void CHsc3::AddSystemMacros(CToken *tk, int option) {
 int CHsc3::PreProcessAht(char *fname, void *ahtoption, int mode) {
     int res;
     CToken tk;
-    
+
     lb_info = NULL;
     ahtbuf = NULL;
     tk.SetErrorBuf(errbuf);
     tk.SetCommonPath(common_path);
-    tk.SetAHT((AHTMODEL *)ahtoption);
+    tk.SetAHT((AHTMODEL *) ahtoption);
     outbuf = new CMemBuf;
-    
+
     if (mode) {
         ahtbuf = new CMemBuf;
         tk.SetAHTBuffer(ahtbuf);
     }
-    
+
     @autoreleasepool {
-        AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
         global.logString = [global.logString stringByAppendingFormat:@"#AHT processor ver%s / onion software 1997-2015(c)\n", hspver];
     }
 
@@ -129,35 +126,35 @@ int CHsc3::PreProcess(char *fname, char *outname, int option, char *rname, void 
     int res;
     CToken tk;
     CMemBuf *packbuf = NULL;
-    
+
     lb_info = NULL;
     outbuf = new CMemBuf;
     ahtbuf = NULL;
-    
+
     tk.SetErrorBuf(errbuf);
     tk.SetCommonPath(common_path);
     tk.LabelRegist2(hsp_prestr);
     AddSystemMacros(&tk, option);
-    
+
     if (option & HSC3_OPT_MAKEPACK) {
         packbuf = new CMemBuf(0x1000);
         tk.SetPackfileOut(packbuf);
     }
-    if (option & (HSC3_OPT_READAHT|HSC3_OPT_MAKEAHT)) {
-        tk.SetAHT((AHTMODEL *)ahtoption);
+    if (option & (HSC3_OPT_READAHT | HSC3_OPT_MAKEAHT)) {
+        tk.SetAHT((AHTMODEL *) ahtoption);
     }
     if (option & HSC3_OPT_UTF8IN) {
         tk.SetUTF8Input(1);
     }
-    
+
     @autoreleasepool {
-        AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        global.logString = [global.logString stringByAppendingFormat:@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE, hspver];
+        AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
+        global.logString = [global.logString stringByAppendingFormat:@"# %s ver%s / onion software 1997-2015(c)\n", HSC3TITLE, hspver];
     }
-    
+
     tk.SetAdditionMode(1);
-    
-    res = tk.ExpandFile(outbuf, (char *)"hspdef.as", (char *)"hspdef.as");
+
+    res = tk.ExpandFile(outbuf, (char *) "hspdef.as", (char *) "hspdef.as");
     tk.SetAdditionMode(0);
     if (res < -1)
         return -1;
@@ -165,14 +162,14 @@ int CHsc3::PreProcess(char *fname, char *outname, int option, char *rname, void 
     if (res < 0)
         return -1;
     tk.FinishPreprocess(outbuf);
-    
+
     cmpopt = tk.GetCmpOption();
     if (cmpopt & CMPMODE_PPOUT) {
         res = outbuf->SaveFile(outname);
         if (res < 0) {
 #ifdef JPNMSG
             @autoreleasepool {
-                AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+                AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
                 global.logString = [global.logString stringByAppendingString:@"#プリプロセッサファイルの出力に失敗しました\n"];
             }
 #else
@@ -181,8 +178,8 @@ int CHsc3::PreProcess(char *fname, char *outname, int option, char *rname, void 
             return -2;
         }
     }
-    outbuf->Put((int)0);
-    
+    outbuf->Put((int) 0);
+
 #if 0
     //		ソースのラベルを追加(停止中)
     if (addkw != NULL) {
@@ -192,15 +189,15 @@ int CHsc3::PreProcess(char *fname, char *outname, int option, char *rname, void 
     addkw = new CMemBuf(0x1000);
     tk.LabelDump(addkw, DUMPMODE_DLLCMD);
 #endif
-    
+
     if (option & HSC3_OPT_MAKEPACK) {
-        tk.AddPackfile((char *)"start.ax", 1);
-        res = packbuf->SaveFile((char *)"packfile");
+        tk.AddPackfile((char *) "start.ax", 1);
+        res = packbuf->SaveFile((char *) "packfile");
         delete packbuf;
         if (res < 0) {
 #ifdef JPNMSG
             @autoreleasepool {
-                AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+                AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
                 global.logString = [global.logString stringByAppendingString:@"#packfileの出力に失敗しました\n"];
             }
 #else
@@ -209,15 +206,15 @@ int CHsc3::PreProcess(char *fname, char *outname, int option, char *rname, void 
             return -3;
         }
         @autoreleasepool {
-            AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
             global.logString = [global.logString stringByAppendingString:@"#packfile generated.\n"];
         }
     }
-    
+
     hed_option = tk.GetHeaderOption();
-    strcpy( hed_runtime, tk.GetHeaderRuntimeName() );
+    strcpy(hed_runtime, tk.GetHeaderRuntimeName());
     lb_info = tk.GetLabelInfo();
-    
+
     return 0;
 }
 
@@ -243,23 +240,23 @@ int CHsc3::Compile(char *fname, char *outname, int mode) {
     int res;
     CToken tk;
     if (lb_info != NULL)
-        tk.SetLabelInfo(lb_info);		// プリプロセッサのラベル情報
-    
+        tk.SetLabelInfo(lb_info);        // プリプロセッサのラベル情報
+
     tk.SetErrorBuf(errbuf);
     tk.SetCommonPath(common_path);
     tk.LabelRegist(hsp_prestr, 1);
     tk.SetHeaderOption(hed_option, hed_runtime);
     tk.SetCmpOption(cmpopt);
-    
+
     if (process_option & HSC3_OPT_UTF8IN) {
         tk.SetUTF8Input(1);
     }
-    
+
     @autoreleasepool {
-        AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        global.logString = [global.logString stringByAppendingFormat:@"# %s ver%s / onion software 1997-2015(c)\n",HSC3TITLE2, hspver];
+        AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
+        global.logString = [global.logString stringByAppendingFormat:@"# %s ver%s / onion software 1997-2015(c)\n", HSC3TITLE2, hspver];
     }
-    
+
     if (outbuf != NULL) {
         res = tk.GenerateCode(outbuf, outname, mode);
     } else {
@@ -281,14 +278,14 @@ int CHsc3::GetCmdList(int option) {
     int res;
     CToken tk;
     CMemBuf outbuf;
-    
+
     tk.SetErrorBuf(errbuf);
     tk.SetCommonPath(common_path);
     tk.LabelRegist3(hsp_prestr); // 標準キーワード
     tk.LabelRegist3(hsp_prepp); // プリプロセッサキーワード
     AddSystemMacros(&tk, option);
-    
-    res = tk.ExpandFile(&outbuf, (char *)"hspdef.as", (char *)"hspdef.as");
+
+    res = tk.ExpandFile(&outbuf, (char *) "hspdef.as", (char *) "hspdef.as");
     tk.LabelDump(errbuf, DUMPMODE_ALL);
 
     return 0;
@@ -296,7 +293,7 @@ int CHsc3::GetCmdList(int option) {
 
 int CHsc3::OpenPackfile(void) {
     pfbuf = new CMemBuf(0x1000);
-    if (pfbuf->PutFile((char *)"packfile" ) < 0 ) {
+    if (pfbuf->PutFile((char *) "packfile") < 0) {
         delete pfbuf;
         return -1;
     }
@@ -314,12 +311,12 @@ void CHsc3::GetPackfileOption(char *out, char *keyword, char *defval) {
     //note.Select(pfbuf->GetBuffer());
     //max = note.GetMaxLine();
     strcpy(out, defval);
-    for(int i = 0; i < max; i++) {
+    for (int i = 0; i < max; i++) {
         [cwrap GetLine:tmp line:i];
         //note.GetLine(tmp, i);
-        if ((tmp[0] == ';' ) && (tmp[1] == '!')) {
+        if ((tmp[0] == ';') && (tmp[1] == '!')) {
             s = tmp + 2;
-            while(1) {
+            while (1) {
                 a1 = *s;
                 if ((a1 == 0) || (a1 == '='))
                     break;
@@ -328,7 +325,7 @@ void CHsc3::GetPackfileOption(char *out, char *keyword, char *defval) {
             if (a1 != 0) {
                 s[0] = 0;
                 if (tstrcmp(tmp + 2, keyword)) {
-                    strcpy(out, s + 1 );
+                    strcpy(out, s + 1);
                 }
             }
         }
@@ -367,8 +364,8 @@ int CHsc3::GetRuntimeFromHeader(char *fname, char *res) {
         fclose(fp);
         return 0;
     }
-    
-    data = (char *)malloc(exsize);
+
+    data = (char *) malloc(exsize);
     fread(data, 1, exsize, fp);
     fclose(fp);
     ires = 0;

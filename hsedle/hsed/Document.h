@@ -10,13 +10,12 @@
 #import "AppDelegate.h"
 
 
-
 @interface Document : NSDocument {
-    AppDelegate* global;
+    AppDelegate *global;
     int accessNumber;
-    
-    NSString* title;
-    NSWindowController* aController;
+
+    NSString *title;
+    NSWindowController *aController;
 }
 
 

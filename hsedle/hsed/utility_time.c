@@ -26,11 +26,11 @@ static char curdate[16];
 int GetTime(int index) {
     struct timeval tv;
     struct tm *lt;
-    
+
     gettimeofday(&tv, NULL); // MinGWだとVerによって通りません
     lt = localtime(&tv.tv_sec);
-    
-    switch(index) {
+
+    switch (index) {
         case 0:
             return lt->tm_year + 1900;
         case 1:
@@ -46,9 +46,9 @@ int GetTime(int index) {
         case 6:
             return lt->tm_sec;
         case 7:
-            return (int)tv.tv_usec / 10000;
+            return (int) tv.tv_usec / 10000;
         case 8:
-            return (int)tv.tv_usec % 10000; // 一応マイクロ秒まで取れる
+            return (int) tv.tv_usec % 10000; // 一応マイクロ秒まで取れる
     }
     return 0;
 }

@@ -4,41 +4,31 @@
 //
 
 #include "runCompiler.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include "hsp3config.h"
 #include "hsc3.h"
-#include "token.h"
-#import "runCompiler.h"
-#import <Foundation/Foundation.h>
-#import "MyWindow.h"
-#import "AppDelegate.h"
 
-@implementation MyWindow(run)
+@implementation MyWindow (run)
 
-static void usage1( void ) {
-    static 	char *p[] = {
-        (char *)"usage: hspcmp [options] [filename]",
-        (char *)"       -o??? set output file to ???",
-        (char *)"       -d    add debug information",
-        (char *)"       -p    preprocessor only",
-        (char *)"       -c    HSP2.55 compatible mode",
-        (char *)"       -i    input UTF-8 source code",
-        (char *)"       -u    output UTF-8 strings",
-        (char *)"       -w    force debug window on",
-        (char *)"       --compath=??? set common path to ???",
-        NULL };
-    for(int i = 0; p[i]; i++) {
+static void usage1(void) {
+    static char *p[] = {
+            (char *) "usage: hspcmp [options] [filename]",
+            (char *) "       -o??? set output file to ???",
+            (char *) "       -d    add debug information",
+            (char *) "       -p    preprocessor only",
+            (char *) "       -c    HSP2.55 compatible mode",
+            (char *) "       -i    input UTF-8 source code",
+            (char *) "       -u    output UTF-8 strings",
+            (char *) "       -w    force debug window on",
+            (char *) "       --compath=??? set common path to ???",
+            NULL};
+    for (int i = 0; p[i]; i++) {
         @autoreleasepool {
-            AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
             global.logString = [global.logString stringByAppendingFormat:@"%s\n", p[i]];
         }
     }
 }
 
--(int)runCompiler:(int)argc argv:(char **)argv {
+- (int)runCompiler:(int)argc argv:(char **)argv {
     int st = 0;
     int cmpopt = 0;
     int ppopt = HSC3_OPT_UTF8IN;
@@ -49,7 +39,7 @@ static void usage1( void ) {
     char oname[HSP_MAX_PATH];
     char compath[HSP_MAX_PATH];
     CHsc3 *hsc3 = NULL;
-    
+
     if (argc < 2) { // check switch and prm
         usage1();
         return -1;
@@ -60,7 +50,7 @@ static void usage1( void ) {
     oname[0] = 0;
 
     strcpy(compath, "common/");
-    
+
     for (int i = 1; i < argc; i++) {
         if (*argv[i] != '-') {
             strcpy(fname, argv[i]);
@@ -74,7 +64,7 @@ static void usage1( void ) {
                     ppopt |= HSC3_OPT_NOHSPDEF;
                     break;
                 case 'p':
-                    pponly=1;
+                    pponly = 1;
                     break;
                 case 'd':
                     ppopt |= HSC3_OPT_DEBUGMODE;
@@ -101,7 +91,7 @@ static void usage1( void ) {
             }
         }
     }
-    
+
     if (st) {
         global.logString = [global.logString stringByAppendingString:@"Illegal switch selected.\n"];
         return 1;
@@ -110,7 +100,7 @@ static void usage1( void ) {
         global.logString = [global.logString stringByAppendingString:@"No file name selected.\n"];
         return 1;
     }
-    
+
     if (oname[0] == 0) {
         strcpy(oname, fname);
         cutext(oname);
@@ -120,11 +110,11 @@ static void usage1( void ) {
     cutext(fname2);
     addext(fname2, "i");
     addext(fname, "hsp"); // 拡張子がなければ追加する
-    
+
     hsc3 = new CHsc3; // call main
     hsc3->SetCommonPath(compath);
     st = hsc3->PreProcess(fname, fname2, ppopt, fname);
-    if ((cmpopt < 2 ) && ( st == 0)) {
+    if ((cmpopt < 2) && (st == 0)) {
         st = hsc3->Compile(fname2, oname, cmpopt);
     }
     puts(hsc3->GetError());
@@ -133,12 +123,12 @@ static void usage1( void ) {
         delete hsc3;
         hsc3 = NULL;
     }
-    
+
     //printf("!!!!!!!!!!!! \n");
     //[cwrap call_c];
-    swift_test* _swift = [[swift_test alloc] init];
+    swift_test *_swift = [[swift_test alloc] init];
     [_swift _swift_test];
     return st;
 }
-    
+
 @end

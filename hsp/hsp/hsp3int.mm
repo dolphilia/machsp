@@ -11,8 +11,6 @@
 #import "hspvar_int.h"
 #import "hspvar_label.h"
 #import "hspvar_str.h"
-#import "hspvar_struct.h"
-#import "utility_string.h"
 
 // LFを改行として扱う
 #define MATCH_LF

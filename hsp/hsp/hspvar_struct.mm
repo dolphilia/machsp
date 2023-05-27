@@ -5,16 +5,7 @@
 //
 
 #import "hspvar_struct.h"
-#import "debug_message.h"
-#import "hsp3struct_debug.h"
-#import "hsp3struct_var.h"
 #import "strbuf.h"
-#import "supio_hsp3.h"
-#import <Cocoa/Cocoa.h>
-#import <Foundation/Foundation.h>
-#import <stdio.h>
-#import <stdlib.h>
-#import <string.h>
 
 @implementation ViewController (hspvar_struct)
 

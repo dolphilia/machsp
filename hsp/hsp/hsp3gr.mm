@@ -10,8 +10,6 @@
 #import "hspvar_int.h"
 #import "hspvar_label.h"
 #import "hspvar_str.h"
-#import "hspvar_struct.h"
-#import "utility_string.h"
 
 @implementation ViewController (hsp3gr)
 

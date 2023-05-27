@@ -14,40 +14,40 @@
 //--- 文字列操作のためのユーティリティ
 
 //文字列の指定位置で指定された位置の文字を返す
-+(NSString*)charAt:(NSString*)str index:(int)index {
-    if (index>=str.length) {
++ (NSString *)charAt:(NSString *)str index:(int)index {
+    if (index >= str.length) {
         return @"";
     }
-    if (index<0)
+    if (index < 0)
         return @"";
     return [str substringWithRange:NSMakeRange(index, 1)];
 }
 
 //文字列の部分文字列を返す
-+(NSString*)substr:(NSString*)str index:(int)index length:(int)length {
-    if (index>=str.length || index+length>=str.length) {
++ (NSString *)substr:(NSString *)str index:(int)index length:(int)length {
+    if (index >= str.length || index + length >= str.length) {
         return @"";
     }
-    if (index<0)
+    if (index < 0)
         return @"";
     return [str substringWithRange:NSMakeRange(index, length)];
 }
 
-+(int)indexOf:(NSString*)str searchStr:(NSString*)searchStr {
++ (int)indexOf:(NSString *)str searchStr:(NSString *)searchStr {
     if (str.length < searchStr.length) {
         return -1;
     }
-    return (int)[str rangeOfString:searchStr].location;
+    return (int) [str rangeOfString:searchStr].location;
 }
 
-+(int)indexOf:(NSString*)str searchStr:(NSString*)searchStr location:(int)location {
-    if (str.length < location+searchStr.length) {
++ (int)indexOf:(NSString *)str searchStr:(NSString *)searchStr location:(int)location {
+    if (str.length < location + searchStr.length) {
         return -1;
     }
-    return (int)[str rangeOfString:searchStr options:0 range:NSMakeRange(location, str.length-location)].location;
+    return (int) [str rangeOfString:searchStr options:0 range:NSMakeRange(location, str.length - location)].location;
 }
 
-+(BOOL)isSpaceCharacter:(NSString*)str {
++ (BOOL)isSpaceCharacter:(NSString *)str {
     if ([str isEqual:@" "] || [str isEqual:@"\t"] || [str isEqual:@"\f"] || [str isEqual:@"\n"] || [str isEqual:@"\r"] || [str isEqual:@"\v"]) {
         return YES;
     } else {
@@ -55,7 +55,7 @@
     }
 }
 
-+(BOOL)isOperatorCharacter:(NSString*)str {
++ (BOOL)isOperatorCharacter:(NSString *)str {
     if ([str isEqual:@"+"] || [str isEqual:@"-"] || [str isEqual:@"*"] || [str isEqual:@"/"] || [str isEqual:@"\\"] || [str isEqual:@"="] || [str isEqual:@"&"] || [str isEqual:@"|"] || [str isEqual:@"^"] || [str isEqual:@"<"] || [str isEqual:@">"] || [str isEqual:@"!"]) {
         return YES;
     } else {
@@ -63,20 +63,20 @@
     }
 }
 
-+(NSString*)replace:(NSString*)str searchStr:(NSString*)searchStr replaceStr:(NSString*)replaceStr {
++ (NSString *)replace:(NSString *)str searchStr:(NSString *)searchStr replaceStr:(NSString *)replaceStr {
     return [str stringByReplacingOccurrencesOfString:searchStr withString:replaceStr];
 }
 
-+(NSString*)preg_replace:(NSString*)str patternStr:(NSString*)patternStr replaceStr:(NSString*)replaceStr {
++ (NSString *)preg_replace:(NSString *)str patternStr:(NSString *)patternStr replaceStr:(NSString *)replaceStr {
     NSError *error = nil;
     NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:patternStr options:0 error:&error];
     NSString *new_str = [regexp stringByReplacingMatchesInString:str options:0 range:NSMakeRange(0, str.length) withTemplate:replaceStr];
     return new_str;
 }
 
-+(NSString*)preg_replace_lines:(NSString *)str patternStr:(NSString *)patternStr replaceStr:(NSString *)replaceStr {
-    __block NSString* tmpstr = @"";
-    __block NSString* t = @"";
++ (NSString *)preg_replace_lines:(NSString *)str patternStr:(NSString *)patternStr replaceStr:(NSString *)replaceStr {
+    __block NSString *tmpstr = @"";
+    __block NSString *t = @"";
     [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
         t = line;
         if ([self preg_match:line patternStr:patternStr]) {
@@ -88,11 +88,11 @@
     return tmpstr;
 }
 
-+(BOOL)preg_match:(NSString*)str patternStr:(NSString*)patternStr {
++ (BOOL)preg_match:(NSString *)str patternStr:(NSString *)patternStr {
     BOOL ret = NO;
-    NSError* error = nil;
+    NSError *error = nil;
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:patternStr options:0 error:&error];
-    NSArray * matches = [regex matchesInString:str options:0 range:NSMakeRange(0, str.length)];
+    NSArray *matches = [regex matchesInString:str options:0 range:NSMakeRange(0, str.length)];
     if ([matches isEqual:nil]) {
     } else {
         if (matches.count > 0) {
@@ -102,28 +102,29 @@
     return ret;
 }
 
-+(NSString*)trim:(NSString*)str {
++ (NSString *)trim:(NSString *)str {
     return [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
-+(NSString*)append:(NSString*)str append:(NSString*)append {
++ (NSString *)append:(NSString *)str append:(NSString *)append {
     return [str stringByAppendingString:append];
 }
 
 //すべての行をtrimする
-+(NSString*)trimAllLines:(NSString*)str {
-    __block NSString* tmpstr = @"";
++ (NSString *)trimAllLines:(NSString *)str {
+    __block NSString *tmpstr = @"";
     [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
         tmpstr = [tmpstr stringByAppendingString:[self trim:line]];
         tmpstr = [tmpstr stringByAppendingString:@"\n"];
     }];
     return tmpstr;
 }
+
 //すべての行から空行を取り除く
-+(NSString*)deleteBlankLineAllLines:(NSString*)str {
-    __block NSString* tmpstr = @"";
++ (NSString *)deleteBlankLineAllLines:(NSString *)str {
+    __block NSString *tmpstr = @"";
     [str enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
-        if ([line isEqual:@""]){}
+        if ([line isEqual:@""]) {}
         else {
             tmpstr = [tmpstr stringByAppendingString:line];
             tmpstr = [tmpstr stringByAppendingString:@"\n"];

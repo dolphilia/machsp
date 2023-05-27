@@ -12,11 +12,12 @@
 #import "c_wrapper.h"
 #import "hsedle-Swift.h"
 
-@interface MyWindow(run) {
+@interface MyWindow (run) {
 }
 
-static void usage1( void );
--(int)runCompiler:(int)argc argv:(char **)argv;
+static void usage1(void);
+
+- (int)runCompiler:(int)argc argv:(char **)argv;
 
 @end
 

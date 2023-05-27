@@ -14,7 +14,9 @@
 #include <time.h>
 
 int GetTime(int index);
+
 char *CurrentTime(void);
+
 char *CurrentDate(void);
 
 #endif /* utility_time_h */

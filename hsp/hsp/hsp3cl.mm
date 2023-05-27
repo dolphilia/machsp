@@ -8,9 +8,7 @@
 #import "hspvar_int.h"
 #import "hspvar_label.h"
 #import "hspvar_str.h"
-#import "hspvar_struct.h"
 #import "hsp3debug.h"
-#import "utility_string.h"
 
 #define GetPRM(id) (&hspctx.mem_finfo[id])
 #define strp(dsptr) &hspctx.mem_mds[dsptr]

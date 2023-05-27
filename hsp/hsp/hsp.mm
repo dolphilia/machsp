@@ -3,13 +3,10 @@
 //
 
 #import "hsp.h"
-#import "hspvar_core.h"
 #import "hspvar_double.h"
 #import "hspvar_int.h"
 #import "hspvar_label.h"
 #import "hspvar_str.h"
-#import "hspvar_struct.h"
-#import "utility_string.h"
 
 #define strp(dsptr) &hsp_hspctx->mem_mds[dsptr]
 #define GetTypeInfoPtr(hsp_type_tmp) (&hsp_hsp3tinfo[hsp_type_tmp])

@@ -7,23 +7,12 @@
 //->Cnv
 
 #import "hspvar_core.h"
-#import "debug_message.h"
-#import "hsp3struct_debug.h"
-#import "hsp3struct_var.h"
 #import "hspvar_label.h"
 #import "strbuf.h"
-#import "supio_hsp3.h"
-#import <Cocoa/Cocoa.h>
-#import <Foundation/Foundation.h>
-#import <stdio.h>
-#import <stdlib.h>
-#import <string.h>
 #import "hspvar_double.h"
 #import "hspvar_int.h"
-#import "hspvar_label.h"
 #import "hspvar_str.h"
 #import "hspvar_struct.h"
-#import "utility_string.h"
 
 @implementation ViewController (hspvar_core)
 

@@ -9,7 +9,6 @@
 // http://sprocket.babyblue.jp/html/hsp_d3m.htm
 
 #import "d3module.h"
-#import <Foundation/Foundation.h>
 
 @implementation d3module
 

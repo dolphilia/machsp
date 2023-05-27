@@ -7,21 +7,9 @@
 //
 
 #include "supio_hsp3.h"
-#include "debug_message.h"
 #include "dpmread.h"
-#include "hsp3config.h"
-#include "strbuf.h"
-#include <ctype.h>
 #include <dirent.h> // dirlist
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <sys/stat.h> // mkdir stat
-#include <sys/time.h> // gettime
-#include <sys/types.h>
-#include <time.h>
-#include <unistd.h> // changedir delfile get_current_dir_name stat
 
 #ifndef _MAX_PATH
 #define _MAX_PATH 256

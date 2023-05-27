@@ -8,21 +8,30 @@
 class CStrNote {
 public:
     CStrNote();
+
     ~CStrNote();
 
     void Select(char *str);
+
     int GetSize(void);
+
     char *GetStr(void);
+
     int GetMaxLine(void);
+
     int GetLine(char *nres, int line);
+
     int GetLine(char *nres, int line, int max);
+
     int PutLine(char *nstr, int line, int ovr);
+
     char *GetLineDirect(int line);
+
     void ResumeLineDirect(void);
-    
+
 private:
-    int nnget( char *nbase, int line );
-    
+    int nnget(char *nbase, int line);
+
     char *base;
     int lastcr; // CR/LFで終了している
     char *nn; // 先頭ポインタ

@@ -21,11 +21,11 @@ void CMemBuf::InitMemBuf(int sz) {
         size = 0x10000;
     }
     limit_size = size;
-    mem_buf = (char *)malloc(limit_size);
+    mem_buf = (char *) malloc(limit_size);
     mem_buf[0] = 0;
     name[0] = 0;
     cur = 0;
-    
+
     idxflag = 0; // Indexバッファ初期化
     idxmax = -1;
     curidx = 0;
@@ -38,7 +38,7 @@ void CMemBuf::InitIndexBuf(int sz) {
     idxflag = 1;
     idxmax = sz;
     curidx = 0;
-    idxbuf = (int *)malloc(sizeof(int)*sz);
+    idxbuf = (int *) malloc(sizeof(int) * sz);
 }
 
 /// バッファ拡張チェック
@@ -55,9 +55,9 @@ char *CMemBuf::PreparePtr(int sz) {
         return p;
     }
     int i = size; // expand buffer (VCのreallocは怖いので使わない)
-    while(i <= (cur + sz))
+    while (i <= (cur + sz))
         i += limit_size;
-    p = (char *)malloc(i);
+    p = (char *) malloc(i);
     memcpy(p, mem_buf, size);
     free(mem_buf);
     size = i;
@@ -76,8 +76,8 @@ void CMemBuf::RegistIndex(int val) {
     idxbuf[curidx++] = val;
     if (curidx >= idxmax) {
         idxmax += 256;
-        p = (int *)malloc(sizeof(int)*idxmax);
-        memcpy(p, idxbuf, sizeof(int)*curidx);
+        p = (int *) malloc(sizeof(int) * idxmax);
+        memcpy(p, idxbuf, sizeof(int) * curidx);
         free(idxbuf);
         idxbuf = p;
     }
@@ -103,7 +103,7 @@ void CMemBuf::Put(char data) {
 }
 
 void CMemBuf::Put(unsigned char data) {
-    unsigned char *p = (unsigned char *)PreparePtr(1);
+    unsigned char *p = (unsigned char *) PreparePtr(1);
     *p = data;
 }
 
@@ -118,25 +118,25 @@ void CMemBuf::Put(double data) {
 }
 
 void CMemBuf::PutStr(char *data) {
-    char *p = PreparePtr((int)strlen(data));
+    char *p = PreparePtr((int) strlen(data));
     strcpy(p, data);
 }
 
 /// ダブルクォート内専用str
 ///
 void CMemBuf::PutStrDQ(char *data) {
-    unsigned char *src = (unsigned char *)data;
+    unsigned char *src = (unsigned char *) data;
     unsigned char *p;
     unsigned char cur_char;
     unsigned char a2 = '\0';
     int fl;
-    while(1) {
+    while (1) {
         cur_char = *src++;
         if (cur_char == 0)
             break;
         fl = 0;
         if (cur_char == '\\') { // ¥を¥¥に
-            p = (unsigned char *)PreparePtr(1);
+            p = (unsigned char *) PreparePtr(1);
             *p = cur_char;
         }
         if (cur_char == 13) { // CRを¥nに
@@ -149,8 +149,7 @@ void CMemBuf::PutStrDQ(char *data) {
             if (cur_char <= 159) {
                 fl = 1;
                 a2 = *src++;
-            }
-            else if (cur_char >= 224) {
+            } else if (cur_char >= 224) {
                 fl = 1;
                 a2 = *src++;
             }
@@ -158,18 +157,18 @@ void CMemBuf::PutStrDQ(char *data) {
                 break;
         }
         if (fl) {
-            p = (unsigned char *)PreparePtr(2);
+            p = (unsigned char *) PreparePtr(2);
             p[0] = cur_char;
             p[1] = a2;
             continue;
         }
-        p = (unsigned char *)PreparePtr(1);
+        p = (unsigned char *) PreparePtr(1);
         *p = cur_char;
     }
 }
 
 void CMemBuf::PutStrBlock(char *data) {
-    char *p = PreparePtr((int)strlen(data) + 1);
+    char *p = PreparePtr((int) strlen(data) + 1);
     strcpy(p, data);
 }
 
@@ -181,10 +180,10 @@ void CMemBuf::PutCR(void) {
 
 void CMemBuf::PutData(void *data, int sz) {
     char *p = PreparePtr(sz);
-    memcpy(p, (char *)data, sz);
+    memcpy(p, (char *) data, sz);
 }
 
-#if ( WIN32 || _WIN32 ) && ! __CYGWIN__
+#if (WIN32 || _WIN32) && !__CYGWIN__
 # define VSNPRINTF _vsnprintf
 #else
 # define VSNPRINTF vsnprintf
@@ -194,7 +193,7 @@ void CMemBuf::PutStrf(char *format, ...) {
     va_list args;
     int c = cur;
     int space = size - cur;
-    while(1) {
+    while (1) {
         char *p = PreparePtr(space - 1);
         cur = c;
         space = size - cur;
@@ -225,15 +224,15 @@ int CMemBuf::PutFile(char *fname) {
     if (ff == NULL)
         return -1;
     fseek(ff, 0, SEEK_END);
-    length = (int)ftell(ff); // normal file size
+    length = (int) ftell(ff); // normal file size
     fclose(ff);
-    
+
     p = PreparePtr(length + 1);
     ff = fopen(fname, "rb");
     fread(p, 1, length, ff);
     fclose(ff);
     p[length] = 0;
-    
+
     strcpy(name, fname);
     return length;
 }
@@ -313,7 +312,7 @@ int CMemBuf::SearchIndexValue(int val) {
     if (idxflag == 0)
         return -1;
     j = -1;
-    for(int i = 0; i < cur; i++) {
+    for (int i = 0; i < cur; i++) {
         if (idxbuf[i] == val)
             j = i;
     }
@@ -329,7 +328,7 @@ int CMemBuf::SaveFile(char *fname) {
     int flen;
     if (fp == NULL)
         return -1;
-    flen = (int)fwrite(mem_buf, 1, cur, fp);
+    flen = (int) fwrite(mem_buf, 1, cur, fp);
     fclose(fp);
     strcpy(name, fname);
     return flen;

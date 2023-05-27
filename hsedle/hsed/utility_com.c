@@ -12,6 +12,6 @@
 ///
 /// (COMサポート場合は変換が必要)
 ///
-int ConvertIID( COM_GUID *guid, char *name ) {
+int ConvertIID(COM_GUID *guid, char *name) {
     return 0;
 }

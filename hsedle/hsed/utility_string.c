@@ -22,7 +22,7 @@ void Select(char *str) {
 ///
 ///
 int GetSize(void) {
-    return (int)strlen(base);
+    return (int) strlen(base);
 }
 
 /// nngetの解説
@@ -36,9 +36,9 @@ int nnget(char *nbase, int line) {
     lastcr = 0;
     nn = nbase;
     if (line < 0) {
-        if ((int)strlen(nbase) == 0)
+        if ((int) strlen(nbase) == 0)
             return 0;
-        nn += (int)strlen(nbase);
+        nn += (int) strlen(nbase);
         cur_char = *(nn - 1);
         if ((cur_char == 10) || (cur_char == 13))
             lastcr++;
@@ -46,7 +46,7 @@ int nnget(char *nbase, int line) {
     }
     if (line) {
         int i = 0;
-        while(1) {
+        while (1) {
             cur_char = *nn;
             if (cur_char == 0)
                 return 1;
@@ -83,7 +83,7 @@ int GetLine(char *str, int line) {
     if (*nn == 0)
         return 1;
     char cur_char; //現在の文字
-    while(1) {
+    while (1) {
         cur_char = *nn++;
         if ((cur_char == 0) || (cur_char == 13))
             break;
@@ -110,7 +110,7 @@ int GetLine2(char *str, int line, int max) {
         return 1;
     if (*nn == 0)
         return 1;
-    for(int i = 0; i < max; i++) {
+    for (int i = 0; i < max; i++) {
         cur_char = *nn++;
         if ((cur_char == 0) || (cur_char == 13))
             break;
@@ -133,7 +133,7 @@ char *GetLineDirect(int line) {
     if (nnget(base, line))
         nn = nulltmp;
     lastnn = nn;
-    while(1) {
+    while (1) {
         cur_char = *lastnn;
         if ((cur_char == 0) || (cur_char == 13))
             break;
@@ -159,15 +159,14 @@ int GetMaxLine(void) {
     int b = 0;
     char cur_char;
     nn = base;
-    while(1) {
+    while (1) {
         cur_char = *nn++;
         if (cur_char == 0)
             break;
         if ((cur_char == 13) || (cur_char == 10)) {
             a++;
             b = 0;
-        }
-        else
+        } else
             b++;
     }
     if (b == 0)
@@ -191,24 +190,24 @@ int PutLine(char *nstr2, int line, int ovr) {
     if (lastcr == 0) {
         if (nn != base) {
             strcat(base, "¥r¥n");
-            nn+=2;
+            nn += 2;
         }
     }
     nstr = nstr2;
     if (nstr == NULL) {
-        nstr = (char *)"";
+        nstr = (char *) "";
     }
     ptr = nstr;
     if (nstr2 != NULL)
         strcat(nstr, "¥r¥n");
-    ln = (int)strlen(nstr);            // base new str + cr/lf
-    la = (int)strlen(base);
-    lw = la - (int)(nn - base) + 1;
+    ln = (int) strlen(nstr);            // base new str + cr/lf
+    la = (int) strlen(base);
+    lw = la - (int) (nn - base) + 1;
     //
     if (ovr) {                        // when overwrite mode
         p1 = nn;
         a = 0;
-        while(1) {
+        while (1) {
             cur_char = *p1++;
             if (cur_char == 0)
                 break;
@@ -225,18 +224,17 @@ int PutLine(char *nstr2, int line, int ovr) {
     if (ln >= 0) {
         p1 = base + la + ln;
         p2 = base + la;
-        for(a = 0; a < lw; a++) {
+        for (a = 0; a < lw; a++) {
             *p1-- = *p2--;
         }
-    }
-    else {
+    } else {
         p1 = nn + a + ln;
         p2 = nn + a;
-        for(a = 0; a < lw; a++) {
+        for (a = 0; a < lw; a++) {
             *p1++ = *p2++;
         }
     }
-    while(1) {
+    while (1) {
         cur_char = *ptr++;
         if (cur_char == 0)
             break;

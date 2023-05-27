@@ -7,7 +7,6 @@
 //
 
 #import "MyCALayer.h"
-#import <Foundation/Foundation.h>
 
 #define BUFFER_MAX_WIDTH 2500
 #define BUFFER_MAX_HEIGHT 2500

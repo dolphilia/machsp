@@ -34,13 +34,20 @@ typedef struct TAGDATA {
 } TAGDATA;
 
 void stack_init(void);
-int GetTagID( char *tag );
-char *GetTagName( int tagid );
-int PushTag( int tagid, char *str );
-char *PopTag( int tagid );
-char *LookupTag( int tagid, int level );
-void GetTagUniqueName( int tagid, char *outname );
-int StackCheck( char *res );
+
+int GetTagID(char *tag);
+
+char *GetTagName(int tagid);
+
+int PushTag(int tagid, char *str);
+
+char *PopTag(int tagid);
+
+char *LookupTag(int tagid, int level);
+
+void GetTagUniqueName(int tagid, char *outname);
+
+int StackCheck(char *res);
 
 //int StrCmp( char *str1, char *str2 );
 //int SearchTagID( char *tag );

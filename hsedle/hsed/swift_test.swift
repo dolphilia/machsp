@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objcMembers class swift_test : NSObject {
+@objcMembers class swift_test: NSObject {
     func _swift_test() {
         print("aiueo")
     }

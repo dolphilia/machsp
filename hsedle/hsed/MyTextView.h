@@ -15,8 +15,8 @@
 #import "MyWindow.h"
 
 @interface MyTextView : NSTextView <NSTextViewDelegate> {
-    AppDelegate* global;
-    MyWindow* myWindow;
+    AppDelegate *global;
+    MyWindow *myWindow;
 @public
     int accessNumber;
     int timerCount;

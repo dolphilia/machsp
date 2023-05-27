@@ -20,7 +20,7 @@
 ///
 void CToken::Mes(char *mes) {
     errbuf->PutStr(mes);
-    errbuf->PutStr((char *)"\r\n");
+    errbuf->PutStr((char *) "\r\n");
 }
 
 /// メッセージ登録
@@ -34,7 +34,7 @@ void CToken::Mesf(char *format, ...) {
     vsprintf(txtbuf, format, args);
     va_end(args);
     errbuf->PutStr(txtbuf);
-    errbuf->PutStr((char *)"\r\n");
+    errbuf->PutStr((char *) "\r\n");
 }
 
 /// エラーメッセージ登録
@@ -63,7 +63,7 @@ void CToken::SetErrorBuf(CMemBuf *buf) {
 ///
 void CToken::SetPackfileOut(CMemBuf *pack) {
     packbuf = pack;
-    packbuf->PutStr((char *)";\r\n;\tsource generated packfile\r\n;\r\n");
+    packbuf->PutStr((char *) ";\r\n;\tsource generated packfile\r\n;\r\n");
 }
 
 /// エラーメッセージ仮登録
@@ -82,7 +82,7 @@ int CToken::AddPackfile(char *name, int mode) {
     char packadd[1024];
     char tmp[1024];
     char *s;
-    
+
     strcpy(packadd, name);
     strcase(packadd);
     if (mode < 2) {
@@ -90,7 +90,7 @@ int CToken::AddPackfile(char *name, int mode) {
         max = [cwrap GetMaxLine];
         //note.Select(packbuf->GetBuffer());
         //max = note.GetMaxLine();
-        for(int i = 0; i < max; i++) {
+        for (int i = 0; i < max; i++) {
             [cwrap GetLine:tmp line:i];
             //note.GetLine(tmp, i);
             s = tmp;
@@ -100,10 +100,10 @@ int CToken::AddPackfile(char *name, int mode) {
                 return -1;
         }
         if (mode == 1)
-            packbuf->PutStr((char *)"+");
+            packbuf->PutStr((char *) "+");
     }
     packbuf->PutStr(packadd);
-    packbuf->PutStr((char *)"\r\n");
+    packbuf->PutStr((char *) "\r\n");
     return 0;
 }
 
@@ -112,7 +112,7 @@ int CToken::AddPackfile(char *name, int mode) {
 //-------------------------------------------------------------
 
 CToken::CToken(void) {
-    s3 = (unsigned char *)malloc(s3size);
+    s3 = (unsigned char *) malloc(s3size);
     lb = new CLabel;
     tmp_lb = NULL;
     hed_cmpmode = CMPMODE_OPTCODE | CMPMODE_OPTPRM | CMPMODE_SKIPJPSPC;
@@ -123,14 +123,14 @@ CToken::CToken(void) {
     ahtmodel = NULL;
     ahtbuf = NULL;
     scnvbuf = NULL;
-    
-    undefined_symbols = (undefined_symbol_t*)[cwrap vector_create];
-    
+
+    undefined_symbols = (undefined_symbol_t *) [cwrap vector_create];
+
     ResetCompiler();
 }
 
 CToken::CToken(char *buf) {
-    s3 = (unsigned char *)malloc(s3size);
+    s3 = (unsigned char *) malloc(s3size);
     lb = new CLabel;
     tmp_lb = NULL;
     hed_cmpmode = CMPMODE_OPTCODE | CMPMODE_OPTPRM | CMPMODE_SKIPJPSPC;
@@ -141,9 +141,9 @@ CToken::CToken(char *buf) {
     ahtmodel = NULL;
     ahtbuf = NULL;
     scnvbuf = NULL;
-    
-    undefined_symbols = (undefined_symbol_t*)[cwrap vector_create];
-    
+
+    undefined_symbols = (undefined_symbol_t *) [cwrap vector_create];
+
     ResetCompiler();
 }
 
@@ -190,12 +190,12 @@ void CToken::ResetCompiler(void) {
     swsp = 0;
     swmode = 0;
     swlevel = 0;
-    SetModuleName((char *)"");
+    SetModuleName((char *) "");
     modgc = 0;
     search_path[0] = 0;
     lb->Reset();
     fileadd = 0;
-    
+
     //		reset header info
     hed_option = 0;
     hed_runtime[0] = 0;
@@ -212,15 +212,15 @@ void CToken::SetAHTBuffer(CMemBuf *aht) {
 }
 
 void CToken::SetLook(char *buf) {
-    wp = (unsigned char *)buf;
+    wp = (unsigned char *) buf;
 }
 
 char *CToken::GetLook(void) {
-    return (char *)wp;
+    return (char *) wp;
 }
 
 char *CToken::GetLookResult(void) {
-    return (char *)s2;
+    return (char *) s2;
 }
 
 int CToken::GetLookResultInt(void) {
@@ -232,9 +232,9 @@ int CToken::GetLookResultInt(void) {
 void CToken::Pickstr(void) {
     int a = 0;
     unsigned char cur_char;
-    while(1) {
-pickag:
-        cur_char = (unsigned char)*wp;
+    while (1) {
+        pickag:
+        cur_char = (unsigned char) *wp;
         if (cur_char >= 0x81) {
             if (cur_char < 0xa0) { // s-jis code
                 s3[a++] = cur_char;
@@ -242,8 +242,7 @@ pickag:
                 s3[a++] = *wp;
                 wp++;
                 continue;
-            }
-            else if (cur_char >= 0xe0) { // s-jis code2
+            } else if (cur_char >= 0xe0) { // s-jis code2
                 s3[a++] = cur_char;
                 wp++;
                 s3[a++] = *wp;
@@ -251,11 +250,11 @@ pickag:
                 continue;
             }
         }
-        
+
         if (cur_char == 0x5c) { // '\' extra control
             wp++;
             cur_char = tolower(*wp);
-            switch(cur_char) {
+            switch (cur_char) {
                 case 'n':
                     s3[a++] = 13;
                     cur_char = 10;
@@ -304,11 +303,11 @@ pickag:
 /// Strings pick sub '〜'
 ///
 char *CToken::Pickstr2(char *str) {
-    unsigned char *ptr = (unsigned char *)str;
+    unsigned char *ptr = (unsigned char *) str;
     unsigned char *pp = s3;
     unsigned char cur_char;
-    
-    while(1) {
+
+    while (1) {
         cur_char = *ptr;
         if (cur_char == 0)
             break;
@@ -321,7 +320,7 @@ char *CToken::Pickstr2(char *str) {
             cur_char = tolower(*ptr);
             if (cur_char < 32)
                 continue;
-            switch(cur_char) {
+            switch (cur_char) {
                 case 'n':
                     *pp++ = 13;
                     cur_char = 10;
@@ -336,7 +335,7 @@ char *CToken::Pickstr2(char *str) {
         }
         int skip = SkipMultiByte(cur_char);
         if (skip) { // 全角文字チェック
-            for(int i = 0; i < skip; i++) {
+            for (int i = 0; i < skip; i++) {
                 *pp++ = cur_char;
                 ptr++;
                 cur_char = *ptr;
@@ -346,14 +345,14 @@ char *CToken::Pickstr2(char *str) {
         *pp++ = cur_char;
     }
     *pp = 0;
-    return (char *)ptr;
+    return (char *) ptr;
 }
 
 int CToken::CheckModuleName(char *name) {
-    unsigned char *ptr = (unsigned char *)name;
+    unsigned char *ptr = (unsigned char *) name;
     unsigned char cur_char;
 
-    while(1) { // normal object name
+    while (1) { // normal object name
         cur_char = *ptr;
         if (cur_char == 0)
             return 0;
@@ -385,17 +384,17 @@ int CToken::GetToken(void) {
     int *fpival;
     unsigned char *wp_bak = nullptr;
     int ft_bak;
-    
+
     if (wp == NULL)
         return TK_NONE;
 
-    while(1) {
+    while (1) {
         cur_char = *wp;
         if ((cur_char != 32) && (cur_char != 9)) // Skip Space & Tab
             break;
         wp++;
     }
-    
+
     if (cur_char == 0) { // End of Source
         wp = NULL;
         return TK_NONE;
@@ -412,7 +411,7 @@ int CToken::GetToken(void) {
         line++;
         return TK_NONE;
     }
-    
+
     //	Check Extra Character
     if (cur_char < 0x30)
         rval = TK_NONE;
@@ -422,12 +421,12 @@ int CToken::GetToken(void) {
         rval = TK_NONE;
     if ((cur_char >= 0x7b) && (cur_char <= 0x7f))
         rval = TK_NONE;
-    
+
     if (cur_char == ':' || cur_char == '{' || cur_char == '}') { // multi statement
         wp++;
         return TK_SEPARATE;
     }
-    
+
     if (cur_char == '0') {
         unsigned char next_char = wp[1];
         if (next_char == 'x') { // when hex code (0x)
@@ -442,7 +441,7 @@ int CToken::GetToken(void) {
     if (cur_char == '$') { // when hex code ($)
         wp++;
         val = 0;
-        while(1) {
+        while (1) {
             cur_char = toupper(*wp);
             b = -1;
             if (cur_char == 0) {
@@ -463,14 +462,14 @@ int CToken::GetToken(void) {
             }
             wp++;
         }
-        s3[a]=0;
+        s3[a] = 0;
         return TK_NUM;
     }
-    
+
     if (cur_char == '%') { // when bin code (%)
         wp++;
         val = 0;
-        while(1) {
+        while (1) {
             cur_char = *wp;
             b = -1;
             if (cur_char == 0) {
@@ -485,7 +484,7 @@ int CToken::GetToken(void) {
                 break;
             if (b >= 0) {
                 s3[a++] = cur_char;
-                val = (val <<1 ) + b;
+                val = (val << 1) + b;
             }
             wp++;
         }
@@ -496,7 +495,7 @@ int CToken::GetToken(void) {
     if ((cur_char >= 0x30) && (cur_char <= 0x39)) { // when 0-9 numerical
         fpflag = 0;
         ft_bak = 0;
-        while(1) {
+        while (1) {
             cur_char = *wp;
             if (cur_char == 0) {
                 wp = NULL;
@@ -541,30 +540,30 @@ int CToken::GetToken(void) {
                 wp++;
             }
         }
-        
-        if (fpflag < 0) {				// 小数値でない時は「.」までで終わり
+
+        if (fpflag < 0) {                // 小数値でない時は「.」までで終わり
             s3[ft_bak] = 0;
             wp = wp_bak;
             fpflag = 0;
         }
-        
-        switch(fpflag) {
+
+        switch (fpflag) {
             case 0: // 通常の整数
-                val = atoi_allow_overflow((char *)s3);
+                val = atoi_allow_overflow((char *) s3);
                 if (minmode)
                     val = -val;
                 break;
             case 1: // int固定小数
-                val_d = atof((char *)s3);
-                val = (int)(val_d * fpbit);
+                val_d = atof((char *) s3);
+                val = (int) (val_d * fpbit);
                 if (minmode)
                     val = -val;
                 break;
             case 2: // int形式のfloat値を返す
-                val_f = (float)atof((char *)s3);
+                val_f = (float) atof((char *) s3);
                 if (minmode)
                     val_f = -val_f;
-                fpival = (int *)&val_f;
+                fpival = (int *) &val_f;
                 val = *fpival;
                 break;
             case 4: // double値(指数表記)
@@ -574,36 +573,36 @@ int CToken::GetToken(void) {
                     s3[a++] = cur_char;
                     wp++;
                 }
-                while(1) {
+                while (1) {
                     cur_char = *wp;
                     if ((cur_char < 0x30) || (cur_char > 0x39))
                         break;
                     s3[a++] = cur_char;
                     wp++;
                 }
-                s3[a]=0;
+                s3[a] = 0;
             case 3: // double値
-                val_d = atof((char *)s3);
+                val_d = atof((char *) s3);
                 if (minmode)
                     val_d = -val_d;
                 return TK_DNUM;
         }
         return TK_NUM;
     }
-    
+
     if (cur_char == 0x22) { // when "string"
         wp++;
         Pickstr();
         return TK_STRING;
     }
-    
+
     if (cur_char == 0x27) { // when 'char'
         wp++;
-        wp = (unsigned char *)Pickstr2((char *)wp);
-        val=*(unsigned char *)s3;
+        wp = (unsigned char *) Pickstr2((char *) wp);
+        val = *(unsigned char *) s3;
         return TK_NUM;
     }
-    
+
     if (rval == TK_NONE) { // token code
         wp++;
         unsigned char next_char = *wp;
@@ -627,8 +626,8 @@ int CToken::GetToken(void) {
         s3[1] = 0;
         return cur_char;
     }
-    
-    while(1) {								// normal object name
+
+    while (1) {                                // normal object name
         cur_char = *wp;
         if (cur_char == 0) {
             wp = NULL;
@@ -646,7 +645,7 @@ int CToken::GetToken(void) {
             break;
         int skip = SkipMultiByte(cur_char); // 全角文字チェック
         if (skip) {
-            for(int i = 0; i < skip; i++) {
+            for (int i = 0; i < skip; i++) {
                 s3[a++] = cur_char;
                 wp++;
                 cur_char = *wp;
@@ -673,7 +672,7 @@ int CToken::PeekToken(void) {
 //-----------------------------------------------------------------------------
 
 void CToken::Calc_token(void) {
-    lasttoken = (char *)wp;
+    lasttoken = (char *) wp;
     ttype = GetToken();
 }
 
@@ -682,17 +681,17 @@ void CToken::Calc_factor(CALCVAR &v) {
     int id, type;
     char *ptr_dval;
     if (ttype == TK_NUM) {
-        v = (CALCVAR)val;
+        v = (CALCVAR) val;
         Calc_token();
         return;
     }
     if (ttype == TK_DNUM) {
-        v=(CALCVAR)val_d;
+        v = (CALCVAR) val_d;
         Calc_token();
         return;
     }
     if (ttype == TK_OBJ) {
-        id = lb->Search((char *)s3);
+        id = lb->Search((char *) s3);
         if (id == -1) {
             ttype = TK_CALCERROR;
             return;
@@ -704,9 +703,9 @@ void CToken::Calc_factor(CALCVAR &v) {
         }
         ptr_dval = lb->GetData2(id);
         if (ptr_dval == NULL) {
-            v = (CALCVAR)lb->GetOpt( id );
+            v = (CALCVAR) lb->GetOpt(id);
         } else {
-            v = *(CALCVAR *)ptr_dval;
+            v = *(CALCVAR *) ptr_dval;
         }
         Calc_token();
         return;
@@ -743,20 +742,20 @@ void CToken::Calc_muldiv(CALCVAR &v) {
     CALCVAR v1, v2;
     int op;
     Calc_unary(v1);
-    while((ttype=='*') || (ttype=='/') || (ttype==0x5c)) {
+    while ((ttype == '*') || (ttype == '/') || (ttype == 0x5c)) {
         op = ttype;
         Calc_token();
         Calc_unary(v2);
         if (op == '*')
             v1 *= v2;
         else if (op == '/') {
-            if ((int)v2 == 0) {
+            if ((int) v2 == 0) {
                 ttype = TK_CALCERROR;
                 return;
             }
             v1 /= v2;
         } else if (op == 0x5c) {
-            if ((int)v2 == 0) {
+            if ((int) v2 == 0) {
                 ttype = TK_CALCERROR;
                 return;
             }
@@ -770,7 +769,7 @@ void CToken::Calc_addsub(CALCVAR &v) {
     CALCVAR v1, v2;
     int op;
     Calc_muldiv(v1);
-    while((ttype == '+') || (ttype == '-')) {
+    while ((ttype == '+') || (ttype == '-')) {
         op = ttype;
         Calc_token();
         Calc_muldiv(v2);
@@ -786,13 +785,13 @@ void CToken::Calc_compare(CALCVAR &v) {
     CALCVAR v1, v2;
     int v1i = 0, v2i, op;
     Calc_addsub(v1);
-    while((ttype == '<') || (ttype == '>') || (ttype == '=')) {
+    while ((ttype == '<') || (ttype == '>') || (ttype == '=')) {
         op = ttype;
         Calc_token();
         if (op == '=') {
             Calc_addsub(v2);
             v1i = v1 == v2;
-            v1 = (CALCVAR)v1i;
+            v1 = (CALCVAR) v1i;
             continue;
         }
         if (op == '<') {
@@ -800,21 +799,21 @@ void CToken::Calc_compare(CALCVAR &v) {
                 Calc_token();
                 Calc_addsub(v2);
                 v1i = (v1 <= v2);
-                v1 = (CALCVAR)v1i;
+                v1 = (CALCVAR) v1i;
                 continue;
             }
             if (ttype == '<') {
                 Calc_token();
                 Calc_addsub(v2);
-                v1i = (int)v1;
-                v2i = (int)v2;
+                v1i = (int) v1;
+                v2i = (int) v2;
                 v1i <<= v2i;
-                v1 = (CALCVAR)v1i;
+                v1 = (CALCVAR) v1i;
                 continue;
             }
             Calc_addsub(v2);
-            v1i = (v1<v2);
-            v1 = (CALCVAR)v1i;
+            v1i = (v1 < v2);
+            v1 = (CALCVAR) v1i;
             continue;
         }
         if (op == '>') {
@@ -822,24 +821,24 @@ void CToken::Calc_compare(CALCVAR &v) {
                 Calc_token();
                 Calc_addsub(v2);
                 v1i = (v1 >= v2);
-                v1 = (CALCVAR)v1i;
+                v1 = (CALCVAR) v1i;
                 continue;
             }
             if (ttype == '>') {
                 Calc_token();
                 Calc_addsub(v2);
-                v1i = (int)v1;
-                v2i = (int)v2;
+                v1i = (int) v1;
+                v2i = (int) v2;
                 v1i >>= v2i;
-                v1 = (CALCVAR)v1i;
+                v1 = (CALCVAR) v1i;
                 continue;
             }
             Calc_addsub(v2);
             v1i = (v1 > v2);
-            v1 = (CALCVAR)v1i;
+            v1 = (CALCVAR) v1i;
             continue;
         }
-        v1 = (CALCVAR)v1i;
+        v1 = (CALCVAR) v1i;
     }
     v = v1;
 }
@@ -851,10 +850,10 @@ void CToken::Calc_bool2(CALCVAR &v) {
     while (ttype == '!') {
         Calc_token();
         Calc_compare(v2);
-        v1i = (int)v1;
-        v2i = (int)v2;
+        v1i = (int) v1;
+        v2i = (int) v2;
         v1i = v1i != v2i;
-        v1=(CALCVAR)v1i;
+        v1 = (CALCVAR) v1i;
     }
     v = v1;
 }
@@ -863,19 +862,19 @@ void CToken::Calc_bool(CALCVAR &v) {
     CALCVAR v1, v2;
     int op, v1i, v2i;
     Calc_bool2(v1);
-    while((ttype == '&') || (ttype == '|') || (ttype == '^')) {
-        op=ttype;
+    while ((ttype == '&') || (ttype == '|') || (ttype == '^')) {
+        op = ttype;
         Calc_token();
         Calc_bool2(v2);
-        v1i = (int)v1;
-        v2i = (int)v2;
+        v1i = (int) v1;
+        v2i = (int) v2;
         if (op == '&')
             v1i &= v2i;
         else if (op == '|')
             v1i |= v2i;
         else if (op == '^')
             v1i ^= v2i;
-        v1 = (CALCVAR)v1i;
+        v1 = (CALCVAR) v1i;
     }
     v = v1;
 }
@@ -891,10 +890,10 @@ int CToken::Calc(CALCVAR &val) {
     Calc_token();
     Calc_start(v);
     if (ttype == TK_CALCERROR) {
-        SetError((char *)"abnormal calculation");
+        SetError((char *) "abnormal calculation");
         return -1;
     }
-    if (wp == NULL ) {
+    if (wp == NULL) {
         val = v;
         return 0;
     }
@@ -902,7 +901,7 @@ int CToken::Calc(CALCVAR &val) {
         val = v;
         return 0;
     }
-    SetError((char *)"expression syntax error");
+    SetError((char *) "expression syntax error");
     return -1;
 }
 
@@ -914,17 +913,17 @@ int CToken::Calc(CALCVAR &val) {
 ///
 char *CToken::ExpandStr(char *str, int opt) {
     int a = 0;
-    unsigned char *ptr = (unsigned char *)str;
+    unsigned char *ptr = (unsigned char *) str;
     unsigned char cur_char;
-    unsigned char sep  = 0;
-    
+    unsigned char sep = 0;
+
     if (opt == 1)
         sep = 0x22;
     if (opt == 2)
         sep = 0x27;
     s3[a++] = sep;
 
-    while(1) {
+    while (1) {
         cur_char = *ptr;
         if (cur_char == 0)
             break;
@@ -936,12 +935,12 @@ char *CToken::ExpandStr(char *str, int opt) {
             break;
         s3[a++] = cur_char;
         ptr++;
-        if (cur_char == 0x5c) {					// '\'チェック
+        if (cur_char == 0x5c) {                    // '\'チェック
             s3[a++] = *ptr++;
         }
         int skip = SkipMultiByte(cur_char); // 全角文字チェック
         if (skip) {
-            for(int i = 0; i < skip; i++) {
+            for (int i = 0; i < skip; i++) {
                 s3[a++] = *ptr++;
             }
         }
@@ -952,7 +951,7 @@ char *CToken::ExpandStr(char *str, int opt) {
         if (wrtbuf != NULL)
             wrtbuf->PutData(s3, a);
     }
-    return (char *)ptr;
+    return (char *) ptr;
 }
 
 /// コメントを展開する
@@ -960,9 +959,9 @@ char *CToken::ExpandStr(char *str, int opt) {
 /// ( ;;に続くAHT指定文字列用 )
 ///
 char *CToken::ExpandAhtStr(char *str) {
-    unsigned char *ptr = (unsigned char *)str;
+    unsigned char *ptr = (unsigned char *) str;
     unsigned char cur_char;
-    while(1) {
+    while (1) {
         cur_char = *ptr;
         if (cur_char == 0)
             break;
@@ -970,7 +969,7 @@ char *CToken::ExpandAhtStr(char *str) {
             break;
         ptr++;
     }
-    return (char *)ptr;
+    return (char *) ptr;
 }
 
 /// 指定文字列をmembufへ展開する
@@ -979,10 +978,10 @@ char *CToken::ExpandAhtStr(char *str) {
 ///
 char *CToken::ExpandStrEx(char *str) {
     int a = 0;
-    unsigned char *vs = (unsigned char *)str;
+    unsigned char *vs = (unsigned char *) str;
     unsigned char cur_char;
-    
-    while(1) {
+
+    while (1) {
         cur_char = *vs;
         if (cur_char == 0) {
             break;
@@ -1017,7 +1016,7 @@ char *CToken::ExpandStrEx(char *str) {
         }
         s3[a++] = cur_char;
         vs++;
-        if (cur_char == 0x5c) {					// '\'チェック
+        if (cur_char == 0x5c) {                    // '\'チェック
             if (*vs >= 32) {
                 s3[a++] = *vs;
                 vs++;
@@ -1025,27 +1024,27 @@ char *CToken::ExpandStrEx(char *str) {
         }
         int skip = SkipMultiByte(cur_char); // 全角文字チェック
         if (skip) {
-            for(int i = 0; i < skip; i++) {
+            for (int i = 0; i < skip; i++) {
                 s3[a++] = *vs++;
             }
         }
     }
-    
+
     s3[a] = 0;
     if (wrtbuf != NULL) {
         wrtbuf->PutData(s3, a);
     }
-    return (char *)vs;
+    return (char *) vs;
 }
 
 /// /*〜*/ コメントを展開する
 ///
 char *CToken::ExpandStrComment(char *str, int opt) {
     int a = 0;
-    unsigned char *ptr = (unsigned char *)str;
+    unsigned char *ptr = (unsigned char *) str;
     unsigned char cur_char;
-    
-    while(1) {
+
+    while (1) {
         cur_char = *ptr;
         if (cur_char == 0) {
             break;
@@ -1066,7 +1065,7 @@ char *CToken::ExpandStrComment(char *str, int opt) {
     if (opt == 0)
         if (wrtbuf != NULL)
             wrtbuf->PutData(s3, a);
-    return (char *)ptr;
+    return (char *) ptr;
 }
 
 /// 16進数文字列をmembufへ展開する
@@ -1075,11 +1074,11 @@ char *CToken::ExpandHex(char *str, int *val) {
     int a = 1;
     int b;
     int num = 0;
-    unsigned char *vs = (unsigned char *)str;
+    unsigned char *vs = (unsigned char *) str;
     unsigned char cur_char;
     s3[0] = '$';
 
-    while(1) {
+    while (1) {
         cur_char = toupper(*vs);
         b = -1;
         if ((cur_char >= 0x30) && (cur_char <= 0x39))
@@ -1096,26 +1095,26 @@ char *CToken::ExpandHex(char *str, int *val) {
         }
         vs++;
     }
-    
+
     s3[a] = 0;
     if (wrtbuf != NULL)
         wrtbuf->PutData(s3, a);
     *val = num;
-    return (char *)vs;
+    return (char *) vs;
 }
 
 /// 2進数文字列をmembufへ展開する
 ///
-char *CToken::ExpandBin( char *str, int *val ) {
+char *CToken::ExpandBin(char *str, int *val) {
     int a = 1;
     int b;
     int num = 0;
-    unsigned char *vs = (unsigned char *)str;
+    unsigned char *vs = (unsigned char *) str;
     unsigned char cur_char;
-    
+
     s3[0] = '%';
 
-    while(1) {
+    while (1) {
         cur_char = *vs;
         b = -1;
         if ((cur_char >= 0x30) && (cur_char <= 0x31))
@@ -1133,7 +1132,7 @@ char *CToken::ExpandBin( char *str, int *val ) {
     s3[a] = 0;
     if (wrtbuf != NULL)
         wrtbuf->PutData(s3, a);
-    return (char *)vs;
+    return (char *) vs;
 }
 
 /// stringデータをmembufへ展開する
@@ -1143,7 +1142,7 @@ char *CToken::ExpandBin( char *str, int *val ) {
 char *CToken::ExpandToken(char *str, int *type, int ppmode) {
     int a, chk, id, ltype, opt;
     int flcnt;
-    unsigned char *vs = (unsigned char *)str;
+    unsigned char *vs = (unsigned char *) str;
     unsigned char *vs_bak;
     unsigned char cur_char;
     unsigned char a2;
@@ -1154,70 +1153,70 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
 
     if (vs == NULL) {
         *type = TK_EOF;
-        return NULL;			// already end
+        return NULL;            // already end
     }
-    
+
     cur_char = *vs;
-    if (cur_char == 0) {							// end
+    if (cur_char == 0) {                            // end
         *type = TK_EOF;
         return NULL;
     }
-    if (cur_char == 10) {							// Unix改行
+    if (cur_char == 10) {                            // Unix改行
         vs++;
         if (wrtbuf != NULL)
-            wrtbuf->PutStr((char *)"\r\n");
+            wrtbuf->PutStr((char *) "\r\n");
         *type = TK_EOL;
-        return (char *)vs;
+        return (char *) vs;
     }
-    if (cur_char == 13) {							// 改行
+    if (cur_char == 13) {                            // 改行
         vs++;
         if (*vs == 10)
             vs++;
         if (wrtbuf != NULL)
-            wrtbuf->PutStr((char *)"\r\n");
+            wrtbuf->PutStr((char *) "\r\n");
         *type = TK_EOL;
-        return (char *)vs;
+        return (char *) vs;
     }
-    if (cur_char == ';') {							// コメント
+    if (cur_char == ';') {                            // コメント
         *type = TK_VOID;
         *vs = 0;
         vs++;
         if (*vs == ';') {
             vs++;
             if (ahtmodel != NULL) {
-                ahtkeyword = (char *)vs;
+                ahtkeyword = (char *) vs;
             }
         }
-        return ExpandStr((char *)vs, 0);
+        return ExpandStr((char *) vs, 0);
     }
     if (cur_char == '/') { // Cコメント
         if (vs[1] == '/') {
             *type = TK_VOID;
             *vs = 0;
-            return ExpandStr((char *)vs+2, 0);
+            return ExpandStr((char *) vs + 2, 0);
         }
         if (vs[1] == '*') {
             mulstr = LMODE_COMMENT;
             *type = TK_VOID;
             *vs = 0;
-            return ExpandStrComment((char *)vs + 2, 0);
+            return ExpandStrComment((char *) vs + 2, 0);
         }
     }
     if (cur_char == 0x22) { // "〜"
         *type = TK_STRING;
-        return ExpandStr((char *)vs + 1, 1);
+        return ExpandStr((char *) vs + 1, 1);
     }
     if (cur_char == 0x27) { // '〜'
         *type = TK_STRING;
-        return ExpandStr((char *)vs + 1, 2);
+        return ExpandStr((char *) vs + 1, 2);
     }
     if (cur_char == '{') { // {"〜"}
         if (vs[1] == 0x22) {
             if (wrtbuf != NULL)
-                wrtbuf->PutStr((char *)"{\"");
+                wrtbuf->PutStr((char *) "{\"");
             mulstr = LMODE_STR;
             *type = TK_STRING;
-            return ExpandStrEx((char *)vs + 2);
+            return ExpandStrEx((char *) vs + 2);
         }
     }
     if (cur_char == '0') {
@@ -1233,18 +1232,18 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
     }
     if (cur_char == '$') { // when hex code ($)
         *type = TK_OBJ;
-        return ExpandHex((char *)vs + 1, &a);
+        return ExpandHex((char *) vs + 1, &a);
     }
     if (cur_char == '%') { // when bin code (%)
         *type = TK_OBJ;
-        return ExpandBin((char *)vs + 1, &a);
+        return ExpandBin((char *) vs + 1, &a);
     }
     if (cur_char < 0x30) { // space,tab
         *type = TK_CODE;
         vs++;
         if (wrtbuf != NULL)
-            wrtbuf->Put((char)cur_char);
-        return (char *)vs;
+            wrtbuf->Put((char) cur_char);
+        return (char *) vs;
     }
     chk = 0;
     if ((cur_char >= 0x3a) && (cur_char <= 0x3f))
@@ -1253,19 +1252,19 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
         chk++;
     if ((cur_char >= 0x7b) && (cur_char <= 0x7f))
         chk++;
-    
+
     if (chk) {
         vs++;
         if (wrtbuf != NULL)
-            wrtbuf->Put((char)cur_char); // 記号
+            wrtbuf->Put((char) cur_char); // 記号
         *type = cur_char;
-        return (char *)vs;
+        return (char *) vs;
     }
-    
+
     if ((cur_char >= 0x30) && (cur_char <= 0x39)) { // when 0-9 numerical
         a = 0;
         flcnt = 0;
-        while(1) {
+        while (1) {
             cur_char = *vs;
             if (cur_char == '.') {
                 flcnt++;
@@ -1290,7 +1289,7 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
                 s2[a++] = cur_char;
                 vs++;
             }
-            while(1) {
+            while (1) {
                 cur_char = *vs;
                 if ((cur_char < 0x30) || (cur_char > 0x39))
                     break;
@@ -1298,24 +1297,24 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
                 vs++;
             }
         }
-        
+
         s2[a] = 0;
         if (wrtbuf != NULL)
             wrtbuf->PutData(s2, a);
         *type = TK_OBJ;
-        return (char *)vs;
+        return (char *) vs;
     }
-    
+
     a = 0;
     vs_modbrk = NULL;
 
     //	 シンボル取り出し
     //
-    while(1) {
+    while (1) {
         cur_char = *vs;
         int skip = SkipMultiByte(cur_char); // 全角文字チェック
         if (skip) {
-            for(int i = 0; i < (skip + 1); i++) {
+            for (int i = 0; i < (skip + 1); i++) {
                 NSLog(@"E:%s", str);
                 if (a < OBJNAME_MAX) {
                     s2[a++] = cur_char;
@@ -1324,11 +1323,11 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
                 } else {
                     vs++;
                 }
-                
+
             }
             continue;
         }
-        
+
         chk = 0;
         if (cur_char < 0x30)
             chk++;
@@ -1349,18 +1348,18 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
         if (wrtbuf != NULL)
             wrtbuf->PutData(s2, a);
         *type = TK_CODE;
-        return (char *)vs;
+        return (char *) vs;
     }
 
-    strcase2((char *)s2, fixname); // シンボル検索
+    strcase2((char *) s2, fixname); // シンボル検索
 
-    FixModuleName((char *)s2);
+    FixModuleName((char *) s2);
     AddModuleName(fixname);
-    
-    id = lb->SearchLocal((char *)s2, fixname);
+
+    id = lb->SearchLocal((char *) s2, fixname);
     if (id != -1) {
         ltype = lb->GetType(id);
-        switch(ltype) {
+        switch (ltype) {
             case LAB_TYPE_PPVAL: // constマクロ展開
             {
                 char *ptr_dval;
@@ -1368,23 +1367,23 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
                 if (ptr_dval == NULL) {
                     sprintf(cnvstr, "%d", lb->GetOpt(id));
                 } else {
-                    sprintf(cnvstr, "%f", *(CALCVAR *)ptr_dval);
+                    sprintf(cnvstr, "%f", *(CALCVAR *) ptr_dval);
                 }
-                chk = ReplaceLineBuf(str, (char *)vs, cnvstr, 0, NULL);
+                chk = ReplaceLineBuf(str, (char *) vs, cnvstr, 0, NULL);
                 break;
             }
             case LAB_TYPE_PPINTMAC: // 内部マクロ
                 if (ppmode) { // プリプロセッサ時はそのまま展開
                     if (wrtbuf != NULL) {
-                        FixModuleName((char *)s2);
-                        wrtbuf->PutStr((char *)s2);
+                        FixModuleName((char *) s2);
+                        wrtbuf->PutStr((char *) s2);
                     }
                     *type = TK_OBJ;
-                    return (char *)vs;
+                    return (char *) vs;
                 }
             case LAB_TYPE_PPMAC: // マクロ展開
                 vs_bak = vs;
-                while(1) { // 直後のspace/tabを除去
+                while (1) { // 直後のspace/tabを除去
                     cur_char = *vs_bak;
                     if ((cur_char != 32) && (cur_char != 9))
                         break;
@@ -1392,22 +1391,22 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
                 }
                 opt = lb->GetOpt(id);
                 if ((cur_char == '=') && (opt & PRM_MASK)) { // マクロに代入しようとした場合のエラー
-                    SetError((char *)"Reserved word syntax error");
+                    SetError((char *) "Reserved word syntax error");
                     *type = TK_ERROR;
-                    return (char *)vs;
+                    return (char *) vs;
                 }
                 macptr = lb->GetData(id);
                 if (macptr == NULL) {
                     *cnvstr = 0;
                     macptr = cnvstr;
                 }
-                chk = ReplaceLineBuf(str, (char *)vs, macptr, opt, (MACDEF *)lb->GetData2(id));
+                chk = ReplaceLineBuf(str, (char *) vs, macptr, opt, (MACDEF *) lb->GetData2(id));
                 break;
             case LAB_TYPE_PPDLLFUNC: // モジュール名付き展開キーワード
                 if (wrtbuf != NULL) { // AddModuleName((char*)s2);
                     if (lb->GetEternal(id)) {
-                        FixModuleName((char *)s2);
-                        wrtbuf->PutStr((char *)s2);
+                        FixModuleName((char *) s2);
+                        wrtbuf->PutStr((char *) s2);
                     } else {
                         wrtbuf->PutStr(fixname);
                     }
@@ -1422,32 +1421,32 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
                         lb->AddRelation(id, i);
                     }
                 }
-                return (char *)vs;
+                return (char *) vs;
                 break;
             case LAB_TYPE_COMVAR: // COMキーワードを展開
                 if (wrtbuf != NULL) {
                     if (lb->GetEternal(id)) {
-                        FixModuleName((char *)s2);
-                        wrtbuf->PutStr((char *)s2);
+                        FixModuleName((char *) s2);
+                        wrtbuf->PutStr((char *) s2);
                     } else {
                         wrtbuf->PutStr(fixname);
                     }
                 }
                 *type = TK_OBJ;
-                lb->AddReference( id );
-                return (char *)vs;
+                lb->AddReference(id);
+                return (char *) vs;
             case LAB_TYPE_PPMODFUNC:
             default: // 通常キーワードはそのまま展開
                 if (wrtbuf != NULL) {
                     if (!lb->GetEternal(id)) { // local func
-                        strcpy((char*)s2, lb->GetName(id));
+                        strcpy((char *) s2, lb->GetName(id));
                     }
-                    FixModuleName((char *)s2);
-                    wrtbuf->PutStr((char *)s2);
+                    FixModuleName((char *) s2);
+                    wrtbuf->PutStr((char *) s2);
                 }
                 *type = TK_OBJ;
                 lb->AddReference(id);
-                return (char *)vs;
+                return (char *) vs;
         }
         if (chk) {
             *type = TK_ERROR;
@@ -1459,32 +1458,32 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
 
 //#define __vector_add_asg(vec_addr) ((typeof(*vec_addr))([cwrap _vector_add:(vector*)vec_addr vec_addr:(sizeof)(**vec_addr)]))
 //#define __vector_add(vec_addr, value) (*__vector_add_asg(vec_addr) = value)
-    
+
     if (wrtbuf != NULL) { // 登録されていないキーワードを展開
-        if (strcmp((char *)s2, fixname)) {
+        if (strcmp((char *) s2, fixname)) {
             //	後ろで定義されている関数の呼び出しのために
             //	モジュール内で＠をつけていない識別子の位置を記録する
             undefined_symbol_t sym;
             sym.pos = wrtbuf->GetSize();
-            sym.len_include_modname = (int)strlen(fixname);
-            sym.len = (int)strlen((char *)s2);
+            sym.len_include_modname = (int) strlen(fixname);
+            sym.len = (int) strlen((char *) s2);
             //undefined_symbols.push_back(sym);
             //vector_push(undefined_symbols, sym);
             //[cwrap _vector_add:(vector*)undefined_symbols type_size:(vec_type_t)sym];
             //__vector_add(undefined_symbols, sym);
             //struct undefined_symbol_t* symbol = (undefined_symbol_t*)[cwrap _vector_add:(vector*)undefined_symbols type_size:sizeof(*undefined_symbols)];
             //symbol = &sym;
-            
-            vector v = [cwrap _vector_add:(vector*)&undefined_symbols type_size:sizeof(**&undefined_symbols)];
-            (*((typeof(*&undefined_symbols))(v)) = sym);
+
+            vector v = [cwrap _vector_add:(vector *) &undefined_symbols type_size:sizeof(**&undefined_symbols)];
+            (*((typeof(*&undefined_symbols)) (v)) = sym);
             //(*((typeof(*&undefined_symbols))(_vector_add((vector*)&undefined_symbols, sizeof(**&undefined_symbols)))) = sym);
-            
+
             //*(typeof(*vec_addr))_vector_add((vector*)vec_addr, sizeof(**vec_addr)) = value
         }
         wrtbuf->PutStr(fixname);
     }
     *type = TK_OBJ;
-    return (char *)vs;
+    return (char *) vs;
 }
 
 
@@ -1501,10 +1500,10 @@ char *CToken::ExpandToken(char *str, int *type, int ppmode) {
 /// 行末に「\」で次行を接続
 ///
 char *CToken::SkipLine(char *str, int *pline) {
-    unsigned char *ptr = (unsigned char *)str;
+    unsigned char *ptr = (unsigned char *) str;
     unsigned char cur_char;
     unsigned char prev_char = 0;
-    while(1) {
+    while (1) {
         cur_char = *ptr;
         if (cur_char == 0)
             break;
@@ -1529,7 +1528,7 @@ char *CToken::SkipLine(char *str, int *pline) {
         ptr++;
         prev_char = cur_char;
     }
-    return (char *)ptr;
+    return (char *) ptr;
 }
 
 /// １行分のデータをlinebufに転送
@@ -1538,7 +1537,7 @@ char *CToken::SendLineBuf(char *str) {
     char *ptr = str;
     char *w = linebuf;
     char cur_char;
-    while(1) {
+    while (1) {
         cur_char = *ptr;
         if (cur_char == 0)
             break;
@@ -1564,18 +1563,18 @@ is_sjis_char_head((unsigned char *)(str), (int)((pos) - (unsigned char *)(str)))
 /// 行末の'\'は継続 linesに行数を返す
 ///
 char *CToken::SendLineBufPP(char *str, int *lines) {
-    unsigned char *ptr = (unsigned char *)str;
-    unsigned char *w = (unsigned char *)linebuf;
+    unsigned char *ptr = (unsigned char *) str;
+    unsigned char *w = (unsigned char *) linebuf;
     unsigned char cur_char;
     unsigned char prev_char = 0;
     int ln = 0;
-    while(1) {
+    while (1) {
         cur_char = *ptr;
         if (cur_char == 0)
             break;
         ptr++;
         if (cur_char == 10) {
-            if (prev_char == 0x5c && IS_CHAR_HEAD(str, ptr - 2) ) {
+            if (prev_char == 0x5c && IS_CHAR_HEAD(str, ptr - 2)) {
                 ln++;
                 w--;
                 prev_char = 0;
@@ -1584,7 +1583,7 @@ char *CToken::SendLineBufPP(char *str, int *lines) {
             break;
         }
         if (cur_char == 13) {
-            if (prev_char == 0x5c && IS_CHAR_HEAD(str, ptr - 2) ) {
+            if (prev_char == 0x5c && IS_CHAR_HEAD(str, ptr - 2)) {
                 if (*ptr == 10)
                     ptr++;
                 ln++;
@@ -1601,7 +1600,7 @@ char *CToken::SendLineBufPP(char *str, int *lines) {
     }
     *w = 0;
     *lines = ln;
-    return (char *)ptr;
+    return (char *) ptr;
 }
 
 #undef IS_CHAR_HEAD
@@ -1651,32 +1650,32 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
     int ctype = 0;
     int noprm;
     int kakko = 0;
-    
+
     if (opt & PRM_FLAG_CTYPE)
         ctype = 1;
     *dummy = 0;
     strcpy(linetmp, str2);
-    wp = (unsigned char *)linetmp;
+    wp = (unsigned char *) linetmp;
     if ((macopt) || (ctype)) {
-        p = (char *)wp;
+        p = (char *) wp;
         type = GetToken();
         if (ctype) {
             if (type != '(') {
 #ifdef JPNMSG
-                SetError((char *)"ctypeマクロの直後には、丸括弧でくくられた引数リストが必要です");
+                SetError((char *) "ctypeマクロの直後には、丸括弧でくくられた引数リストが必要です");
 #else
                 SetError("C-Type macro syntax error");
 #endif
                 return 4;
             }
-            p = (char *)wp;
+            p = (char *) wp;
             type = GetToken();
         }
         if (type != TK_NONE) {
-            wp = (unsigned char *)p;
+            wp = (unsigned char *) p;
             prm[i] = p;
-            while(1) { // マクロパラメータを取り出す
-                p = (char *)wp;
+            while (1) { // マクロパラメータを取り出す
+                p = (char *) wp;
                 type = GetToken();
                 if (type == ';')
                     type = TK_SEPARATE;
@@ -1687,12 +1686,12 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
                         type = TK_SEPARATE;
                     }
                     if (*wp == '*') {
-                        char *start = (char *)wp - 1;
+                        char *start = (char *) wp - 1;
                         char *end = ExpandStrComment2(start + 2);
                         if (end == NULL) { // 範囲コメントが次の行まで続いている
                             type = TK_SEPARATE;
                         } else {
-                            wp = (unsigned char *)end;
+                            wp = (unsigned char *) end;
                         }
                     }
                 }
@@ -1705,8 +1704,8 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
                     }
                 }
                 if (type == TK_SEPARATE) {
-                    wp = (unsigned char *)p;
-                    prme[i++] = (char *)wp;
+                    wp = (unsigned char *) p;
+                    prme[i++] = (char *) wp;
                     break;
                 }
                 if (wp == NULL) {
@@ -1733,9 +1732,9 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
                     if (type == ')') {
                         kakko--;
                         if (ctype == 1) {
-                            wp = (unsigned char *)p;
-                            prme[i++] = (char *)wp;
-                            while(1) {
+                            wp = (unsigned char *) p;
+                            prme[i++] = (char *) wp;
+                            while (1) {
                                 if ((*wp != 32) && (*wp != 9))
                                     break;
                                 wp++;
@@ -1748,21 +1747,21 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
                 }
             }
         }
-        
+
         if (i > macopt) {
             noprm = 1;
             if ((ctype) && (i == 1) && (macopt == 0) && (prm[0] == prme[0]))
                 noprm = 0;
             if (noprm) {
 #ifdef JPNMSG
-                SetError((char *)"マクロの引数が多すぎます");
+                SetError((char *) "マクロの引数が多すぎます");
 #else
                 SetError("too many macro parameters");
 #endif
                 return 3;
             }
         }
-        while(1) { // 省略パラメータを補完
+        while (1) { // 省略パラメータを補完
             if (i >= macopt)
                 break;
             prm[i] = dummy;
@@ -1770,16 +1769,16 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
             i++;
         }
     }
-    last = (char *)wp;
-    
+    last = (char *) wp;
+
     tagid = 0x10000;
     w = str1;
-    wp = (unsigned char *)repl;
-    while(1) { // マクロ置き換え
+    wp = (unsigned char *) repl;
+    while (1) { // マクロ置き換え
         if (wp == NULL)
             break;
         if (w >= linetmp) {
-            SetError((char *)"macro buffer overflow");
+            SetError((char *) "macro buffer overflow");
             return 4;
         }
         cur_char = *wp++;
@@ -1795,10 +1794,10 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
             if (type == TK_OBJ) { // 特殊コマンドラベル処理
                 macbuf = mactmp;
                 *mactmp = 0;
-                cur_char = tolower((int)*s3);
+                cur_char = tolower((int) *s3);
                 switch (cur_char) {
                     case 't': // %tタグ名
-                        tagid = [cwrap GetTagID:(char *)(s3 + 1)];
+                        tagid = [cwrap GetTagID:(char *) (s3 + 1)];
                         //tagid = tstack->GetTagID((char *)(s3 + 1));
                         break;
                     case 'i':
@@ -1810,10 +1809,10 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
                             *mactmp = 0;
                         break;
                     case 's':
-                        val = (int)(s3[1] - 48);
+                        val = (int) (s3[1] - 48);
                         val--;
                         if (!(0 <= val && val <= macopt - 1)) {
-                            SetError((char *)"illegal macro parameter %s");
+                            SetError((char *) "illegal macro parameter %s");
                             return 2;
                         }
                         w2 = mactmp;
@@ -1828,7 +1827,7 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
                                 *w2++ = cur_char;
                             }
                         } else {
-                            while(1) { // %numマクロ展開
+                            while (1) { // %numマクロ展開
                                 if (p == endp)
                                     break;
                                 cur_char = *p++;
@@ -1847,8 +1846,8 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
                         //tstack->GetTagUniqueName(tagid, mactmp);
                         break;
                     case 'p':
-                        stklevel = (int)(s3[1] - 48);
-                        if ((stklevel < 0 ) || (stklevel > 9))
+                        stklevel = (int) (s3[1] - 48);
+                        if ((stklevel < 0) || (stklevel > 9))
                             stklevel = 0;
                         macbuf = [cwrap LookupTag:tagid level:stklevel];
                         //macbuf = tstack->LookupTag(tagid, stklevel);
@@ -1872,14 +1871,14 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
                         break;
                 }
                 if (macbuf == NULL) {
-                    sprintf(mactmp, "macro syntax error [%s]",[cwrap GetTagName:tagid]);
+                    sprintf(mactmp, "macro syntax error [%s]", [cwrap GetTagName:tagid]);
                     //sprintf(mactmp, "macro syntax error [%s]",tstack->GetTagName(tagid));
                     SetError(mactmp);
                     return 2;
                 }
                 while (1) { //mactmp展開
                     cur_char = *macbuf++;
-                    if (cur_char == 0 )
+                    if (cur_char == 0)
                         break;
                     *w++ = cur_char;
                 }
@@ -1891,12 +1890,12 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
                 continue;
             }
             if (type != TK_NUM) {
-                SetError((char *)"macro parameter invalid");
+                SetError((char *) "macro parameter invalid");
                 return 1;
             }
             val--;
-            if (!(0 <= val && val <= macopt - 1 )) {
-                SetError((char *)"illegal macro parameter");
+            if (!(0 <= val && val <= macopt - 1)) {
+                SetError((char *) "illegal macro parameter");
                 return 2;
             }
             p = prm[val];
@@ -1905,7 +1904,7 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
                 macbuf = macdef->data + macdef->index[val];
                 if (*macbuf == 0) {
 #ifdef JPNMSG
-                    SetError((char *)"デフォルトパラメータのないマクロの引数は省略できません");
+                    SetError((char *) "デフォルトパラメータのないマクロの引数は省略できません");
 #else
                     SetError("no default parameter");
 #endif
@@ -1934,7 +1933,7 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
     *w = 0;
     if (last != NULL) {
         if (w + strlen(last) + 1 >= linetmp) {
-            SetError((char *)"macro buffer overflow");
+            SetError((char *) "macro buffer overflow");
             return 4;
         }
         strcpy(w, last);
@@ -1948,7 +1947,7 @@ ppresult_t CToken::PP_SwitchStart(int sw) {
         swlevel = LMODE_ON;
     }
     if (swsp >= SWSTACK_MAX) {
-        SetError((char *)"#if nested too deeply");
+        SetError((char *) "#if nested too deeply");
         return PPRESULT_ERROR;
     }
     swstack[swsp] = swflag; // 有効フラグ
@@ -1958,7 +1957,7 @@ ppresult_t CToken::PP_SwitchStart(int sw) {
     swmode = 0;
     if (swflag == 0)
         return PPRESULT_SUCCESS;
-    if (sw==0) {
+    if (sw == 0) {
         swlevel = LMODE_OFF;
     } else {
         swlevel = LMODE_ON;
@@ -1971,7 +1970,7 @@ ppresult_t CToken::PP_SwitchStart(int sw) {
 
 ppresult_t CToken::PP_SwitchEnd(void) {
     if (swsp == 0) {
-        SetError((char *)"#endif without #if");
+        SetError((char *) "#endif without #if");
         return PPRESULT_ERROR;
     }
     swsp--;
@@ -1985,15 +1984,15 @@ ppresult_t CToken::PP_SwitchEnd(void) {
 
 ppresult_t CToken::PP_SwitchReverse(void) {
     if (swsp == 0) {
-        SetError((char *)"#else without #if");
+        SetError((char *) "#else without #if");
         return PPRESULT_ERROR;
     }
     if (swmode != 0) {
-        SetError((char *)"#else after #else");
+        SetError((char *) "#else after #else");
         return PPRESULT_ERROR;
     }
     if (swstack[swsp - 1] == 0)
-        return PPRESULT_SUCCESS;	// 上のスタックが無効なら無視
+        return PPRESULT_SUCCESS;    // 上のスタックが無効なら無視
     swmode = 1;
     if (swlevel == LMODE_ON) {
         swlevel = LMODE_OFF;
@@ -2006,20 +2005,20 @@ ppresult_t CToken::PP_SwitchReverse(void) {
 }
 
 ppresult_t CToken::PP_Include(int is_addition) {
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     char tmp_spath[HSP_MAX_PATH];
     int add_bak = 0;
     if (GetToken() != TK_STRING) {
         if (is_addition) {
-            SetError((char *)"invalid addition suffix");
+            SetError((char *) "invalid addition suffix");
         } else {
-            SetError((char *)"invalid include suffix");
+            SetError((char *) "invalid include suffix");
         }
         return PPRESULT_ERROR;
     }
     incinf++;
     if (incinf > 32) {
-        SetError((char *)"too many include level");
+        SetError((char *) "too many include level");
         return PPRESULT_ERROR;
     }
     strcpy(tmp_spath, search_path);
@@ -2036,43 +2035,43 @@ ppresult_t CToken::PP_Include(int is_addition) {
             return PPRESULT_SUCCESS;
         return PPRESULT_ERROR;
     }
-    
+
     return PPRESULT_INCLUDED;
 }
 
 /// #const解析
 ///
-ppresult_t CToken::PP_Const( void ) {
+ppresult_t CToken::PP_Const(void) {
     enum ConstType {
         Indeterminate,
         Double,
         Int
     };
     ConstType valuetype = ConstType::Indeterminate;
-    
+
     char *word;
     int id, res, glmode;
     char keyword[256];
     char strtmp[512];
     CALCVAR cres;
     glmode = 0;
-    word = (char *)s3;
+    word = (char *) s3;
     if (GetToken() != TK_OBJ) {
-        sprintf(strtmp,"invalid symbol [%s]", word);
+        sprintf(strtmp, "invalid symbol [%s]", word);
         SetError(strtmp);
         return PPRESULT_ERROR;
     }
-    
-    strcase( word );
-    if (tstrcmp(word,"global")) {		// global macro
-        if ( GetToken() != TK_OBJ ) {
-            SetError((char *)"bad global syntax");
+
+    strcase(word);
+    if (tstrcmp(word, "global")) {        // global macro
+        if (GetToken() != TK_OBJ) {
+            SetError((char *) "bad global syntax");
             return PPRESULT_ERROR;
         }
         glmode = 1;
         strcase(word);
     }
-    
+
     // 型指定キーワード
     if (tstrcmp(word, "double")) {
         valuetype = ConstType::Double;
@@ -2081,12 +2080,12 @@ ppresult_t CToken::PP_Const( void ) {
     }
     if (valuetype != ConstType::Indeterminate) {
         if (GetToken() != TK_OBJ) {
-            SetError((char *)"bad #const syntax" );
+            SetError((char *) "bad #const syntax");
             return PPRESULT_ERROR;
         }
         strcase(word);
     }
-    
+
     strcpy(keyword, word);
     if (glmode)
         FixModuleName(keyword);
@@ -2097,10 +2096,10 @@ ppresult_t CToken::PP_Const( void ) {
         SetErrorSymbolOverdefined(keyword, res);
         return PPRESULT_ERROR;
     }
-    
+
     if (Calc(cres))
         return PPRESULT_ERROR;
-    
+
 //    // AHT keyword check
 //    if (ahtkeyword != NULL) {
 //        if (ahtbuf != NULL) { // AHT出力時
@@ -2129,10 +2128,10 @@ ppresult_t CToken::PP_Const( void ) {
 //            }
 //        }
 //    }
-    
-    id = lb->Regist(keyword, LAB_TYPE_PPVAL, (int)cres);
+
+    id = lb->Regist(keyword, LAB_TYPE_PPVAL, (int) cres);
     if (valuetype == ConstType::Double || (valuetype == ConstType::Indeterminate && cres != floor(cres))) {
-        lb->SetData2(id, (char *)(&cres), sizeof(CALCVAR));
+        lb->SetData2(id, (char *) (&cres), sizeof(CALCVAR));
     }
     if (glmode)
         lb->SetEternal(id);
@@ -2142,7 +2141,7 @@ ppresult_t CToken::PP_Const( void ) {
 /// #enum解析
 ///
 ppresult_t CToken::PP_Enum(void) {
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     int id;
     int res;
     int glmode = 0;
@@ -2151,14 +2150,14 @@ ppresult_t CToken::PP_Enum(void) {
     char strtmp[512];
 
     if (GetToken() != TK_OBJ) {
-        sprintf(strtmp,"invalid symbol [%s]", word);
+        sprintf(strtmp, "invalid symbol [%s]", word);
         SetError(strtmp);
         return PPRESULT_ERROR;
     }
     strcase(word);
-    if (tstrcmp(word,"global")) { // global macro
+    if (tstrcmp(word, "global")) { // global macro
         if (GetToken() != TK_OBJ) {
-            SetError((char *)"bad global syntax");
+            SetError((char *) "bad global syntax");
             return PPRESULT_ERROR;
         }
         glmode = 1;
@@ -2177,7 +2176,7 @@ ppresult_t CToken::PP_Enum(void) {
     if (GetToken() == '=') {
         if (Calc(cres))
             return PPRESULT_ERROR;
-        enumgc = (int)cres;
+        enumgc = (int) cres;
     }
     res = enumgc++;
     id = lb->Regist(keyword, LAB_TYPE_PPVAL, res);
@@ -2190,18 +2189,18 @@ ppresult_t CToken::PP_Enum(void) {
 /// @return 有効文字列の先頭ポインタ
 ///
 char *CToken::CheckValidWord(void) {
-    char *res = (char *)wp;
+    char *res = (char *) wp;
     char *p;
     char *p2;
     unsigned char cur_char;
     int qqflg = 0;
     int qqchr = 0;
-    
+
     if (res == NULL)
         return res;
     p = res;
-    
-    while(1) {
+
+    while (1) {
         cur_char = *p;
         if (cur_char == 0)
             break;
@@ -2225,8 +2224,8 @@ char *CToken::CheckValidWord(void) {
                 }
                 if (p[1] == '*') {
                     mulstr = LMODE_COMMENT;
-                    p2 = ExpandStrComment((char *)p + 2, 1);
-                    while(1) {
+                    p2 = ExpandStrComment((char *) p + 2, 1);
+                    while (1) {
                         if (p >= p2)
                             break;
                         *p++ = 32; // コメント部分をspaceに
@@ -2245,7 +2244,7 @@ char *CToken::CheckValidWord(void) {
             if (cur_char == qqchr)
                 qqflg = 0;
         }
-        
+
         p += SkipMultiByte(cur_char);           // 全角文字チェック
         p++;
     }
@@ -2255,7 +2254,7 @@ char *CToken::CheckValidWord(void) {
 /// #define解析
 ///
 ppresult_t CToken::PP_Define(void) {
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     char *wdata;
     int id;
     int res;
@@ -2270,25 +2269,25 @@ ppresult_t CToken::PP_Define(void) {
     char *macbuf;
     char keyword[256];
     char strtmp[512];
-    
+
     if (GetToken() != TK_OBJ) {
         sprintf(strtmp, "invalid symbol [%s]", word);
         SetError(strtmp);
         return PPRESULT_ERROR;
     }
-    
+
     strcase(word);
-    if (tstrcmp(word, "global")) {		// global macro
+    if (tstrcmp(word, "global")) {        // global macro
         if (GetToken() != TK_OBJ) {
-            SetError((char *)"bad macro syntax");
+            SetError((char *) "bad macro syntax");
             return PPRESULT_ERROR;
         }
         glmode = 1;
         strcase(word);
     }
-    if (tstrcmp(word, "ctype")) {		// C-type macro
+    if (tstrcmp(word, "ctype")) {        // C-type macro
         if (GetToken() != TK_OBJ) {
-            SetError((char *)"bad macro syntax");
+            SetError((char *) "bad macro syntax");
             return PPRESULT_ERROR;
         }
         ctype = 1;
@@ -2304,7 +2303,7 @@ ppresult_t CToken::PP_Define(void) {
         SetErrorSymbolOverdefined(keyword, res);
         return PPRESULT_ERROR;
     }
-    
+
     // skip space,tab code
     if (wp == NULL)
         cur_char = 0;
@@ -2313,7 +2312,7 @@ ppresult_t CToken::PP_Define(void) {
         if (cur_char != '(')
             cur_char = 0;
     }
-    
+
     if (cur_char == 0) { // no parameters
         prms = 0;
         if (ctype)
@@ -2338,24 +2337,24 @@ ppresult_t CToken::PP_Define(void) {
 //                }
 //            }
 //        }
-        
+
         id = lb->Regist(keyword, LAB_TYPE_PPMAC, prms);
         lb->SetData(id, wdata);
         if (glmode)
             lb->SetEternal(id);
-        
+
         return PPRESULT_SUCCESS;
     }
-    
+
     //		パラメータ定義取得
     //
-    macdef = (MACDEF *)linetmp;
+    macdef = (MACDEF *) linetmp;
     macdef->data[0] = 0;
-    macptr = 1;				// デフォルトマクロデータ参照オフセット
+    macptr = 1;                // デフォルトマクロデータ参照オフセット
     wp++;
     prms = 0;
     flg = 0;
-    while(1) {
+    while (1) {
         if (wp == NULL)
             goto bad_macro_param_expr;
         cur_char = *wp++;
@@ -2365,7 +2364,7 @@ ppresult_t CToken::PP_Define(void) {
             prms++;
             break;
         }
-        switch(cur_char) {
+        switch (cur_char) {
             case 9:
             case 32:
                 break;
@@ -2384,20 +2383,20 @@ ppresult_t CToken::PP_Define(void) {
                 if (val != (prms + 1))
                     goto bad_macro_param_expr;
                 flg = 1;
-                macdef->index[prms] = 0;			// デフォルト(初期値なし)
+                macdef->index[prms] = 0;            // デフォルト(初期値なし)
                 break;
             case '=':
                 if (flg != 1)
                     goto bad_macro_param_expr;
                 flg = 2;
-                macdef->index[prms] = macptr;		// 初期値ポインタの設定
+                macdef->index[prms] = macptr;        // 初期値ポインタの設定
                 type = GetToken();
-                switch(type) {
+                switch (type) {
                     case TK_NUM:
                         sprintf(word, "%d", val);
                         break;
                     case TK_DNUM:
-                        strcpy(word, (char *)s3);
+                        strcpy(word, (char *) s3);
                         break;
                     case TK_STRING:
                         sprintf(strtmp, "\"%s\"", word);
@@ -2413,18 +2412,18 @@ ppresult_t CToken::PP_Define(void) {
                             break;
                         }
                         if (type != TK_NUM) {
-                            SetError((char *)"bad default value");
+                            SetError((char *) "bad default value");
                             return PPRESULT_ERROR;
                         }
                         //_itoa( val, word, 10 );
                         sprintf(word, "-%d", val);
                         break;
                     default:
-                        SetError((char *)"bad default value");
+                        SetError((char *) "bad default value");
                         return PPRESULT_ERROR;
                 }
                 macbuf = (macdef->data) + macptr;
-                res = (int)strlen(word);
+                res = (int) strlen(word);
                 strcpy(macbuf, word);
                 macptr += res + 1;
                 break;
@@ -2432,12 +2431,12 @@ ppresult_t CToken::PP_Define(void) {
                 goto bad_macro_param_expr;
         }
     }
-    
+
     //		skip space,tab code
     if (wp == NULL)
         cur_char = 0;
     else {
-        while(1) {
+        while (1) {
             cur_char = *wp;
             if (cur_char == 0)
                 break;
@@ -2447,25 +2446,25 @@ ppresult_t CToken::PP_Define(void) {
         }
     }
     if (cur_char == 0) {
-        SetError((char *)"macro contains no data");
+        SetError((char *) "macro contains no data");
         return PPRESULT_ERROR;
     }
     if (ctype)
         prms |= PRM_FLAG_CTYPE;
-    
+
     //		データ定義
     id = lb->Regist(keyword, LAB_TYPE_PPMAC, prms);
     wdata = CheckValidWord();
     lb->SetData(id, wdata);
-    lb->SetData2(id, (char *)macdef, macptr + sizeof(macdef->index));
+    lb->SetData2(id, (char *) macdef, macptr + sizeof(macdef->index));
     if (glmode)
         lb->SetEternal(id);
-    
+
     //sprintf( keyword,"[%d]-[%s]",id,wdata );Alert( keyword );
     return PPRESULT_SUCCESS;
 
-bad_macro_param_expr:
-    SetError((char *)"bad macro parameter expression");
+    bad_macro_param_expr:
+    SetError((char *) "bad macro parameter expression");
     return PPRESULT_ERROR;
 }
 
@@ -2477,32 +2476,32 @@ bad_macro_param_expr:
 ///
 ppresult_t CToken::PP_Defcfunc(int mode) {
     int id = -1;
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     char *mod = GetModuleName();
     char fixname[128];
     int glmode = 0;
     int premode = LAB_TYPE_PPMODFUNC;
     int token = GetToken();
-    
+
     if (token == TK_OBJ) {
         strcase(word);
         if (tstrcmp(word, "local")) { // local option
             if (*mod == 0) {
-                SetError((char *)"module name not found");
+                SetError((char *) "module name not found");
                 return PPRESULT_ERROR;
             }
             glmode = 1;
             token = GetToken();
         }
-        if (tstrcmp(word,"prep")) { // prepare option
+        if (tstrcmp(word, "prep")) { // prepare option
             premode = LAB_TYPE_PP_PREMODFUNC;
             token = GetToken();
         }
     }
-    
+
     strcase2(word, fixname);
     if (token != TK_OBJ) {
-        SetError((char *)"invalid func name");
+        SetError((char *) "invalid func name");
         return PPRESULT_ERROR;
     }
     token = lb->Search(fixname);
@@ -2513,16 +2512,16 @@ ppresult_t CToken::PP_Defcfunc(int mode) {
         }
         id = token;
     }
-    
+
     if (glmode)
         AddModuleName(fixname);
 
     if (premode == LAB_TYPE_PP_PREMODFUNC) {
-        wrtbuf->PutStrf((char *)"#defcfunc prep %s ", fixname);
+        wrtbuf->PutStrf((char *) "#defcfunc prep %s ", fixname);
     } else {
-        wrtbuf->PutStrf((char *)"#defcfunc %s ", fixname);
+        wrtbuf->PutStrf((char *) "#defcfunc %s ", fixname);
     }
-    
+
     if (id == -1) {
         id = lb->Regist(fixname, premode, 0);
         if (glmode == 0)
@@ -2533,23 +2532,23 @@ ppresult_t CToken::PP_Defcfunc(int mode) {
     } else {
         lb->SetFlag(id, premode);
     }
-    
+
     if (mode) {
         if (mode == 1) {
-            wrtbuf->PutStr((char *)"modvar ");
+            wrtbuf->PutStr((char *) "modvar ");
         } else {
-            wrtbuf->PutStr((char *)"modinit ");
+            wrtbuf->PutStr((char *) "modinit ");
         }
         if (*mod == 0) {
-            SetError((char *)"module name not found");
+            SetError((char *) "module name not found");
             return PPRESULT_ERROR;
         }
         wrtbuf->PutStr(mod);
         if (wp != NULL)
             wrtbuf->Put(',');
     }
-    
-    while(1) {
+
+    while (1) {
         token = GetToken();
         if (token == TK_OBJ) {
             wrtbuf->PutStr(word);
@@ -2557,10 +2556,10 @@ ppresult_t CToken::PP_Defcfunc(int mode) {
         if (wp == NULL)
             break;
         if (token != TK_OBJ) {
-            SetError((char *)"invalid func param");
+            SetError((char *) "invalid func param");
             return PPRESULT_ERROR;
         }
-        
+
         token = GetToken();
         if (token == TK_OBJ) {
             strcase2(word, fixname);
@@ -2572,12 +2571,12 @@ ppresult_t CToken::PP_Defcfunc(int mode) {
         if (wp == NULL)
             break;
         if (token != ',') {
-            SetError((char *)"invalid func param");
+            SetError((char *) "invalid func param");
             return PPRESULT_ERROR;
         }
-        wrtbuf->Put( ',' );
+        wrtbuf->Put(',');
     }
-    
+
     wrtbuf->PutCR();
     return PPRESULT_WROTE_LINE;
 }
@@ -2592,20 +2591,20 @@ ppresult_t CToken::PP_Defcfunc(int mode) {
 ///
 ppresult_t CToken::PP_Deffunc(int mode) {
     int id = -1;
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     char *mod = GetModuleName();
     char fixname[128];
     int glmode = 0;
     int premode = LAB_TYPE_PPMODFUNC;
     int token;
-    
+
     if (mode < 2) {
         token = GetToken();
         if (token == TK_OBJ) {
             strcase(word);
             if (tstrcmp(word, "local")) { // local option
                 if (*mod == 0) {
-                    SetError((char *)"module name not found");
+                    SetError((char *) "module name not found");
                     return PPRESULT_ERROR;
                 }
                 glmode = 1;
@@ -2616,10 +2615,10 @@ ppresult_t CToken::PP_Deffunc(int mode) {
                 token = GetToken();
             }
         }
-        
+
         strcase2(word, fixname);
         if (token != TK_OBJ) {
-            SetError((char *)"invalid func name");
+            SetError((char *) "invalid func name");
             return PPRESULT_ERROR;
         }
         token = lb->Search(fixname);
@@ -2630,31 +2629,31 @@ ppresult_t CToken::PP_Deffunc(int mode) {
             }
             id = token;
         }
-        
+
         if (glmode)
             AddModuleName(fixname);
-        
+
         if (premode == LAB_TYPE_PP_PREMODFUNC) {
-            wrtbuf->PutStrf((char *)"#deffunc prep %s ", fixname);
+            wrtbuf->PutStrf((char *) "#deffunc prep %s ", fixname);
         } else {
-            wrtbuf->PutStrf((char *)"#deffunc %s ", fixname);
+            wrtbuf->PutStrf((char *) "#deffunc %s ", fixname);
         }
-        
+
         if (id == -1) {
             id = lb->Regist(fixname, premode, 0);
             if (glmode == 0)
                 lb->SetEternal(id);
             if (*mod != 0) {
                 lb->AddRelation(mod, id);
-            }		// モジュールラベルに依存を追加
+            }        // モジュールラベルに依存を追加
         } else {
             lb->SetFlag(id, premode);
         }
-        
+
         if (mode) {
-            wrtbuf->PutStr((char *)"modvar ");
+            wrtbuf->PutStr((char *) "modvar ");
             if (*mod == 0) {
-                SetError((char *)"module name not found");
+                SetError((char *) "module name not found");
                 return PPRESULT_ERROR;
             }
             wrtbuf->PutStr(mod);
@@ -2663,12 +2662,12 @@ ppresult_t CToken::PP_Deffunc(int mode) {
         }
     } else {
         if (mode == 2) {
-            wrtbuf->PutStr((char *)"#deffunc __init modinit ");
+            wrtbuf->PutStr((char *) "#deffunc __init modinit ");
         } else {
-            wrtbuf->PutStr((char *)"#deffunc __term modterm ");
+            wrtbuf->PutStr((char *) "#deffunc __term modterm ");
         }
         if (*mod == 0) {
-            SetError((char *)"module name not found");
+            SetError((char *) "module name not found");
             return PPRESULT_ERROR;
         }
         wrtbuf->PutStr(mod);
@@ -2676,22 +2675,22 @@ ppresult_t CToken::PP_Deffunc(int mode) {
             wrtbuf->Put(',');
     }
 
-    while(1) {
+    while (1) {
         token = GetToken();
         if (token == TK_OBJ) {
             wrtbuf->PutStr(word);
             strcase(word);
-            if (tstrcmp(word, "onexit")) {							// onexitは参照済みにする
+            if (tstrcmp(word, "onexit")) {                            // onexitは参照済みにする
                 lb->AddReference(id);
             }
         }
         if (wp == NULL)
             break;
         if (token != TK_OBJ) {
-            SetError((char *)"invalid func param");
+            SetError((char *) "invalid func param");
             return PPRESULT_ERROR;
         }
-        
+
         token = GetToken();
         if (token == TK_OBJ) {
             strcase2(word, fixname);
@@ -2703,7 +2702,7 @@ ppresult_t CToken::PP_Deffunc(int mode) {
         if (wp == NULL)
             break;
         if (token != ',') {
-            SetError((char *)"invalid func param");
+            SetError((char *) "invalid func param");
             return PPRESULT_ERROR;
         }
         wrtbuf->Put(',');
@@ -2715,8 +2714,8 @@ ppresult_t CToken::PP_Deffunc(int mode) {
 
 /// #struct解析
 ///
-ppresult_t CToken::PP_Struct( void ) {
-    char *word = (char *)s3;
+ppresult_t CToken::PP_Struct(void) {
+    char *word = (char *) s3;
     int id;
     int res;
     int glmode = 0;
@@ -2726,20 +2725,20 @@ ppresult_t CToken::PP_Struct( void ) {
 
     if (GetToken() != TK_OBJ) {
         sprintf(strtmp, "invalid symbol [%s]", word);
-        SetError(strtmp );
+        SetError(strtmp);
         return PPRESULT_ERROR;
     }
-    
-    strcase( word );
-    if (tstrcmp(word,"global")) {		// global macro
+
+    strcase(word);
+    if (tstrcmp(word, "global")) {        // global macro
         if (GetToken() != TK_OBJ) {
-            SetError((char *)"bad global syntax");
+            SetError((char *) "bad global syntax");
             return PPRESULT_ERROR;
         }
         glmode = 1;
         strcase(word);
     }
-    
+
     strcpy(tagname, word);
     if (glmode)
         FixModuleName(tagname);
@@ -2754,23 +2753,23 @@ ppresult_t CToken::PP_Struct( void ) {
     if (glmode)
         lb->SetEternal(id);
 
-    wrtbuf->PutStrf((char *)"#struct %s ",tagname);
+    wrtbuf->PutStrf((char *) "#struct %s ", tagname);
 
     int token;
-    while(1) {
+    while (1) {
         token = GetToken();
         if (wp == NULL)
             break;
         if (token != TK_OBJ) {
-            SetError((char *)"invalid struct param");
+            SetError((char *) "invalid struct param");
             return PPRESULT_ERROR;
         }
         wrtbuf->PutStr(word);
         wrtbuf->Put(' ');
-        
+
         token = GetToken();
         if (token != TK_OBJ) {
-            SetError((char *)"invalid struct param");
+            SetError((char *) "invalid struct param");
             return PPRESULT_ERROR;
         }
 
@@ -2793,7 +2792,7 @@ ppresult_t CToken::PP_Struct( void ) {
         if (wp == NULL)
             break;
         if (token != ',') {
-            SetError((char *)"invalid struct param");
+            SetError((char *) "invalid struct param");
             return PPRESULT_ERROR;
         }
         wrtbuf->Put(',');
@@ -2807,29 +2806,29 @@ ppresult_t CToken::PP_Struct( void ) {
 ppresult_t CToken::PP_Func(char *name) {
     int id;
     int glmode;
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     int token = GetToken();
-    
+
     if (token != TK_OBJ) {
-        SetError((char *)"invalid func name");
+        SetError((char *) "invalid func name");
         return PPRESULT_ERROR;
     }
-    
+
     glmode = 0;
     strcase(word);
-    if (tstrcmp(word, "global")) {		// global macro
+    if (tstrcmp(word, "global")) {        // global macro
         if (GetToken() != TK_OBJ) {
-            SetError((char *)"bad global syntax");
+            SetError((char *) "bad global syntax");
             return PPRESULT_ERROR;
         }
         glmode = 1;
     }
-    
+
     if (glmode)
         FixModuleName(word);
     else
         AddModuleName(word);
-    
+
     token = lb->Search(word);
     if (token != -1) {
         SetErrorSymbolOverdefined(word, token);
@@ -2839,7 +2838,7 @@ ppresult_t CToken::PP_Func(char *name) {
     if (glmode)
         lb->SetEternal(id);
 
-    wrtbuf->PutStrf((char *)"#%s %s%s",name, word, (char *)wp);
+    wrtbuf->PutStrf((char *) "#%s %s%s", name, word, (char *) wp);
     wrtbuf->PutCR();
 
     return PPRESULT_WROTE_LINE;
@@ -2849,11 +2848,11 @@ ppresult_t CToken::PP_Func(char *name) {
 ///
 ppresult_t CToken::PP_Cmd(char *name) {
     int id;
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     int token = GetToken();
-    
+
     if (token != TK_OBJ) {
-        SetError((char *)"invalid func name");
+        SetError((char *) "invalid func name");
         return PPRESULT_ERROR;
     }
     token = lb->Search(word);
@@ -2861,15 +2860,15 @@ ppresult_t CToken::PP_Cmd(char *name) {
         SetErrorSymbolOverdefined(word, token);
         return PPRESULT_ERROR;
     }
-    
+
     id = lb->Regist(word, LAB_TYPE_PPINTMAC, 0); // 内部マクロとして定義
     strcat(word, "@hsp");
     lb->SetData(id, word);
     lb->SetEternal(id);
 
-    wrtbuf->PutStrf((char *)"#%s %s%s", name, word, (char *)wp);
+    wrtbuf->PutStrf((char *) "#%s %s%s", name, word, (char *) wp);
     wrtbuf->PutCR();
-    
+
     return PPRESULT_WROTE_LINE;
 }
 
@@ -2878,25 +2877,25 @@ ppresult_t CToken::PP_Cmd(char *name) {
 ppresult_t CToken::PP_Usecom(void) {
     int id;
     int glmode;
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     int token = GetToken();
-    
+
     if (token != TK_OBJ) {
-        SetError((char *)"invalid COM symbol name");
+        SetError((char *) "invalid COM symbol name");
         return PPRESULT_ERROR;
     }
-    
+
     glmode = 0;
     strcase(word);
     if (tstrcmp(word, "global")) { // global macro
         if (GetToken() != TK_OBJ) {
-            SetError((char *)"bad global syntax");
+            SetError((char *) "bad global syntax");
             return PPRESULT_ERROR;
         }
         glmode = 1;
     }
-    
-    token = lb->Search( word );
+
+    token = lb->Search(word);
     if (token != -1) {
         SetErrorSymbolOverdefined(word, token);
         return PPRESULT_ERROR;
@@ -2909,7 +2908,7 @@ ppresult_t CToken::PP_Usecom(void) {
     if (glmode)
         lb->SetEternal(id);
 
-    wrtbuf->PutStrf((char *)"#usecom %s%s", word, (char *)wp);
+    wrtbuf->PutStrf((char *) "#usecom %s%s", word, (char *) wp);
     wrtbuf->PutCR();
     return PPRESULT_WROTE_LINE;
 }
@@ -2920,10 +2919,10 @@ ppresult_t CToken::PP_Module(void) {
     int res;
     int id;
     int fl = 0;
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     char tagname[MODNAME_MAX + 1];
     int token = GetToken();
-    
+
     if ((token == TK_OBJ) || (token == TK_STRING))
         fl = 1;
     if (token == TK_NONE) {
@@ -2932,15 +2931,15 @@ ppresult_t CToken::PP_Module(void) {
         fl = 1;
     }
     if (fl == 0) {
-        SetError((char *)"invalid module name");
+        SetError((char *) "invalid module name");
         return PPRESULT_ERROR;
     }
     if (!IsGlobalMode()) {
-        SetError((char *)"not in global mode");
+        SetError((char *) "not in global mode");
         return PPRESULT_ERROR;
     }
     if (CheckModuleName(word)) {
-        SetError((char *)"bad module name");
+        SetError((char *) "bad module name");
         return PPRESULT_ERROR;
     }
     sprintf(tagname, "%.*s", MODNAME_MAX, word);
@@ -2952,18 +2951,18 @@ ppresult_t CToken::PP_Module(void) {
     id = lb->Regist(tagname, LAB_TYPE_PPDLLFUNC, 0);
     lb->SetEternal(id);
     SetModuleName(tagname);
-    
-    wrtbuf->PutStrf((char *)"#module %s",tagname);
+
+    wrtbuf->PutStrf((char *) "#module %s", tagname);
     wrtbuf->PutCR();
-    wrtbuf->PutStrf((char *)"goto@hsp *_%s_exit", tagname);
+    wrtbuf->PutStrf((char *) "goto@hsp *_%s_exit", tagname);
     wrtbuf->PutCR();
-    
+
     if (PeekToken() != TK_NONE) {
-        wrtbuf->PutStrf((char *)"#struct %s ", tagname);
-        while(1) {
+        wrtbuf->PutStrf((char *) "#struct %s ", tagname);
+        while (1) {
             token = GetToken();
             if (token != TK_OBJ) {
-                SetError((char *)"invalid module param");
+                SetError((char *) "invalid module param");
                 return PPRESULT_ERROR;
             }
             AddModuleName(word);
@@ -2973,14 +2972,14 @@ ppresult_t CToken::PP_Module(void) {
                 return PPRESULT_ERROR;
             }
             id = lb->Regist(word, LAB_TYPE_PPDLLFUNC, 0);
-            wrtbuf->PutStr((char *)"var ");
+            wrtbuf->PutStr((char *) "var ");
             wrtbuf->PutStr(word);
-            
+
             token = GetToken();
             if (wp == NULL)
                 break;
             if (token != ',') {
-                SetError((char *)"invalid module param");
+                SetError((char *) "invalid module param");
                 return PPRESULT_ERROR;
             }
             wrtbuf->Put(',');
@@ -2995,17 +2994,17 @@ ppresult_t CToken::PP_Module(void) {
 ppresult_t CToken::PP_Global(void) {
     if (IsGlobalMode()) {
 #ifdef JPNMSG
-        SetError((char *)"#module と対応していない #global があります");
+        SetError((char *) "#module と対応していない #global があります");
 #else
         SetError("already in global mode");
 #endif
         return PPRESULT_ERROR;
     }
-    wrtbuf->PutStrf((char *)"*_%s_exit",GetModuleName());
+    wrtbuf->PutStrf((char *) "*_%s_exit", GetModuleName());
     wrtbuf->PutCR();
-    wrtbuf->PutStr((char *)"#global");
+    wrtbuf->PutStr((char *) "#global");
     wrtbuf->PutCR();
-    SetModuleName((char *)"");
+    SetModuleName((char *) "");
     return PPRESULT_WROTE_LINES;
 }
 
@@ -3017,17 +3016,17 @@ ppresult_t CToken::PP_Aht(void) {
         return PPRESULT_SUCCESS;
     if (ahtbuf != NULL)
         return PPRESULT_SUCCESS; // AHT出力時は無視する
-    
+
     int token = GetToken();
     if (token != TK_OBJ) {
-        SetError((char *)"invalid AHT option name");
+        SetError((char *) "invalid AHT option name");
         return PPRESULT_ERROR;
     }
-    strcpy2(tmp, (char *)s3, 512);
-    
+    strcpy2(tmp, (char *) s3, 512);
+
     token = GetToken();
     if ((token != TK_STRING) && (token != TK_NUM)) {
-        SetError((char *)"invalid AHT option value");
+        SetError((char *) "invalid AHT option value");
         return PPRESULT_ERROR;
     }
 //    ahtmodel->SetAHTOption(tmp, (char *)s3);
@@ -3043,16 +3042,16 @@ ppresult_t CToken::PP_Ahtout(void) {
         return PPRESULT_SUCCESS;
     if (wp == NULL)
         return PPRESULT_SUCCESS;
-    ahtbuf->PutStr((char *)wp);
+    ahtbuf->PutStr((char *) wp);
     ahtbuf->PutCR();
     return PPRESULT_SUCCESS;
 }
 
 /// #ahtmes解析
 ///
-ppresult_t CToken::PP_Ahtmes( void ) {
+ppresult_t CToken::PP_Ahtmes(void) {
     int addprm = 0;
-    
+
     if (ahtmodel == NULL)
         return PPRESULT_SUCCESS;
     if (ahtbuf == NULL)
@@ -3061,25 +3060,25 @@ ppresult_t CToken::PP_Ahtmes( void ) {
         return PPRESULT_SUCCESS;
 
     int token;
-    while(1) {
+    while (1) {
         if (wp == NULL)
             break;
         token = GetToken();
         if (token == TK_NONE)
             break;
         if ((token != TK_OBJ) && (token != TK_NUM) && (token != TK_STRING)) {
-            SetError((char *)"illegal ahtmes parameter");
+            SetError((char *) "illegal ahtmes parameter");
             return PPRESULT_ERROR;
         }
-        ahtbuf->PutStr((char *)s3);
+        ahtbuf->PutStr((char *) s3);
         if (wp == NULL) {
             addprm = 0;
             break;
         }
-        
+
         token = GetToken();
         if (token != '+') {
-            SetError((char *)"invalid ahtmes format");
+            SetError((char *) "invalid ahtmes format");
             return PPRESULT_ERROR;
         }
         addprm++;
@@ -3098,10 +3097,10 @@ ppresult_t CToken::PP_Pack(int mode) {
     if (packbuf != NULL) {
         token = GetToken();
         if (token != TK_STRING) {
-            SetError((char *)"invalid pack name");
+            SetError((char *) "invalid pack name");
             return PPRESULT_ERROR;
         }
-        AddPackfile((char *)s3, mode);
+        AddPackfile((char *) s3, mode);
     }
     return PPRESULT_SUCCESS;
 }
@@ -3112,20 +3111,20 @@ ppresult_t CToken::PP_PackOpt(void) {
     int token;
     char tmp[1024];
     char optname[1024];
-    
+
     if (packbuf != NULL) {
         token = GetToken();
         if (token != TK_OBJ) {
-            SetError((char *)"illegal option name");
+            SetError((char *) "illegal option name");
             return PPRESULT_ERROR;
         }
-        strncpy(optname, (char *)s3, 128);
+        strncpy(optname, (char *) s3, 128);
         token = GetToken();
         if ((token != TK_OBJ) && (token != TK_NUM) && (token != TK_STRING)) {
-            SetError((char *)"illegal option parameter");
+            SetError((char *) "illegal option parameter");
             return PPRESULT_ERROR;
         }
-        sprintf(tmp, ";!%s=%s", optname, (char *)s3);
+        sprintf(tmp, ";!%s=%s", optname, (char *) s3);
         AddPackfile(tmp, 2);
     }
     return PPRESULT_SUCCESS;
@@ -3136,19 +3135,19 @@ ppresult_t CToken::PP_PackOpt(void) {
 ppresult_t CToken::PP_CmpOpt(void) {
     char optname[1024];
     int token = GetToken();
-    
+
     if (token != TK_OBJ) {
-        SetError((char *)"illegal option name");
+        SetError((char *) "illegal option name");
         return PPRESULT_ERROR;
     }
-    strcase2((char *)s3, optname);
-    
+    strcase2((char *) s3, optname);
+
     token = GetToken();
     if (token != TK_NUM) {
-        SetError((char *)"illegal option parameter");
+        SetError((char *) "illegal option parameter");
         return PPRESULT_ERROR;
     }
-    
+
     token = 0;
     if (tstrcmp(optname, "ppout")) { // preprocessor out sw
         token = CMPMODE_PPOUT;
@@ -3174,18 +3173,18 @@ ppresult_t CToken::PP_CmpOpt(void) {
     if (tstrcmp(optname, "skipjpspc")) { // skip Japanese Space Code sw
         token = CMPMODE_SKIPJPSPC;
     }
-    
+
     if (token == 0) {
-        SetError((char *)"illegal option name");
+        SetError((char *) "illegal option name");
         return PPRESULT_ERROR;
     }
-    
+
     if (val) {
         hed_cmpmode |= token;
     } else {
         hed_cmpmode &= ~token;
     }
-    
+
     return PPRESULT_SUCCESS;
 }
 
@@ -3194,14 +3193,14 @@ ppresult_t CToken::PP_CmpOpt(void) {
 ppresult_t CToken::PP_RuntimeOpt(void) {
     char tmp[1024];
     int token = GetToken();
-    
+
     if (token != TK_STRING) {
-        SetError((char *)"illegal runtime name");
+        SetError((char *) "illegal runtime name");
         return PPRESULT_ERROR;
     }
-    strncpy(hed_runtime, (char *)s3, sizeof hed_runtime);
+    strncpy(hed_runtime, (char *) s3, sizeof hed_runtime);
     hed_runtime[sizeof hed_runtime - 1] = '\0';
-    
+
     if (packbuf != NULL) {
         sprintf(tmp, ";!runtime=%s.hrt", hed_runtime);
         AddPackfile(tmp, 2);
@@ -3217,41 +3216,40 @@ ppresult_t CToken::PP_BootOpt(void) {
     char optname[1024];
     int token = GetToken();
     if (token != TK_OBJ) {
-        SetError((char *)"illegal option name");
+        SetError((char *) "illegal option name");
         return PPRESULT_ERROR;
     }
-    strcase2((char *)s3, optname);
-    
+    strcase2((char *) s3, optname);
+
     token = GetToken();
     if (token != TK_NUM) {
-        SetError((char *)"illegal option parameter");
+        SetError((char *) "illegal option parameter");
         return PPRESULT_ERROR;
     }
-    
+
     token = 0;
-    if (tstrcmp(optname, "notimer")) {			// No MMTimer sw
+    if (tstrcmp(optname, "notimer")) {            // No MMTimer sw
         token = HEDINFO_NOMMTIMER;
         hed_autoopt_timer = -1;
     }
-    if (tstrcmp(optname, "nogdip")) {			// No GDI+ sw
+    if (tstrcmp(optname, "nogdip")) {            // No GDI+ sw
         token = HEDINFO_NOGDIP;
     }
-    if (tstrcmp(optname, "float32")) {			// float32 sw
+    if (tstrcmp(optname, "float32")) {            // float32 sw
         token = HEDINFO_FLOAT32;
     }
-    if (tstrcmp(optname, "orgrnd")) {			// standard random sw
+    if (tstrcmp(optname, "orgrnd")) {            // standard random sw
         token = HEDINFO_ORGRND;
     }
-    
+
     if (token == 0) {
-        SetError((char *)"illegal option name");
+        SetError((char *) "illegal option name");
         return PPRESULT_ERROR;
     }
-    
+
     if (val) {
         hed_option |= token;
-    }
-    else {
+    } else {
         hed_option &= ~token;
     }
     return PPRESULT_SUCCESS;
@@ -3259,16 +3257,16 @@ ppresult_t CToken::PP_BootOpt(void) {
 
 void CToken::PreprocessCommentCheck(char *str) {
     int qmode = 0;
-    unsigned char *vs = (unsigned char *)str;
+    unsigned char *vs = (unsigned char *) str;
     unsigned char cur_char;
-    while(1) {
+    while (1) {
         cur_char = *vs++;
         if (cur_char == 0)
             break;
         if (qmode == 0) {
             if ((cur_char == ';') && (*vs == ';')) {
                 vs++;
-                ahtkeyword = (char *)vs;
+                ahtkeyword = (char *) vs;
             }
         }
         if (cur_char == 0x22)
@@ -3280,24 +3278,24 @@ void CToken::PreprocessCommentCheck(char *str) {
 /// プリプロセスの実行(マクロ展開なし)
 ///
 ppresult_t CToken::PreprocessNM(char *str) {
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     int id;
     int type;
     ppresult_t res;
     char fixname[128];
-    wp = (unsigned char *)str;
-    
+    wp = (unsigned char *) str;
+
     if (ahtmodel != NULL) {
         PreprocessCommentCheck(str);
     }
-    
+
     type = GetToken();
     if (type != TK_OBJ)
         return PPRESULT_UNKNOWN_DIRECTIVE;
-    
+
     //		ソース生成コントロール
     //
-    if (tstrcmp(word, "ifdef")) {		// generate control
+    if (tstrcmp(word, "ifdef")) {        // generate control
         if (mulstr == LMODE_OFF) {
             res = PP_SwitchStart(0);
         } else {
@@ -3313,7 +3311,7 @@ ppresult_t CToken::PreprocessNM(char *str) {
         }
         return res;
     }
-    if (tstrcmp(word, "ifndef")) {		// generate control
+    if (tstrcmp(word, "ifndef")) {        // generate control
         if (mulstr == LMODE_OFF) {
             res = PP_SwitchStart(0);
         } else {
@@ -3329,33 +3327,33 @@ ppresult_t CToken::PreprocessNM(char *str) {
         }
         return res;
     }
-    if (tstrcmp(word, "else")) {			// generate control
+    if (tstrcmp(word, "else")) {            // generate control
         return PP_SwitchReverse();
     }
-    if (tstrcmp(word, "endif")) {		// generate control
+    if (tstrcmp(word, "endif")) {        // generate control
         return PP_SwitchEnd();
     }
-    
+
     //		これ以降は#off時に実行しません
     //
     if (mulstr == LMODE_OFF) {
         return PPRESULT_UNKNOWN_DIRECTIVE;
     }
-    
-    if (tstrcmp(word, "define")) {		// keyword define
+
+    if (tstrcmp(word, "define")) {        // keyword define
         return PP_Define();
     }
-    
-    if (tstrcmp(word, "undef")) {		// keyword terminate
+
+    if (tstrcmp(word, "undef")) {        // keyword terminate
         if (GetToken() != TK_OBJ) {
-            SetError((char *)"invalid symbol");
+            SetError((char *) "invalid symbol");
             return PPRESULT_ERROR;
         }
-        
+
         strcase2(word, fixname);
         AddModuleName(fixname);
         id = lb->SearchLocal(word, fixname);
-        
+
         //id = lb->Search( word );
         if (id >= 0) {
             lb->SetFlag(id, -1);
@@ -3368,151 +3366,151 @@ ppresult_t CToken::PreprocessNM(char *str) {
 /// プリプロセスの実行
 ///
 ppresult_t CToken::Preprocess(char *str) {
-    char *word = (char *)s3;
+    char *word = (char *) s3;
     int a;
     ppresult_t res;
     CALCVAR cres;
-    wp = (unsigned char *)str;
+    wp = (unsigned char *) str;
     int type = GetToken();
-    
+
     if (type != TK_OBJ)
         return PPRESULT_SUCCESS;
-    
+
     //		ソース生成コントロール
     //
-    if (tstrcmp(word, "if")) {			// generate control
+    if (tstrcmp(word, "if")) {            // generate control
         if (mulstr == LMODE_OFF) {
             res = PP_SwitchStart(0);
         } else {
             res = PPRESULT_SUCCESS;
             if (Calc(cres) == 0) {
-                a = (int)cres;
+                a = (int) cres;
                 res = PP_SwitchStart(a);
             } else res = PPRESULT_ERROR;
         }
         return res;
     }
-    
+
     //		これ以降は#off時に実行しません
     //
     if (mulstr == LMODE_OFF) {
         return PPRESULT_SUCCESS;
     }
-    
+
     //		コード生成コントロール
     //
-    if (tstrcmp(word, "include")) {		// text include
+    if (tstrcmp(word, "include")) {        // text include
         res = PP_Include(0);
         return res;
     }
-    if (tstrcmp(word, "addition")) {		// text include
+    if (tstrcmp(word, "addition")) {        // text include
         res = PP_Include(1);
         return res;
     }
-    if (tstrcmp(word, "const")) {		// constant define
+    if (tstrcmp(word, "const")) {        // constant define
         res = PP_Const();
         return res;
     }
-    if (tstrcmp(word, "enum")) {			// constant enum define
+    if (tstrcmp(word, "enum")) {            // constant enum define
         res = PP_Enum();
         return res;
     }
-    if (tstrcmp(word, "module")) {		// module define
+    if (tstrcmp(word, "module")) {        // module define
         res = PP_Module();
         return res;
     }
-    if (tstrcmp(word, "global")) {		// module exit
+    if (tstrcmp(word, "global")) {        // module exit
         res = PP_Global();
         return res;
     }
-    if (tstrcmp(word, "deffunc")) {		// module function
+    if (tstrcmp(word, "deffunc")) {        // module function
         res = PP_Deffunc(0);
         return res;
     }
-    if (tstrcmp(word, "defcfunc")) {		// module function (1)
+    if (tstrcmp(word, "defcfunc")) {        // module function (1)
         res = PP_Defcfunc(0);
         return res;
     }
-    if (tstrcmp(word, "modfunc")) {		// module function (2)
+    if (tstrcmp(word, "modfunc")) {        // module function (2)
         res = PP_Deffunc(1);
         return res;
     }
-    if (tstrcmp(word, "modcfunc")) {		// module function (2+)
+    if (tstrcmp(word, "modcfunc")) {        // module function (2+)
         res = PP_Defcfunc(1);
         return res;
     }
-    if (tstrcmp(word, "modinit")) {		// module function (3)
+    if (tstrcmp(word, "modinit")) {        // module function (3)
         res = PP_Deffunc(2);
         return res;
     }
-    if (tstrcmp(word, "modterm")) {		// module function (4)
+    if (tstrcmp(word, "modterm")) {        // module function (4)
         res = PP_Deffunc(3);
         return res;
     }
-    if (tstrcmp(word, "struct")) {		// struct define
+    if (tstrcmp(word, "struct")) {        // struct define
         res = PP_Struct();
         return res;
     }
-    if (tstrcmp(word, "func")) {			// DLL function
-        res = PP_Func((char *)"func");
+    if (tstrcmp(word, "func")) {            // DLL function
+        res = PP_Func((char *) "func");
         return res;
     }
-    if (tstrcmp(word, "cfunc")) {		// DLL function
-        res = PP_Func((char *)"cfunc");
+    if (tstrcmp(word, "cfunc")) {        // DLL function
+        res = PP_Func((char *) "cfunc");
         return res;
     }
-    if (tstrcmp(word, "cmd")) {			// DLL function (3.0)
-        res = PP_Cmd((char *)"cmd");
+    if (tstrcmp(word, "cmd")) {            // DLL function (3.0)
+        res = PP_Cmd((char *) "cmd");
         return res;
     }
-    if (tstrcmp(word, "comfunc")) {		// COM Object function
-        res = PP_Func((char *)"comfunc");
+    if (tstrcmp(word, "comfunc")) {        // COM Object function
+        res = PP_Func((char *) "comfunc");
         return res;
     }
-    if (tstrcmp(word, "aht")) {			// AHT definition
+    if (tstrcmp(word, "aht")) {            // AHT definition
         res = PP_Aht();
         return res;
     }
-    if (tstrcmp(word, "ahtout")) {		// AHT command line output
+    if (tstrcmp(word, "ahtout")) {        // AHT command line output
         res = PP_Ahtout();
         return res;
     }
-    if (tstrcmp(word, "ahtmes")) {		// AHT command line output (mes)
+    if (tstrcmp(word, "ahtmes")) {        // AHT command line output (mes)
         res = PP_Ahtmes();
         return res;
     }
-    if (tstrcmp(word, "pack")) {			// packfile process
+    if (tstrcmp(word, "pack")) {            // packfile process
         res = PP_Pack(0);
         return res;
     }
-    if (tstrcmp(word, "epack")) {		// packfile process
+    if (tstrcmp(word, "epack")) {        // packfile process
         res = PP_Pack(1);
         return res;
     }
-    if (tstrcmp(word, "packopt")) {		// packfile process
+    if (tstrcmp(word, "packopt")) {        // packfile process
         res = PP_PackOpt();
         return res;
     }
-    if (tstrcmp(word, "runtime")) {		// runtime process
+    if (tstrcmp(word, "runtime")) {        // runtime process
         res = PP_RuntimeOpt();
         return res;
     }
-    if (tstrcmp(word, "bootopt")) {		// boot option process
+    if (tstrcmp(word, "bootopt")) {        // boot option process
         res = PP_BootOpt();
         return res;
     }
-    if (tstrcmp(word, "cmpopt")) {		// compile option process
+    if (tstrcmp(word, "cmpopt")) {        // compile option process
         res = PP_CmpOpt();
         return res;
     }
-    if (tstrcmp(word, "usecom")) {		// COM definition
+    if (tstrcmp(word, "usecom")) {        // COM definition
         res = PP_Usecom();
         return res;
     }
-    
+
     //		登録キーワード以外はコンパイラに渡す
     //
-    wrtbuf->Put((char)'#');
+    wrtbuf->Put((char) '#');
     wrtbuf->PutStr(linebuf);
     wrtbuf->PutCR();
     //wrtbuf->PutStr( (char *)s3 );
@@ -3524,13 +3522,13 @@ ppresult_t CToken::Preprocess(char *str) {
 int CToken::ExpandTokens(char *vp, CMemBuf *buf, int *lineext, int is_preprocess_line) {
     *lineext = 0; // 1行->複数行にマクロ展開されたか?
     int macloop = 0; // マクロ展開無限ループチェック用カウンタ
-    while(1) {
+    while (1) {
         if (mulstr == LMODE_OFF) { // １行無視
             if (wrtbuf != NULL)
                 wrtbuf->PutCR(); // 行末CR/LFを追加
             break;
         }
-        
+
         // {"〜"}の処理
         //
         if (mulstr == LMODE_STR) {
@@ -3539,15 +3537,15 @@ int CToken::ExpandTokens(char *vp, CMemBuf *buf, int *lineext, int is_preprocess
             if (*vp != 0)
                 continue;
         }
-        
+
         // /*〜*/の処理
         //
         if (mulstr == LMODE_COMMENT) {
             vp = ExpandStrComment(vp, 0);
-            if (*vp != 0 )
+            if (*vp != 0)
                 continue;
         }
-        
+
         char *vp_bak = vp;
         int type;
         vp = ExpandToken(vp, &type, is_preprocess_line);
@@ -3559,13 +3557,13 @@ int CToken::ExpandTokens(char *vp, CMemBuf *buf, int *lineext, int is_preprocess
         }
         if (type == TK_EOF) {
             if (wrtbuf != NULL)
-                wrtbuf->PutCR();	// 行末CR/LFを追加
+                wrtbuf->PutCR();    // 行末CR/LFを追加
             break;
         }
         if (vp_bak == vp) {
             macloop++;
             if (macloop > 999) {
-                SetError((char *)"Endless macro loop");
+                SetError((char *) "Endless macro loop");
                 return -1;
             }
         }
@@ -3582,24 +3580,24 @@ int CToken::ExpandLine(CMemBuf *buf, CMemBuf *src, char *refname) {
     mulstr = LMODE_ON;
     *errtmp = 0;
     unsigned char cur_char;
-    
-    while(1) {
-        RegistExtMacro((char *)"__line__", pline); // 行番号マクロを更新
-        while(1) {
-            cur_char = *(unsigned char *)p;
+
+    while (1) {
+        RegistExtMacro((char *) "__line__", pline); // 行番号マクロを更新
+        while (1) {
+            cur_char = *(unsigned char *) p;
             if (cur_char == ' ' || cur_char == '\t') {
                 p++;
                 continue;
             }
             break;
         }
-        
+
         if (*p == 0) // 終了(EOF)
             break;
         ahtkeyword = NULL; // AHTキーワードをリセットする
-        
+
         int is_preprocess_line = *p == '#' && mulstr != LMODE_STR && mulstr != LMODE_COMMENT;
-        
+
         // 行データをlinebufに展開
         int mline;
         if (is_preprocess_line) {
@@ -3610,7 +3608,7 @@ int CToken::ExpandLine(CMemBuf *buf, CMemBuf *src, char *refname) {
             mline = 0;
             wrtbuf = buf;
         }
-        
+
         // マクロ展開前に処理されるプリプロセッサ
         if (is_preprocess_line) {
             ppresult_t res = PreprocessNM(linebuf);
@@ -3628,7 +3626,7 @@ int CToken::ExpandLine(CMemBuf *buf, CMemBuf *src, char *refname) {
             }
             assert(res == PPRESULT_UNKNOWN_DIRECTIVE);
         }
-        
+
         // マクロを展開
         int lineext; // 1行->複数行にマクロ展開されたか?
         int res = ExpandTokens(linebuf, buf, &lineext, is_preprocess_line);
@@ -3636,25 +3634,25 @@ int CToken::ExpandLine(CMemBuf *buf, CMemBuf *src, char *refname) {
             LineError(errtmp, pline, refname);
             return res;
         }
-        
+
         // プリプロセッサ処理
         if (is_preprocess_line) {
             wrtbuf = buf;
             ppresult_t res = Preprocess(linebuf);
             if (res == PPRESULT_INCLUDED) { // include後の処理
                 pline += 1 + mline;
-                
+
                 char *fname_literal = to_hsp_string_literal(refname);
-                RegistExtMacro((char *)"__file__", fname_literal); // ファイル名マクロを更新
-                
+                RegistExtMacro((char *) "__file__", fname_literal); // ファイル名マクロを更新
+
                 wrtbuf = buf;
-                wrtbuf->PutStrf((char *)"##%d %s\r\n", pline-1, fname_literal);
+                wrtbuf->PutStrf((char *) "##%d %s\r\n", pline - 1, fname_literal);
                 free(fname_literal);
                 continue;
             }
             if (res == PPRESULT_WROTE_LINES) { // プリプロセスで行が増えた後の処理
                 pline += mline;
-                wrtbuf->PutStrf((char *)"##%d\r\n", pline);
+                wrtbuf->PutStrf((char *) "##%d\r\n", pline);
                 pline++;
                 continue;
             }
@@ -3671,11 +3669,11 @@ int CToken::ExpandLine(CMemBuf *buf, CMemBuf *src, char *refname) {
             assert(res == PPRESULT_SUCCESS || res == PPRESULT_WROTE_LINE);
             continue;
         }
-        
+
         // マクロ展開後に行数が変わった場合の処理
         pline += 1 + mline;
         if (lineext != mline) {
-            wrtbuf->PutStrf((char *)"##%d\r\n", pline);
+            wrtbuf->PutStrf((char *) "##%d\r\n", pline);
         }
     }
     return 0;
@@ -3690,34 +3688,33 @@ int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
     char foldername[HSP_MAX_PATH];
     char refname_copy[HSP_MAX_PATH];
     CMemBuf fbuf;
-    
+
     getpath(fname, purename, 8);
     getpath(fname, foldername, 32);
     if (*foldername != 0) {
         strcpy(search_path, foldername);
     }
-    
+
     //-------
-    AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
 
     //#includeのsearchパスを設定する
-    NSString * ns_search_path;
+    NSString *ns_search_path;
     //if (global.isStartAxInResource) { //リソース内にstart.axがある場合
     //    path = [NSBundle mainBundle].resourcePath; //リソースディレクトリ
     //    path = [path stringByAppendingString:@"/"];
     //    path = [path stringByAppendingString:filename];
     //}
     //else
-    if(![[global.currentPaths objectAtIndex:global.runtimeAccessNumber] isEqual:@""]) { //ソースコードのあるディレクトリ
+    if (![[global.currentPaths objectAtIndex:global.runtimeAccessNumber] isEqual:@""]) { //ソースコードのあるディレクトリ
         ns_search_path = [global.currentPaths objectAtIndex:global.runtimeAccessNumber];
-    }
-    else { //hsptmp
+    } else { //hsptmp
         ns_search_path = [NSHomeDirectory() stringByAppendingString:@"/Documents/hsptmp"];
     }
     ns_search_path = [ns_search_path stringByAppendingString:@"/"];
-    
+
     //パスに%記号が入っていたらエラーにする
-    for (int n = 0; n < ns_search_path.length ; n++) {
+    for (int n = 0; n < ns_search_path.length; n++) {
         //- (NSString*) charAt:(NSString*)str index:(int)index { //文字列の指定位置で指定された位置の文字を返す
         //    if (index>=str.length) {
         //        return @"";
@@ -3729,7 +3726,7 @@ int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
         if ([[ns_search_path substringWithRange:NSMakeRange(n, 1)] isEqual:@"%"]) {
             NSAlert *alert = [[NSAlert alloc] init];
             [alert setMessageText:@"コンパイルエラー"];
-            NSString* infoText = @"ソースコードのパスに非ASCII文字が含まれています。処理を中断します。\n>> ";
+            NSString *infoText = @"ソースコードのパスに非ASCII文字が含まれています。処理を中断します。\n>> ";
             ns_search_path = [ns_search_path stringByRemovingPercentEncoding];
             infoText = [infoText stringByAppendingString:ns_search_path];
             [alert setInformativeText:infoText];
@@ -3745,50 +3742,50 @@ int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
     //Byte* byteData = (Byte*)malloc(len+1);
     //memcpy(byteData,[data bytes],len);
     //byteData[len+1] = *(char *)"\0";
-    
-    const char * c_search_path = (char *)[ns_search_path UTF8String];
-    int i=0;
-    for(; i < strlen(c_search_path)-1; i++) {
+
+    const char *c_search_path = (char *) [ns_search_path UTF8String];
+    int i = 0;
+    for (; i < strlen(c_search_path) - 1; i++) {
         search_path[i] = c_search_path[i];
     }
-    search_path[i] = *(char *)"/";
+    search_path[i] = *(char *) "/";
     i++;
-    search_path[i] = *(char *)"\0";
-    
+    search_path[i] = *(char *) "\0";
+
     //NSString *filename =  [NSString stringWithCString:fname encoding:NSUTF8StringEncoding];
     //path = [path stringByAppendingString:filename];
-    
-    if(strcmp(common_path,"common/") == 0) {
+
+    if (strcmp(common_path, "common/") == 0) {
         //#includeのcommonパスを設定する
         //NSLog(@"null");
-        NSString* ns_common_path = @"";
+        NSString *ns_common_path = @"";
         ns_common_path = [NSBundle mainBundle].resourcePath; //リソースディレクトリ
         ns_common_path = [ns_common_path stringByAppendingString:@"/"];
-        char * c_common_path = (char *)[ns_common_path UTF8String];
+        char *c_common_path = (char *) [ns_common_path UTF8String];
         int i = 0;
-        for(; i < strlen(c_common_path)-1; i++) {
+        for (; i < strlen(c_common_path) - 1; i++) {
             common_path[i] = c_common_path[i];
         }
-        common_path[i] = *(char *)"/";
+        common_path[i] = *(char *) "/";
         i++;
-        common_path[i] = *(char *)"\0";
+        common_path[i] = *(char *) "\0";
     }
 
     if (fbuf.PutFile(fname) < 0) {
         strcpy(cname, common_path);
         strcat(cname, purename);
-        if (fbuf.PutFile( cname ) < 0) {
+        if (fbuf.PutFile(cname) < 0) {
             strcpy(cname, search_path);
             strcat(cname, purename);
-            if (fbuf.PutFile( cname) < 0) {
+            if (fbuf.PutFile(cname) < 0) {
                 strcpy(cname, common_path);
                 strcat(cname, search_path);
                 strcat(cname, purename);
-                if (fbuf.PutFile( cname ) < 0) {
+                if (fbuf.PutFile(cname) < 0) {
                     if (fileadd == 0) {
 #ifdef JPNMSG
                         @autoreleasepool {
-                            AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+                            AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
                             global.logString = [global.logString stringByAppendingFormat:@"#スクリプトファイルが見つかりません [%s]\n", purename];
                         }
 #else
@@ -3800,25 +3797,25 @@ int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
             }
         }
     }
-    
-    fbuf.Put((char)0);
-    
+
+    fbuf.Put((char) 0);
+
     if (fileadd) {
         @autoreleasepool {
-            AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-            global.logString = [global.logString stringByAppendingFormat:@"#Use file [%s]\n",purename];
+            AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
+            global.logString = [global.logString stringByAppendingFormat:@"#Use file [%s]\n", purename];
         }
     }
-    
+
     char *fname_literal = to_hsp_string_literal(refname);
-    RegistExtMacro((char *)"__file__", fname_literal);			// ファイル名マクロを更新
-    
-    buf->PutStrf((char *)"##0 %s\r\n", fname_literal);
+    RegistExtMacro((char *) "__file__", fname_literal);            // ファイル名マクロを更新
+
+    buf->PutStrf((char *) "##0 %s\r\n", fname_literal);
     free(fname_literal);
-    
+
     strcpy2(refname_copy, refname, sizeof refname_copy);
     res = ExpandLine(buf, &fbuf, refname_copy);
-    
+
     if (res == 0) {
         //		プリプロセス後チェック
         //
@@ -3828,26 +3825,26 @@ int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
 #ifdef JPNMSG
             //Mesf( (char *)"#スタックが空になっていないマクロタグが%d個あります [%s]", res, refname_copy );
             @autoreleasepool {
-                AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+                AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
                 global.logString = [global.logString stringByAppendingFormat:@"#スタックが空になっていないマクロタグが%d個あります [%s]\n", res, refname_copy];
             }
 #else
             Mesf( "#%d unresolved macro(s).[%s]", res, refname_copy );
 #endif
             @autoreleasepool {
-                AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+                AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
                 global.logString = [global.logString stringByAppendingFormat:@"%s\n", linebuf];
             }
             //Mes( linebuf );
         }
     }
-    
+
     if (res) {
-        
+
 #ifdef JPNMSG
         //Mes((char *)"#重大なエラーが検出されています");
         @autoreleasepool {
-            AppDelegate* global = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
             global.logString = [global.logString stringByAppendingString:@"#重大なエラーが検出されています\n"];
         }
 #else
@@ -3882,11 +3879,11 @@ void CToken::FinishPreprocess(CMemBuf *buf) {
     int read_pos = 0;
     int write_pos = 0;
     char *p = buf->GetBuffer();
-    
+
     size_t len = [cwrap vector_size:undefined_symbols];
     //size_t len = undefined_symbols.size();
-    
-    for (size_t i = 0; i < len; i ++) {
+
+    for (size_t i = 0; i < len; i++) {
         undefined_symbol_t sym = undefined_symbols[i];
         int pos = sym.pos;
         int len_include_modname = sym.len_include_modname;
@@ -3903,7 +3900,7 @@ void CToken::FinishPreprocess(CMemBuf *buf) {
             write_pos += len;
             read_pos += len_include_modname;
         }
-        p[pos+len] = '@';
+        p[pos + len] = '@';
     }
     memmove(p + write_pos, p + read_pos, buf->GetSize() - read_pos);
     buf->ReduceSize(buf->GetSize() - (read_pos - write_pos));
@@ -3913,15 +3910,15 @@ void CToken::FinishPreprocess(CMemBuf *buf) {
 ///
 int CToken::LabelRegist(char **list, int mode) {
     if (mode) {
-        return lb->RegistList(list, (char *)"@hsp");
+        return lb->RegistList(list, (char *) "@hsp");
     }
-    return lb->RegistList(list, (char *)"");
+    return lb->RegistList(list, (char *) "");
 }
 
 /// ラベル情報を登録(マクロ)
 ///
 int CToken::LabelRegist2(char **list) {
-    return lb->RegistList2(list, (char *)"@hsp");
+    return lb->RegistList2(list, (char *) "@hsp");
 }
 
 /// ラベル情報を登録(色分け用)
@@ -3937,10 +3934,10 @@ int CToken::RegistExtMacroPath(char *keyword, char *str) {
     int res;
     char path[1024];
     char mm[512];
-    unsigned char *ptr = (unsigned char *)path;
-    unsigned char *src = (unsigned char *)str;
+    unsigned char *ptr = (unsigned char *) path;
+    unsigned char *src = (unsigned char *) str;
     unsigned char cur_char;
-    while(1) {
+    while (1) {
         cur_char = *src++;
         if (cur_char == 0)
             break;
@@ -3951,8 +3948,7 @@ int CToken::RegistExtMacroPath(char *keyword, char *str) {
             if (cur_char <= 159) {
                 *ptr++ = cur_char;
                 cur_char = *src++;
-            }
-            else if (cur_char >= 224) {
+            } else if (cur_char >= 224) {
                 *ptr++ = cur_char;
                 cur_char = *src++;
             }
@@ -4041,8 +4037,8 @@ char *CToken::GetModuleName(void) {
 ///
 void CToken::AddModuleName(char *str) {
     unsigned char cur_char;
-    unsigned char *ptr = (unsigned char *)str;
-    while(1) {
+    unsigned char *ptr = (unsigned char *) str;
+    while (1) {
         cur_char = *ptr;
         if (cur_char == 0)
             break;
@@ -4058,15 +4054,15 @@ void CToken::AddModuleName(char *str) {
     }
     if (*modname == 0)
         return;
-    strcpy((char *)ptr, modname);
+    strcpy((char *) ptr, modname);
 }
 
 /// キーワードのモジュール名を正規化(モジュール非依存ラベル用)
 ///
 void CToken::FixModuleName(char *str) {
     unsigned char cur_char;
-    unsigned char *ptr = (unsigned char *)str;
-    while(1) {
+    unsigned char *ptr = (unsigned char *) str;
+    while (1) {
         cur_char = *ptr;
         if (cur_char == 0)
             break;
@@ -4107,7 +4103,7 @@ void CToken::InitSCNV(int size) {
     }
     if (size <= 0)
         return;
-    scnvbuf = (char *)malloc(size);
+    scnvbuf = (char *) malloc(size);
     scnvsize = size;
 }
 
@@ -4117,8 +4113,8 @@ char *CToken::ExecSCNV(char *srcbuf, int opt) {
     int size;
     if (scnvbuf == NULL)
         InitSCNV(SCNVBUF_DEFAULTSIZE);
-    size = (int)strlen(srcbuf);
-    switch(opt) {
+    size = (int) strlen(srcbuf);
+    switch (opt) {
         case SCNV_OPT_NONE:
             strcpy(scnvbuf, srcbuf);
             break;
@@ -4134,10 +4130,10 @@ char *CToken::ExecSCNV(char *srcbuf, int opt) {
 
 /// 識別子の多重定義エラー
 ///
-void CToken::SetErrorSymbolOverdefined(char* keyword, int label_id) {
+void CToken::SetErrorSymbolOverdefined(char *keyword, int label_id) {
     char strtmp[0x100];
 #ifdef JPNMSG
-    sprintf( strtmp,"定義済みの識別子は使用できません [%s]", keyword );
+    sprintf(strtmp, "定義済みの識別子は使用できません [%s]", keyword);
 #else
     sprintf( strtmp,"symbol in use [%s]", keyword );
 #endif

@@ -9,14 +9,6 @@
 //
 
 #include "strbuf.h"
-#include "debug_message.h"
-#include "hsp3struct_debug.h"
-#include "supio_hsp3.h"
-#import <Cocoa/Cocoa.h>
-#import <Foundation/Foundation.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define REALLOC realloc
 #define MALLOC malloc
