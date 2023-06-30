@@ -6,6 +6,7 @@
 //
 
 #import <stdio.h>
+#import <stdlib.h>
 #import "hsp3config.h"
 #import "hsp3debug.h"
 

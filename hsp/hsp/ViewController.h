@@ -31,21 +31,6 @@ typedef struct {
     int info; // ソートの前にこの要素があった位置
 } DATA;
 
-#define STM_STRSIZE_DEFAULT 64
-
-//	StackManagerData structure
-//
-typedef struct {
-    //	Memory Data structure
-    //
-    short type;
-    short mode;
-    char *ptr;
-    void *pval;
-    int ival;
-    char itemp[STM_STRSIZE_DEFAULT - 4]; // data area padding
-} StackManagerData;
-
 @interface ViewController : NSViewController <NSTextFieldDelegate> { // NSTextFieldのデリゲートのため
 @public
     AppDelegate *global;
@@ -175,12 +160,6 @@ typedef struct {
     double hsp3int_ease_4096;
     double hsp3int_ease_org_start;
     double hsp3int_ease_org_diff; //<----easing
-
-    // stack.mm
-    int stack_stm_max;
-    StackManagerData *stack_mem_stm;
-    StackManagerData *stack_stm_cur;
-    StackManagerData *stack_stm_maxptr;
 }
 
 - (void)show_alert_dialog:(NSString *)message;

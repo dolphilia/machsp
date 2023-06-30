@@ -9,7 +9,8 @@
 #ifndef hspvar_int_h
 #define hspvar_int_h
 
-#import "ViewController.h"
+
+#include "hsp3struct.h"
 
 PDAT *HspVarInt_GetPtr(PVal *pval);
 void *HspVarInt_Cnv(const void *buffer, int flag);

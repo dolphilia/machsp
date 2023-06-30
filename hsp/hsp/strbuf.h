@@ -6,7 +6,11 @@
 #define __strbuf_h
 
 #include "hsp3config.h"
-#import "ViewController.h"
+#include "hsp3struct.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 #define STRBUF_BLOCKSIZE 64
 #define STRBUF_BLOCK_DEFAULT 0x400

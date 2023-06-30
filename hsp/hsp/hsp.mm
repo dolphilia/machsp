@@ -368,8 +368,8 @@
         }
     }
     [self calcprm:varproc pval:(PDAT *) mpval->pt exp:op ptr:ptr];  // 計算を行なう
-    [self StackPop];
-    [self StackPop];
+    StackPop();
+    StackPop();
 
     if (varproc->aftertype != tflag) {  // 演算後に型が変わる場合
         tflag = varproc->aftertype;
@@ -391,8 +391,7 @@
             @throw [self make_nsexception:HSPERR_SYNTAX];
         }
     }
-    [self StackPush:tflag data:mpval->pt size:basesize];
-
+    StackPush(tflag, mpval->pt, basesize);
 }
 
 /// Check PVal Array information
@@ -803,18 +802,18 @@
                         @throw [self make_nsexception:HSPERR_SYNTAX];
                     }
                 }
-                [self StackPush:tflag data:ptr size:basesize];
+                StackPush(tflag, ptr, basesize);
                 break;
             case TYPE_INUM:
-                [self StackPushi:hsp_val_tmp];
+                StackPushi(hsp_val_tmp);
                 [self code_next];
                 break;
             case TYPE_STRING:
-                [self StackPush:hsp_type_tmp str:&abc_hspctx.mem_mds[hsp_val_tmp]];
+                StackPush2(hsp_type_tmp, &abc_hspctx.mem_mds[hsp_val_tmp]);
                 [self code_next];
                 break;
             case TYPE_DNUM:
-                [self StackPush:hsp_type_tmp data:&abc_hspctx.mem_mds[hsp_val_tmp] size:sizeof(double)];
+                StackPush(hsp_type_tmp, &abc_hspctx.mem_mds[hsp_val_tmp], sizeof(double));
                 [self code_next];
                 break;
             case TYPE_STRUCT:
@@ -855,12 +854,12 @@
                         @throw [self make_nsexception:HSPERR_SYNTAX];
                     }
                 }
-                [self StackPush:tflag data:ptr size:basesize];
+                StackPush(tflag, ptr, basesize);
                 break;
             case TYPE_LABEL: {
                 unsigned short *tmpval =
                         abc_hspctx.mem_mcs + abc_hspctx.mem_ot[hsp_val_tmp];
-                [self StackPush:HSPVAR_FLAG_LABEL data:(char *) &tmpval size:sizeof(unsigned short *)];
+                StackPush(HSPVAR_FLAG_LABEL, (char *) &tmpval, sizeof(unsigned short *));
                 [self code_next];
                 break;
             }
@@ -914,7 +913,7 @@
                 } else {
                     @throw [self make_nsexception:HSPERR_SYNTAX];
                 }
-                [self StackPush:tflag data:ptr size:basesize];
+                StackPush(tflag, ptr, basesize);
                 break;
         }
 
@@ -958,7 +957,7 @@
         }
     }
 
-    [self StackPop];
+    StackPop();
     if (stack_def != StackGetLevel) {  // スタックが正常に復帰していない
         @throw [self make_nsexception:HSPERR_STACK_OVERFLOW];
     }
@@ -1449,7 +1448,7 @@
     hsp_hspctx->prmstack = r->oldtack;  // 以前のスタックに戻す
     hsp_hspctx->sublev--;
     [self code_next];
-    [self StackPop];
+    StackPop();
 }
 
 /// gosub execute
@@ -1460,7 +1459,7 @@
     r.stacklev = abc_hspctx.sublev++;
     r.oldtack = abc_hspctx.prmstack;
     r.param = NULL;
-    [self StackPush:TYPE_EX_SUBROUTINE data:(char *) &r size:sizeof(HSPROUTINE)];
+    StackPush(TYPE_EX_SUBROUTINE, (char *)&r, sizeof(HSPROUTINE));
 
     hsp_mcs = subr;
     [self code_next];
@@ -1527,7 +1526,7 @@
 - (int)code_callfunc:(int)cmd {
     STRUCTDAT *st = &abc_hspctx.mem_finfo[cmd];
     int size = sizeof(HSPROUTINE) + st->size;
-    HSPROUTINE *r = (HSPROUTINE *) [self StackPushSize:TYPE_EX_CUSTOMFUNC size:size];
+    HSPROUTINE *r = (HSPROUTINE *) StackPushSize(TYPE_EX_CUSTOMFUNC, size);
     char *p = (char *) (r + 1);
     [self code_expandstruct:p st:st option:CODE_EXPANDSTRUCT_OPT_NONE];  // スタックの内容を初期化
 
@@ -3069,7 +3068,7 @@ APTR code_newstruct(PVal *pval) {
     HSP_ExtraInfomation *exinfo;
 
     sbInit();  // 可変メモリバッファ初期化
-    [self StackInit];
+    StackInit();
     HspVarCoreInit();  // ストレージコア初期化
     mpval = HspVarCoreGetPVal(0);
     hsp_hspevent_opt = 0;  // イベントオプションを初期化
@@ -3277,7 +3276,7 @@ APTR code_newstruct(PVal *pval) {
     sbFree(hsp_hspctx->fnbuffer);
     sbFree(hsp_hspctx->refstr);
     sbFree(hsp_hsp3tinfo);
-    [self StackTerm];
+    StackTerm();
     sbBye();
 }
 
@@ -3290,7 +3289,7 @@ APTR code_newstruct(PVal *pval) {
     rerun:
     abc_hspctx.looplev = 0;
     abc_hspctx.sublev = 0;
-    [self StackReset];
+    StackReset();
 
 #ifdef FLAG_HSP_ERROR_HANDLE
     @try {
@@ -4086,7 +4085,7 @@ APTR code_newstruct(PVal *pval) {
     int line;
     char tmp[HSP_MAX_PATH + 5 + 1];
     [self code_inidbg];
-    for (it = stack_mem_stm; it != stack_stm_cur; it++) {
+    for (it = get_stack_mem_stm(); it != get_stack_stm_cur(); it++) {
         if (it->type == TYPE_EX_SUBROUTINE || it->type == TYPE_EX_CUSTOMFUNC) {
             routine = (HSPROUTINE *) STM_GETPTR(it);
             line = [self code_getdebug_line:routine->mcsret];

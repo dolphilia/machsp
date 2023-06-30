@@ -9,7 +9,7 @@
 #ifndef hspvar_struct_h
 #define hspvar_struct_h
 
-#import "ViewController.h"
+#include "hsp3struct.h"
 
 PDAT *HspVarStruct_GetPtr(PVal *pval);
 void HspVarStruct_Free(PVal *pval);

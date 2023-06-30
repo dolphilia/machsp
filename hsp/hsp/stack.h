@@ -6,12 +6,9 @@
 #ifndef __stack_h
 #define __stack_h
 
-#import <Cocoa/Cocoa.h>
-#import <Foundation/Foundation.h>
 #import <stdio.h>
 #import <stdlib.h>
 #import <string.h>
-#import "ViewController.h"
 #import "debug_message.h"
 #import "hsp3config.h"
 #import "hsp3struct_debug.h"
@@ -22,40 +19,43 @@
 #define STMMODE_SELF 0
 #define STMMODE_ALLOC 1
 #define STM_GETPTR(pp) (pp->ptr)
-#define StackPeek (stack_stm_cur - 1)
-#define StackPeek2 (stack_stm_cur - 2)
-#define PeekPtr ((void *)(stack_stm_cur - 1)->ptr)
-#define StackGetLevel (stack_stm_cur - stack_mem_stm)
-#define StackDecLevel stack_stm_cur--
+#define StackPeek (get_stack_stm_cur() - 1)
+#define StackPeek2 (get_stack_stm_cur() - 2)
+#define PeekPtr ((void *)(get_stack_stm_cur() - 1)->ptr)
+#define StackGetLevel (get_stack_stm_cur() - get_stack_mem_stm())
+#define StackDecLevel dec_stack_stm_cur()
 
-@interface ViewController (stack) {
-}
-- (void)StackInit;
+#define STM_STRSIZE_DEFAULT 64
 
-- (void)StackTerm;
+//    StackManagerData structure
+//
+//    Memory Data structure
+//
+typedef struct {
+    short type;
+    short mode;
+    char *ptr;
+    void *pval;
+    int ival;
+    char itemp[STM_STRSIZE_DEFAULT - 4]; // data area padding
+} StackManagerData;
 
-- (void)StackAlloc:(StackManagerData *)stm size:(int)size;  // private
-- (void)StackReset;
-
-- (void)StackPush:(int)type data:(char *)data size:(int)size;
-
-- (void)StackPush:(int)type str:(char *)str;
-
-- (void)StackPushStr:(char *)str;
-
-- (void)StackPushTypeVal:(int)type val:(int)val val2:(int)val2;
-
-- (void)StackPushVar:(void *)pval aptr:(int)aptr;
-
-- (void)StackPushType:(int)type;
-
-- (void)StackPopFree;
-
-- (void)StackPushi:(int)val;
-
-- (void)StackPop;
-
-- (void *)StackPushSize:(int)type size:(int)size;
-@end
+void StackInit();
+void StackTerm();
+void StackAlloc(StackManagerData *stm, int size);  // private
+void StackReset();
+void StackPush(int type, char *data, int size);
+void StackPush2(int type, char *str);
+void StackPushStr(char *str);
+void StackPushTypeVal(int type, int val, int val2);
+void StackPushVar(void *pval, int aptr);
+void StackPushType(int type);
+void StackPopFree();
+void StackPushi(int val);
+void StackPop();
+void *StackPushSize(int type, int size);
+StackManagerData *get_stack_stm_cur();
+StackManagerData *get_stack_mem_stm();
+void dec_stack_stm_cur();
 
 #endif

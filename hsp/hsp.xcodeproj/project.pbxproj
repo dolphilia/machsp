@@ -40,7 +40,7 @@
 		8B719AAA1D86524A00F35EC5 /* hspvar_label.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A981D86524A00F35EC5 /* hspvar_label.mm */; };
 		8B719AAB1D86524A00F35EC5 /* hspvar_str.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A991D86524A00F35EC5 /* hspvar_str.mm */; };
 		8B719AAC1D86524A00F35EC5 /* hspvar_struct.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A9A1D86524A00F35EC5 /* hspvar_struct.mm */; };
-		8B719AAD1D86524A00F35EC5 /* stack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A9D1D86524A00F35EC5 /* stack.m */; };
+		8B719AAD1D86524A00F35EC5 /* stack.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A9D1D86524A00F35EC5 /* stack.mm */; };
 		8B7B03141DA78DCD004F4B68 /* utility_string.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B7B03121DA78DCD004F4B68 /* utility_string.c */; };
 /* End PBXBuildFile section */
 
@@ -137,7 +137,7 @@
 		8B719A9A1D86524A00F35EC5 /* hspvar_struct.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = hspvar_struct.mm; sourceTree = "<group>"; };
 		8B719A9B1D86524A00F35EC5 /* hspwnd_linux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hspwnd_linux.h; sourceTree = "<group>"; };
 		8B719A9C1D86524A00F35EC5 /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
-		8B719A9D1D86524A00F35EC5 /* stack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = stack.m; sourceTree = "<group>"; };
+		8B719A9D1D86524A00F35EC5 /* stack.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = stack.mm; sourceTree = "<group>"; };
 		8B719AB01D86525600F35EC5 /* debug_message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debug_message.h; sourceTree = "<group>"; };
 		8B739AA21DC1EB4F00B0EA30 /* hsp3struct_debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hsp3struct_debug.h; sourceTree = "<group>"; };
 		8B7B03121DA78DCD004F4B68 /* utility_string.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utility_string.c; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 				8B719A801D86523500F35EC5 /* hsp3int.h */,
 				8B719A811D86523500F35EC5 /* hsp3int.mm */,
 				8B719A9C1D86524A00F35EC5 /* stack.h */,
-				8B719A9D1D86524A00F35EC5 /* stack.m */,
+				8B719A9D1D86524A00F35EC5 /* stack.mm */,
 				8B719A821D86523500F35EC5 /* dpmread.h */,
 				8B719A831D86523500F35EC5 /* dpmread.mm */,
 				8B719A8B1D86524A00F35EC5 /* hsp3debug.h */,
@@ -519,7 +519,7 @@
 				8B719A141D8650A300F35EC5 /* AppDelegate.m in Sources */,
 				8B719A541D86520A00F35EC5 /* SineWaveData.m in Sources */,
 				8B719A781D86522900F35EC5 /* stb_image.c in Sources */,
-				8B719AAD1D86524A00F35EC5 /* stack.m in Sources */,
+				8B719AAD1D86524A00F35EC5 /* stack.mm in Sources */,
 				8B719AAC1D86524A00F35EC5 /* hspvar_struct.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

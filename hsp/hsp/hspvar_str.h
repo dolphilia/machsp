@@ -5,7 +5,7 @@
 #ifndef hspvar_str_h
 #define hspvar_str_h
 
-#import "ViewController.h"
+#include "hsp3struct.h"
 
 char **HspVarStr_GetFlexBufPtr(PVal *pval, int num);
 PDAT *HspVarStr_GetPtr(PVal *pval);
