@@ -1,9 +1,5 @@
 //
 //  MyAudio.m
-//  avaudioenginetest
-//
-//  Created by dolphilia on 2016/02/13.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

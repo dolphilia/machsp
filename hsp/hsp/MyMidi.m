@@ -1,9 +1,5 @@
 //
 //  MyMidi.m
-//  hsp
-//
-//  Created by 半澤 聡 on 2016/07/03.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

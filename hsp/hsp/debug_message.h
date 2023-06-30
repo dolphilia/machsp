@@ -1,9 +1,5 @@
 //
 //  debug_message.h
-//  crowbar-xcode
-//
-//  Created by 半澤 聡 on 2016/06/16.
-//  Copyright © 2016年 半澤 聡. All rights reserved.
 //
 
 #ifndef debug_message_h

@@ -1,9 +1,5 @@
 //
 //  ViewController.h
-//  hsp
-//
-//  Created by 半澤 聡 on 2016/09/12.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 
 #import "AppDelegate.h"

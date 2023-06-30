@@ -1,9 +1,5 @@
 //
 //  PictureUtility.h
-//  hsp
-//
-//  Created by 半澤 聡 on 2016/09/04.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 
 #ifndef PictureUtility_h

@@ -1,9 +1,5 @@
 //
 //  hsp3struct_var.h
-//  hsp
-//
-//  Created by 半澤 聡 on 2016/10/07.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 
 #ifndef hsp3struct_var_h
