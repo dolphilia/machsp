@@ -1,9 +1,5 @@
 //
 //  MyWindow.m
-//  objc-calayer-example
-//
-//  Created by dolphilia on 2016/02/01.
-//  Copyright © 2016年 dolphilia. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

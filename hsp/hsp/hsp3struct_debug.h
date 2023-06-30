@@ -76,7 +76,7 @@ enum {
     HSPDEBUG_MAX
 };
 
-typedef struct HSP3DEBUG {
+typedef struct hspdebug_t {
     //	[in/out] tranfer value
     //	(システムとの通信用)
     //
@@ -89,7 +89,7 @@ typedef struct HSP3DEBUG {
     //	[in] system value
     //	(初期化後に設定されます)
     //
-    struct HSPContext *hspctx;
+    struct hsp_context_t *hspctx;
 
     //
     char *(*get_value)(int);            // debug情報取得コールバック
@@ -99,6 +99,6 @@ typedef struct HSP3DEBUG {
     int (*dbg_set)(int);                // debugモード設定
     char *(*dbg_callstack)(void);     // コールスタックの取得
 
-} HSP3DEBUG;
+} hspdebug_t;
 
 #endif /* hsp3struct_debug_h */

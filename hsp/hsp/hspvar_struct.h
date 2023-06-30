@@ -7,14 +7,14 @@
 
 #include "hsp3struct.h"
 
-PDAT *HspVarStruct_GetPtr(PVal *pval);
-void HspVarStruct_Free(PVal *pval);
-void HspVarStruct_Alloc(PVal *pval, const PVal *pval2);
-int HspVarStruct_GetSize(const PDAT *pdat);
-int HspVarStruct_GetUsing(const PDAT *pdat);
-void HspVarStruct_Set(PVal *pval, PDAT *pdat, const void *in);
-void *HspVarStruct_GetBlockSize(PVal *pval, PDAT *pdat, int *size);
-void HspVarStruct_AllocBlock(PVal *pval, PDAT *pdat, int size);
-void HspVarStruct_Init(HspVarProc *p);
+void *HspVarStruct_GetPtr(value_t *pval);
+void HspVarStruct_Free(value_t *pval);
+void HspVarStruct_Alloc(value_t *pval, const value_t *pval2);
+int HspVarStruct_GetSize(const void *pdat);
+int HspVarStruct_GetUsing(const void *pdat);
+void HspVarStruct_Set(value_t *pval, void *pdat, const void *in);
+void *HspVarStruct_GetBlockSize(value_t *pval, void *pdat, int *size);
+void HspVarStruct_AllocBlock(value_t *pval, void *pdat, int size);
+void HspVarStruct_Init(hspvar_proc_t *p);
 
 #endif /* hspvar_struct_h */

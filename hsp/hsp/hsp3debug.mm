@@ -67,7 +67,7 @@ static char *error_message[] = {
 
 static char errmsg[256];
 
-char *hspd_geterror(HSPERROR error) {
+char *hsp_debug_get_error(HSPERROR error) {
     fprintf(stderr, "Error: %d\n", (int) error);
     exit(EXIT_FAILURE);
     return errmsg;
@@ -76,7 +76,7 @@ char *hspd_geterror(HSPERROR error) {
 #else
 static char errmsg[256];
 
-char * hspd_geterror(HSPERROR error) {
+char * hsp_debug_get_error(HSPERROR error) {
     sprintf( errmsg, "内部エラーが発生しました(%d)", (int)error );
     return errmsg;
 }

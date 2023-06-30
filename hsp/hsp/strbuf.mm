@@ -26,7 +26,7 @@ typedef struct {
 static SLOT *mem_sb;
 static int str_blockcur;
 static int slot_len;
-static STRBUF *freelist;
+static strbuf_t *freelist;
 
 // STRINF_FLAG_NONE のとき STRINF::extptr を free list の次のポインタに使う
 #define STRINF_NEXT(inf) ((inf).extptr)
@@ -82,7 +82,7 @@ static char *BlockAlloc(int size) {
     int *p;
     STRBUF *st = BlockEntry();
     STRBUF *st2;
-    STRINF *inf = &(st->inf);
+    strbuf_info_t *inf = &(st->inf);
     if (size <= STRBUF_BLOCKSIZE) {
         inf->flag = STRINF_FLAG_USEINT;
         inf->size = STRBUF_BLOCKSIZE;
@@ -91,7 +91,7 @@ static char *BlockAlloc(int size) {
     } else {
         inf->flag = STRINF_FLAG_USEEXT;
         inf->size = size;
-        st2 = (STRBUF *) MALLOC(size + sizeof(STRINF));
+        st2 = (STRBUF *) MALLOC(size + sizeof(strbuf_info_t));
         p = (int *) (st2->data);
         inf->extptr = st2;
         inf->ptr = (char *) p;
@@ -102,13 +102,13 @@ static char *BlockAlloc(int size) {
     return (char *) p;
 }
 
-static void FreeExtPtr(STRINF *inf) {
+static void FreeExtPtr(strbuf_info_t *inf) {
     if (inf->flag == STRINF_FLAG_USEEXT) {
         FREE(inf->extptr);
     }
 }
 
-static void BlockFree(STRINF *inf) {
+static void BlockFree(strbuf_info_t *inf) {
     FreeExtPtr(inf);
     STRINF_NEXT(*inf) = freelist;
     freelist = (STRBUF *) inf;
@@ -116,11 +116,11 @@ static void BlockFree(STRINF *inf) {
 }
 
 static char *BlockRealloc(STRBUF *st, int size) {
-    STRINF *inf = GET_INTINF(st);
+    strbuf_info_t *inf = GET_INTINF(st);
 
     if (size <= inf->size)
         return inf->ptr;
-    STRBUF *newst = (STRBUF *) MALLOC(size + sizeof(STRINF));
+    STRBUF *newst = (STRBUF *) MALLOC(size + sizeof(strbuf_info_t));
     char *p = newst->data;
 
     memcpy(p, inf->ptr, inf->size);
@@ -133,7 +133,7 @@ static char *BlockRealloc(STRBUF *st, int size) {
     return p;
 }
 
-void BlockInfo(STRINF *inf) {
+void BlockInfo(strbuf_info_t *inf) {
     STRBUF *newst;
     if (inf->flag == STRINF_FLAG_USEEXT) {
         newst = (STRBUF *) inf->extptr;
@@ -144,14 +144,14 @@ void BlockInfo(STRINF *inf) {
 // interface
 //------------------------------------------------------------
 
-void sbInit(void) {
+void strbuf_init(void) {
     str_blockcur = 0;
     freelist = NULL;
     slot_len = STRBUF_BLOCK_DEFAULT;
     BlockPtrPrepare();
 }
 
-void sbBye(void) {
+void strbuf_bye(void) {
     for (int i = 0; i < str_blockcur; i++) {
         STRBUF *mem = mem_sb[i].mem;
         STRBUF *p = mem;
@@ -165,41 +165,41 @@ void sbBye(void) {
     FREE(mem_sb);
 }
 
-STRINF *sbGetSTRINF(char *ptr) {
-    return (STRINF *) (ptr - sizeof(STRINF));
+strbuf_info_t *strbuf_get_strbuf_info(char *ptr) {
+    return (strbuf_info_t *) (ptr - sizeof(strbuf_info_t));
 }
 
-char *sbAlloc(int size) {
+char *strbuf_alloc(int size) {
     int sz = size;
     if (size < STRBUF_BLOCKSIZE)
         sz = STRBUF_BLOCKSIZE;
     return BlockAlloc(sz);
 }
 
-char *sbAllocClear(int size) {
-    char *p = sbAlloc(size);
+char *strbuf_alloc_clear(int size) {
+    char *p = strbuf_alloc(size);
     memset(p, 0, size);
     return p;
 }
 
-void sbFree(void *ptr) {
+void strbuf_free(void *ptr) {
     char *p = (char *) ptr;
-    STRBUF *st = (STRBUF *) (p - sizeof(STRINF));
-    STRINF *inf = GET_INTINF(st);
+    STRBUF *st = (STRBUF *) (p - sizeof(strbuf_info_t));
+    strbuf_info_t *inf = GET_INTINF(st);
     if (p != (inf->ptr)) {
         return;
     }
     BlockFree(inf);
 }
 
-char *sbExpand(char *ptr, int size) {
-    STRBUF *st = (STRBUF *) (ptr - sizeof(STRINF));
+char *strbuf_expand(char *ptr, int size) {
+    STRBUF *st = (STRBUF *) (ptr - sizeof(strbuf_info_t));
     return BlockRealloc(st, size);
 }
 
-void sbCopy(char **pptr, char *data, int size) {
+void strbuf_copy(char **pptr, char *data, int size) {
     char *ptr = *pptr;
-    STRBUF *st = (STRBUF *) (ptr - sizeof(STRINF));
+    STRBUF *st = (STRBUF *) (ptr - sizeof(strbuf_info_t));
     int sz = st->inf.size;
     char *p = st->inf.ptr;
     if (size > sz) {
@@ -211,9 +211,9 @@ void sbCopy(char **pptr, char *data, int size) {
 
 /// mode:0=normal/1=string
 ///        
-void sbAdd(char **pptr, char *data, int size, int mode) {
+void strbuf_add(char **pptr, char *data, int size, int mode) {
     char *ptr = *pptr;
-    STRBUF *st = (STRBUF *) (ptr - sizeof(STRINF));
+    STRBUF *st = (STRBUF *) (ptr - sizeof(strbuf_info_t));
     char *p = st->inf.ptr;
     int sz;
 
@@ -226,29 +226,29 @@ void sbAdd(char **pptr, char *data, int size, int mode) {
     int newsize = sz + size;
     if (newsize > (st->inf.size)) {
         newsize = (newsize + 0xfff) & 0xfffff000; // 8K単位で確保
-        // Alertf( "#Alloc%d",newsize );
+        // alert_format( "#Alloc%d",newsize );
         p = BlockRealloc(st, newsize);
         *pptr = p;
     }
     memcpy(p + sz, data, size);
 }
 
-void sbStrCopy(char **ptr, char *str) {
-    sbCopy(ptr, str, (int) strlen(str) + 1);
+void strbuf_copy_str(char **ptr, char *str) {
+    strbuf_copy(ptr, str, (int) strlen(str) + 1);
 }
 
-void sbStrAdd(char **ptr, char *str) {
-    sbAdd(ptr, str, (int) strlen(str) + 1, 1);
+void strbuf_add_str(char **ptr, char *str) {
+    strbuf_add(ptr, str, (int) strlen(str) + 1, 1);
 }
 
-void *sbGetOption(char *ptr) {
-    STRBUF *st = (STRBUF *) (ptr - sizeof(STRINF));
+void *strbuf_get_option(char *ptr) {
+    STRBUF *st = (STRBUF *) (ptr - sizeof(strbuf_info_t));
     return st->inf.opt;
 }
 
-void sbSetOption(char *ptr, void *option) {
-    STRBUF *st = (STRBUF *) (ptr - sizeof(STRINF));
-    STRINF *inf;
+void strbuf_set_option(char *ptr, void *option) {
+    STRBUF *st = (STRBUF *) (ptr - sizeof(strbuf_info_t));
+    strbuf_info_t *inf;
     st->inf.opt = option;
     inf = GET_INTINF(st);
     inf->opt = option;
@@ -257,10 +257,10 @@ void sbSetOption(char *ptr, void *option) {
 //@end
 
 /*
- void sbInfo( char *ptr )
+ void strbuf_info( char *ptr )
  {
- STRBUF *st;
- st = (STRBUF *)( ptr - sizeof(STRINF) );
- Alertf( "size:%d (%x)",st->inf.size, st->inf.ptr );
+ strbuf_t *st;
+ st = (strbuf_t *)( ptr - sizeof(STRINF) );
+ alert_format( "size:%d (%x)",st->inf.size, st->inf.ptr );
  }
  */

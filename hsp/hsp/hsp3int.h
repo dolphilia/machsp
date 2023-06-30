@@ -40,9 +40,9 @@
 
 - (int)cmdfunc_intcmd:(int)cmd;
 
-- (void)hsp3typeinit_intcmd:(HSP3TYPEINFO *)info;
+- (void)hsp3typeinit_intcmd:(hsp_type_info_t *)info;
 
-- (void)hsp3typeinit_intfunc:(HSP3TYPEINFO *)info;
+- (void)hsp3typeinit_intfunc:(hsp_type_info_t *)info;
 
 - (void)Select:(char *)str;
 

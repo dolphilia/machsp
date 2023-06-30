@@ -38,24 +38,24 @@ typedef struct {
     void *pval;
     int ival;
     char itemp[STM_STRSIZE_DEFAULT - 4]; // data area padding
-} StackManagerData;
+} stack_manager_t;
 
-void StackInit();
-void StackTerm();
-void StackAlloc(StackManagerData *stm, int size);  // private
-void StackReset();
-void StackPush(int type, char *data, int size);
-void StackPush2(int type, char *str);
-void StackPushStr(char *str);
-void StackPushTypeVal(int type, int val, int val2);
-void StackPushVar(void *pval, int aptr);
-void StackPushType(int type);
-void StackPopFree();
-void StackPushi(int val);
-void StackPop();
-void *StackPushSize(int type, int size);
-StackManagerData *get_stack_stm_cur();
-StackManagerData *get_stack_mem_stm();
+void stack_init();
+void stack_free();
+void stack_alloc(stack_manager_t *stm, int size);  // private
+void stack_reset();
+void stack_push(int type, char *data, int size);
+void stack_push2(int type, char *str);
+void stack_push_str(char *str);
+void stack_push_type_val(int type, int val, int val2);
+void stack_push_var(void *pval, int aptr);
+void stack_push_type(int type);
+void stack_pop_free();
+void stack_push_int(int val);
+void stack_pop();
+void *stack_push_size(int type, int size);
+stack_manager_t *get_stack_stm_cur();
+stack_manager_t *get_stack_mem_stm();
 void dec_stack_stm_cur();
 
 #endif

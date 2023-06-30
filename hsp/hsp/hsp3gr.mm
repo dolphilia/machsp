@@ -63,7 +63,7 @@
     return NULL;
 }
 
-- (void)ex_mref:(PVal *)pval prm:(int)prm {
+- (void)ex_mref:(value_t *)pval prm:(int)prm {
     int t = HSPVAR_FLAG_INT;
     int size = 4;
     void *ptr;
@@ -634,7 +634,7 @@
         printf("\n");
         return;
     }
-    PDAT *dst;
+    void *dst;
     if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "int") == 0) {  //整数のFree
         dst = HspVarInt_GetPtr(mpval);
     } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "double") == 0) {  //実数のFree
@@ -667,7 +667,7 @@
     if (![p1 isEqual:@""]) {
         [myLayer mes:p1];
     }
-    // strsp_ini();
+    // str_split_init();
     // while(1) {
     //	chk = strsp_get( ptr, stmp, 0, 1022 );
     //	printf( "%s\n",stmp );
@@ -830,8 +830,8 @@
 }
 
 - (void)cmdfunc_getkey {
-    PVal *pval;
-    APTR aptr = [self code_getva:&pval];
+    value_t *pval;
+    int aptr = [self code_getva:&pval];
     int res = 0;
     int p1 = [self code_getdi:0];
     int ckey = 0;
@@ -1240,7 +1240,7 @@
 
     /*
      PVal *pval;
-     APTR aptr;
+     int aptr;
      char *pp2;
      char *vptr;
      int strsize;
@@ -1419,8 +1419,8 @@
 }
 
 - (void)cmdfunc_stick {
-    PVal *pval;
-    APTR aptr;
+    value_t *pval;
+    int aptr;
     int res;
     aptr = [self code_getva:&pval];
     int p1 = [self code_getdi:0];
@@ -1651,7 +1651,7 @@ typedef DWORD COLORREF;
         } union_data;
         char *union_pointer;
         union_pointer = union_data.c;
-        PVal *pval;
+        value_t *pval;
         int vsize;
         char *ptr = [self code_getvptr:&pval size:&vsize];
         int size = [self code_geti];
@@ -1930,8 +1930,8 @@ typedef DWORD COLORREF;
     return 0;
 }
 
-- (void)hsp3typeinit_cl_extcmd:(HSP3TYPEINFO *)info {
-    HSP_ExtraInfomation *exinfo;  // Info for Plugins
+- (void)hsp3typeinit_cl_extcmd:(hsp_type_info_t *)info {
+    hsp_extra_info_t *exinfo;  // Info for Plugins
 
     hsp3gr_ctx = info->hspctx;
     exinfo = info->hspexinfo;
@@ -1955,7 +1955,7 @@ typedef DWORD COLORREF;
     //_setmode( _fileno(stdin),  _O_BINARY );
 }
 
-- (void)hsp3typeinit_cl_extfunc:(HSP3TYPEINFO *)info {
+- (void)hsp3typeinit_cl_extfunc:(hsp_type_info_t *)info {
     info->reffuncNumber = 4;  // reffunc_function;
 }
 

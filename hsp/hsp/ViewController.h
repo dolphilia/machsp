@@ -48,28 +48,28 @@ typedef struct {
 
     //チェックボックス
     int myCheckBoxIndex;
-    PVal *myCheckBoxPval[64];
-    APTR myCheckBoxAptr[64];
+    value_t *myCheckBoxPval[64];
+    int myCheckBoxAptr[64];
     NSMutableArray *myCheckBoxs;
     NSButton *myCheckBox; //チェックボックス
 
     //テキストフィールド（インプット）
     int myTextFieldIndex;
-    PVal *myTextFieldPval[64];
-    APTR myTextFieldAptr[64];
+    value_t *myTextFieldPval[64];
+    int myTextFieldAptr[64];
     NSMutableArray *myTextFields;
     NSTextField *myTextField; //チェックボックス
 
     // MIDIのデータ受け渡し用変数
     unsigned short *myMidiEventLabel;
-    PVal *myMidiEventTypePval;
-    PVal *myMidiEventNumberPval;
-    PVal *myMidiEventVelocityPval;
-    PVal *myMidiEventChannelPval;
-    APTR myMidiEventTypeAptr;
-    APTR myMidiEventNumberAptr;
-    APTR myMidiEventVelocityAptr;
-    APTR myMidiEventChannelAptr;
+    value_t *myMidiEventTypePval;
+    value_t *myMidiEventNumberPval;
+    value_t *myMidiEventVelocityPval;
+    value_t *myMidiEventChannelPval;
+    int myMidiEventTypeAptr;
+    int myMidiEventNumberAptr;
+    int myMidiEventVelocityAptr;
+    int myMidiEventChannelAptr;
 
     // UI関連
     NSWindow *myWindow;
@@ -82,7 +82,7 @@ typedef struct {
 
     //----view_controller
     //共有
-    PVal *mpval; // code_getで使用されたテンポラリ変 //hsp.mm hsp3gr.mm hsp3int.mm
+    value_t *mpval; // code_getで使用されたテンポラリ変 //hsp.mm hsp3gr.mm hsp3int.mm
     HSPContext *
             vc_hspctx; // vcに意味はない //ViewController.m hsp3cl.mm hsp3int.mm
     HSPContext
@@ -106,16 +106,16 @@ typedef struct {
     unsigned char *hsp_mem_di_val; // Debug VALS info ptr
     unsigned short *hsp_mcs;       // Current PC ptr
     unsigned short *hsp_mcsbak;
-    PVal *hsp_plugin_pval; // プラグインに渡される変数ポインタの実態
-    PVal *hsp_mpval_int; // code_getで使用されたテンポラリ変数(int用)
-    HSP_ExtraInfomation hsp_mem_exinfo; // HSP_ExtraInfomation本体
-    MPModVarData hsp_modvar_init;
+    value_t *hsp_plugin_pval; // プラグインに渡される変数ポインタの実態
+    value_t *hsp_mpval_int; // code_getで使用されたテンポラリ変数(int用)
+    hsp_extra_info_t hsp_mem_exinfo; // HSP_ExtraInfomation本体
+    multi_param_module_var_data_t hsp_modvar_init;
     HSPContext *hsp_hspctx;      // Current Context
-    HSP3TYPEINFO *hsp_hsp3tinfo; // HSP3 type info structure (strbuf)
+    hsp_type_info_t *hsp_hsp3tinfo; // HSP3 type info structure (strbuf)
 #ifdef FLAG_HSPDEBUG
     int hsp_dbgmode;
     char *hsp_dbgbuf;
-    HSP3DEBUG hsp_dbginfo;
+    hspdebug_t hsp_dbginfo;
 #endif
 
     // hsp3cl.mm
@@ -148,7 +148,7 @@ typedef struct {
     double hsp3int_reffunc_intfunc_value;
     DATA *hsp3int_data_temp;
     HSPContext *hsp3int_ctx;             // Current Context
-    HSP_ExtraInfomation *hsp3int_exinfo; // Info for Plugins
+    hsp_extra_info_t *hsp3int_exinfo; // Info for Plugins
     int hsp3int_ease_type;               //---->easing
     int hsp3int_ease_reverse;
     double hsp3int_ease_start;

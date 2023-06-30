@@ -8,8 +8,10 @@
 
 #import "hsp3struct_debug.h"
 
-
-char *hspd_geterror(HSPERROR error);
-char *hspd_geterror(HSPERROR error);
+#ifdef FLAG_HSPDEBUG
+char *hsp_debug_get_error(HSPERROR error);
+#else
+char *hsp_debug_get_error(HSPERROR error);
+#endif
 
 #endif

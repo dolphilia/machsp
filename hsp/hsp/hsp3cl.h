@@ -41,9 +41,9 @@
 - (void)SetFileName:(char *)name;            // axファイル名を指定する
 - (void *)copy_DAT:(char *)ptr size:(size_t)size;
 
-- (LIBDAT *)copy_LIBDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size;
+- (library_t *)copy_LIBDAT:(hsp_header_t *)hsphed ptr:(char *)ptr size:(size_t)size;
 
-- (STRUCTDAT *)copy_STRUCTDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size;
+- (struct_data_t *)copy_STRUCTDAT:(hsp_header_t *)hsphed ptr:(char *)ptr size:(size_t)size;
 @end
 
 // int hsp3cl_exec( void );

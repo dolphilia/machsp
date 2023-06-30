@@ -11,14 +11,14 @@
 
 // stack.mm
 int stack_stm_max;
-StackManagerData *stack_mem_stm;
-StackManagerData *stack_stm_cur;
-StackManagerData *stack_stm_maxptr;
+stack_manager_t *stack_mem_stm;
+stack_manager_t *stack_stm_cur;
+stack_manager_t *stack_stm_maxptr;
 
-void StackInit() {
-    StackManagerData *stm;
+void stack_init() {
+    stack_manager_t *stm;
     stack_stm_max = STM_MAX_DEFAULT;
-    stack_mem_stm = (StackManagerData *) malloc(sizeof(StackManagerData) * stack_stm_max);
+    stack_mem_stm = (stack_manager_t *) malloc(sizeof(stack_manager_t) * stack_stm_max);
     stack_stm_maxptr = stack_mem_stm + stack_stm_max;
     stack_stm_cur = stack_mem_stm;
     stm = stack_mem_stm;
@@ -30,12 +30,12 @@ void StackInit() {
     }
 }
 
-void StackTerm() {
-    StackReset();
+void stack_free() {
+    stack_reset();
     free(stack_mem_stm);
 }
 
-void StackAlloc(StackManagerData *stm, int size) {
+void stack_alloc(stack_manager_t *stm, int size) {
     if (size <= STM_STRSIZE_DEFAULT) {
         //		stm->mode = STMMODE_SELF;
         //		stm->ptr = (char *)&(stm->ival);
@@ -45,15 +45,15 @@ void StackAlloc(StackManagerData *stm, int size) {
     stm->ptr = (char *) malloc(size);
 }
 
-void StackReset() {
+void stack_reset() {
     while (1) {
         if (stack_stm_cur == stack_mem_stm) break;
-        StackPop();
+        stack_pop();
     }
 }
 
-void StackPush(int type, char *data, int size) {
-    StackManagerData *stm;
+void stack_push(int type, char *data, int size) {
+    stack_manager_t *stm;
     // double *dptr;
     if (stack_stm_cur >= stack_stm_maxptr) {
         fprintf(stderr, "Error: %d\n", HSPERR_STACK_OVERFLOW);
@@ -80,34 +80,34 @@ void StackPush(int type, char *data, int size) {
         default:
             break;
     }
-    StackAlloc(stm, size);
+    stack_alloc(stm, size);
     memcpy(stm->ptr, data, size);
     stack_stm_cur++;
 }
 
-void StackPush2(int type, char *str) {
-    StackPush(type, str, strlen(str) + 1);
+void stack_push2(int type, char *str) {
+    stack_push(type, str, (int)strlen(str) + 1);
 }
 
-void *StackPushSize(int type, int size) {
-    StackManagerData *stm;
+void *stack_push_size(int type, int size) {
+    stack_manager_t *stm;
     if (stack_stm_cur >= stack_stm_maxptr) {
         fprintf(stderr, "Error: %d\n", HSPERR_STACK_OVERFLOW);
         exit(EXIT_FAILURE);
     }
     stm = stack_stm_cur;
     stm->type = type;
-    StackAlloc(stm, size);
+    stack_alloc(stm, size);
     stack_stm_cur++;
     return (void *) stm->ptr;
 }
 
-void StackPushStr(char *str) {
-    StackPush(HSPVAR_FLAG_STR, str, strlen(str) + 1);
+void stack_push_str(char *str) {
+    stack_push(HSPVAR_FLAG_STR, str, (int)strlen(str) + 1);
 }
 
-void StackPushTypeVal(int type, int val, int val2) {
-    StackManagerData *stm;
+void stack_push_type_val(int type, int val, int val2) {
+    stack_manager_t *stm;
     int *iptr;
     //	if ( stack_stm_cur >= stack_stm_maxptr ) throw HSPERR_STACK_OVERFLOW;
     stm = stack_stm_cur;
@@ -119,8 +119,8 @@ void StackPushTypeVal(int type, int val, int val2) {
     stack_stm_cur++;
 }
 
-void StackPushVar(void *pval, int aptr) {
-    StackManagerData *stm;
+void stack_push_var(void *pval, int aptr) {
+    stack_manager_t *stm;
     //	if ( stack_stm_cur >= stack_stm_maxptr ) throw HSPERR_STACK_OVERFLOW;
     stm = stack_stm_cur;
     stm->type = -1;  // HSPVAR_FLAG_VAR
@@ -130,11 +130,11 @@ void StackPushVar(void *pval, int aptr) {
     stack_stm_cur++;
 }
 
-void StackPushType(int type) {
-    StackPushTypeVal(type, 0, 0);
+void stack_push_type(int type) {
+    stack_push_type_val(type, 0, 0);
 }
 
-void StackPopFree() {
+void stack_pop_free() {
     free(stack_stm_cur->ptr);
     stack_stm_cur->mode = STMMODE_SELF;
     stack_stm_cur->ptr = (char *) &(stack_stm_cur->ival);
@@ -148,21 +148,21 @@ void StackPopFree() {
 //  stack_manager_data_current->ptr = (char*)&(stack_manager_data_current->ival);
 //}
 
-void StackPushi(int val) {
+void stack_push_int(int val) {
     //	if ( stack_stm_cur >= stack_stm_maxptr ) throw HSPERR_STACK_OVERFLOW;
     stack_stm_cur->type = HSPVAR_FLAG_INT;
     stack_stm_cur->ival = val;
     stack_stm_cur++;
 }
 
-void StackPushl(int val) {
+void stack_push_label(int val) {
     //	if ( stack_stm_cur >= stack_stm_maxptr ) throw HSPERR_STACK_OVERFLOW;
     stack_stm_cur->type = HSPVAR_FLAG_LABEL;
     stack_stm_cur->ival = val;
     stack_stm_cur++;
 }
 
-void StackPushd(double val) {
+void stack_push_double(double val) {
     double *dptr;
     //	if ( stack_stm_cur >= stack_stm_maxptr ) throw HSPERR_STACK_OVERFLOW;
     stack_stm_cur->type = HSPVAR_FLAG_DOUBLE;
@@ -171,19 +171,19 @@ void StackPushd(double val) {
     stack_stm_cur++;
 }
 
-void StackPop() {
+void stack_pop() {
     //	if ( stack_stm_cur <= stack_mem_stm ) throw HSPERR_UNKNOWN_CODE;
     stack_stm_cur--;
     if (stack_stm_cur->mode) {
-        StackPopFree();
+        stack_pop_free();
     }
 }
 
-StackManagerData *get_stack_stm_cur() {
+stack_manager_t *get_stack_stm_cur() {
     return stack_stm_cur;
 }
 
-StackManagerData *get_stack_mem_stm() {
+stack_manager_t *get_stack_mem_stm() {
     return stack_mem_stm;
 }
 

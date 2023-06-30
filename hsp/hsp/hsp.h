@@ -75,31 +75,31 @@
 
 - (double)code_getdd:(const double)defval;
 
-- (PVal *)code_getpval;
+- (value_t *)code_getpval;
 
-- (char *)code_getvptr:(PVal **)pval size:(int *)size;
+- (char *)code_getvptr:(value_t **)pval size:(int *)size;
 
-- (APTR)code_getva:(PVal **)pval;
+- (int)code_getva:(value_t **)pval;
 
-- (void)code_setva:(PVal *)pval aptr:(APTR)aptr type:(int)type ptr:(const void *)ptr;
+- (void)code_setva:(value_t *)pval aptr:(int)aptr type:(int)type ptr:(const void *)ptr;
 
 - (unsigned short *)code_getlb;
 
 - (unsigned short *)code_getlb2;
 
-- (STRUCTDAT *)code_getstruct;
+- (struct_data_t *)code_getstruct;
 
-- (STRUCTPRM *)code_getstprm;
+- (struct_param_t *)code_getstprm;
 
-- (STRUCTDAT *)code_getcomst;
+- (struct_data_t *)code_getcomst;
 
 - (char *)code_get_proxyvar:(char *)ptr mptype:(int *)mptype;
 
-- (APTR)code_getv_proxy:(PVal **)pval var:(MPVarData *)var mptype:(int)mptype;
+- (int)code_getv_proxy:(value_t **)pval var:(multi_param_var_data_t *)var mptype:(int)mptype;
 
-- (void)code_expandstruct:(char *)p st:(STRUCTDAT *)st option:(int)option;
+- (void)code_expandstruct:(char *)p st:(struct_data_t *)st option:(int)option;
 
-- (FlexValue *)code_setvs:(PVal *)pval aptr:(APTR)aptr ptr:(void *)ptr size:(int)size subid:(int)subid;
+- (flex_value_t *)code_setvs:(value_t *)pval aptr:(int)aptr ptr:(void *)ptr size:(int)size subid:(int)subid;
 
 - (char *)code_stmpstr:(char *)src;
 
@@ -145,11 +145,11 @@
 
 - (void)code_enableirq:(int)id sw:(int)sw;
 
-- (HSP3TYPEINFO *)code_gettypeinfo:(int)type;
+- (hsp_type_info_t *)code_gettypeinfo:(int)type;
 
-- (void)code_enable_typeinfo:(HSP3TYPEINFO *)info;
+- (void)code_enable_typeinfo:(hsp_type_info_t *)info;
 
-- (HSP3DEBUG *)code_getdbg;
+- (hspdebug_t *)code_getdbg;
 
 - (char *)code_inidbg;
 
@@ -169,7 +169,7 @@
 
 - (void)code_dbgdump:(char const *)mem size:(int)size;
 
-- (void)code_dbgvarinf_ext:(PVal *)pv src:(void *)src buf:(char *)buf;
+- (void)code_dbgvarinf_ext:(value_t *)pv src:(void *)src buf:(char *)buf;
 
 - (char *)code_dbgvalue:(int)type;
 
@@ -185,13 +185,13 @@
 
 - (void)code_dbgtrace;
 
-- (void)code_delstruct:(PVal *)in_pval in_aptr:(APTR)in_aptr;
+- (void)code_delstruct:(value_t *)in_pval in_aptr:(int)in_aptr;
 
-- (void)code_delstruct_all:(PVal *)pval;
+- (void)code_delstruct_all:(value_t *)pval;
 
-- (void)code_checkarray:(PVal *)pval;
+- (void)code_checkarray:(value_t *)pval;
 
-- (void)code_checkarray2:(PVal *)pval;
+- (void)code_checkarray2:(value_t *)pval;
 
 - (int)cmdfunc_gosub:(unsigned short *)subr;
 

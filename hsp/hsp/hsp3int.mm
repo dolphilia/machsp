@@ -14,24 +14,24 @@
 
 // LFを改行として扱う
 #define MATCH_LF
-#define CRSTR "\n"
-#define EASE_LINEAR 0
-#define EASE_QUAD_IN 1
-#define EASE_QUAD_OUT 2
-#define EASE_QUAD_INOUT 3
-#define EASE_CUBIC_IN 4
-#define EASE_CUBIC_OUT 5
-#define EASE_CUBIC_INOUT 6
-#define EASE_QUARTIC_IN 7
-#define EASE_QUARTIC_OUT 8
-#define EASE_QUARTIC_INOUT 9
-#define EASE_BOUNCE_IN 10
-#define EASE_BOUNCE_OUT 11
-#define EASE_BOUNCE_INOUT 12
-#define EASE_SHAKE_IN 13
-#define EASE_SHAKE_OUT 14
-#define EASE_SHAKE_INOUT 15
-#define EASE_LOOP 4096
+#define CRSTR              "\n"
+#define EASE_LINEAR           0
+#define EASE_QUAD_IN          1
+#define EASE_QUAD_OUT         2
+#define EASE_QUAD_INOUT       3
+#define EASE_CUBIC_IN         4
+#define EASE_CUBIC_OUT        5
+#define EASE_CUBIC_INOUT      6
+#define EASE_QUARTIC_IN       7
+#define EASE_QUARTIC_OUT      8
+#define EASE_QUARTIC_INOUT    9
+#define EASE_BOUNCE_IN       10
+#define EASE_BOUNCE_OUT      11
+#define EASE_BOUNCE_INOUT    12
+#define EASE_SHAKE_IN        13
+#define EASE_SHAKE_OUT       14
+#define EASE_SHAKE_INOUT     15
+#define EASE_LOOP          4096
 
 // デストラクタで自動的に sbFree を呼ぶ
 class CAutoSbFree {
@@ -54,7 +54,7 @@ CAutoSbFree::CAutoSbFree(char **pptr) : pptr_(pptr) {
 }
 
 CAutoSbFree::~CAutoSbFree() {
-    sbFree(*pptr_);
+    strbuf_free(*pptr_);
 }
 
 @implementation ViewController (hsp3int)
@@ -436,7 +436,7 @@ CAutoSbFree::~CAutoSbFree() {
         while (needed_size > capa) {
             capa *= 2;
         }
-        *p = sbExpand(*p, capa);
+        *p = strbuf_expand(*p, capa);
         *capacity = capa;
     }
 }
@@ -460,7 +460,7 @@ CAutoSbFree::~CAutoSbFree() {
     fstr[sizeof(fstr) - 1] = '\0';
     fp = fstr;
     capacity = 1024;
-    p = sbAlloc(capacity);
+    p = strbuf_alloc(capacity);
     len = 0;
 
     CAutoSbFree autofree(&p);
@@ -578,8 +578,8 @@ CAutoSbFree::~CAutoSbFree() {
 
 /// 変数にstrからlenバイトの文字列を代入する
 ///
-- (void)var_set_str_len:(PVal *)pval aptr:(APTR)aptr str:(char *)str len:(int)len {
-    HspVarProc *proc = HspVarCoreGetProc(HSPVAR_FLAG_STR);
+- (void)var_set_str_len:(value_t *)pval aptr:(int)aptr str:(char *)str len:(int)len {
+    hspvar_proc_t *proc = HspVarCoreGetProc(HSPVAR_FLAG_STR);
     if (pval->flag != HSPVAR_FLAG_STR) {
         if (aptr != 0) {
             @throw [self make_nsexception:HSPERR_INVALID_ARRAYSTORE];
@@ -588,7 +588,7 @@ CAutoSbFree::~CAutoSbFree() {
     }
     pval->offset = aptr;
 
-    PDAT *dst;
+    void *dst;
     if (strcmp(proc->vartype_name, "int") == 0) {  //整数のGetPtr
         dst = HspVarInt_GetPtr(pval);
     } else if (strcmp(proc->vartype_name, "double") == 0) {  //実数のGetPtr
@@ -858,8 +858,8 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_dirlist {
-    PVal *pval;
-    APTR aptr = [self code_getva:&pval];
+    value_t *pval;
+    int aptr = [self code_getva:&pval];
     char *ptr;
     [self code_event:HSPEVENT_FNAME prm1:0 prm2:0 prm3:[self code_gets]];
     int p1 = [self code_getdi:0];
@@ -869,7 +869,7 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_bload_bsave:(int)cmd {
-    PVal *pval;
+    value_t *pval;
     char *ptr;
     int size;
     int tmpsize;
@@ -894,7 +894,7 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_memfile {
-    PVal *pval;
+    value_t *pval;
     int size;
     char *ptr = [self code_getvptr:&pval size:&size];
     int p1 = [self code_getdi:0];
@@ -905,7 +905,7 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_poke_wpoke_lpoke:(int)cmd {
-    PVal *pval;
+    value_t *pval;
     int size;
     char *ptr = [self code_getvptr:&pval size:&size];
     int fl;
@@ -968,9 +968,9 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_getstr {
-    PVal *pval2;
-    PVal *pval;
-    APTR aptr = [self code_getva:&pval];
+    value_t *pval2;
+    value_t *pval;
+    int aptr = [self code_getva:&pval];
     int size;
     char *ptr = [self code_getvptr:&pval2 size:&size];
     char *p;
@@ -982,9 +982,9 @@ CAutoSbFree::~CAutoSbFree() {
     }
     ptr += p1;
     p = [self code_stmp:p3 + 1];
-    strsp_ini();
-    vc_hspctx->stat = strsp_get(ptr, p, p2, p3);
-    vc_hspctx->strsize = strsp_getptr();
+    str_split_init();
+    vc_hspctx->stat = str_split_get(ptr, p, p2, p3);
+    vc_hspctx->strsize = str_split_get_ptr();
     [self code_setva:pval aptr:aptr type:HSPVAR_FLAG_STR ptr:p];
 }
 
@@ -999,9 +999,9 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_memexpand {
-    PVal *pval;
-    APTR aptr;
-    PDAT *ptr;
+    value_t *pval;
+    int aptr;
+    void *ptr;
     aptr = [self code_getva:&pval];
     ptr = HspVarCorePtrAPTR(pval, aptr);
     if ((pval->support & HSPVAR_SUPPORT_FLEXSTORAGE) == 0) {
@@ -1027,7 +1027,7 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_memcpy {
-    PVal *pval;
+    value_t *pval;
     char *sptr;
     char *tptr;
     int bufsize_t, bufsize_s;
@@ -1055,7 +1055,7 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_memset {
-    PVal *pval;
+    value_t *pval;
     char *ptr;
     int size;
     ptr = [self code_getvptr:&pval size:&size];
@@ -1232,8 +1232,8 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_noteget {
-    PVal *pval;
-    APTR aptr;
+    value_t *pval;
+    int aptr;
     char *p;
     [self note_update];
     aptr = [self code_getva:&pval];
@@ -1245,7 +1245,7 @@ CAutoSbFree::~CAutoSbFree() {
 
 //    指定した文字列で分割された要素を代入する(fujidig)
 - (void)cmdfunc_split {
-    PVal *pval = NULL;
+    value_t *pval = NULL;
     int aptr = 0;
     char *sptr;
     char *sep;
@@ -1307,8 +1307,8 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_strrep {
-    PVal *pval;
-    APTR aptr;
+    value_t *pval;
+    int aptr;
     char *ss;
     // char *s_rep;
     char *s_buffer;
@@ -1337,8 +1337,8 @@ CAutoSbFree::~CAutoSbFree() {
 
 - (void)cmdfunc_sortval {
     int a, i;
-    PVal *p1;
-    APTR ap;
+    value_t *p1;
+    int ap;
     int order;
 
     ap = [self code_getva:&p1];   // パラメータ1:変数
@@ -1398,9 +1398,9 @@ CAutoSbFree::~CAutoSbFree() {
 - (void)cmdfunc_sortstr {
     int len, order;
     char *p;
-    PVal *pv;
-    APTR ap;
-    HspVarProc *proc;
+    value_t *pv;
+    int ap;
+    hspvar_proc_t *proc;
     char **pvstr;
 
     ap = [self code_getva:&pv];   // パラメータ1:変数
@@ -1436,10 +1436,10 @@ CAutoSbFree::~CAutoSbFree() {
     for (int i = 0; i < len; i++) {
         if (i == 0) {
             pv->pt = hsp3int_data_temp[i].as.skey;
-            sbSetOption(pv->pt, &pv->pt);
+            strbuf_set_option(pv->pt, &pv->pt);
         } else {
             pvstr[i] = hsp3int_data_temp[i].as.skey;
-            sbSetOption(pvstr[i], &pvstr[i]);
+            strbuf_set_option(pvstr[i], &pvstr[i]);
         }
     }
 }
@@ -1448,8 +1448,8 @@ CAutoSbFree::~CAutoSbFree() {
     int i, sflag;
     char *p;
     char *stmp;
-    PVal *pv;
-    APTR ap;
+    value_t *pv;
+    int ap;
 
     ap = [self code_getva:&pv];   // パラメータ1:変数
     sflag = [self code_getdi:0];  // パラメータ2:数値
@@ -1476,8 +1476,8 @@ CAutoSbFree::~CAutoSbFree() {
 }
 
 - (void)cmdfunc_sortget {
-    PVal *pv;
-    APTR ap = [self code_getva:&pv];
+    value_t *pv;
+    int ap = [self code_getva:&pv];
     int result;
     int n = [self code_getdi:0];
 
@@ -1572,7 +1572,7 @@ CAutoSbFree::~CAutoSbFree() {
         case 0x005:  // length3(3.0)
         case 0x006:  // length4(3.0)
         {
-            PVal *pv;
+            value_t *pv;
             pv = [self code_getpval];
             hsp3int_reffunc_intfunc_ivalue = pv->len[arg - 0x002];
             break;
@@ -1580,11 +1580,11 @@ CAutoSbFree::~CAutoSbFree() {
 
         case 0x007:  // vartype(3.0)
         {
-            PVal *pv;
-            HspVarProc *proc;
+            value_t *pv;
+            hspvar_proc_t *proc;
             if (*hsp3int_type == TYPE_STRING) {
                 sval = [self code_gets];
-                proc = HspVarCoreSeekProc(sval);
+                proc = hspvar_core_seek_proc(sval);
                 if (proc == NULL) {
                     @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
                 }
@@ -1598,14 +1598,14 @@ CAutoSbFree::~CAutoSbFree() {
 
         case 0x008:  // gettime
             ival = [self code_geti];
-            hsp3int_reffunc_intfunc_ivalue = gettime(ival);
+            hsp3int_reffunc_intfunc_ivalue = get_time(ival);
             break;
 
         case 0x009:  // peek
         case 0x00a:  // wpeek
         case 0x00b:  // lpeek
         {
-            PVal *pval;
+            value_t *pval;
             char *ptr;
             int size;
             ptr = [self code_getvptr:&pval size:&size];
@@ -1634,10 +1634,10 @@ CAutoSbFree::~CAutoSbFree() {
         }
         case 0x00c:  // varptr
         {
-            PVal *pval;
-            APTR aptr;
-            PDAT *pdat;
-            STRUCTDAT *st;
+            value_t *pval;
+            int aptr;
+            void *pdat;
+            struct_data_t *st;
             if (*hsp3int_type == TYPE_DLLFUNC) {
                 st = &(vc_hspctx->mem_finfo[*hsp3int_val]);
                 hsp3int_reffunc_intfunc_ivalue = (int) (size_t) (st->proc);
@@ -1651,9 +1651,9 @@ CAutoSbFree::~CAutoSbFree() {
         }
         case 0x00d:  // varuse
         {
-            PVal *pval;
-            APTR aptr;
-            PDAT *pdat;
+            value_t *pval;
+            int aptr;
+            void *pdat;
             aptr = [self code_getva:&pval];
             if (pval->support & HSPVAR_SUPPORT_VARUSE) {
                 pdat = HspVarCorePtrAPTR(pval, aptr);
@@ -1692,7 +1692,7 @@ CAutoSbFree::~CAutoSbFree() {
 
         case 0x00f:  // instr
         {
-            PVal *pval;
+            value_t *pval;
             char *ptr;
             char *ps;
             char *ps2;
@@ -1731,7 +1731,7 @@ CAutoSbFree::~CAutoSbFree() {
             p1 = [self code_geti];
             p2 = [self code_geti];
             p3 = [self code_geti];
-            hsp3int_reffunc_intfunc_ivalue = GetLimit(p1, p2, p3);
+            hsp3int_reffunc_intfunc_ivalue = get_limit(p1, p2, p3);
             break;
 
         case 0x012:  // getease
@@ -1935,7 +1935,7 @@ CAutoSbFree::~CAutoSbFree() {
         }
         case 0x101:  // strmid
         {
-            PVal *pval;
+            value_t *pval;
             char *sptr;
             char *p;
             char chrtmp;
@@ -1976,13 +1976,13 @@ CAutoSbFree::~CAutoSbFree() {
             p = vc_hspctx->stmp;
             strncpy(pathname, [self code_gets], HSP_MAX_PATH - 1);
             p1 = [self code_geti];
-            getpath(pathname, p, p1);
+            get_path(pathname, p, p1);
             ptr = p;
             break;
         }
         case 0x105:  // strtrim
         {
-            PVal *pval;
+            value_t *pval;
             char *sptr;
             char *p;
             int size;
@@ -1996,17 +1996,17 @@ CAutoSbFree::~CAutoSbFree() {
             strcpy(p, sptr);
             switch (p1) {
                 case 0:
-                    TrimCodeL(p, p2);
-                    TrimCodeR(p, p2);
+                    trim_code_left(p, p2);
+                    trim_code_right(p, p2);
                     break;
                 case 1:
-                    TrimCodeL(p, p2);
+                    trim_code_left(p, p2);
                     break;
                 case 2:
-                    TrimCodeR(p, p2);
+                    trim_code_right(p, p2);
                     break;
                 case 3:
-                    TrimCode(p, p2);
+                    trim_code(p, p2);
                     break;
             }
             break;
@@ -2166,7 +2166,7 @@ CAutoSbFree::~CAutoSbFree() {
     return 0;
 }
 
-- (void)hsp3typeinit_intcmd:(HSP3TYPEINFO *)info {
+- (void)hsp3typeinit_intcmd:(hsp_type_info_t *)info {
     hsp3int_ctx = info->hspctx;
     hsp3int_exinfo = info->hspexinfo;
     hsp3int_type = hsp3int_exinfo->nptype;
@@ -2177,7 +2177,7 @@ CAutoSbFree::~CAutoSbFree() {
     // info->termfunc = termfunc_intcmd;
 }
 
-- (void)hsp3typeinit_intfunc:(HSP3TYPEINFO *)info {
+- (void)hsp3typeinit_intfunc:(hsp_type_info_t *)info {
     info->reffuncNumber = 5;  // reffunc_intfunc;
 }
 

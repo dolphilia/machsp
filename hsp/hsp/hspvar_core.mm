@@ -18,8 +18,8 @@
 // master pointer
 //------------------------------------------------------------
 
-PVal *mem_pval;
-HspVarProc *hspvarproc;
+value_t *mem_pval;
+hspvar_proc_t *hspvarproc;
 int hspvartype_max;
 int hspvartype_limit;
 
@@ -27,9 +27,9 @@ int hspvartype_limit;
 ///
 ///        (APTRとpvalから実態を求める)
 ///
-PDAT *HspVarCorePtrAPTR(PVal *pv, APTR ofs) {
+void *HspVarCorePtrAPTR(value_t *pv, int ofs) {
     pv->offset = ofs;
-    PDAT *dst;
+    void *dst;
     if (strcmp(hspvarproc[(pv)->flag].vartype_name, "int") == 0) { //整数のFree
         dst = HspVarInt_GetPtr(pv);
     } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "double") == 0) { //実数のFree
@@ -47,8 +47,8 @@ PDAT *HspVarCorePtrAPTR(PVal *pv, APTR ofs) {
     return dst; // hspvarproc[(pv)->flag].GetPtr(pv);
 }
 
-void HspVarCoreInit(void) {
-    hspvarproc = (HspVarProc *) sbAlloc(sizeof(HspVarProc) * HSPVAR_FLAG_MAX);
+void hspvar_core_init(void) {
+    hspvarproc = (hspvar_proc_t *) strbuf_alloc(sizeof(hspvar_proc_t) * HSPVAR_FLAG_MAX);
     hspvartype_max = HSPVAR_FLAG_MAX;
     for (int i = 0; i < HSPVAR_FLAG_MAX; i++) {
         hspvarproc[i].flag = 0;
@@ -56,8 +56,8 @@ void HspVarCoreInit(void) {
 
     //		mpval(テンポラリ変数)を初期化します
     //		(実態の初期化は、変数使用時に行なわれます)
-    PVal *pval;
-    mem_pval = (PVal *) sbAlloc(sizeof(PVal) * HSPVAR_FLAG_MAX);
+    value_t *pval;
+    mem_pval = (value_t *) strbuf_alloc(sizeof(value_t) * HSPVAR_FLAG_MAX);
     for (int i = 0; i < HSPVAR_FLAG_MAX; i++) {
         pval = &mem_pval[i];
         pval->mode = HSPVAR_MODE_NONE;
@@ -65,7 +65,7 @@ void HspVarCoreInit(void) {
     }
 }
 
-void HspVarCoreBye(void) {
+void hspvar_core_bye(void) {
     for (int i = 0; i < hspvartype_max; i++) {
         if (mem_pval[i].mode == HSPVAR_MODE_MALLOC) {
             // HspVarCoreDispose( &mem_pval[i] );
@@ -85,31 +85,31 @@ void HspVarCoreBye(void) {
             }
         }
     }
-    sbFree(mem_pval);
-    sbFree(hspvarproc);
+    strbuf_free(mem_pval);
+    strbuf_free(hspvarproc);
 }
 
 /// VARTYPEを初期化する(HspVarCoreInitの後で呼ぶ)
 ///
 /// (expandに拡張するVARTYPEの数を指定する)
 ///
-void HspVarCoreResetVartype(int expand) {
+void hspvar_core_reset_var_type(int expand) {
     hspvartype_limit = hspvartype_max + expand;
     if (expand >= 0) {
-        hspvarproc = (HspVarProc *) sbExpand((char *) hspvarproc, sizeof(HspVarProc) * hspvartype_limit);
-        mem_pval = (PVal *) sbExpand((char *) mem_pval, sizeof(PVal) * hspvartype_limit);
+        hspvarproc = (hspvar_proc_t *) strbuf_expand((char *) hspvarproc, sizeof(hspvar_proc_t) * hspvartype_limit);
+        mem_pval = (value_t *) strbuf_expand((char *) mem_pval, sizeof(value_t) * hspvartype_limit);
     }
 
     // 標準の型を登録する
-    HspVarCoreRegisterType(HSPVAR_FLAG_INT, (char *) "int");
-    HspVarCoreRegisterType(HSPVAR_FLAG_STR, (char *) "str");
-    HspVarCoreRegisterType(HSPVAR_FLAG_DOUBLE, (char *) "double");
-    HspVarCoreRegisterType(HSPVAR_FLAG_STRUCT, (char *) "struct");
-    HspVarCoreRegisterType(HSPVAR_FLAG_LABEL, (char *) "label"); // ラベル型(3.1)
+    hspvar_core_register_type(HSPVAR_FLAG_INT, (char *) "int");
+    hspvar_core_register_type(HSPVAR_FLAG_STR, (char *) "str");
+    hspvar_core_register_type(HSPVAR_FLAG_DOUBLE, (char *) "double");
+    hspvar_core_register_type(HSPVAR_FLAG_STRUCT, (char *) "struct");
+    hspvar_core_register_type(HSPVAR_FLAG_LABEL, (char *) "label"); // ラベル型(3.1)
 }
 
-int HspVarCoreAddType() {
-    PVal *pval;
+int hspvar_core_add_type() {
+    value_t *pval;
     if (hspvartype_max >= hspvartype_limit)
         return -1;
     int id = hspvartype_max++;
@@ -129,16 +129,16 @@ static void PutInvalid(void) {
     exit(EXIT_FAILURE);
 }
 
-void HspVarCoreRegisterType(int flag, char *vartype_name) {
+void hspvar_core_register_type(int flag, char *vartype_name) {
     int id = flag;
     if (id < 0) {
-        id = HspVarCoreAddType();
+        id = hspvar_core_add_type();
         if (id < 0) {
             return;
         }
     }
 
-    HspVarProc *p = &hspvarproc[id];
+    hspvar_proc_t *p = &hspvarproc[id];
     p->flag = p->aftertype = id;
 
     //void** procs;
@@ -172,9 +172,9 @@ void HspVarCoreRegisterType(int flag, char *vartype_name) {
 
 /// 指定されたポインタからのクローンになる
 ///
-void HspVarCoreDupPtr(PVal *pval, int flag, void *ptr, int size) {
-    PDAT *buf = (PDAT *) ptr;
-    HspVarProc *p = &hspvarproc[flag];
+void HspVarCoreDupPtr(value_t *pval, int flag, void *ptr, int size) {
+    void *buf = (void *) ptr;
+    hspvar_proc_t *p = &hspvarproc[flag];
 
     // HspVarCoreDispose( pval );
     if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
@@ -213,10 +213,10 @@ void HspVarCoreDupPtr(PVal *pval, int flag, void *ptr, int size) {
 
 /// 指定された変数のクローンになる
 ///
-void HspVarCoreDup(PVal *pval, PVal *arg, APTR aptr) {
+void HspVarCoreDup(value_t *pval, value_t *arg, int aptr) {
     int size;
-    PDAT *buf = HspVarCorePtrAPTR(arg, aptr);
-    HspVarProc *p = &hspvarproc[arg->flag];
+    void *buf = HspVarCorePtrAPTR(arg, aptr);
+    hspvar_proc_t *p = &hspvarproc[arg->flag];
 
     // HspVarCoreGetBlockSize( arg, buf, &size );
     void *dst;
@@ -243,8 +243,8 @@ void HspVarCoreDup(PVal *pval, PVal *arg, APTR aptr) {
 ///
 /// (len1〜len4は、4byte単位なので注意)
 ///
-void HspVarCoreDim(PVal *pval, int flag, int len1, int len2, int len3, int len4) {
-    HspVarProc *p = &hspvarproc[flag];
+void HspVarCoreDim(value_t *pval, int flag, int len1, int len2, int len3, int len4) {
+    hspvar_proc_t *p = &hspvarproc[flag];
 
     if ((len1 < 0) || (len2 < 0) || (len3 < 0) || (len4 < 0)) {
         fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ILLEGALPRM);
@@ -297,8 +297,8 @@ void HspVarCoreDim(PVal *pval, int flag, int len1, int len2, int len3, int len4)
 ///
 /// (len1〜len4は、4byte単位なので注意)
 ///
-void HspVarCoreDimFlex(PVal *pval, int flag, int len0, int len1, int len2, int len3, int len4) {
-    HspVarProc *p = &hspvarproc[flag];
+void HspVarCoreDimFlex(value_t *pval, int flag, int len0, int len1, int len2, int len3, int len4) {
+    hspvar_proc_t *p = &hspvarproc[flag];
 
     if ((len1 < 0) || (len2 < 0) || (len3 < 0) || (len4 < 0)) {
         fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ILLEGALPRM);
@@ -351,8 +351,8 @@ void HspVarCoreDimFlex(PVal *pval, int flag, int len0, int len1, int len2, int l
 
 /// 配列を拡張する
 ///
-void HspVarCoreReDim(PVal *pval, int lenid, int len) {
-    HspVarProc *p = &hspvarproc[pval->flag];
+void HspVarCoreReDim(value_t *pval, int lenid, int len) {
+    hspvar_proc_t *p = &hspvarproc[pval->flag];
     pval->len[lenid] = len;
     if (strcmp(p->vartype_name, "int") == 0) { //整数のAlloc
         HspVarInt_Alloc(pval, pval);
@@ -372,21 +372,21 @@ void HspVarCoreReDim(PVal *pval, int lenid, int len) {
 
 /// 指定タイプの変数を最小メモリで初期化する
 ///
-void HspVarCoreClear(PVal *pval, int flag) {
+void HspVarCoreClear(value_t *pval, int flag) {
     HspVarCoreDim(pval, flag, 1, 0, 0, 0); // 最小サイズのメモリを確保
 }
 
 /// 指定タイプの変数を最小メモリで初期化する(テンポラリ用)
 ///
-void HspVarCoreClearTemp(PVal *pval, int flag) {
+void HspVarCoreClearTemp(value_t *pval, int flag) {
     HspVarCoreDim(pval, flag, 1, 0, 0, 0); // 最小サイズのメモリを確保
     pval->support |= HSPVAR_SUPPORT_TEMPVAR;
 }
 
 /// 指定されたtypeフラグに変換された値のポインタを得る
 ///
-void *HspVarCoreCnvPtr(PVal *pval, int flag) {
-    PDAT *dst;
+void *HspVarCoreCnvPtr(value_t *pval, int flag) {
+    void *dst;
     if (pval->flag == flag) {
         if (strcmp(hspvarproc[flag].vartype_name, "int") == 0) { //整数のFree
             dst = HspVarInt_GetPtr(pval);
@@ -474,8 +474,8 @@ PDAT * HspVarCorePtrAPTR( PVal *pv, APTR ofs ) {
 }
 #endif
 
-HspVarProc *HspVarCoreSeekProc(const char *name) {
-    HspVarProc *p;
+hspvar_proc_t *hspvar_core_seek_proc(const char *name) {
+    hspvar_proc_t *p;
     for (int i = 0; i < hspvartype_max; i++) {
         p = &hspvarproc[i];
         if (p->flag) {
@@ -491,7 +491,7 @@ HspVarProc *HspVarCoreSeekProc(const char *name) {
 ///
 /// ( Reset後に次元数だけ連続で呼ばれます )
 ///
-void HspVarCoreArray(PVal *pval, int offset) {
+void HspVarCoreArray(value_t *pval, int offset) {
     if (pval->arraycnt >= 5) {
         fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ARRAYOVER);
         exit(EXIT_FAILURE);

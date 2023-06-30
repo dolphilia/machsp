@@ -229,7 +229,7 @@ char *strchr2(char *target, char code) {
     return ret;
 }
 
-void getpath(char *stmp, char *outbuf, int p2) {
+void get_path(char *stmp, char *outbuf, int p2) {
     char *p = outbuf;
     char tmp[_MAX_PATH];
     char p_drive[_MAX_PATH];
@@ -264,15 +264,15 @@ void getpath(char *stmp, char *outbuf, int p2) {
     }
 }
 
-int makedir(char *name) {
+int make_dir(char *name) {
     return mkdir(name, 0755);
 }
 
-int changedir(char *name) {
+int change_dir(char *name) {
     return chdir(name);
 }
 
-int delfile(char *name) {
+int delete_file(char *name) {
     return unlink(name);
     // return remove( name );		// ディレクトリにもファイルにも対応
 }
@@ -338,8 +338,8 @@ int dirlist(char *fname, char **target, int p3) {
 
         if (fl) {
             stat_main++;
-            sbStrAdd(target, p);
-            sbStrAdd(target, (char *) "\n");
+            strbuf_add_str(target, p);
+            strbuf_add_str(target, (char *) "\n");
         }
         fd = readdir(sh);
     }
@@ -361,7 +361,7 @@ int dirlist(char *fname, char **target, int p3) {
 /// 7 wMilliseconds
 /// 8 wMicroseconds
 
-int gettime(int index) {
+int get_time(int index) {
     struct timeval tv;
     struct tm *lt;
 
@@ -395,17 +395,17 @@ int gettime(int index) {
 
 static int splc; // split pointer
 
-void strsp_ini(void) {
+void str_split_init(void) {
     splc = 0;
 }
 
-int strsp_getptr(void) {
+int str_split_get_ptr(void) {
     return splc;
 }
 
 /// split string with parameters
 ///
-int strsp_get(char *srcstr, char *dststr, char splitchr, int len) {
+int str_split_get(char *srcstr, char *dststr, char splitchr, int len) {
     char cur_char;
     char a2;
     int a = 0;
@@ -464,7 +464,7 @@ char *strsp_cmds(char *srcstr) {
     return cmdchk;
 }
 
-int GetLimit(int num, int min, int max) {
+int get_limit(int num, int min, int max) {
     if (num > max)
         return max;
     if (num < min)
@@ -474,7 +474,7 @@ int GetLimit(int num, int min, int max) {
 
 /// 最後の'\\'を取り除く
 ///
-void CutLastChr(char *p, char code) {
+void cut_last_char(char *p, char code) {
     char *ss = strchr2(p, '\\');
     char *ss2;
 
@@ -572,7 +572,7 @@ char *strchr3(char *target, int code, int sw, char **findptr) {
 }
 
 // 最後のcodeを取り除く
-void TrimCodeR(char *p, int code) {
+void trim_code_right(char *p, int code) {
     char *ss;
     char *ss2;
     char *sslast;
@@ -590,7 +590,7 @@ void TrimCodeR(char *p, int code) {
 }
 
 // すべてのcodeを取り除く
-void TrimCode(char *p, int code) {
+void trim_code(char *p, int code) {
     char *ss;
     char *ss2;
     while (1) {
@@ -602,7 +602,7 @@ void TrimCode(char *p, int code) {
 }
 
 // 最初のcodeを取り除く
-void TrimCodeL(char *p, int code) {
+void trim_code_left(char *p, int code) {
     char *ss;
     char *ss2;
     while (1) {

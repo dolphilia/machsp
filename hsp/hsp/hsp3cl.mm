@@ -118,7 +118,7 @@
 
     //		コマンドライン関連
     ss = (char *) "";  // コマンドラインパラメーターを入れる
-    sbStrCopy(&vc_hspctx->cmdline, ss);  // コマンドラインパラメーターを保存
+    strbuf_copy_str(&vc_hspctx->cmdline, ss);  // コマンドラインパラメーターを保存
 
     //		Register Type
     //
@@ -193,7 +193,7 @@
     char errmsg[1024];
     char *fname = [self code_getdebug_name];
     HSPERROR err = [self code_geterror];
-    char *msg = hspd_geterror(err);
+    char *msg = hsp_debug_get_error(err);
     int ln = [self code_getdebug_line];
 
     if (ln < 0) {
@@ -263,7 +263,7 @@
     int i;
     char *ptr;
     char fname[512];
-    HSPHED *hsphed;
+    hsp_header_t *hsphed;
     char startax[] = {'S' - 40, 'T' - 40, 'A' - 40, 'R' - 40, 'T' - 40, '.' - 40, 'A' - 40, 'X' - 40, 0};
 
     if (abc_hspctx.mem_mcs != NULL) {
@@ -315,7 +315,7 @@
 
     //		memory location set
     //
-    hsphed = (HSPHED *) ptr;
+    hsphed = (hsp_header_t *) ptr;
 
     if ((hsphed->h1 != 'H') || (hsphed->h2 != 'S') || (hsphed->h3 != 'P') ||
             (hsphed->h4 != '3')) {
@@ -330,19 +330,19 @@
     abc_hspctx.mem_mds = (char *) (ptr + hsphed->pt_ds);
     abc_hspctx.mem_ot = (int *) [self copy_DAT:ptr + hsphed->pt_ot size:hsphed->max_ot];
     abc_hspctx.mem_di = (unsigned char *) [self copy_DAT:ptr + hsphed->pt_dinfo size:hsphed->max_dinfo];
-    abc_hspctx.mem_linfo = (LIBDAT *) [self copy_LIBDAT:hsphed ptr:ptr + hsphed->pt_linfo size:hsphed->max_linfo];
-    abc_hspctx.mem_minfo = (STRUCTPRM *) [self copy_DAT:ptr + hsphed->pt_minfo size:hsphed->max_minfo];
-    abc_hspctx.mem_finfo = (STRUCTDAT *) [self copy_STRUCTDAT:hsphed ptr:ptr + hsphed->pt_finfo size:hsphed->max_finfo];
+    abc_hspctx.mem_linfo = (library_t *) [self copy_LIBDAT:hsphed ptr:ptr + hsphed->pt_linfo size:hsphed->max_linfo];
+    abc_hspctx.mem_minfo = (struct_param_t *) [self copy_DAT:ptr + hsphed->pt_minfo size:hsphed->max_minfo];
+    abc_hspctx.mem_finfo = (struct_data_t *) [self copy_STRUCTDAT:hsphed ptr:ptr + hsphed->pt_finfo size:hsphed->max_finfo];
 
-    HspVarCoreResetVartype(hsphed->max_varhpi);  // 型の初期化
+    hspvar_core_reset_var_type(hsphed->max_varhpi);  // 型の初期化
     [self code_resetctx:&abc_hspctx];            // hsp3code setup
 
     //		HspVar setup
     abc_hspctx.mem_var = NULL;
     if (hsp3cl_maxvar) {
-        abc_hspctx.mem_var = new PVal[hsp3cl_maxvar];
+        abc_hspctx.mem_var = new value_t[hsp3cl_maxvar];
         for (int i = 0; i < hsp3cl_maxvar; i++) {
-            PVal *pval = &abc_hspctx.mem_var[i];
+            value_t *pval = &abc_hspctx.mem_var[i];
             pval->mode = HSPVAR_MODE_NONE;
             pval->flag = HSPVAR_FLAG_INT;            // 仮の型
             HspVarCoreClear(pval, HSPVAR_FLAG_INT);  // グローバル変数を0にリセット
@@ -350,7 +350,7 @@
     }
 
     //		debug
-    // Alertf( "#HSP objcode
+    // alert_format( "#HSP objcode
     // initalized.(CS=%d/DS=%d/OT=%d/VAR=%d)\n",hsphed->max_cs, hsphed->max_ds,
     // hsphed->max_ot, hsphed->max_val );
     [self code_setpc:abc_hspctx.mem_mcs];
@@ -378,18 +378,18 @@
 
 /// libdatの準備
 ///
-- (LIBDAT *)copy_LIBDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size {
+- (library_t *)copy_LIBDAT:(hsp_header_t *)hsphed ptr:(char *)ptr size:(size_t)size {
     int max;
     int newsize;
-    LIBDAT *mem_dst;
-    LIBDAT *dst;
+    library_t *mem_dst;
+    library_t *dst;
     HED_LIBDAT org_dat;
 
     max = (int) (size / sizeof(HED_LIBDAT));
     if (max <= 0)
-        return (LIBDAT *) ptr;
-    newsize = sizeof(LIBDAT) * max;
-    mem_dst = (LIBDAT *) malloc(newsize);
+        return (library_t *) ptr;
+    newsize = sizeof(library_t) * max;
+    mem_dst = (library_t *) malloc(newsize);
     dst = mem_dst;
     for (int i = 0; i < max; i++) {
         memcpy(&org_dat, ptr, sizeof(HED_LIBDAT));
@@ -397,7 +397,7 @@
         dst->flag = org_dat.flag;
         dst->nameidx = org_dat.nameidx;
         dst->clsid = org_dat.clsid;
-        dst->hlib = NULL;
+        dst->handle = NULL;
 
         dst++;
         ptr += sizeof(HED_LIBDAT);
@@ -409,16 +409,16 @@
 
 /// structdatの準備
 ///
-- (STRUCTDAT *)copy_STRUCTDAT:(HSPHED *)hsphed ptr:(char *)ptr size:(size_t)size {
+- (struct_data_t *)copy_STRUCTDAT:(hsp_header_t *)hsphed ptr:(char *)ptr size:(size_t)size {
     int i, max;
     int newsize;
-    STRUCTDAT *mem_dst;
-    STRUCTDAT *dst;
+    struct_data_t *mem_dst;
+    struct_data_t *dst;
     HED_STRUCTDAT org_dat;
     max = (int) (size / sizeof(HED_STRUCTDAT));
-    if (max <= 0) return (STRUCTDAT *) ptr;
-    newsize = sizeof(STRUCTDAT) * max;
-    mem_dst = (STRUCTDAT *) malloc(sizeof(STRUCTDAT) * max);
+    if (max <= 0) return (struct_data_t *) ptr;
+    newsize = sizeof(struct_data_t) * max;
+    mem_dst = (struct_data_t *) malloc(sizeof(struct_data_t) * max);
     dst = mem_dst;
     for (i = 0; i < max; i++) {
         memcpy(&org_dat, ptr, sizeof(HED_STRUCTDAT));

@@ -13,25 +13,25 @@
 //	式の評価でpval->ptを参照するため、常に配列0のポイントはpval->ptが指し示す必要がある。
 
 // コアシステムメイン関数
-void HspVarCoreInit(void);
-void HspVarCoreBye(void);
-void HspVarCoreResetVartype(int expand);
-int HspVarCoreAddType();
-void HspVarCoreRegisterType(int flag, char *vartype_name);
-HspVarProc *HspVarCoreSeekProc(const char *name);
+void hspvar_core_init(void);
+void hspvar_core_bye(void);
+void hspvar_core_reset_var_type(int expand);
+int hspvar_core_add_type();
+void hspvar_core_register_type(int flag, char *vartype_name);
+hspvar_proc_t *hspvar_core_seek_proc(const char *name);
 
 // 低レベルサポート関数
-void HspVarCoreDup(PVal *pval, PVal *arg, APTR aptr);
-void HspVarCoreDupPtr(PVal *pval, int flag, void *ptr, int size);
-void HspVarCoreClear(PVal *pval, int flag);
-void HspVarCoreClearTemp(PVal *pval, int flag);
-void HspVarCoreDim(PVal *pval, int flag, int len1, int len2, int len3, int len4);
-void HspVarCoreDimFlex(PVal *pval, int flag, int len0, int len1, int len2, int len3, int len4);
-void HspVarCoreReDim(PVal *pval, int lenid, int len);
-void *HspVarCoreCnvPtr(PVal *pval, int flag);
-PDAT *HspVarCorePtrAPTR(PVal *pv, APTR ofs);
-void HspVarCoreArray(PVal *pval, int offset);
-PDAT *HspVarCorePtrAPTR(PVal *pv, APTR ofs);
+void HspVarCoreDup(value_t *pval, value_t *arg, int aptr);
+void HspVarCoreDupPtr(value_t *pval, int flag, void *ptr, int size);
+void HspVarCoreClear(value_t *pval, int flag);
+void HspVarCoreClearTemp(value_t *pval, int flag);
+void HspVarCoreDim(value_t *pval, int flag, int len1, int len2, int len3, int len4);
+void HspVarCoreDimFlex(value_t *pval, int flag, int len0, int len1, int len2, int len3, int len4);
+void HspVarCoreReDim(value_t *pval, int lenid, int len);
+void *HspVarCoreCnvPtr(value_t *pval, int flag);
+void *HspVarCorePtrAPTR(value_t *pv, int ofs);
+void HspVarCoreArray(value_t *pval, int offset);
+void *HspVarCorePtrAPTR(value_t *pv, int ofs);
 
 // PVal用マクロ
 #define HspVarCoreGetProc(flag) (&hspvarproc[flag])
