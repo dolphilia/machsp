@@ -6,11 +6,6 @@
 #define __hspvar_label_h
 
 #import "hsp3struct_var.h"
-#import "ViewController.h"
-
-@interface
-ViewController (hspvar_label) {
-}
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,6 +38,5 @@ void HspVarLabel_AllocBlock(PVal *pval, PDAT *pdat, int size);
 
 void HspVarLabel_Init(HspVarProc *p);
 
-@end
 
 #endif

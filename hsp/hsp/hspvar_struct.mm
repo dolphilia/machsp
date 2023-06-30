@@ -7,8 +7,6 @@
 #import "hspvar_struct.h"
 #import "strbuf.h"
 
-@implementation ViewController (hspvar_struct)
-
 //------------------------------------------------------------
 // HSPVAR core interface (struct)
 //------------------------------------------------------------
@@ -180,5 +178,3 @@ void HspVarStruct_Init(HspVarProc *p) {
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize = sizeof(FlexValue); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
-
-@end

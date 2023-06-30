@@ -631,6 +631,8 @@
         case 6:
             isKeyDown_Z = YES;
             break;
+        default:
+            break;
     }
 }
 
@@ -872,6 +874,8 @@
             break;
         case 6:
             isKeyDown_Z = NO;
+            break;
+        default:
             break;
     }
 }

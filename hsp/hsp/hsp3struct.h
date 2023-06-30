@@ -6,125 +6,111 @@
 #define __hsp3struct_h
 
 #include "hsp3struct_var.h"
-//#include "hspvar_core.h"
 #include "hsp3struct_debug.h"
 
 #ifdef _WIN64
-#define PTR64BIT //  ポインタは64bit
+#define PTR64BIT // ポインタは64bit
 #else
-#define PTR32BIT //  ポインタは32bit
+#define PTR32BIT // ポインタは32bit
 #endif
 
 // command type
-#define TYPE_MARK 0
-#define TYPE_VAR 1
-#define TYPE_STRING 2
-#define TYPE_DNUM 3
-#define TYPE_INUM 4
-#define TYPE_STRUCT 5
-#define TYPE_XLABEL 6
-#define TYPE_LABEL 7
-#define TYPE_INTCMD 8
-#define TYPE_EXTCMD 9
-#define TYPE_EXTSYSVAR 10
-#define TYPE_CMPCMD 11
-#define TYPE_MODCMD 12
-#define TYPE_INTFUNC 13
-#define TYPE_SYSVAR 14
-#define TYPE_PROGCMD 15
-#define TYPE_DLLFUNC 16
-#define TYPE_DLLCTRL 17
-#define TYPE_USERDEF 18
-#define TYPE_ERROR -1
-#define TYPE_CALCERROR -2
-#define PARAM_OK 0
-#define PARAM_SPLIT -1
-#define PARAM_END -2
-#define PARAM_DEFAULT -3
-#define PARAM_ENDSPLIT -4
-#define HSP3_FUNC_MAX 18
-#define HSP3_TYPE_USER 18
-#define EXFLG_0 0x1000
-#define EXFLG_1 0x2000
-#define EXFLG_2 0x4000
-#define EXFLG_3 0x8000
-#define CSTYPE 0x0fff
+#define TYPE_MARK           0 // 記号(code = 文字コード)
+#define TYPE_VAR            1 // ユーザー定義変数(code = 変数ID)
+#define TYPE_STRING         2 // 文字列(code = DSオフセット)
+#define TYPE_DNUM           3 // 実数値(code = DSオフセット)
+#define TYPE_INUM           4 // 整数値(code = 値)
+#define TYPE_STRUCT         5 // モジュール変数・構造体(code = minfoID)
+#define TYPE_XLABEL         6 // 未使用
+#define TYPE_LABEL          7 // ラベル名(code = OTオフセット)
+#define TYPE_INTCMD         8 // 内蔵命令(code = コマンドID)
+#define TYPE_EXTCMD         9 // 拡張命令(code = コマンドID)
+#define TYPE_EXTSYSVAR     10 // 拡張システム変数(code = コマンドID)
+#define TYPE_CMPCMD        11 // 比較命令(code = コマンドID)
+#define TYPE_MODCMD        12 // ユーザー命令/関数(code = コマンドID)
+#define TYPE_INTFUNC       13 // 内蔵関数(code = コマンドID)
+#define TYPE_SYSVAR        14 // 内蔵システム変数(code = コマンドID)
+#define TYPE_PROGCMD       15 // プログラム制御命令(code = コマンドID)
+#define TYPE_DLLFUNC       16 // DLL拡張命令/関数(code = コマンドID)
+#define TYPE_DLLCTRL       17 // DLLコントロール命令(code = コマンドID)
+#define TYPE_USERDEF       18 // HSP3拡張プラグイン命令(code = コマンドID)
+#define TYPE_ERROR         -1
+#define TYPE_CALCERROR     -2
+#define PARAM_OK            0
+#define PARAM_SPLIT        -1
+#define PARAM_END          -2
+#define PARAM_DEFAULT      -3
+#define PARAM_ENDSPLIT     -4
+#define HSP3_FUNC_MAX      18
+#define HSP3_TYPE_USER     18
+#define EXFLG_0        0x1000
+#define EXFLG_1        0x2000
+#define EXFLG_2        0x4000
+#define EXFLG_3        0x8000
+#define CSTYPE         0x0fff
 
+// HSP3.0 ヘッダー構造体
 typedef struct HSPHED {
-    //		HSP3.0 header structure
-    //
-
-    char h1;     // magic code1
-    char h2;     // magic code2
-    char h3;     // magic code3
-    char h4;     // magic code4
-    int version; // version number info
-    int max_val; // max count of VAL Object
-    int allsize; // total file size
-
-    int pt_cs;  // ptr to Code Segment
-    int max_cs; // size of CS
-    int pt_ds;  // ptr to Data Segment
-    int max_ds; // size of DS
-
-    int pt_ot;     // ptr to Object Temp
-    int max_ot;    // size of OT
-    int pt_dinfo;  // ptr to Debug Info
-    int max_dinfo; // size of DI
-
-    int pt_linfo;  // ptr to LibInfo(2.3)
-    int max_linfo; // size of LibInfo(2.3)
-    int pt_finfo;  // ptr to FuncInfo(2.3)
-    int max_finfo; // size of FuncInfo(2.3)
-
-    int pt_minfo;   // ptr to ModInfo(2.5)
-    int max_minfo;  // size of ModInfo(2.5)
-    int pt_finfo2;  // ptr to FuncInfo2(2.5)
-    int max_finfo2; // size of FuncInfo2(2.5)
-
-    int pt_hpidat;    // ptr to HPIDAT(3.0)
-    short max_hpi;    // size of HPIDAT(3.0)
-    short max_varhpi; // Num of Vartype Plugins(3.0)
-    int bootoption;   // bootup options
-    int runtime;      // ptr to runtime name
-
-    //		HSP3.5 extra header structure
-    //
-    int pt_sr;  // ptr to Option Segment
-    int max_sr; // size of Option Segment
-    int opt1;   // option (reserved)
-    int opt2;   // option (reserved)
+    char h1;          // H
+    char h2;          // S
+    char h3;          // P
+    char h4;          // 3
+    int version;      // バージョン番号の情報
+    int max_val;      // VALオブジェクトの最大数
+    int allsize;      // 合計ファイルサイズ
+    int pt_cs;        // コード領域のオフセット
+    int max_cs;       // コード領域のサイズ
+    int pt_ds;        // データ領域のオフセット
+    int max_ds;       // データ領域のサイズ
+    int pt_ot;        // ラベル情報のオフセット
+    int max_ot;       // ラベル情報のサイズ
+    int pt_dinfo;     // 行番号情報のオフセット
+    int max_dinfo;    // 行番号情報のサイズ
+    int pt_linfo;     // ライブラリ情報のオフセット(2.3)
+    int max_linfo;    // ライブラリ情報のサイズ(2.3)
+    int pt_finfo;     // 関数情報のオフセット(2.3)
+    int max_finfo;    // 関数情報のサイズ(2.3)
+    int pt_minfo;     // モジュール情報のオフセット(2.5)
+    int max_minfo;    // モジュール情報のサイズ(2.5)
+    int pt_finfo2;    // 関数情報のオフセット2(2.5)
+    int max_finfo2;   // 関数情報のサイズ2(2.5)
+    int pt_hpidat;    // HPIデータのオフセット(3.0)
+    short max_hpi;    // HPIデータのサイズ(3.0)
+    short max_varhpi; // 変数型プラグインの数(3.0)
+    int bootoption;   // 起動オプション
+    int runtime;      // ランタイム名のオフセット
+    int pt_sr;        // オプション領域のオフセット
+    int max_sr;       // オプション領域のサイズ
+    int opt1;         // 追加オプション領域のオフセット (3.6)
+    int opt2;         // 追加オプション領域のサイズ (3.6)
 
 } HSPHED;
 
-#define HSPHED_BOOTOPT_DEBUGWIN 1 // 起動時デバッグウインドゥ表示
-#define HSPHED_BOOTOPT_WINHIDE 2  // 起動時ウインドゥ非表示
-#define HSPHED_BOOTOPT_DIRSAVE 4 // 起動時カレントディレクトリ変更なし
-#define HSPHED_BOOTOPT_SAVER 0x100    // スクリーンセーバー
-#define HSPHED_BOOTOPT_RUNTIME 0x1000 // 動的ランタイムを有効にする
+#define HSPHED_BOOTOPT_DEBUGWIN       1 // 起動時デバッグウインドゥ表示
+#define HSPHED_BOOTOPT_WINHIDE        2 // 起動時ウインドゥ非表示
+#define HSPHED_BOOTOPT_DIRSAVE        4 // 起動時カレントディレクトリ変更なし
+#define HSPHED_BOOTOPT_SAVER      0x100 // スクリーンセーバー
+#define HSPHED_BOOTOPT_RUNTIME   0x1000 // 動的ランタイムを有効にする
 #define HSPHED_BOOTOPT_NOMMTIMER 0x2000 // マルチメディアタイマーを無効にする
-#define HSPHED_BOOTOPT_NOGDIP 0x4000 // GDI+による描画を無効にする
-#define HSPHED_BOOTOPT_FLOAT32 0x8000 // 実数を32bit floatとして処理する
-#define HSPHED_BOOTOPT_ORGRND 0x10000 // 標準の乱数発生を使用する
-#define HPIDAT_FLAG_TYPEFUNC 0
-#define HPIDAT_FLAG_SELFFUNC -1
-#define HPIDAT_FLAG_VARFUNC 1
-#define HPIDAT_FLAG_DLLFUNC 2
+#define HSPHED_BOOTOPT_NOGDIP    0x4000 // GDI+による描画を無効にする
+#define HSPHED_BOOTOPT_FLOAT32   0x8000 // 実数を32bit floatとして処理する
+#define HSPHED_BOOTOPT_ORGRND   0x10000 // 標準の乱数発生を使用する
+#define HPIDAT_FLAG_TYPEFUNC          0
+#define HPIDAT_FLAG_SELFFUNC         -1
+#define HPIDAT_FLAG_VARFUNC           1
+#define HPIDAT_FLAG_DLLFUNC           2
 
-typedef struct MEM_HPIDAT { // native HPIDAT
-
+// native HPIDAT
+typedef struct MEM_HPIDAT {
     short flag; // flag info
     short option;
     int libname;  // lib name index (DS)
     int funcname; // function name index (DS)
     void *libptr; // lib handle
-
 } MEM_HPIDAT;
 
 #ifdef PTR64BIT
-typedef struct HPIDAT
-{
-    
+typedef struct HPIDAT {
     short flag; // flag info
     short option;
     int libname;  // lib name index (DS)
@@ -143,25 +129,20 @@ typedef MEM_HPIDAT HPIDAT;
 #define LIBDAT_FLAG_COMOBJ 4
 
 typedef struct LIBDAT {
-
     int flag;    // initalize flag
     int nameidx; // function name index (DS)
     // Interface IID ( Com Object )
     void *hlib; // Lib handle
     int clsid;  // CLSID (DS) ( Com Object )
-
 } LIBDAT;
 
 #ifdef PTR64BIT
-typedef struct HED_LIBDAT
-{
-    
+typedef struct HED_LIBDAT {
     int flag;    // initalize flag
     int nameidx; // function name index (DS)
     // Interface IID ( Com Object )
     int p_hlib; // Lib handle
     int clsid;  // CLSID (DS) ( Com Object )
-    
 } HED_LIBDAT;
 #else
 typedef LIBDAT HED_LIBDAT;

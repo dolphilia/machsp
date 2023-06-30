@@ -159,10 +159,7 @@
     //        return NO;
     //    }
 
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:
-            NSPlainTextDocumentType,
-            NSDocumentTypeDocumentAttribute,
-                    nil];
+    NSDictionary *dic = @{NSDocumentTypeDocumentAttribute: NSPlainTextDocumentType};
     NSDictionary *attr;
     NSError *error = nil;
     NSAttributedString *zNSAttributedStringObj =

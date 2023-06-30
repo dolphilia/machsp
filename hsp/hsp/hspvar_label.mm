@@ -7,7 +7,6 @@
 #import "hspvar_label.h"
 #import "strbuf.h"
 
-@implementation ViewController (hspvar_label)
 
 //------------------------------------------------------------
 // HSPVAR core interface (label)
@@ -115,4 +114,3 @@ void HspVarLabel_Init(HspVarProc *p) {
     p->basesize = sizeof(HSPVAR_LABEL); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
 
-@end

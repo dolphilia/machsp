@@ -24,8 +24,6 @@
 #define _MAX_FNAME 256
 #endif
 
-@implementation ViewController (supio_hsp3)
-
 //
 //		Internal function support (without Windows API)
 //
@@ -573,8 +571,7 @@ char *strchr3(char *target, int code, int sw, char **findptr) {
     return pres;
 }
 
-/// 最後のcodeを取り除く
-///
+// 最後のcodeを取り除く
 void TrimCodeR(char *p, int code) {
     char *ss;
     char *ss2;
@@ -592,8 +589,7 @@ void TrimCodeR(char *p, int code) {
     }
 }
 
-/// すべてのcodeを取り除く
-///
+// すべてのcodeを取り除く
 void TrimCode(char *p, int code) {
     char *ss;
     char *ss2;
@@ -605,8 +601,7 @@ void TrimCode(char *p, int code) {
     }
 }
 
-/// 最初のcodeを取り除く
-///
+// 最初のcodeを取り除く
 void TrimCodeL(char *p, int code) {
     char *ss;
     char *ss2;
@@ -617,5 +612,3 @@ void TrimCodeL(char *p, int code) {
         strcpy(ss2, ss);
     }
 }
-
-@end

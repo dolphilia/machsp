@@ -7,8 +7,6 @@
 #import "hspvar_str.h"
 #import "strbuf.h"
 
-@implementation ViewController (hspvar_str)
-
 //------------------------------------------------------------
 // HSPVAR core interface (str)
 //------------------------------------------------------------
@@ -50,8 +48,8 @@ void *HspVarStr_Cnv(const void *buffer, int flag) {
             sprintf(hspvar_str_conv, "%f", *(double *) buffer);
             return hspvar_str_conv;
         default: {
-            NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_TYPEMISS];
-            @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+            fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_TYPEMISS);
+            exit(EXIT_FAILURE);
         }
     }
     return (void *) buffer;
@@ -120,9 +118,8 @@ void HspVarStr_Alloc(PVal *pval, const PVal *pval2) {
     pval->mode = HSPVAR_MODE_MALLOC;
     pval->master = (char *) calloc(size, 1);
     if (pval->master == NULL) {
-        NSString *error_str =
-                [NSString stringWithFormat:@"%d", HSPERR_OUT_OF_MEMORY];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_OUT_OF_MEMORY);
+        exit(EXIT_FAILURE);
     }
 
     if (pval2 == NULL) { // 配列拡張なし
@@ -269,5 +266,3 @@ void HspVarStr_Init(HspVarProc *p) {
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize = -1; // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
-
-@end

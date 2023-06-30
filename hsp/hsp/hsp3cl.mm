@@ -285,7 +285,7 @@
         unsigned char *s = (unsigned char *) startax;
         unsigned char ap;
         int sum = 0;
-        while (1) {
+        while (true) {
             ap = *s++;
             if (ap == 0)
                 break;

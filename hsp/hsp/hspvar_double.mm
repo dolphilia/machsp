@@ -7,8 +7,6 @@
 #import "hspvar_double.h"
 #import "strbuf.h"
 
-@implementation ViewController (hspvar_double)
-
 //------------------------------------------------------------
 // HSPVAR core interface (double)
 //------------------------------------------------------------
@@ -40,8 +38,8 @@ void *HspVarDouble_Cnv(const void *buffer, int flag) {
         case HSPVAR_FLAG_DOUBLE:
             break;
         default: {
-            NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_TYPEMISS];
-            @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+            fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_TYPEMISS);
+            exit(EXIT_FAILURE);
         }
     }
     return (void *) buffer;
@@ -155,8 +153,8 @@ void HspVarDouble_MulI(PDAT *pval, const void *val) {
 void HspVarDouble_DivI(PDAT *pval, const void *val) {
     double p = *((double *) (val));
     if (p == 0.0) {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_DIVZERO];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_DIVZERO);
+        exit(EXIT_FAILURE);
     }
     *hspvar_double_GetPtr(pval) /= p;
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
@@ -166,8 +164,8 @@ void HspVarDouble_DivI(PDAT *pval, const void *val) {
 void HspVarDouble_ModI(PDAT *pval, const void *val) {
     double p = *((double *) (val));
     if (p == 0.0) {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_DIVZERO];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_DIVZERO);
+        exit(EXIT_FAILURE);
     }
     double dval = *hspvar_double_GetPtr(pval);
     *hspvar_double_GetPtr(pval) = fmod(dval, p);
@@ -269,5 +267,3 @@ void HspVarDouble_Init(HspVarProc *p) {
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->basesize = sizeof(double); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
-
-@end

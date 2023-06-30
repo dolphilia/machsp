@@ -11,7 +11,6 @@
 
 // エラーコード
 typedef enum {
-
     HSPERR_NONE = 0,                // スクリプト終了時
     HSPERR_UNKNOWN_CODE,
     HSPERR_SYNTAX,
@@ -85,11 +84,11 @@ typedef struct HSP3DEBUG {
     //	[in/out] tranfer value
     //	(システムとの通信用)
     //
-    int flag;                // Flag ID
-    int line;                // 行番号情報
-    char *fname;            // ファイル名情報
-    void *dbgwin;            // Debug WindowのHandle
-    char *dbgval;            // debug情報取得バッファ
+    int flag;     // Flag ID
+    int line;     // 行番号情報
+    char *fname;  // ファイル名情報
+    void *dbgwin; // デバッグウィンドウのハンドル
+    char *dbgval; // debug情報取得バッファ
 
     //	[in] system value
     //	(初期化後に設定されます)

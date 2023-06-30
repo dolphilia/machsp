@@ -33,8 +33,6 @@ static STRBUF *freelist;
 #define STRBUF_NEXT(buf) STRINF_NEXT((buf)->inf)
 #define GET_INTINF(buf) (&((buf)->inf.intptr->inf))
 
-@implementation ViewController (strbuf)
-
 //------------------------------------------------------------
 // internal function
 //------------------------------------------------------------
@@ -48,8 +46,8 @@ static void BlockPtrPrepare(void) {
 
     STRBUF *sb = (STRBUF *) MALLOC(sizeof(STRBUF) * slot_len);
     if (sb == NULL) {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_OUT_OF_MEMORY];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_OUT_OF_MEMORY);
+        exit(EXIT_FAILURE);
     }
 
     STRBUF *p = sb;
@@ -256,7 +254,7 @@ void sbSetOption(char *ptr, void *option) {
     inf->opt = option;
 }
 
-@end
+//@end
 
 /*
  void sbInfo( char *ptr )

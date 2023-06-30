@@ -6,8 +6,6 @@
 #import "strbuf.h"
 #import "supio_hsp3.h"
 
-@implementation ViewController (hspvar_int)
-
 //------------------------------------------------------------
 // HSPVAR core interface (int)
 //------------------------------------------------------------
@@ -40,8 +38,8 @@ void *HspVarInt_Cnv(const void *buffer, int flag) {
             hspvar_int_conv = (int) (*(double *) buffer);
             return &hspvar_int_conv;
         default: {
-            NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_TYPEMISS];
-            @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+            fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_TYPEMISS);
+            exit(EXIT_FAILURE);
         }
     }
     return (void *) buffer;
@@ -150,8 +148,8 @@ void HspVarInt_MulI(PDAT *pval, const void *val) {
 void HspVarInt_DivI(PDAT *pval, const void *val) {
     int p = *((int *) (val));
     if (p == 0) {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_DIVZERO];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_DIVZERO);
+        exit(EXIT_FAILURE);
     }
     *hspvar_int_GetPtr(pval) /= p;
 }
@@ -160,8 +158,8 @@ void HspVarInt_DivI(PDAT *pval, const void *val) {
 void HspVarInt_ModI(PDAT *pval, const void *val) {
     int p = *((int *) (val));
     if (p == 0) {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_DIVZERO];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_DIVZERO);
+        exit(EXIT_FAILURE);
     }
     *hspvar_int_GetPtr(pval) %= p;
 }
@@ -270,5 +268,3 @@ void HspVarInt_Init(HspVarProc *p) {
     p->support = HSPVAR_SUPPORT_STORAGE | HSPVAR_SUPPORT_FLEXARRAY;
     p->basesize = sizeof(int); // １つのデータが使用するサイズ(byte) / 可変長の時は-1
 }
-
-@end

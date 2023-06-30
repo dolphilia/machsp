@@ -21,12 +21,12 @@
 
         samplesPerPixel = 4; //ピクセル数(3 = RGB, 4 = RGBA)
 
-        int bufferCount = 24; //バッファーの数
+        size_t bufferCount = 24; //バッファーの数
         if (pixel_data == nil) {
             pixel_data = calloc(bufferCount, sizeof(UInt8 *));
             for (int i = 0; i < bufferCount; i++) {
                 pixel_data[i] =
-                        calloc(BUFFER_MAX_WIDTH * BUFFER_MAX_HEIGHT * samplesPerPixel,
+                        calloc((size_t) (BUFFER_MAX_WIDTH * BUFFER_MAX_HEIGHT * samplesPerPixel),
                                 sizeof(UInt8));
             }
         }
@@ -90,7 +90,7 @@
             int h_mul = width * 2 * samplesPerPixel;
 
             unsigned char *retina_pixel_data = calloc(
-                    width * 2 * height * 2 * samplesPerPixel * 4, sizeof(unsigned char));
+                    (size_t) (width * 2 * height * 2 * samplesPerPixel * 4), sizeof(unsigned char));
             int i = 0;
             for (int y = 0; y < height * 2; y += 2) {
                 for (int x = 0; x < width * 2 * samplesPerPixel; x += 8) {

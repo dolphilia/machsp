@@ -9,8 +9,6 @@
 #import "hsp3config.h"
 #import "hsp3debug.h"
 
-@implementation ViewController (hsp3debug)
-
 //------------------------------------------------------------
 // system data
 //------------------------------------------------------------
@@ -69,13 +67,8 @@ static char *error_message[] = {
 static char errmsg[256];
 
 char *hspd_geterror(HSPERROR error) {
-    NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:@"内部エラーが発生しました"];
-    NSString *nsstr_error_message = [NSString stringWithCString:error_message[(int) error] encoding:NSUTF8StringEncoding];
-    [alert setInformativeText:nsstr_error_message];
-    [alert addButtonWithTitle:@"OK"];
-    [alert runModal];
-    sprintf(errmsg, "内部エラーが発生しました(%d)", (int) error);
+    fprintf(stderr, "Error: %d\n", (int) error);
+    exit(EXIT_FAILURE);
     return errmsg;
 }
 
@@ -87,5 +80,3 @@ char * hspd_geterror(HSPERROR error) {
     return errmsg;
 }
 #endif
-
-@end

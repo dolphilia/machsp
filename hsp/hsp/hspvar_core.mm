@@ -14,8 +14,6 @@
 #import "hspvar_str.h"
 #import "hspvar_struct.h"
 
-@implementation ViewController (hspvar_core)
-
 //------------------------------------------------------------
 // master pointer
 //------------------------------------------------------------
@@ -43,8 +41,8 @@ PDAT *HspVarCorePtrAPTR(PVal *pv, APTR ofs) {
     } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "struct") == 0) { // structのFree
         dst = HspVarLabel_GetPtr(pv);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
     return dst; // hspvarproc[(pv)->flag].GetPtr(pv);
 }
@@ -82,8 +80,8 @@ void HspVarCoreBye(void) {
             } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "struct") == 0) { // structのFree
                 HspVarLabel_Free(&mem_pval[i]);
             } else {
-                NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-                @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+                fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+                exit(EXIT_FAILURE);
             }
         }
     }
@@ -127,8 +125,8 @@ int HspVarCoreAddType() {
 }
 
 static void PutInvalid(void) {
-    NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_UNSUPPORTED_FUNCTION];
-    @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+    fprintf(stderr, "Error: %d\n", HSPERR_UNSUPPORTED_FUNCTION);
+    exit(EXIT_FAILURE);
 }
 
 void HspVarCoreRegisterType(int flag, char *vartype_name) {
@@ -164,8 +162,8 @@ void HspVarCoreRegisterType(int flag, char *vartype_name) {
     } else if (strcmp(vartype_name, "label") == 0) {
         HspVarLabel_Init(p);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_UNKNOWN_CODE];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_UNKNOWN_CODE);
+        exit(EXIT_FAILURE);
     }
     // func( p );
 }
@@ -190,8 +188,8 @@ void HspVarCoreDupPtr(PVal *pval, int flag, void *ptr, int size) {
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
         HspVarLabel_Free(pval);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
 
     pval->pt = (char *) buf;
@@ -233,8 +231,8 @@ void HspVarCoreDup(PVal *pval, PVal *arg, APTR aptr) {
     } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "struct") == 0) { // structのGetBlockSize
         dst = HspVarLabel_GetBlockSize(arg, buf, &size);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
 
     HspVarCoreDupPtr(pval, arg->flag, buf, size);
@@ -249,8 +247,8 @@ void HspVarCoreDim(PVal *pval, int flag, int len1, int len2, int len3, int len4)
     HspVarProc *p = &hspvarproc[flag];
 
     if ((len1 < 0) || (len2 < 0) || (len3 < 0) || (len4 < 0)) {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ILLEGALPRM];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ILLEGALPRM);
+        exit(EXIT_FAILURE);
     }
 
     // HspVarCoreDispose( pval );
@@ -265,8 +263,8 @@ void HspVarCoreDim(PVal *pval, int flag, int len1, int len2, int len3, int len4)
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
         HspVarLabel_Free(pval);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
 
     pval->flag = flag;
@@ -290,8 +288,8 @@ void HspVarCoreDim(PVal *pval, int flag, int len1, int len2, int len3, int len4)
     } else if (strcmp(p->vartype_name, "struct") == 0) { // structのAlloc
         HspVarLabel_Alloc(pval, NULL);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -303,8 +301,8 @@ void HspVarCoreDimFlex(PVal *pval, int flag, int len0, int len1, int len2, int l
     HspVarProc *p = &hspvarproc[flag];
 
     if ((len1 < 0) || (len2 < 0) || (len3 < 0) || (len4 < 0)) {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ILLEGALPRM];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ILLEGALPRM);
+        exit(EXIT_FAILURE);
     }
 
     // HspVarCoreDispose( pval );
@@ -319,8 +317,8 @@ void HspVarCoreDimFlex(PVal *pval, int flag, int len0, int len1, int len2, int l
     } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
         HspVarLabel_Free(pval);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
 
     pval->flag = flag;
@@ -344,8 +342,8 @@ void HspVarCoreDimFlex(PVal *pval, int flag, int len0, int len1, int len2, int l
     } else if (strcmp(p->vartype_name, "struct") == 0) { // structのAlloc
         HspVarLabel_Alloc(pval, NULL);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
 
     pval->len[0] = 1;
@@ -367,8 +365,8 @@ void HspVarCoreReDim(PVal *pval, int lenid, int len) {
     } else if (strcmp(p->vartype_name, "struct") == 0) { // structのAlloc
         HspVarLabel_Alloc(pval, pval);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -401,8 +399,8 @@ void *HspVarCoreCnvPtr(PVal *pval, int flag) {
         } else if (strcmp(hspvarproc[flag].vartype_name, "struct") == 0) { // structのFree
             dst = HspVarLabel_GetPtr(pval);
         } else {
-            NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-            @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+            fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+            exit(EXIT_FAILURE);
         }
         return (void *) dst; // hspvarproc[ flag ].GetPtr( pval );
     }
@@ -421,8 +419,8 @@ void *HspVarCoreCnvPtr(PVal *pval, int flag) {
     } else if (strcmp(hspvarproc[pval->flag].vartype_name, "struct") == 0) { // structのFree
         dst = HspVarLabel_GetPtr(pval);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
 
     buf = (void *) dst;
@@ -439,8 +437,8 @@ void *HspVarCoreCnvPtr(PVal *pval, int flag) {
     } else if (strcmp(hspvarproc[flag].vartype_name, "str") == 0) { //文字列のCnv
         buf = HspVarStr_Cnv(buf, pval->flag);
     } else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
     return (void *) dst; //( hspvarproc[flag].Cnv( buf, pval->flag ) );
 }
@@ -468,8 +466,8 @@ PDAT * HspVarCorePtrAPTR( PVal *pv, APTR ofs ) {
         dst = HspVarLabel_GetPtr(pv);
     }
     else {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPERR_SYNTAX];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
+        exit(EXIT_FAILURE);
     }
 
     return dst;//[(pv)->flag].GetPtr(pv);
@@ -495,8 +493,8 @@ HspVarProc *HspVarCoreSeekProc(const char *name) {
 ///
 void HspVarCoreArray(PVal *pval, int offset) {
     if (pval->arraycnt >= 5) {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ARRAYOVER];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ARRAYOVER);
+        exit(EXIT_FAILURE);
     }
     if (pval->arraycnt == 0) {
         pval->arraymul = 1; // 最初の値
@@ -505,14 +503,12 @@ void HspVarCoreArray(PVal *pval, int offset) {
     }
     pval->arraycnt++;
     if (offset < 0) {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ARRAYOVER];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ARRAYOVER);
+        exit(EXIT_FAILURE);
     }
     if (offset >= (pval->len[pval->arraycnt])) {
-        NSString *error_str = [NSString stringWithFormat:@"%d", HSPVAR_ERROR_ARRAYOVER];
-        @throw [NSException exceptionWithName:@"" reason:error_str userInfo:nil];
+        fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ARRAYOVER);
+        exit(EXIT_FAILURE);
     }
     pval->offset += offset * pval->arraymul;
 }
-
-@end

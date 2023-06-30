@@ -9,35 +9,35 @@
 #ifndef hsp3struct_var_h
 #define hsp3struct_var_h
 
-#define HSPVAR_FLAG_NONE 0
-#define HSPVAR_FLAG_LABEL 1
-#define HSPVAR_FLAG_STR 2
-#define HSPVAR_FLAG_DOUBLE 3
-#define HSPVAR_FLAG_INT 4
-#define HSPVAR_FLAG_STRUCT 5
+#define HSPVAR_FLAG_NONE      0
+#define HSPVAR_FLAG_LABEL     1
+#define HSPVAR_FLAG_STR       2
+#define HSPVAR_FLAG_DOUBLE    3
+#define HSPVAR_FLAG_INT       4
+#define HSPVAR_FLAG_STRUCT    5
 #define HSPVAR_FLAG_COMSTRUCT 6
 //	7はVARIANTで予約済み
-#define HSPVAR_FLAG_USERDEF 8
-#define HSPVAR_FLAG_MAX 8
-#define HSPVAR_MODE_NONE -1
-#define HSPVAR_MODE_MALLOC 1
-#define HSPVAR_MODE_CLONE 2
+#define HSPVAR_FLAG_USERDEF   8
+#define HSPVAR_FLAG_MAX       8
+#define HSPVAR_MODE_NONE     -1
+#define HSPVAR_MODE_MALLOC    1
+#define HSPVAR_MODE_CLONE     2
 #define HSPVAR_ERROR_INVALID HSPERR_WRONG_EXPRESSION
 #define HSPVAR_ERROR_DIVZERO HSPERR_DIVIDED_BY_ZERO
 #define HSPVAR_ERROR_TYPEMISS HSPERR_TYPE_MISMATCH
 #define HSPVAR_ERROR_ARRAYOVER HSPERR_ARRAY_OVERFLOW
 #define HSPVAR_ERROR_ILLEGALPRM HSPERR_ILLEGAL_FUNCTION
-#define HSPVAR_SUPPORT_STORAGE 1                // 固定長ストレージサポート
-#define HSPVAR_SUPPORT_FLEXSTORAGE 2            // 可変長ストレージサポート
-#define HSPVAR_SUPPORT_FIXEDARRAY 4                // 配列サポート
-#define HSPVAR_SUPPORT_FLEXARRAY 8                // 可変長配列サポート
-#define HSPVAR_SUPPORT_ARRAYOBJ 16                // 連想配列サポート
-#define HSPVAR_SUPPORT_FLEXSIZE 32                // 要素ごとのデータが可変長
-#define HSPVAR_SUPPORT_NOCONVERT 64                // 代入時の型変換を無効にする
-#define HSPVAR_SUPPORT_VARUSE 128                // varuse関数のチェックを有効にする
-#define HSPVAR_SUPPORT_TEMPVAR 256                // テンポラリ変数として使用する
-#define HSPVAR_SUPPORT_USER1 0x4000                // ユーザーフラグ1
-#define HSPVAR_SUPPORT_USER2 0x8000                // ユーザーフラグ2
+#define HSPVAR_SUPPORT_STORAGE        1 // 固定長ストレージサポート
+#define HSPVAR_SUPPORT_FLEXSTORAGE    2 // 可変長ストレージサポート
+#define HSPVAR_SUPPORT_FIXEDARRAY     4 // 配列サポート
+#define HSPVAR_SUPPORT_FLEXARRAY      8 // 可変長配列サポート
+#define HSPVAR_SUPPORT_ARRAYOBJ      16 // 連想配列サポート
+#define HSPVAR_SUPPORT_FLEXSIZE      32 // 要素ごとのデータが可変長
+#define HSPVAR_SUPPORT_NOCONVERT     64 // 代入時の型変換を無効にする
+#define HSPVAR_SUPPORT_VARUSE       128 // varuse関数のチェックを有効にする
+#define HSPVAR_SUPPORT_TEMPVAR      256 // テンポラリ変数として使用する
+#define HSPVAR_SUPPORT_USER1     0x4000 // ユーザーフラグ1
+#define HSPVAR_SUPPORT_USER2     0x8000 // ユーザーフラグ2
 #define HSPVAR_SUPPORT_MISCTYPE (HSPVAR_SUPPORT_ARRAYOBJ)
 
 typedef void *PDAT;                            // データの実態へのポインタ
