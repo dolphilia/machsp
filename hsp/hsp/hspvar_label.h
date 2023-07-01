@@ -12,31 +12,22 @@ extern "C" {
 #endif
 
 typedef unsigned short *HSPVAR_LABEL;
-void HspVarLabel_Init(hspvar_proc_t *p);
+void hspvar_label_init(hspvar_proc_t *p);
 
 #ifdef __cplusplus
 }
 #endif
 
-void *HspVarLabel_GetPtr(value_t *pval);
-
-int HspVarLabel_GetVarSize(value_t *pval);
-
-void HspVarLabel_Free(value_t *pval);
-
-void HspVarLabel_Alloc(value_t *pval, const value_t *pval2);
-
-int HspVarLabel_GetSize(const void *pval);
-
-int HspVarLabel_GetUsing(const void *pdat);
-
-void HspVarLabel_Set(value_t *pval, void *pdat, const void *in);
-
-void *HspVarLabel_GetBlockSize(value_t *pval, void *pdat, int *size);
-
-void HspVarLabel_AllocBlock(value_t *pval, void *pdat, int size);
-
-void HspVarLabel_Init(hspvar_proc_t *p);
+void *hspvar_label_get_ptr(value_t *pval);
+int hspvar_label_get_var_size(value_t *pval);
+void hspvar_label_free(value_t *pval);
+void hspvar_label_alloc(value_t *pval, const value_t *pval2);
+int hspvar_label_get_size(const void *pval);
+int hspvar_label_get_using(const void *pdat);
+void hspvar_label_set(value_t *pval, void *pdat, const void *in);
+void *hspvar_label_get_block_size(value_t *pval, void *pdat, int *size);
+void hspvar_label_alloc_block(value_t *pval, void *pdat, int size);
+void hspvar_label_init(hspvar_proc_t *p);
 
 
 #endif

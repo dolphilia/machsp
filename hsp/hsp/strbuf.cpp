@@ -1,29 +1,10 @@
-
 //
-//	HSP3文字列サポート
-//
-//	(おおらかなメモリ管理をするバッファマネージャー)
-//	(sbAllocでSTRBUF_BLOCKSIZEのバッファを確保します)
-//	(あとはsbCopy,sbAddで自動的にバッファの再確保を行ないます)
-//	onion software/onitama 2004/6
+//	文字列バッファマネージャー
 //
 
 #include "strbuf.h"
 
-#define REALLOC realloc
-#define MALLOC malloc
-#define FREE free
-
-//------------------------------------------------------------
-// system data
-//------------------------------------------------------------
-
-typedef struct {
-    STRBUF *mem;
-    int len;
-} SLOT;
-
-static SLOT *mem_sb;
+static strbuf_memory_t *mem_sb;
 static int str_blockcur;
 static int slot_len;
 static strbuf_t *freelist;
@@ -37,21 +18,21 @@ static strbuf_t *freelist;
 // internal function
 //------------------------------------------------------------
 
-static void BlockPtrPrepare(void) {
+static void prepare_block_ptr(void) {
     if (str_blockcur == 0) {
-        mem_sb = (SLOT *) MALLOC(sizeof(SLOT));
+        mem_sb = (strbuf_memory_t *) malloc(sizeof(strbuf_memory_t));
     } else {
-        mem_sb = (SLOT *) REALLOC(mem_sb, sizeof(SLOT) * (str_blockcur + 1));
+        mem_sb = (strbuf_memory_t *) realloc(mem_sb, sizeof(strbuf_memory_t) * (str_blockcur + 1));
     }
 
-    STRBUF *sb = (STRBUF *) MALLOC(sizeof(STRBUF) * slot_len);
+    strbuf_t *sb = (strbuf_t *) malloc(sizeof(strbuf_t) * slot_len);
     if (sb == NULL) {
         fprintf(stderr, "Error: %d\n", HSPERR_OUT_OF_MEMORY);
         exit(EXIT_FAILURE);
     }
 
-    STRBUF *p = sb;
-    STRBUF *pend = p + slot_len;
+    strbuf_t *p = sb;
+    strbuf_t *pend = p + slot_len;
 
     mem_sb[str_blockcur].mem = sb;
     mem_sb[str_blockcur].len = slot_len;
@@ -67,21 +48,20 @@ static void BlockPtrPrepare(void) {
     }
 }
 
-/// 空きエントリーブロックを探す
-///
-static STRBUF *BlockEntry(void) {
+// 空きエントリーブロックを探す
+static strbuf_t *search_entry_block(void) {
     if (freelist == NULL) {
-        BlockPtrPrepare();
+        prepare_block_ptr();
     }
-    STRBUF *buf = freelist;
+    strbuf_t *buf = freelist;
     freelist = STRBUF_NEXT(freelist);
     return buf;
 }
 
-static char *BlockAlloc(int size) {
+static char *alloc_block(int size) {
     int *p;
-    STRBUF *st = BlockEntry();
-    STRBUF *st2;
+    strbuf_t *st = search_entry_block();
+    strbuf_t *st2;
     strbuf_info_t *inf = &(st->inf);
     if (size <= STRBUF_BLOCKSIZE) {
         inf->flag = STRINF_FLAG_USEINT;
@@ -91,40 +71,39 @@ static char *BlockAlloc(int size) {
     } else {
         inf->flag = STRINF_FLAG_USEEXT;
         inf->size = size;
-        st2 = (STRBUF *) MALLOC(size + sizeof(strbuf_info_t));
+        st2 = (strbuf_t *) malloc(size + sizeof(strbuf_info_t));
         p = (int *) (st2->data);
         inf->extptr = st2;
         inf->ptr = (char *) p;
         st2->inf = *inf;
     }
     *p = 0;
-    // return inf->ptr;
     return (char *) p;
 }
 
-static void FreeExtPtr(strbuf_info_t *inf) {
+static void free_ext_ptr(strbuf_info_t *inf) {
     if (inf->flag == STRINF_FLAG_USEEXT) {
-        FREE(inf->extptr);
+        free(inf->extptr);
     }
 }
 
-static void BlockFree(strbuf_info_t *inf) {
-    FreeExtPtr(inf);
+static void free_block(strbuf_info_t *inf) {
+    free_ext_ptr(inf);
     STRINF_NEXT(*inf) = freelist;
-    freelist = (STRBUF *) inf;
+    freelist = (strbuf_t *) inf;
     inf->flag = STRINF_FLAG_NONE;
 }
 
-static char *BlockRealloc(STRBUF *st, int size) {
+static char *realloc_block(strbuf_t *st, int size) {
     strbuf_info_t *inf = GET_INTINF(st);
 
     if (size <= inf->size)
         return inf->ptr;
-    STRBUF *newst = (STRBUF *) MALLOC(size + sizeof(strbuf_info_t));
+    strbuf_t *newst = (strbuf_t *) malloc(size + sizeof(strbuf_info_t));
     char *p = newst->data;
 
     memcpy(p, inf->ptr, inf->size);
-    FreeExtPtr(inf);
+    free_ext_ptr(inf);
     inf->size = size;
     inf->flag = STRINF_FLAG_USEEXT;
     inf->ptr = p;
@@ -133,10 +112,10 @@ static char *BlockRealloc(STRBUF *st, int size) {
     return p;
 }
 
-void BlockInfo(strbuf_info_t *inf) {
-    STRBUF *newst;
+void block_info(strbuf_info_t *inf) {
+    strbuf_t *newst;
     if (inf->flag == STRINF_FLAG_USEEXT) {
-        newst = (STRBUF *) inf->extptr;
+        newst = (strbuf_t *) inf->extptr;
     }
 }
 
@@ -148,21 +127,21 @@ void strbuf_init(void) {
     str_blockcur = 0;
     freelist = NULL;
     slot_len = STRBUF_BLOCK_DEFAULT;
-    BlockPtrPrepare();
+    prepare_block_ptr();
 }
 
 void strbuf_bye(void) {
     for (int i = 0; i < str_blockcur; i++) {
-        STRBUF *mem = mem_sb[i].mem;
-        STRBUF *p = mem;
-        STRBUF *pend = p + mem_sb[i].len;
+        strbuf_t *mem = mem_sb[i].mem;
+        strbuf_t *p = mem;
+        strbuf_t *pend = p + mem_sb[i].len;
         while (p < pend) {
-            FreeExtPtr(&p->inf);
+            free_ext_ptr(&p->inf);
             p++;
         }
-        FREE(mem);
+        free(mem);
     }
-    FREE(mem_sb);
+    free(mem_sb);
 }
 
 strbuf_info_t *strbuf_get_strbuf_info(char *ptr) {
@@ -173,7 +152,7 @@ char *strbuf_alloc(int size) {
     int sz = size;
     if (size < STRBUF_BLOCKSIZE)
         sz = STRBUF_BLOCKSIZE;
-    return BlockAlloc(sz);
+    return alloc_block(sz);
 }
 
 char *strbuf_alloc_clear(int size) {
@@ -184,36 +163,35 @@ char *strbuf_alloc_clear(int size) {
 
 void strbuf_free(void *ptr) {
     char *p = (char *) ptr;
-    STRBUF *st = (STRBUF *) (p - sizeof(strbuf_info_t));
+    strbuf_t *st = (strbuf_t *) (p - sizeof(strbuf_info_t));
     strbuf_info_t *inf = GET_INTINF(st);
     if (p != (inf->ptr)) {
         return;
     }
-    BlockFree(inf);
+    free_block(inf);
 }
 
 char *strbuf_expand(char *ptr, int size) {
-    STRBUF *st = (STRBUF *) (ptr - sizeof(strbuf_info_t));
-    return BlockRealloc(st, size);
+    strbuf_t *st = (strbuf_t *) (ptr - sizeof(strbuf_info_t));
+    return realloc_block(st, size);
 }
 
 void strbuf_copy(char **pptr, char *data, int size) {
     char *ptr = *pptr;
-    STRBUF *st = (STRBUF *) (ptr - sizeof(strbuf_info_t));
+    strbuf_t *st = (strbuf_t *) (ptr - sizeof(strbuf_info_t));
     int sz = st->inf.size;
     char *p = st->inf.ptr;
     if (size > sz) {
-        p = BlockRealloc(st, size);
+        p = realloc_block(st, size);
         *pptr = p;
     }
     memcpy(p, data, size);
 }
 
-/// mode:0=normal/1=string
-///        
+// mode:0=normal/1=string
 void strbuf_add(char **pptr, char *data, int size, int mode) {
     char *ptr = *pptr;
-    STRBUF *st = (STRBUF *) (ptr - sizeof(strbuf_info_t));
+    strbuf_t *st = (strbuf_t *) (ptr - sizeof(strbuf_info_t));
     char *p = st->inf.ptr;
     int sz;
 
@@ -226,8 +204,7 @@ void strbuf_add(char **pptr, char *data, int size, int mode) {
     int newsize = sz + size;
     if (newsize > (st->inf.size)) {
         newsize = (newsize + 0xfff) & 0xfffff000; // 8K単位で確保
-        // alert_format( "#Alloc%d",newsize );
-        p = BlockRealloc(st, newsize);
+        p = realloc_block(st, newsize);
         *pptr = p;
     }
     memcpy(p + sz, data, size);
@@ -242,25 +219,14 @@ void strbuf_add_str(char **ptr, char *str) {
 }
 
 void *strbuf_get_option(char *ptr) {
-    STRBUF *st = (STRBUF *) (ptr - sizeof(strbuf_info_t));
+    strbuf_t *st = (strbuf_t *) (ptr - sizeof(strbuf_info_t));
     return st->inf.opt;
 }
 
 void strbuf_set_option(char *ptr, void *option) {
-    STRBUF *st = (STRBUF *) (ptr - sizeof(strbuf_info_t));
+    strbuf_t *st = (strbuf_t *) (ptr - sizeof(strbuf_info_t));
     strbuf_info_t *inf;
     st->inf.opt = option;
     inf = GET_INTINF(st);
     inf->opt = option;
 }
-
-//@end
-
-/*
- void strbuf_info( char *ptr )
- {
- strbuf_t *st;
- st = (strbuf_t *)( ptr - sizeof(STRINF) );
- alert_format( "size:%d (%x)",st->inf.size, st->inf.ptr );
- }
- */

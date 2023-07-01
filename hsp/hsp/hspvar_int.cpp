@@ -14,7 +14,7 @@
 int hspvar_int_conv;
 
 /// Core
-void *HspVarInt_GetPtr(value_t *pval) {
+void *hspvar_int_get_ptr(value_t *pval) {
     return (void *) (((int *) (pval->pt)) + pval->offset);
 }
 
@@ -23,7 +23,7 @@ void *HspVarInt_GetPtr(value_t *pval) {
 /// (組み込み型にのみ対応でOK)
 /// (参照元のデータを破壊しないこと)
 ///
-void *HspVarInt_Cnv(const void *buffer, int flag) {
+void *hspvar_int_cnv(const void *buffer, int flag) {
     switch (flag) {
         case HSPVAR_FLAG_STR:
             if (*(char *) buffer == '$') { // 16->10進数
@@ -61,7 +61,7 @@ void *HspVarInt_Cnv(const void *buffer, int flag) {
 ///
 /// (sizeフィールドに設定される)
 ///
-int HspVarInt_GetVarSize(value_t *pval) {
+int hspvar_int_get_var_size(value_t *pval) {
     int size = pval->len[1];
     if (pval->len[2])
         size *= pval->len[2];
@@ -75,7 +75,7 @@ int HspVarInt_GetVarSize(value_t *pval) {
 
 /// PVALポインタの変数メモリを解放する
 ///
-void HspVarInt_Free(value_t *pval) {
+void hspvar_int_free(value_t *pval) {
     if (pval->mode == HSPVAR_MODE_MALLOC) {
         strbuf_free(pval->pt);
     }
@@ -89,11 +89,11 @@ void HspVarInt_Free(value_t *pval) {
 /// (pval2がNULLの場合は、新規データ)
 /// (pval2が指定されている場合は、pval2の内容を継承して再確保)
 ///
-void HspVarInt_Alloc(value_t *pval, const value_t *pval2) {
+void hspvar_int_alloc(value_t *pval, const value_t *pval2) {
     if (pval->len[1] < 1)
         pval->len[1] = 1; // 配列を最低1は確保する
 
-    int size = HspVarInt_GetVarSize(pval);
+    int size = hspvar_int_get_var_size(pval);
     pval->mode = HSPVAR_MODE_MALLOC;
     char *pt = strbuf_alloc(size);
     int *fv = (int *) pt;
@@ -120,32 +120,32 @@ void HspVarInt_Alloc(value_t *pval, const value_t *pval2) {
  */
 
 /// Size
-int HspVarInt_GetSize(const void *pval) {
+int hspvar_int_get_size(const void *pval) {
     return sizeof(int);
 }
 
 /// Set
-void HspVarInt_Set(value_t *pval, void *pdat, const void *in) {
+void hspvar_int_set(value_t *pval, void *pdat, const void *in) {
     *hspvar_int_GetPtr(pdat) = *((int *) (in));
 }
 
 /// Add
-void HspVarInt_AddI(void *pval, const void *val) {
+void hspvar_int_add_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) += *((int *) (val));
 }
 
 /// Sub
-void HspVarInt_SubI(void *pval, const void *val) {
+void hspvar_int_sub_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) -= *((int *) (val));
 }
 
 /// Mul
-void HspVarInt_MulI(void *pval, const void *val) {
+void hspvar_int_mul_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) *= *((int *) (val));
 }
 
 /// Div
-void HspVarInt_DivI(void *pval, const void *val) {
+void hspvar_int_div_i(void *pval, const void *val) {
     int p = *((int *) (val));
     if (p == 0) {
         fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_DIVZERO);
@@ -155,7 +155,7 @@ void HspVarInt_DivI(void *pval, const void *val) {
 }
 
 /// Mod
-void HspVarInt_ModI(void *pval, const void *val) {
+void hspvar_int_mod_i(void *pval, const void *val) {
     int p = *((int *) (val));
     if (p == 0) {
         fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_DIVZERO);
@@ -165,102 +165,102 @@ void HspVarInt_ModI(void *pval, const void *val) {
 }
 
 /// And
-void HspVarInt_AndI(void *pval, const void *val) {
+void hspvar_int_and_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) &= *((int *) (val));
 }
 
 /// Or
-void HspVarInt_OrI(void *pval, const void *val) {
+void hspvar_int_or_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) |= *((int *) (val));
 }
 
 /// Xor
-void HspVarInt_XorI(void *pval, const void *val) {
+void hspvar_int_xor_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) ^= *((int *) (val));
 }
 
 /// Eq
-void HspVarInt_EqI(void *pval, const void *val) {
+void hspvar_int_eq_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) == *((int *) (val)));
 }
 
 /// Ne
-void HspVarInt_NeI(void *pval, const void *val) {
+void hspvar_int_ne_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) != *((int *) (val)));
 }
 
 /// Gt
-void HspVarInt_GtI(void *pval, const void *val) {
+void hspvar_int_gt_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) > *((int *) (val)));
 }
 
 /// Lt
-void HspVarInt_LtI(void *pval, const void *val) {
+void hspvar_int_lt_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) < *((int *) (val)));
 }
 
 /// GtEq
-void HspVarInt_GtEqI(void *pval, const void *val) {
+void hspvar_int_gt_eq_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) >= *((int *) (val)));
 }
 
 /// LtEq
-void HspVarInt_LtEqI(void *pval, const void *val) {
+void hspvar_int_lt_eq_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) = (*hspvar_int_GetPtr(pval) <= *((int *) (val)));
 }
 
 /// Rr
-void HspVarInt_RrI(void *pval, const void *val) {
+void hspvar_int_rr_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) >>= *((int *) (val));
 }
 
 /// Lr
-void HspVarInt_LrI(void *pval, const void *val) {
+void hspvar_int_lr_i(void *pval, const void *val) {
     *hspvar_int_GetPtr(pval) <<= *((int *) (val));
 }
 
-void *HspVarInt_GetBlockSize(value_t *pval, void *pdat, int *size) {
+void *hspvar_int_get_block_size(value_t *pval, void *pdat, int *size) {
     *size = pval->size - (int) (((char *) pdat) - pval->pt);
     return (pdat);
 }
 
-void HspVarInt_AllocBlock(value_t *pval, void *pdat, int size) {
+void hspvar_int_alloc_block(value_t *pval, void *pdat, int size) {
 }
 
 //------------------------------------------------------------
 
-void HspVarInt_Init(hspvar_proc_t *p) {
-    //    p->Set = HspVarInt_Set;
-    //    p->Cnv = HspVarInt_Cnv;
-    //    p->GetPtr = HspVarInt_GetPtr;
+void hspvar_int_init(hspvar_proc_t *p) {
+    //    p->Set = hspvar_int_set;
+    //    p->Cnv = hspvar_int_cnv;
+    //    p->GetPtr = hspvar_int_get_ptr;
     //    //	p->CnvCustom = HspVarInt_CnvCustom;
-    //    p->GetSize = HspVarInt_GetSize;
-    //    p->GetBlockSize = HspVarInt_GetBlockSize;
-    //    p->AllocBlock = HspVarInt_AllocBlock;
+    //    p->GetSize = hspvar_int_get_size;
+    //    p->GetBlockSize = hspvar_int_get_block_size;
+    //    p->AllocBlock = hspvar_int_alloc_block;
     //
     //    //	p->ArrayObject = HspVarInt_ArrayObject;
-    //    p->Alloc = HspVarInt_Alloc;
-    //    p->Free = HspVarInt_Free;
+    //    p->Alloc = hspvar_int_alloc;
+    //    p->Free = hspvar_int_free;
     //
-    //    p->AddI = HspVarInt_AddI;
-    //    p->SubI = HspVarInt_SubI;
-    //    p->MulI = HspVarInt_MulI;
-    //    p->DivI = HspVarInt_DivI;
-    //    p->ModI = HspVarInt_ModI;
+    //    p->AddI = hspvar_int_add_i;
+    //    p->SubI = hspvar_int_sub_i;
+    //    p->MulI = hspvar_int_mul_i;
+    //    p->DivI = hspvar_int_div_i;
+    //    p->ModI = hspvar_int_mod_i;
     //
-    //    p->AndI = HspVarInt_AndI;
-    //    p->OrI  = HspVarInt_OrI;
-    //    p->XorI = HspVarInt_XorI;
+    //    p->AndI = hspvar_int_and_i;
+    //    p->OrI  = hspvar_int_or_i;
+    //    p->XorI = hspvar_int_xor_i;
     //
-    //    p->EqI = HspVarInt_EqI;
-    //    p->NeI = HspVarInt_NeI;
-    //    p->GtI = HspVarInt_GtI;
-    //    p->LtI = HspVarInt_LtI;
-    //    p->GtEqI = HspVarInt_GtEqI;
-    //    p->LtEqI = HspVarInt_LtEqI;
+    //    p->EqI = hspvar_int_eq_i;
+    //    p->NeI = hspvar_int_ne_i;
+    //    p->GtI = hspvar_int_gt_i;
+    //    p->LtI = hspvar_int_lt_i;
+    //    p->GtEqI = hspvar_int_gt_eq_i;
+    //    p->LtEqI = hspvar_int_lt_eq_i;
     //
-    //    p->RrI = HspVarInt_RrI;
-    //    p->LrI = HspVarInt_LrI;
+    //    p->RrI = hspvar_int_rr_i;
+    //    p->LrI = hspvar_int_lr_i;
 
     // サポート状況フラグ(HSPVAR_SUPPORT_*)
     p->vartype_name = (char *) "int"; // タイプ名

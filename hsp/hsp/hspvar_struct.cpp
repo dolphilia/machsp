@@ -12,8 +12,8 @@
 //------------------------------------------------------------
 
 /// Core
-void *HspVarStruct_GetPtr(value_t *pval) {
-    return (void *) (((flex_value_t *) (pval->pt)) + pval->offset);
+void *hspvar_struct_get_ptr(value_t *pval) {
+    return (void *) (((flex_value_t *)(pval->pt)) + pval->offset);
 }
 
 /*
@@ -42,7 +42,7 @@ void *HspVarStruct_GetPtr(value_t *pval) {
 
 /// PVALポインタの変数メモリを解放する
 ///
-void HspVarStruct_Free(value_t *pval) {
+void hspvar_struct_free(value_t *pval) {
     if (pval->mode == HSPVAR_MODE_MALLOC) {
         // code_delstruct_all( pval );
         // デストラクタがあれば呼び出す
@@ -63,7 +63,7 @@ void HspVarStruct_Free(value_t *pval) {
 /// (pval2がNULLの場合は、新規データ)
 /// (pval2が指定されている場合は、pval2の内容を継承して再確保)
 ///
-void HspVarStruct_Alloc(value_t *pval, const value_t *pval2) {
+void hspvar_struct_alloc(value_t *pval, const value_t *pval2) {
     if (pval->len[1] < 1)
         pval->len[1] = 1; // 配列を最低1は確保する
     pval->mode = HSPVAR_MODE_MALLOC;
@@ -96,18 +96,18 @@ void HspVarStruct_Alloc(value_t *pval, const value_t *pval2) {
  */
 
 /// Size
-int HspVarStruct_GetSize(const void *pdat) {
+int hspvar_struct_get_size(const void *pdat) {
     return sizeof(flex_value_t); // 実態のポインタが渡されます
 }
 
 /// Using
-int HspVarStruct_GetUsing(const void *pdat) {
+int hspvar_struct_get_using(const void *pdat) {
     flex_value_t *fv = (flex_value_t *) pdat; // 実態のポインタが渡されます
     return fv->type;
 }
 
 /// Set
-void HspVarStruct_Set(value_t *pval, void *pdat, const void *in) {
+void hspvar_struct_set(value_t *pval, void *pdat, const void *in) {
     flex_value_t *fv = (flex_value_t *) in;
     flex_value_t *fv_src = (flex_value_t *) pdat;
     fv->type = FLEXVAL_TYPE_CLONE;
@@ -126,30 +126,30 @@ void HspVarStruct_Set(value_t *pval, void *pdat, const void *in) {
  }
  */
 
-void *HspVarStruct_GetBlockSize(value_t *pval, void *pdat, int *size) {
+void *hspvar_struct_get_block_size(value_t *pval, void *pdat, int *size) {
     flex_value_t *fv = (flex_value_t *) pdat;
     *size = fv->size;
     return (void *) (fv->ptr);
 }
 
-void HspVarStruct_AllocBlock(value_t *pval, void *pdat, int size) {
+void hspvar_struct_alloc_block(value_t *pval, void *pdat, int size) {
 }
 
 //------------------------------------------------------------
 
-void HspVarStruct_Init(hspvar_proc_t *p) {
+void hspvar_struct_init(hspvar_proc_t *p) {
 
-    //    p->Set = HspVarStruct_Set;
-    //    p->GetPtr = HspVarStruct_GetPtr;
+    //    p->Set = hspvar_struct_set;
+    //    p->GetPtr = hspvar_struct_get_ptr;
     //    //	p->Cnv = HspVarStruct_Cnv;
     //    //	p->CnvCustom = HspVarStruct_CnvCustom;
-    //    p->GetSize = HspVarStruct_GetSize;
-    //    p->GetUsing = HspVarStruct_GetUsing;
-    //    p->GetBlockSize = HspVarStruct_GetBlockSize;
-    //    p->AllocBlock = HspVarStruct_AllocBlock;
+    //    p->GetSize = hspvar_struct_get_size;
+    //    p->GetUsing = hspvar_struct_get_using;
+    //    p->GetBlockSize = hspvar_struct_get_block_size;
+    //    p->AllocBlock = hspvar_struct_alloc_block;
     //    //	p->ArrayObject = HspVarStruct_ArrayObject;
-    //    p->Alloc = HspVarStruct_Alloc;
-    //    p->Free = HspVarStruct_Free;
+    //    p->Alloc = hspvar_struct_alloc;
+    //    p->Free = hspvar_struct_free;
     //    /*
     //     p->AddI = HspVarStruct_Invalid;
     //     p->SubI = HspVarStruct_Invalid;

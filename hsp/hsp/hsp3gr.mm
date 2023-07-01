@@ -90,7 +90,7 @@
             }
         }
     }
-    HspVarCoreDupPtr(pval, t, ptr, size);
+    hspvar_core_dup_ptr(pval, t, ptr, size);
 }
 
 //------------------------------------------------------------
@@ -635,27 +635,27 @@
         return;
     }
     void *dst;
-    if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "int") == 0) {  //整数のFree
-        dst = HspVarInt_GetPtr(mpval);
-    } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "double") == 0) {  //実数のFree
-        dst = HspVarDouble_GetPtr(mpval);
-    } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "str") == 0) {  //文字列のFree
-        dst = HspVarStr_GetPtr(mpval);
-    } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "label") == 0) {  //ラベルのFree
-        dst = HspVarLabel_GetPtr(mpval);
-    } else if (strcmp(hspvarproc[(mpval)->flag].vartype_name, "struct") == 0) {  // structのFree
-        dst = HspVarLabel_GetPtr(mpval);
+    if (strcmp(hspvar_proc[(mpval)->flag].vartype_name, "int") == 0) {  //整数のFree
+        dst = hspvar_int_get_ptr(mpval);
+    } else if (strcmp(hspvar_proc[(mpval)->flag].vartype_name, "double") == 0) {  //実数のFree
+        dst = hspvar_double_get_ptr(mpval);
+    } else if (strcmp(hspvar_proc[(mpval)->flag].vartype_name, "str") == 0) {  //文字列のFree
+        dst = hspvar_str_get_ptr(mpval);
+    } else if (strcmp(hspvar_proc[(mpval)->flag].vartype_name, "label") == 0) {  //ラベルのFree
+        dst = hspvar_label_get_ptr(mpval);
+    } else if (strcmp(hspvar_proc[(mpval)->flag].vartype_name, "struct") == 0) {  // structのFree
+        dst = hspvar_label_get_ptr(mpval);
     } else {
         @throw [self make_nsexception:HSPERR_SYNTAX];
     }
     ptr = (char *) dst;  //(HspVarCorePtr(mpval));
     if (mpval->flag != HSPVAR_FLAG_STR) {
-        if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "int") == 0) {  //整数のCnv
-            ptr = (char *) HspVarInt_Cnv(ptr, mpval->flag);
-        } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "double") == 0) {  //実数のCnv
-            ptr = (char *) HspVarDouble_Cnv(ptr, mpval->flag);
-        } else if (strcmp(hspvarproc[HSPVAR_FLAG_STR].vartype_name, "str") == 0) {  //文字列のCnv
-            ptr = (char *) HspVarStr_Cnv(ptr, mpval->flag);
+        if (strcmp(hspvar_proc[HSPVAR_FLAG_STR].vartype_name, "int") == 0) {  //整数のCnv
+            ptr = (char *) hspvar_int_cnv(ptr, mpval->flag);
+        } else if (strcmp(hspvar_proc[HSPVAR_FLAG_STR].vartype_name, "double") == 0) {  //実数のCnv
+            ptr = (char *) hspvar_double_cnv(ptr, mpval->flag);
+        } else if (strcmp(hspvar_proc[HSPVAR_FLAG_STR].vartype_name, "str") == 0) {  //文字列のCnv
+            ptr = (char *) hspvar_str_cnv(ptr, mpval->flag);
         } else {
             @throw [self make_nsexception:HSPERR_SYNTAX];
         }

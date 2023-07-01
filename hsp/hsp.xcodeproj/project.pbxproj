@@ -30,17 +30,17 @@
 		8B719A851D86523500F35EC5 /* hsp3cl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A7C1D86523500F35EC5 /* hsp3cl.mm */; };
 		8B719A861D86523500F35EC5 /* hsp3gr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A7F1D86523500F35EC5 /* hsp3gr.mm */; };
 		8B719A871D86523500F35EC5 /* hsp3int.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A811D86523500F35EC5 /* hsp3int.mm */; };
-		8B719A881D86523500F35EC5 /* dpmread.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A831D86523500F35EC5 /* dpmread.mm */; };
-		8B719AA31D86524A00F35EC5 /* hsp3debug.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A8C1D86524A00F35EC5 /* hsp3debug.mm */; };
-		8B719AA51D86524A00F35EC5 /* supio_hsp3.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A901D86524A00F35EC5 /* supio_hsp3.mm */; };
-		8B719AA61D86524A00F35EC5 /* strbuf.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A921D86524A00F35EC5 /* strbuf.mm */; };
-		8B719AA71D86524A00F35EC5 /* hspvar_core.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A941D86524A00F35EC5 /* hspvar_core.mm */; };
-		8B719AA81D86524A00F35EC5 /* hspvar_double.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A951D86524A00F35EC5 /* hspvar_double.mm */; };
-		8B719AA91D86524A00F35EC5 /* hspvar_int.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A961D86524A00F35EC5 /* hspvar_int.mm */; };
-		8B719AAA1D86524A00F35EC5 /* hspvar_label.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A981D86524A00F35EC5 /* hspvar_label.mm */; };
-		8B719AAB1D86524A00F35EC5 /* hspvar_str.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A991D86524A00F35EC5 /* hspvar_str.mm */; };
-		8B719AAC1D86524A00F35EC5 /* hspvar_struct.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A9A1D86524A00F35EC5 /* hspvar_struct.mm */; };
-		8B719AAD1D86524A00F35EC5 /* stack.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A9D1D86524A00F35EC5 /* stack.mm */; };
+		8B719A881D86523500F35EC5 /* dpmread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A831D86523500F35EC5 /* dpmread.cpp */; };
+		8B719AA31D86524A00F35EC5 /* hsp3debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A8C1D86524A00F35EC5 /* hsp3debug.cpp */; };
+		8B719AA51D86524A00F35EC5 /* supio_hsp3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A901D86524A00F35EC5 /* supio_hsp3.cpp */; };
+		8B719AA61D86524A00F35EC5 /* strbuf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A921D86524A00F35EC5 /* strbuf.cpp */; };
+		8B719AA71D86524A00F35EC5 /* hspvar_core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A941D86524A00F35EC5 /* hspvar_core.cpp */; };
+		8B719AA81D86524A00F35EC5 /* hspvar_double.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A951D86524A00F35EC5 /* hspvar_double.cpp */; };
+		8B719AA91D86524A00F35EC5 /* hspvar_int.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A961D86524A00F35EC5 /* hspvar_int.cpp */; };
+		8B719AAA1D86524A00F35EC5 /* hspvar_label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A981D86524A00F35EC5 /* hspvar_label.cpp */; };
+		8B719AAB1D86524A00F35EC5 /* hspvar_str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A991D86524A00F35EC5 /* hspvar_str.cpp */; };
+		8B719AAC1D86524A00F35EC5 /* hspvar_struct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A9A1D86524A00F35EC5 /* hspvar_struct.cpp */; };
+		8B719AAD1D86524A00F35EC5 /* stack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A9D1D86524A00F35EC5 /* stack.cpp */; };
 		8B7B03141DA78DCD004F4B68 /* utility_string.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B7B03121DA78DCD004F4B68 /* utility_string.c */; };
 /* End PBXBuildFile section */
 
@@ -119,25 +119,25 @@
 		8B719A801D86523500F35EC5 /* hsp3int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3int.h; sourceTree = "<group>"; };
 		8B719A811D86523500F35EC5 /* hsp3int.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = hsp3int.mm; sourceTree = "<group>"; };
 		8B719A821D86523500F35EC5 /* dpmread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dpmread.h; sourceTree = "<group>"; };
-		8B719A831D86523500F35EC5 /* dpmread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = dpmread.mm; sourceTree = "<group>"; };
+		8B719A831D86523500F35EC5 /* dpmread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dpmread.cpp; sourceTree = "<group>"; };
 		8B719A891D86524A00F35EC5 /* hsp3config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3config.h; sourceTree = "<group>"; };
 		8B719A8A1D86524A00F35EC5 /* hsp3struct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3struct.h; sourceTree = "<group>"; };
 		8B719A8B1D86524A00F35EC5 /* hsp3debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hsp3debug.h; sourceTree = "<group>"; };
-		8B719A8C1D86524A00F35EC5 /* hsp3debug.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = hsp3debug.mm; sourceTree = "<group>"; };
+		8B719A8C1D86524A00F35EC5 /* hsp3debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hsp3debug.cpp; sourceTree = "<group>"; };
 		8B719A8F1D86524A00F35EC5 /* supio_hsp3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = supio_hsp3.h; sourceTree = "<group>"; };
-		8B719A901D86524A00F35EC5 /* supio_hsp3.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = supio_hsp3.mm; sourceTree = "<group>"; };
+		8B719A901D86524A00F35EC5 /* supio_hsp3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = supio_hsp3.cpp; sourceTree = "<group>"; };
 		8B719A911D86524A00F35EC5 /* strbuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strbuf.h; sourceTree = "<group>"; };
-		8B719A921D86524A00F35EC5 /* strbuf.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = strbuf.mm; sourceTree = "<group>"; };
-		8B719A941D86524A00F35EC5 /* hspvar_core.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = hspvar_core.mm; sourceTree = "<group>"; };
-		8B719A951D86524A00F35EC5 /* hspvar_double.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = hspvar_double.mm; sourceTree = "<group>"; };
-		8B719A961D86524A00F35EC5 /* hspvar_int.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = hspvar_int.mm; sourceTree = "<group>"; };
+		8B719A921D86524A00F35EC5 /* strbuf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = strbuf.cpp; sourceTree = "<group>"; };
+		8B719A941D86524A00F35EC5 /* hspvar_core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hspvar_core.cpp; sourceTree = "<group>"; };
+		8B719A951D86524A00F35EC5 /* hspvar_double.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hspvar_double.cpp; sourceTree = "<group>"; };
+		8B719A961D86524A00F35EC5 /* hspvar_int.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hspvar_int.cpp; sourceTree = "<group>"; };
 		8B719A971D86524A00F35EC5 /* hspvar_label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hspvar_label.h; sourceTree = "<group>"; };
-		8B719A981D86524A00F35EC5 /* hspvar_label.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = hspvar_label.mm; sourceTree = "<group>"; };
-		8B719A991D86524A00F35EC5 /* hspvar_str.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = hspvar_str.mm; sourceTree = "<group>"; };
-		8B719A9A1D86524A00F35EC5 /* hspvar_struct.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = hspvar_struct.mm; sourceTree = "<group>"; };
+		8B719A981D86524A00F35EC5 /* hspvar_label.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hspvar_label.cpp; sourceTree = "<group>"; };
+		8B719A991D86524A00F35EC5 /* hspvar_str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hspvar_str.cpp; sourceTree = "<group>"; };
+		8B719A9A1D86524A00F35EC5 /* hspvar_struct.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hspvar_struct.cpp; sourceTree = "<group>"; };
 		8B719A9B1D86524A00F35EC5 /* hspwnd_linux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hspwnd_linux.h; sourceTree = "<group>"; };
 		8B719A9C1D86524A00F35EC5 /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
-		8B719A9D1D86524A00F35EC5 /* stack.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = stack.mm; sourceTree = "<group>"; };
+		8B719A9D1D86524A00F35EC5 /* stack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stack.cpp; sourceTree = "<group>"; };
 		8B719AB01D86525600F35EC5 /* debug_message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debug_message.h; sourceTree = "<group>"; };
 		8B739AA21DC1EB4F00B0EA30 /* hsp3struct_debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hsp3struct_debug.h; sourceTree = "<group>"; };
 		8B7B03121DA78DCD004F4B68 /* utility_string.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utility_string.c; sourceTree = "<group>"; };
@@ -263,27 +263,27 @@
 				8B719A801D86523500F35EC5 /* hsp3int.h */,
 				8B719A811D86523500F35EC5 /* hsp3int.mm */,
 				8B719A9C1D86524A00F35EC5 /* stack.h */,
-				8B719A9D1D86524A00F35EC5 /* stack.mm */,
+				8B719A9D1D86524A00F35EC5 /* stack.cpp */,
 				8B719A821D86523500F35EC5 /* dpmread.h */,
-				8B719A831D86523500F35EC5 /* dpmread.mm */,
+				8B719A831D86523500F35EC5 /* dpmread.cpp */,
 				8B719A8B1D86524A00F35EC5 /* hsp3debug.h */,
-				8B719A8C1D86524A00F35EC5 /* hsp3debug.mm */,
+				8B719A8C1D86524A00F35EC5 /* hsp3debug.cpp */,
 				8B719A8F1D86524A00F35EC5 /* supio_hsp3.h */,
-				8B719A901D86524A00F35EC5 /* supio_hsp3.mm */,
+				8B719A901D86524A00F35EC5 /* supio_hsp3.cpp */,
 				8B719A911D86524A00F35EC5 /* strbuf.h */,
-				8B719A921D86524A00F35EC5 /* strbuf.mm */,
+				8B719A921D86524A00F35EC5 /* strbuf.cpp */,
 				8B6ABFD31DA742D9004064B3 /* hspvar_core.h */,
-				8B719A941D86524A00F35EC5 /* hspvar_core.mm */,
+				8B719A941D86524A00F35EC5 /* hspvar_core.cpp */,
 				8B6ABFCF1DA740D4004064B3 /* hspvar_double.h */,
-				8B719A951D86524A00F35EC5 /* hspvar_double.mm */,
+				8B719A951D86524A00F35EC5 /* hspvar_double.cpp */,
 				8B6ABFD01DA740E2004064B3 /* hspvar_int.h */,
-				8B719A961D86524A00F35EC5 /* hspvar_int.mm */,
+				8B719A961D86524A00F35EC5 /* hspvar_int.cpp */,
 				8B6ABFD11DA740EC004064B3 /* hspvar_str.h */,
-				8B719A991D86524A00F35EC5 /* hspvar_str.mm */,
+				8B719A991D86524A00F35EC5 /* hspvar_str.cpp */,
 				8B6ABFD21DA740F6004064B3 /* hspvar_struct.h */,
-				8B719A9A1D86524A00F35EC5 /* hspvar_struct.mm */,
+				8B719A9A1D86524A00F35EC5 /* hspvar_struct.cpp */,
 				8B719A971D86524A00F35EC5 /* hspvar_label.h */,
-				8B719A981D86524A00F35EC5 /* hspvar_label.mm */,
+				8B719A981D86524A00F35EC5 /* hspvar_label.cpp */,
 			);
 			name = view_controller;
 			sourceTree = "<group>";
@@ -491,7 +491,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B719A4A1D8651D000F35EC5 /* MyMidi.m in Sources */,
-				8B719AAB1D86524A00F35EC5 /* hspvar_str.mm in Sources */,
+				8B719AAB1D86524A00F35EC5 /* hspvar_str.cpp in Sources */,
 				8B719A721D86521B00F35EC5 /* MyCALayer.m in Sources */,
 				8B719A6F1D86521B00F35EC5 /* MyWindow.m in Sources */,
 				8B719A1A1D8650A300F35EC5 /* ViewController.m in Sources */,
@@ -499,28 +499,28 @@
 				8B719A711D86521B00F35EC5 /* MyView.m in Sources */,
 				8B7B03141DA78DCD004F4B68 /* utility_string.c in Sources */,
 				8B719A6C1D86521B00F35EC5 /* utility_picture.c in Sources */,
-				8B719AA31D86524A00F35EC5 /* hsp3debug.mm in Sources */,
+				8B719AA31D86524A00F35EC5 /* hsp3debug.cpp in Sources */,
 				8B719A861D86523500F35EC5 /* hsp3gr.mm in Sources */,
-				8B719AAA1D86524A00F35EC5 /* hspvar_label.mm in Sources */,
+				8B719AAA1D86524A00F35EC5 /* hspvar_label.cpp in Sources */,
 				8B719A841D86523500F35EC5 /* hsp.mm in Sources */,
-				8B719A881D86523500F35EC5 /* dpmread.mm in Sources */,
-				8B719AA71D86524A00F35EC5 /* hspvar_core.mm in Sources */,
+				8B719A881D86523500F35EC5 /* dpmread.cpp in Sources */,
+				8B719AA71D86524A00F35EC5 /* hspvar_core.cpp in Sources */,
 				8B719A6B1D86521B00F35EC5 /* utility_pixel.c in Sources */,
 				8B719A6A1D86521B00F35EC5 /* utility_math.c in Sources */,
 				8B719A6D1D86521B00F35EC5 /* d3module.m in Sources */,
 				8B719A531D86520A00F35EC5 /* SineWave.m in Sources */,
-				8B719AA51D86524A00F35EC5 /* supio_hsp3.mm in Sources */,
-				8B719AA61D86524A00F35EC5 /* strbuf.mm in Sources */,
+				8B719AA51D86524A00F35EC5 /* supio_hsp3.cpp in Sources */,
+				8B719AA61D86524A00F35EC5 /* strbuf.cpp in Sources */,
 				8B719A871D86523500F35EC5 /* hsp3int.mm in Sources */,
-				8B719AA81D86524A00F35EC5 /* hspvar_double.mm in Sources */,
-				8B719AA91D86524A00F35EC5 /* hspvar_int.mm in Sources */,
+				8B719AA81D86524A00F35EC5 /* hspvar_double.cpp in Sources */,
+				8B719AA91D86524A00F35EC5 /* hspvar_int.cpp in Sources */,
 				8B719A851D86523500F35EC5 /* hsp3cl.mm in Sources */,
 				8B719A4E1D8651FF00F35EC5 /* MyAudio.m in Sources */,
 				8B719A141D8650A300F35EC5 /* AppDelegate.m in Sources */,
 				8B719A541D86520A00F35EC5 /* SineWaveData.m in Sources */,
 				8B719A781D86522900F35EC5 /* stb_image.c in Sources */,
-				8B719AAD1D86524A00F35EC5 /* stack.mm in Sources */,
-				8B719AAC1D86524A00F35EC5 /* hspvar_struct.mm in Sources */,
+				8B719AAD1D86524A00F35EC5 /* stack.cpp in Sources */,
+				8B719AAC1D86524A00F35EC5 /* hspvar_struct.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

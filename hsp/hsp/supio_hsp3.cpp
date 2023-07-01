@@ -116,14 +116,11 @@ int mem_save(char *fname, void *mem, int msize, int seekofs) {
     return flen;
 }
 
-/// strをすべて小文字に(全角対応版)
-///
-/// 注意! : SJISのみ対応です
-///
+// strをすべて小文字に(全角対応版)
+// SJISのみ対応
 void strcase(char *target) {
     unsigned char *p = (unsigned char *) target;
     unsigned char cur_char;
-
     while (1) {
         cur_char = *p;
         if (cur_char == 0)
@@ -137,13 +134,11 @@ void strcase(char *target) {
     }
 }
 
-/// string copy (ret:length)
-///
+// string copy (ret:length)
 int strcpy2(char *str1, char *str2) {
     char *p = str1;
     char *src = str2;
     char cur_char;
-
     while (1) {
         cur_char = *src++;
         if (cur_char == 0)
@@ -154,8 +149,7 @@ int strcpy2(char *str1, char *str2) {
     return (int) (p - str1);
 }
 
-/// string cat (ret:length)
-///
+// string cat (ret:length)
 int strcat2(char *str1, char *str2) {
     char *src = str1;
     char cur_char;
@@ -170,10 +164,8 @@ int strcat2(char *str1, char *str2) {
     return (strcpy2(src, str2) + i);
 }
 
-/// strstr関数の全角対応版
-///
-/// 注意! : SJISのみ対応です
-///
+// strstr関数の全角対応版
+// SJISのみ対応です
 char *strstr2(char *target, char *src) {
     unsigned char *p = (unsigned char *) target;
     unsigned char *s;
@@ -277,8 +269,8 @@ int delete_file(char *name) {
     // return remove( name );		// ディレクトリにもファイルにも対応
 }
 
-/// Linux System
-///
+// Linux System
+//
 int dirlist(char *fname, char **target, int p3) {
     enum {
         MASK = 3
@@ -360,14 +352,11 @@ int dirlist(char *fname, char **target, int p3) {
 /// 6 wSecond
 /// 7 wMilliseconds
 /// 8 wMicroseconds
-
 int get_time(int index) {
     struct timeval tv;
     struct tm *lt;
-
     gettimeofday(&tv, NULL); // MinGWだとVerによって通りません
     lt = localtime(&tv.tv_sec);
-
     switch (index) {
         case 0:
             return lt->tm_year + 1900;
@@ -389,7 +378,6 @@ int get_time(int index) {
             /*	一応マイクロ秒まで取れる	*/
             return (int) tv.tv_usec % 10000;
     }
-
     return 0;
 }
 
@@ -403,8 +391,8 @@ int str_split_get_ptr(void) {
     return splc;
 }
 
-/// split string with parameters
-///
+// split string with parameters
+//
 int str_split_get(char *srcstr, char *dststr, char splitchr, int len) {
     char cur_char;
     char a2;
@@ -442,13 +430,12 @@ int str_split_get(char *srcstr, char *dststr, char splitchr, int len) {
     return (int) cur_char;
 }
 
-/// Skip 1parameter from command line
-///
+// Skip 1parameter from command line
+//
 char *strsp_cmds(char *srcstr) {
     int spmode = 0;
     char *cmdchk = srcstr;
     char cur_char;
-
     while (1) {
         cur_char = *cmdchk;
         if (cur_char == 0)
@@ -460,7 +447,6 @@ char *strsp_cmds(char *srcstr) {
         if (cur_char == 0x22)
             spmode ^= 1;
     }
-
     return cmdchk;
 }
 
@@ -472,12 +458,11 @@ int get_limit(int num, int min, int max) {
     return num;
 }
 
-/// 最後の'\\'を取り除く
-///
+// 最後の'\\'を取り除く
+//
 void cut_last_char(char *p, char code) {
     char *ss = strchr2(p, '\\');
     char *ss2;
-
     if (ss != NULL) {
         int i = (int) strlen(p);
         ss2 = p + i - 1;
@@ -486,8 +471,8 @@ void cut_last_char(char *p, char code) {
     }
 }
 
-/// exchange hex to int
-///
+// exchange hex to int
+//
 static int htoi_sub(char hstr) {
     char cur_char = tolower(hstr);
     if ((cur_char >= '0') && (cur_char <= '9'))
@@ -514,13 +499,13 @@ int htoi(char *str) {
 //					HSP string trim support
 //----------------------------------------------------------
 
-/// 文字列中のcode位置を探す(2バイトコード、全角対応版)
-///
-/// sw = 0 : findptr = 最後に見つかったcode位置
-/// sw = 1 : findptr = 最初に見つかったcode位置
-/// sw = 2 : findptr = 最初に見つかったcode位置(最初の文字のみ検索)
-/// 戻り値 : 次の文字にあたる位置
-///
+// 文字列中のcode位置を探す(2バイトコード、全角対応版)
+//
+// sw = 0 : findptr = 最後に見つかったcode位置
+// sw = 1 : findptr = 最初に見つかったcode位置
+// sw = 2 : findptr = 最初に見つかったcode位置(最初の文字のみ検索)
+// 戻り値 : 次の文字にあたる位置
+//
 char *strchr3(char *target, int code, int sw, char **findptr) {
     unsigned char *p = (unsigned char *) target;
     unsigned char code1 = (unsigned char) (code & 0xff);

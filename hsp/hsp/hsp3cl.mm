@@ -228,17 +228,17 @@
     }
     if (abc_hspctx.mem_var != NULL) {
         for (int i = 0; i < hsp3cl_maxvar; i++) {
-            char *vartype_name = hspvarproc[(&abc_hspctx.mem_var[i])->flag].vartype_name;
+            char *vartype_name = hspvar_proc[(&abc_hspctx.mem_var[i])->flag].vartype_name;
             if (strcmp(vartype_name, "int") == 0) {  //整数のFree
-                HspVarInt_Free(&abc_hspctx.mem_var[i]);
+                hspvar_int_free(&abc_hspctx.mem_var[i]);
             } else if (strcmp(vartype_name, "double") == 0) {  //実数のFree
-                HspVarDouble_Free(&abc_hspctx.mem_var[i]);
+                hspvar_double_free(&abc_hspctx.mem_var[i]);
             } else if (strcmp(vartype_name, "str") == 0) {  //文字列のFree
-                HspVarStr_Free(&abc_hspctx.mem_var[i]);
+                hspvar_str_free(&abc_hspctx.mem_var[i]);
             } else if (strcmp(vartype_name, "label") == 0) {  //ラベルのFree
-                HspVarLabel_Free(&abc_hspctx.mem_var[i]);
+                hspvar_label_free(&abc_hspctx.mem_var[i]);
             } else if (strcmp(vartype_name, "struct") == 0) {  // structのFree
-                HspVarLabel_Free(&abc_hspctx.mem_var[i]);
+                hspvar_label_free(&abc_hspctx.mem_var[i]);
             } else {
                 @throw [self make_nsexception:HSPERR_SYNTAX];
             }
@@ -274,9 +274,9 @@
     //
     hsp3cl_axtype = HSP3_AXTYPE_NONE;
     if (mode) {  // "start.ax"を呼び出す
-        i = [self dpm_ini:(char *) "" dpmofs:mode chksum:hsp3cl_hsp_sum deckey:hsp3cl_hsp_dec];  // customized EXE mode
+        i = dpm_ini((char *)"", mode, hsp3cl_hsp_sum, hsp3cl_hsp_dec);  // customized EXE mode
     } else {
-        [self dpm_ini:(char *) "data.dpm" dpmofs:0 chksum:-1 deckey:-1];  // original EXE mode
+        dpm_ini((char *)"data.dpm", 0, -1, -1);  // original EXE mode
     }
 
     //		start.ax読み込み
@@ -298,7 +298,7 @@
             return -1;
         }
         if (mode) {
-            if ([self dpm_filebase:fname] != 1) {
+            if (dpm_filebase(fname) != 1) {
                 return -1;  // DPM,packfileからのみstart.axを読み込む
             }
         }
@@ -306,7 +306,7 @@
         strcpy(fname, hsp3cl_axname);
     }
 
-    ptr = [self dpm_readalloc:fname];
+    ptr = dpm_readalloc(fname);
     if (ptr == NULL) {
         return -1;
     }
@@ -345,7 +345,7 @@
             value_t *pval = &abc_hspctx.mem_var[i];
             pval->mode = HSPVAR_MODE_NONE;
             pval->flag = HSPVAR_FLAG_INT;            // 仮の型
-            HspVarCoreClear(pval, HSPVAR_FLAG_INT);  // グローバル変数を0にリセット
+            hspvar_core_clear(pval, HSPVAR_FLAG_INT);  // グローバル変数を0にリセット
         }
     }
 

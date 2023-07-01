@@ -21,20 +21,20 @@ void hspvar_core_register_type(int flag, char *vartype_name);
 hspvar_proc_t *hspvar_core_seek_proc(const char *name);
 
 // 低レベルサポート関数
-void HspVarCoreDup(value_t *pval, value_t *arg, int aptr);
-void HspVarCoreDupPtr(value_t *pval, int flag, void *ptr, int size);
-void HspVarCoreClear(value_t *pval, int flag);
-void HspVarCoreClearTemp(value_t *pval, int flag);
-void HspVarCoreDim(value_t *pval, int flag, int len1, int len2, int len3, int len4);
-void HspVarCoreDimFlex(value_t *pval, int flag, int len0, int len1, int len2, int len3, int len4);
-void HspVarCoreReDim(value_t *pval, int lenid, int len);
-void *HspVarCoreCnvPtr(value_t *pval, int flag);
-void *HspVarCorePtrAPTR(value_t *pv, int ofs);
-void HspVarCoreArray(value_t *pval, int offset);
-void *HspVarCorePtrAPTR(value_t *pv, int ofs);
+void hspvar_core_dup(value_t *pval, value_t *arg, int aptr);
+void hspvar_core_dup_ptr(value_t *pval, int flag, void *ptr, int size);
+void hspvar_core_clear(value_t *pval, int flag);
+void hspvar_core_clear_tmp(value_t *pval, int flag);
+void hspvar_core_dim(value_t *pval, int flag, int len1, int len2, int len3, int len4);
+void hspvar_core_dim_flex(value_t *pval, int flag, int len0, int len1, int len2, int len3, int len4);
+void hspvar_core_re_dim(value_t *pval, int lenid, int len);
+void *hspvar_core_cnv_ptr(value_t *pval, int flag);
+void *hspvar_core_ptr_offset(value_t *pv, int ofs);
+void hspvar_core_array(value_t *pval, int offset);
+void *hspvar_core_ptr_offset(value_t *pv, int ofs);
 
 // PVal用マクロ
-#define HspVarCoreGetProc(flag) (&hspvarproc[flag])
+#define HspVarCoreGetProc(flag) (&hspvar_proc[flag])
 #define HspVarCoreReset(pv) ((pv)->offset = 0, (pv)->arraycnt = 0)
 #define HspVarCoreGetAPTR(pv) ((pv)->offset)
 #define HspVarCoreCopyArrayInfo(pv, src)                                       \

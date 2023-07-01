@@ -19,27 +19,27 @@
 //------------------------------------------------------------
 
 value_t *mem_pval;
-hspvar_proc_t *hspvarproc;
-int hspvartype_max;
-int hspvartype_limit;
+hspvar_proc_t *hspvar_proc;
+int hspvar_type_max;
+int hspvar_type_limit;
 
 ///        変数データの実態ポインタを得る
 ///
 ///        (APTRとpvalから実態を求める)
 ///
-void *HspVarCorePtrAPTR(value_t *pv, int ofs) {
+void *hspvar_core_ptr_offset(value_t *pv, int ofs) {
     pv->offset = ofs;
     void *dst;
-    if (strcmp(hspvarproc[(pv)->flag].vartype_name, "int") == 0) { //整数のFree
-        dst = HspVarInt_GetPtr(pv);
-    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "double") == 0) { //実数のFree
-        dst = HspVarDouble_GetPtr(pv);
-    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "str") == 0) { //文字列のFree
-        dst = HspVarStr_GetPtr(pv);
-    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "label") == 0) { //ラベルのFree
-        dst = HspVarLabel_GetPtr(pv);
-    } else if (strcmp(hspvarproc[(pv)->flag].vartype_name, "struct") == 0) { // structのFree
-        dst = HspVarLabel_GetPtr(pv);
+    if (strcmp(hspvar_proc[(pv)->flag].vartype_name, "int") == 0) { //整数のFree
+        dst = hspvar_int_get_ptr(pv);
+    } else if (strcmp(hspvar_proc[(pv)->flag].vartype_name, "double") == 0) { //実数のFree
+        dst = hspvar_double_get_ptr(pv);
+    } else if (strcmp(hspvar_proc[(pv)->flag].vartype_name, "str") == 0) { //文字列のFree
+        dst = hspvar_str_get_ptr(pv);
+    } else if (strcmp(hspvar_proc[(pv)->flag].vartype_name, "label") == 0) { //ラベルのFree
+        dst = hspvar_label_get_ptr(pv);
+    } else if (strcmp(hspvar_proc[(pv)->flag].vartype_name, "struct") == 0) { // structのFree
+        dst = hspvar_label_get_ptr(pv);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
         exit(EXIT_FAILURE);
@@ -48,10 +48,10 @@ void *HspVarCorePtrAPTR(value_t *pv, int ofs) {
 }
 
 void hspvar_core_init(void) {
-    hspvarproc = (hspvar_proc_t *) strbuf_alloc(sizeof(hspvar_proc_t) * HSPVAR_FLAG_MAX);
-    hspvartype_max = HSPVAR_FLAG_MAX;
+    hspvar_proc = (hspvar_proc_t *) strbuf_alloc(sizeof(hspvar_proc_t) * HSPVAR_FLAG_MAX);
+    hspvar_type_max = HSPVAR_FLAG_MAX;
     for (int i = 0; i < HSPVAR_FLAG_MAX; i++) {
-        hspvarproc[i].flag = 0;
+        hspvar_proc[i].flag = 0;
     }
 
     //		mpval(テンポラリ変数)を初期化します
@@ -66,19 +66,19 @@ void hspvar_core_init(void) {
 }
 
 void hspvar_core_bye(void) {
-    for (int i = 0; i < hspvartype_max; i++) {
+    for (int i = 0; i < hspvar_type_max; i++) {
         if (mem_pval[i].mode == HSPVAR_MODE_MALLOC) {
             // HspVarCoreDispose( &mem_pval[i] );
-            if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "int") == 0) { //整数のFree
-                HspVarInt_Free(&mem_pval[i]);
-            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "double") == 0) { //実数のFree
-                HspVarDouble_Free(&mem_pval[i]);
-            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "str") == 0) { //文字列のFree
-                HspVarStr_Free(&mem_pval[i]);
-            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "label") == 0) { //ラベルのFree
-                HspVarLabel_Free(&mem_pval[i]);
-            } else if (strcmp(hspvarproc[(&mem_pval[i])->flag].vartype_name, "struct") == 0) { // structのFree
-                HspVarLabel_Free(&mem_pval[i]);
+            if (strcmp(hspvar_proc[(&mem_pval[i])->flag].vartype_name, "int") == 0) { //整数のFree
+                hspvar_int_free(&mem_pval[i]);
+            } else if (strcmp(hspvar_proc[(&mem_pval[i])->flag].vartype_name, "double") == 0) { //実数のFree
+                hspvar_double_free(&mem_pval[i]);
+            } else if (strcmp(hspvar_proc[(&mem_pval[i])->flag].vartype_name, "str") == 0) { //文字列のFree
+                hspvar_str_free(&mem_pval[i]);
+            } else if (strcmp(hspvar_proc[(&mem_pval[i])->flag].vartype_name, "label") == 0) { //ラベルのFree
+                hspvar_label_free(&mem_pval[i]);
+            } else if (strcmp(hspvar_proc[(&mem_pval[i])->flag].vartype_name, "struct") == 0) { // structのFree
+                hspvar_label_free(&mem_pval[i]);
             } else {
                 fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
                 exit(EXIT_FAILURE);
@@ -86,7 +86,7 @@ void hspvar_core_bye(void) {
         }
     }
     strbuf_free(mem_pval);
-    strbuf_free(hspvarproc);
+    strbuf_free(hspvar_proc);
 }
 
 /// VARTYPEを初期化する(HspVarCoreInitの後で呼ぶ)
@@ -94,10 +94,10 @@ void hspvar_core_bye(void) {
 /// (expandに拡張するVARTYPEの数を指定する)
 ///
 void hspvar_core_reset_var_type(int expand) {
-    hspvartype_limit = hspvartype_max + expand;
+    hspvar_type_limit = hspvar_type_max + expand;
     if (expand >= 0) {
-        hspvarproc = (hspvar_proc_t *) strbuf_expand((char *) hspvarproc, sizeof(hspvar_proc_t) * hspvartype_limit);
-        mem_pval = (value_t *) strbuf_expand((char *) mem_pval, sizeof(value_t) * hspvartype_limit);
+        hspvar_proc = (hspvar_proc_t *) strbuf_expand((char *) hspvar_proc, sizeof(hspvar_proc_t) * hspvar_type_limit);
+        mem_pval = (value_t *) strbuf_expand((char *) mem_pval, sizeof(value_t) * hspvar_type_limit);
     }
 
     // 標準の型を登録する
@@ -110,14 +110,14 @@ void hspvar_core_reset_var_type(int expand) {
 
 int hspvar_core_add_type() {
     value_t *pval;
-    if (hspvartype_max >= hspvartype_limit)
+    if (hspvar_type_max >= hspvar_type_limit)
         return -1;
-    int id = hspvartype_max++;
+    int id = hspvar_type_max++;
     // hspvarproc = (HspVarProc *)sbExpand( (char *)hspvarproc, sizeof(HspVarProc)
-    // * hspvartype_max );
-    hspvarproc[id].flag = 0;
+    // * hspvar_type_max );
+    hspvar_proc[id].flag = 0;
     // mem_pval = (PVal *)sbExpand( (char *)mem_pval, sizeof(PVal) *
-    // hspvartype_max );
+    // hspvar_type_max );
     pval = &mem_pval[id];
     pval->mode = HSPVAR_MODE_NONE;
     pval->flag = HSPVAR_FLAG_INT; // 仮の型
@@ -138,7 +138,7 @@ void hspvar_core_register_type(int flag, char *vartype_name) {
         }
     }
 
-    hspvar_proc_t *p = &hspvarproc[id];
+    hspvar_proc_t *p = &hspvar_proc[id];
     p->flag = p->aftertype = id;
 
     //void** procs;
@@ -152,15 +152,15 @@ void hspvar_core_register_type(int flag, char *vartype_name) {
 
     //	初期化関数の呼び出し
     if (strcmp(vartype_name, "int") == 0) {
-        HspVarInt_Init(p);
+        hspvar_int_init(p);
     } else if (strcmp(vartype_name, "str") == 0) {
-        HspVarStr_Init(p);
+        hspvar_str_init(p);
     } else if (strcmp(vartype_name, "double") == 0) {
-        HspVarDouble_Init(p);
+        hspvar_double_init(p);
     } else if (strcmp(vartype_name, "struct") == 0) {
-        HspVarStruct_Init(p);
+        hspvar_struct_init(p);
     } else if (strcmp(vartype_name, "label") == 0) {
-        HspVarLabel_Init(p);
+        hspvar_label_init(p);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_UNKNOWN_CODE);
         exit(EXIT_FAILURE);
@@ -172,21 +172,21 @@ void hspvar_core_register_type(int flag, char *vartype_name) {
 
 /// 指定されたポインタからのクローンになる
 ///
-void HspVarCoreDupPtr(value_t *pval, int flag, void *ptr, int size) {
+void hspvar_core_dup_ptr(value_t *pval, int flag, void *ptr, int size) {
     void *buf = (void *) ptr;
-    hspvar_proc_t *p = &hspvarproc[flag];
+    hspvar_proc_t *p = &hspvar_proc[flag];
 
     // HspVarCoreDispose( pval );
-    if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
-        HspVarInt_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") == 0) { //実数のFree
-        HspVarDouble_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") == 0) { //文字列のFree
-        HspVarStr_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") == 0) { //ラベルのFree
-        HspVarLabel_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
-        HspVarLabel_Free(pval);
+    if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
+        hspvar_int_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "double") == 0) { //実数のFree
+        hspvar_double_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "str") == 0) { //文字列のFree
+        hspvar_str_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "label") == 0) { //ラベルのFree
+        hspvar_label_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
+        hspvar_label_free(pval);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
         exit(EXIT_FAILURE);
@@ -213,29 +213,29 @@ void HspVarCoreDupPtr(value_t *pval, int flag, void *ptr, int size) {
 
 /// 指定された変数のクローンになる
 ///
-void HspVarCoreDup(value_t *pval, value_t *arg, int aptr) {
+void hspvar_core_dup(value_t *pval, value_t *arg, int aptr) {
     int size;
-    void *buf = HspVarCorePtrAPTR(arg, aptr);
-    hspvar_proc_t *p = &hspvarproc[arg->flag];
+    void *buf = hspvar_core_ptr_offset(arg, aptr);
+    hspvar_proc_t *p = &hspvar_proc[arg->flag];
 
     // HspVarCoreGetBlockSize( arg, buf, &size );
     void *dst;
-    if (strcmp(hspvarproc[(arg)->flag].vartype_name, "int") == 0) { //整数のGetBlockSize
-        dst = HspVarInt_GetBlockSize(arg, buf, &size);
-    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "double") == 0) { //実数のGetBlockSize
-        dst = HspVarDouble_GetBlockSize(arg, buf, &size);
-    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "str") == 0) { //文字列のGetBlockSize
-        dst = HspVarStr_GetBlockSize(arg, buf, &size);
-    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "label") == 0) { //ラベルのGetBlockSize
-        dst = HspVarLabel_GetBlockSize(arg, buf, &size);
-    } else if (strcmp(hspvarproc[(arg)->flag].vartype_name, "struct") == 0) { // structのGetBlockSize
-        dst = HspVarLabel_GetBlockSize(arg, buf, &size);
+    if (strcmp(hspvar_proc[(arg)->flag].vartype_name, "int") == 0) { //整数のGetBlockSize
+        dst = hspvar_int_get_block_size(arg, buf, &size);
+    } else if (strcmp(hspvar_proc[(arg)->flag].vartype_name, "double") == 0) { //実数のGetBlockSize
+        dst = hspvar_double_get_block_size(arg, buf, &size);
+    } else if (strcmp(hspvar_proc[(arg)->flag].vartype_name, "str") == 0) { //文字列のGetBlockSize
+        dst = hspvar_str_get_block_size(arg, buf, &size);
+    } else if (strcmp(hspvar_proc[(arg)->flag].vartype_name, "label") == 0) { //ラベルのGetBlockSize
+        dst = hspvar_label_get_block_size(arg, buf, &size);
+    } else if (strcmp(hspvar_proc[(arg)->flag].vartype_name, "struct") == 0) { // structのGetBlockSize
+        dst = hspvar_label_get_block_size(arg, buf, &size);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
         exit(EXIT_FAILURE);
     }
 
-    HspVarCoreDupPtr(pval, arg->flag, buf, size);
+    hspvar_core_dup_ptr(pval, arg->flag, buf, size);
 
 }
 
@@ -243,8 +243,8 @@ void HspVarCoreDup(value_t *pval, value_t *arg, int aptr) {
 ///
 /// (len1〜len4は、4byte単位なので注意)
 ///
-void HspVarCoreDim(value_t *pval, int flag, int len1, int len2, int len3, int len4) {
-    hspvar_proc_t *p = &hspvarproc[flag];
+void hspvar_core_dim(value_t *pval, int flag, int len1, int len2, int len3, int len4) {
+    hspvar_proc_t *p = &hspvar_proc[flag];
 
     if ((len1 < 0) || (len2 < 0) || (len3 < 0) || (len4 < 0)) {
         fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ILLEGALPRM);
@@ -252,16 +252,16 @@ void HspVarCoreDim(value_t *pval, int flag, int len1, int len2, int len3, int le
     }
 
     // HspVarCoreDispose( pval );
-    if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
-        HspVarInt_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") == 0) { //実数のFree
-        HspVarDouble_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") == 0) { //文字列のFree
-        HspVarStr_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") == 0) { //ラベルのFree
-        HspVarLabel_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
-        HspVarLabel_Free(pval);
+    if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
+        hspvar_int_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "double") == 0) { //実数のFree
+        hspvar_double_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "str") == 0) { //文字列のFree
+        hspvar_str_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "label") == 0) { //ラベルのFree
+        hspvar_label_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
+        hspvar_label_free(pval);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
         exit(EXIT_FAILURE);
@@ -278,15 +278,15 @@ void HspVarCoreDim(value_t *pval, int flag, int len1, int len2, int len3, int le
     pval->len[4] = len4;
 
     if (strcmp(p->vartype_name, "int") == 0) { //整数のAlloc
-        HspVarInt_Alloc(pval, NULL);
+        hspvar_int_alloc(pval, NULL);
     } else if (strcmp(p->vartype_name, "double") == 0) { //実数のAlloc
-        HspVarDouble_Alloc(pval, NULL);
+        hspvar_double_alloc(pval, NULL);
     } else if (strcmp(p->vartype_name, "str") == 0) { //文字列のAlloc
-        HspVarStr_Alloc(pval, NULL);
+        hspvar_str_alloc(pval, NULL);
     } else if (strcmp(p->vartype_name, "label") == 0) { //ラベルのAlloc
-        HspVarLabel_Alloc(pval, NULL);
+        hspvar_label_alloc(pval, NULL);
     } else if (strcmp(p->vartype_name, "struct") == 0) { // structのAlloc
-        HspVarLabel_Alloc(pval, NULL);
+        hspvar_label_alloc(pval, NULL);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
         exit(EXIT_FAILURE);
@@ -297,8 +297,8 @@ void HspVarCoreDim(value_t *pval, int flag, int len1, int len2, int len3, int le
 ///
 /// (len1〜len4は、4byte単位なので注意)
 ///
-void HspVarCoreDimFlex(value_t *pval, int flag, int len0, int len1, int len2, int len3, int len4) {
-    hspvar_proc_t *p = &hspvarproc[flag];
+void hspvar_core_dim_flex(value_t *pval, int flag, int len0, int len1, int len2, int len3, int len4) {
+    hspvar_proc_t *p = &hspvar_proc[flag];
 
     if ((len1 < 0) || (len2 < 0) || (len3 < 0) || (len4 < 0)) {
         fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ILLEGALPRM);
@@ -306,16 +306,16 @@ void HspVarCoreDimFlex(value_t *pval, int flag, int len0, int len1, int len2, in
     }
 
     // HspVarCoreDispose( pval );
-    if (strcmp(hspvarproc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
-        HspVarInt_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "double") == 0) { //実数のFree
-        HspVarDouble_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "str") == 0) { //文字列のFree
-        HspVarStr_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "label") == 0) { //ラベルのFree
-        HspVarLabel_Free(pval);
-    } else if (strcmp(hspvarproc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
-        HspVarLabel_Free(pval);
+    if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "int") == 0) { //整数のFree
+        hspvar_int_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "double") == 0) { //実数のFree
+        hspvar_double_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "str") == 0) { //文字列のFree
+        hspvar_str_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "label") == 0) { //ラベルのFree
+        hspvar_label_free(pval);
+    } else if (strcmp(hspvar_proc[(pval)->flag].vartype_name, "struct") == 0) { // structのFree
+        hspvar_label_free(pval);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
         exit(EXIT_FAILURE);
@@ -332,15 +332,15 @@ void HspVarCoreDimFlex(value_t *pval, int flag, int len0, int len1, int len2, in
     pval->len[4] = len4;
 
     if (strcmp(p->vartype_name, "int") == 0) { //整数のAlloc
-        HspVarInt_Alloc(pval, NULL);
+        hspvar_int_alloc(pval, NULL);
     } else if (strcmp(p->vartype_name, "double") == 0) { //実数のAlloc
-        HspVarDouble_Alloc(pval, NULL);
+        hspvar_double_alloc(pval, NULL);
     } else if (strcmp(p->vartype_name, "str") == 0) { //文字列のAlloc
-        HspVarStr_Alloc(pval, NULL);
+        hspvar_str_alloc(pval, NULL);
     } else if (strcmp(p->vartype_name, "label") == 0) { //ラベルのAlloc
-        HspVarLabel_Alloc(pval, NULL);
+        hspvar_label_alloc(pval, NULL);
     } else if (strcmp(p->vartype_name, "struct") == 0) { // structのAlloc
-        HspVarLabel_Alloc(pval, NULL);
+        hspvar_label_alloc(pval, NULL);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
         exit(EXIT_FAILURE);
@@ -351,19 +351,19 @@ void HspVarCoreDimFlex(value_t *pval, int flag, int len0, int len1, int len2, in
 
 /// 配列を拡張する
 ///
-void HspVarCoreReDim(value_t *pval, int lenid, int len) {
-    hspvar_proc_t *p = &hspvarproc[pval->flag];
+void hspvar_core_re_dim(value_t *pval, int lenid, int len) {
+    hspvar_proc_t *p = &hspvar_proc[pval->flag];
     pval->len[lenid] = len;
     if (strcmp(p->vartype_name, "int") == 0) { //整数のAlloc
-        HspVarInt_Alloc(pval, pval);
+        hspvar_int_alloc(pval, pval);
     } else if (strcmp(p->vartype_name, "double") == 0) { //実数のAlloc
-        HspVarDouble_Alloc(pval, pval);
+        hspvar_double_alloc(pval, pval);
     } else if (strcmp(p->vartype_name, "str") == 0) { //文字列のAlloc
-        HspVarStr_Alloc(pval, pval);
+        hspvar_str_alloc(pval, pval);
     } else if (strcmp(p->vartype_name, "label") == 0) { //ラベルのAlloc
-        HspVarLabel_Alloc(pval, pval);
+        hspvar_label_alloc(pval, pval);
     } else if (strcmp(p->vartype_name, "struct") == 0) { // structのAlloc
-        HspVarLabel_Alloc(pval, pval);
+        hspvar_label_alloc(pval, pval);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
         exit(EXIT_FAILURE);
@@ -372,32 +372,32 @@ void HspVarCoreReDim(value_t *pval, int lenid, int len) {
 
 /// 指定タイプの変数を最小メモリで初期化する
 ///
-void HspVarCoreClear(value_t *pval, int flag) {
-    HspVarCoreDim(pval, flag, 1, 0, 0, 0); // 最小サイズのメモリを確保
+void hspvar_core_clear(value_t *pval, int flag) {
+    hspvar_core_dim(pval, flag, 1, 0, 0, 0); // 最小サイズのメモリを確保
 }
 
 /// 指定タイプの変数を最小メモリで初期化する(テンポラリ用)
 ///
-void HspVarCoreClearTemp(value_t *pval, int flag) {
-    HspVarCoreDim(pval, flag, 1, 0, 0, 0); // 最小サイズのメモリを確保
+void hspvar_core_clear_tmp(value_t *pval, int flag) {
+    hspvar_core_dim(pval, flag, 1, 0, 0, 0); // 最小サイズのメモリを確保
     pval->support |= HSPVAR_SUPPORT_TEMPVAR;
 }
 
 /// 指定されたtypeフラグに変換された値のポインタを得る
 ///
-void *HspVarCoreCnvPtr(value_t *pval, int flag) {
+void *hspvar_core_cnv_ptr(value_t *pval, int flag) {
     void *dst;
     if (pval->flag == flag) {
-        if (strcmp(hspvarproc[flag].vartype_name, "int") == 0) { //整数のFree
-            dst = HspVarInt_GetPtr(pval);
-        } else if (strcmp(hspvarproc[flag].vartype_name, "double") == 0) { //実数のFree
-            dst = HspVarDouble_GetPtr(pval);
-        } else if (strcmp(hspvarproc[flag].vartype_name, "str") == 0) { //文字列のFree
-            dst = HspVarStr_GetPtr(pval);
-        } else if (strcmp(hspvarproc[flag].vartype_name, "label") == 0) { //ラベルのFree
-            dst = HspVarLabel_GetPtr(pval);
-        } else if (strcmp(hspvarproc[flag].vartype_name, "struct") == 0) { // structのFree
-            dst = HspVarLabel_GetPtr(pval);
+        if (strcmp(hspvar_proc[flag].vartype_name, "int") == 0) { //整数のFree
+            dst = hspvar_int_get_ptr(pval);
+        } else if (strcmp(hspvar_proc[flag].vartype_name, "double") == 0) { //実数のFree
+            dst = hspvar_double_get_ptr(pval);
+        } else if (strcmp(hspvar_proc[flag].vartype_name, "str") == 0) { //文字列のFree
+            dst = hspvar_str_get_ptr(pval);
+        } else if (strcmp(hspvar_proc[flag].vartype_name, "label") == 0) { //ラベルのFree
+            dst = hspvar_label_get_ptr(pval);
+        } else if (strcmp(hspvar_proc[flag].vartype_name, "struct") == 0) { // structのFree
+            dst = hspvar_label_get_ptr(pval);
         } else {
             fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
             exit(EXIT_FAILURE);
@@ -408,16 +408,16 @@ void *HspVarCoreCnvPtr(value_t *pval, int flag) {
     void *buf;
 
     // buf = hspvarproc[ pval->flag ].GetPtr( pval );
-    if (strcmp(hspvarproc[pval->flag].vartype_name, "int") == 0) { //整数のFree
-        dst = HspVarInt_GetPtr(pval);
-    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "double") == 0) { //実数のFree
-        dst = HspVarDouble_GetPtr(pval);
-    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "str") == 0) { //文字列のFree
-        dst = HspVarStr_GetPtr(pval);
-    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "label") == 0) { //ラベルのFree
-        dst = HspVarLabel_GetPtr(pval);
-    } else if (strcmp(hspvarproc[pval->flag].vartype_name, "struct") == 0) { // structのFree
-        dst = HspVarLabel_GetPtr(pval);
+    if (strcmp(hspvar_proc[pval->flag].vartype_name, "int") == 0) { //整数のFree
+        dst = hspvar_int_get_ptr(pval);
+    } else if (strcmp(hspvar_proc[pval->flag].vartype_name, "double") == 0) { //実数のFree
+        dst = hspvar_double_get_ptr(pval);
+    } else if (strcmp(hspvar_proc[pval->flag].vartype_name, "str") == 0) { //文字列のFree
+        dst = hspvar_str_get_ptr(pval);
+    } else if (strcmp(hspvar_proc[pval->flag].vartype_name, "label") == 0) { //ラベルのFree
+        dst = hspvar_label_get_ptr(pval);
+    } else if (strcmp(hspvar_proc[pval->flag].vartype_name, "struct") == 0) { // structのFree
+        dst = hspvar_label_get_ptr(pval);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
         exit(EXIT_FAILURE);
@@ -430,12 +430,12 @@ void *HspVarCoreCnvPtr(value_t *pval, int flag) {
         return NULL; //( hspvarproc[ pval->flag ].CnvCustom( buf, flag ) );
     }
 
-    if (strcmp(hspvarproc[flag].vartype_name, "int") == 0) { //整数のCnv
-        buf = HspVarInt_Cnv(buf, pval->flag);
-    } else if (strcmp(hspvarproc[flag].vartype_name, "double") == 0) { //実数のCnv
-        buf = HspVarDouble_Cnv(buf, pval->flag);
-    } else if (strcmp(hspvarproc[flag].vartype_name, "str") == 0) { //文字列のCnv
-        buf = HspVarStr_Cnv(buf, pval->flag);
+    if (strcmp(hspvar_proc[flag].vartype_name, "int") == 0) { //整数のCnv
+        buf = hspvar_int_cnv(buf, pval->flag);
+    } else if (strcmp(hspvar_proc[flag].vartype_name, "double") == 0) { //実数のCnv
+        buf = hspvar_double_cnv(buf, pval->flag);
+    } else if (strcmp(hspvar_proc[flag].vartype_name, "str") == 0) { //文字列のCnv
+        buf = hspvar_str_cnv(buf, pval->flag);
     } else {
         fprintf(stderr, "Error: %d\n", HSPERR_SYNTAX);
         exit(EXIT_FAILURE);
@@ -476,8 +476,8 @@ PDAT * HspVarCorePtrAPTR( PVal *pv, APTR ofs ) {
 
 hspvar_proc_t *hspvar_core_seek_proc(const char *name) {
     hspvar_proc_t *p;
-    for (int i = 0; i < hspvartype_max; i++) {
-        p = &hspvarproc[i];
+    for (int i = 0; i < hspvar_type_max; i++) {
+        p = &hspvar_proc[i];
         if (p->flag) {
             if (strcmp(p->vartype_name, name) == 0) {
                 return p;
@@ -491,7 +491,7 @@ hspvar_proc_t *hspvar_core_seek_proc(const char *name) {
 ///
 /// ( Reset後に次元数だけ連続で呼ばれます )
 ///
-void HspVarCoreArray(value_t *pval, int offset) {
+void hspvar_core_array(value_t *pval, int offset) {
     if (pval->arraycnt >= 5) {
         fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_ARRAYOVER);
         exit(EXIT_FAILURE);

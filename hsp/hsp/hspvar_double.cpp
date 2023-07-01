@@ -18,7 +18,7 @@ short *hspvar_double_aftertype;
 
 /// Core
 ///
-void *HspVarDouble_GetPtr(value_t *pval) {
+void *hspvar_double_get_ptr(value_t *pval) {
     return (void *) (((double *) (pval->pt)) + pval->offset);
 }
 
@@ -27,7 +27,7 @@ void *HspVarDouble_GetPtr(value_t *pval) {
 /// (組み込み型にのみ対応でOK)
 /// (参照元のデータを破壊しないこと)
 ///
-void *HspVarDouble_Cnv(const void *buffer, int flag) {
+void *hspvar_double_cnv(const void *buffer, int flag) {
     switch (flag) {
         case HSPVAR_FLAG_STR:
             hspvar_double_conv = (double) atof((char *) buffer);
@@ -61,7 +61,7 @@ void *HspVarDouble_Cnv(const void *buffer, int flag) {
 ///
 /// (sizeフィールドに設定される)
 ///
-int HspVarDouble_GetVarSize(value_t *pval) {
+int hspvar_double_get_var_size(value_t *pval) {
     int size = pval->len[1];
     if (pval->len[2])
         size *= pval->len[2];
@@ -75,7 +75,7 @@ int HspVarDouble_GetVarSize(value_t *pval) {
 
 /// PVALポインタの変数メモリを解放する
 ///
-void HspVarDouble_Free(value_t *pval) {
+void hspvar_double_free(value_t *pval) {
     if (pval->mode == HSPVAR_MODE_MALLOC) {
         strbuf_free(pval->pt);
     }
@@ -90,11 +90,11 @@ void HspVarDouble_Free(value_t *pval) {
 /// (pval2がNULLの場合は、新規データ)
 /// (pval2が指定されている場合は、pval2の内容を継承して再確保)
 ///
-void HspVarDouble_Alloc(value_t *pval, const value_t *pval2) {
+void hspvar_double_alloc(value_t *pval, const value_t *pval2) {
     if (pval->len[1] < 1)
         pval->len[1] = 1; // 配列を最低1は確保する
 
-    int size = HspVarDouble_GetVarSize(pval);
+    int size = hspvar_double_get_var_size(pval);
     pval->mode = HSPVAR_MODE_MALLOC;
     char *pt = strbuf_alloc(size);
     double *fv = (double *) pt;
@@ -121,36 +121,36 @@ void HspVarDouble_Alloc(value_t *pval, const value_t *pval2) {
  */
 
 /// Size
-int HspVarDouble_GetSize(const void *pval) {
+int hspvar_double_get_size(const void *pval) {
     return sizeof(double);
 }
 
 /// Set
-void HspVarDouble_Set(value_t *pval, void *pdat, const void *in) {
+void hspvar_double_set(value_t *pval, void *pdat, const void *in) {
     //*hspvar_double_GetPtr(pdat) = *((double *)(in));
     memcpy(pdat, in, sizeof(double));
 }
 
 /// Add
-void HspVarDouble_AddI(void *pval, const void *val) {
+void hspvar_double_add_i(void *pval, const void *val) {
     *hspvar_double_GetPtr(pval) += *((double *) (val));
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
 
 /// Sub
-void HspVarDouble_SubI(void *pval, const void *val) {
+void hspvar_double_sub_i(void *pval, const void *val) {
     *hspvar_double_GetPtr(pval) -= *((double *) (val));
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
 
 /// Mul
-void HspVarDouble_MulI(void *pval, const void *val) {
+void hspvar_double_mul_i(void *pval, const void *val) {
     *hspvar_double_GetPtr(pval) *= *((double *) (val));
     *hspvar_double_aftertype = HSPVAR_FLAG_DOUBLE;
 }
 
 /// Div
-void HspVarDouble_DivI(void *pval, const void *val) {
+void hspvar_double_div_i(void *pval, const void *val) {
     double p = *((double *) (val));
     if (p == 0.0) {
         fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_DIVZERO);
@@ -161,7 +161,7 @@ void HspVarDouble_DivI(void *pval, const void *val) {
 }
 
 /// Mod
-void HspVarDouble_ModI(void *pval, const void *val) {
+void hspvar_double_mod_i(void *pval, const void *val) {
     double p = *((double *) (val));
     if (p == 0.0) {
         fprintf(stderr, "Error: %d\n", HSPVAR_ERROR_DIVZERO);
@@ -173,37 +173,37 @@ void HspVarDouble_ModI(void *pval, const void *val) {
 }
 
 /// Eq
-void HspVarDouble_EqI(void *pval, const void *val) {
+void hspvar_double_eq_i(void *pval, const void *val) {
     *((int *) pval) = (*hspvar_double_GetPtr(pval) == *((double *) (val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
 
 /// Ne
-void HspVarDouble_NeI(void *pval, const void *val) {
+void hspvar_double_ne_i(void *pval, const void *val) {
     *((int *) pval) = (*hspvar_double_GetPtr(pval) != *((double *) (val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
 
 /// Gt
-void HspVarDouble_GtI(void *pval, const void *val) {
+void hspvar_double_gt_i(void *pval, const void *val) {
     *((int *) pval) = (*hspvar_double_GetPtr(pval) > *((double *) (val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
 
 /// Lt
-void HspVarDouble_LtI(void *pval, const void *val) {
+void hspvar_double_lt_i(void *pval, const void *val) {
     *((int *) pval) = (*hspvar_double_GetPtr(pval) < *((double *) (val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
 
 /// GtEq
-void HspVarDouble_GtEqI(void *pval, const void *val) {
+void hspvar_double_gt_eq_i(void *pval, const void *val) {
     *((int *) pval) = (*hspvar_double_GetPtr(pval) >= *((double *) (val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
 
 /// LtEq
-void HspVarDouble_LtEqI(void *pval, const void *val) {
+void hspvar_double_lt_eq_i(void *pval, const void *val) {
     *((int *) pval) = (*hspvar_double_GetPtr(pval) <= *((double *) (val)));
     *hspvar_double_aftertype = HSPVAR_FLAG_INT;
 }
@@ -216,17 +216,17 @@ void HspVarDouble_LtEqI(void *pval, const void *val) {
  }
  */
 
-void *HspVarDouble_GetBlockSize(value_t *pval, void *pdat, int *size) {
+void *hspvar_double_get_block_size(value_t *pval, void *pdat, int *size) {
     *size = pval->size - (int) (((char *) pdat) - pval->pt);
     return (pdat);
 }
 
-void HspVarDouble_AllocBlock(value_t *pval, void *pdat, int size) {
+void hspvar_double_alloc_block(value_t *pval, void *pdat, int size) {
 }
 
 //------------------------------------------------------------
 
-void HspVarDouble_Init(hspvar_proc_t *p) {
+void hspvar_double_init(hspvar_proc_t *p) {
     hspvar_double_aftertype = &p->aftertype;
 
     //    p->Set = HspVarDouble_Set;
@@ -234,29 +234,29 @@ void HspVarDouble_Init(hspvar_proc_t *p) {
     //    p->GetPtr = HspVarDouble_GetPtr;
     //    //	p->CnvCustom = HspVarDouble_CnvCustom;
     //    p->GetSize = HspVarDouble_GetSize;
-    //    p->GetBlockSize = HspVarDouble_GetBlockSize;
+    //    p->GetBlockSize = hspvar_double_get_block_size;
     //    p->AllocBlock = HspVarDouble_AllocBlock;
     //
     //    //	p->ArrayObject = HspVarDouble_ArrayObject;
-    //    p->Alloc = HspVarDouble_Alloc;
+    //    p->Alloc = hspvar_double_alloc;
     //    p->Free = HspVarDouble_Free;
     //
-    //    p->AddI = HspVarDouble_AddI;
-    //    p->SubI = HspVarDouble_SubI;
+    //    p->AddI = hspvar_double_add_i;
+    //    p->SubI = hspvar_double_sub_i;
     //    p->MulI = HspVarDouble_MulI;
-    //    p->DivI = HspVarDouble_DivI;
-    //    p->ModI = HspVarDouble_ModI;
+    //    p->DivI = hspvar_double_div_i;
+    //    p->ModI = hspvar_double_mod_i;
     //
     //    //	p->AndI = HspVarDouble_Invalid;
     //    //	p->OrI  = HspVarDouble_Invalid;
     //    //	p->XorI = HspVarDouble_Invalid;
     //
-    //    p->EqI = HspVarDouble_EqI;
-    //    p->NeI = HspVarDouble_NeI;
-    //    p->GtI = HspVarDouble_GtI;
-    //    p->LtI = HspVarDouble_LtI;
-    //    p->GtEqI = HspVarDouble_GtEqI;
-    //    p->LtEqI = HspVarDouble_LtEqI;
+    //    p->EqI = hspvar_double_eq_i;
+    //    p->NeI = hspvar_double_ne_i;
+    //    p->GtI = hspvar_double_gt_i;
+    //    p->LtI = hspvar_double_lt_i;
+    //    p->GtEqI = hspvar_double_gt_eq_i;
+    //    p->LtEqI = hspvar_double_lt_eq_i;
 
     //	p->RrI = HspVarDouble_Invalid;
     //	p->LrI = HspVarDouble_Invalid;

@@ -158,8 +158,8 @@ typedef struct {
     void (*LrI)(void *pval, const void *val);
 } hspvar_proc_t;
 
-extern hspvar_proc_t *hspvarproc;
-extern int hspvartype_max;
+extern hspvar_proc_t *hspvar_proc;
+extern int hspvar_type_max;
 
 typedef void (*HSPVAR_COREFUNC)(hspvar_proc_t *);
 

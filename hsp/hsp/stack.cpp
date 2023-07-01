@@ -1,15 +1,9 @@
-
 //
-//	HSP3スタックサポート
-//
-//	(汎用スタックマネージャー)
-//	(int,double,stringなどの可変長データをpush,popできます)
-//	onion software/onitama 2004/6
+//	汎用スタックマネージャー
 //
 
 #import "stack.h"
 
-// stack.mm
 int stack_stm_max;
 stack_manager_t *stack_mem_stm;
 stack_manager_t *stack_stm_cur;

@@ -24,25 +24,17 @@
 @interface ViewController (hsp3cl) {
 }
 - (int)hsp3cl_exec;
-
 - (int)hsp3cl_init:(char *)startfile;
-
 - (void)hsp3win_dialog:(char *)mes;
-
 - (void)hsp3cl_bye;
-
 - (void)hsp3cl_msgfunc:(HSPContext *)hspctx;
-
 - (void)hsp3cl_error;
-
 - (void)Dispose;                             // HSP axの破棄
 - (int)Reset:(int)mode;                      // HSP axの初期化を行なう
 - (void)SetPackValue:(int)sum dec:(int)dec;  // packfile用の設定データを渡す
 - (void)SetFileName:(char *)name;            // axファイル名を指定する
 - (void *)copy_DAT:(char *)ptr size:(size_t)size;
-
 - (library_t *)copy_LIBDAT:(hsp_header_t *)hsphed ptr:(char *)ptr size:(size_t)size;
-
 - (struct_data_t *)copy_STRUCTDAT:(hsp_header_t *)hsphed ptr:(char *)ptr size:(size_t)size;
 @end
 

@@ -21,27 +21,27 @@
 
 //	STRBUF structure
 //
+typedef struct strbuf_t strbuf_t;
 
-typedef struct strbuf_t STRBUF;
-
-//    String Data structure
-//
 typedef struct {
-    short flag;     // 使用フラグ(0=none/other=busy)
-    short exflag;   // 拡張フラグ(未使用)
-    STRBUF *intptr; // 自身のアドレス
-    int size;       // 確保サイズ
-    char *ptr;      // バッファポインタ
-    STRBUF *extptr; // 外部バッファポインタ(STRINF)
-    void *opt;      // オプション(ユーザー定義用)
+    short flag;       // 使用フラグ(0=none/other=busy)
+    short exflag;     // 拡張フラグ(未使用)
+    strbuf_t *intptr; // 自身のアドレス
+    int size;         // 確保サイズ
+    char *ptr;        // バッファポインタ
+    strbuf_t *extptr; // 外部バッファポインタ(STRINF)
+    void *opt;        // オプション(ユーザー定義用)
 } strbuf_info_t;
 
-//    String Data structure
-//
-struct strbuf_t {
-    strbuf_info_t inf;                  // バッファ情報
+typedef struct strbuf_t {
+    strbuf_info_t inf;           // バッファ情報
     char data[STRBUF_BLOCKSIZE]; // 内部バッファ
-};
+} strbuf_t;
+
+typedef struct {
+    strbuf_t *mem;
+    int len;
+} strbuf_memory_t;
 
 void strbuf_init(void);
 void strbuf_bye(void);

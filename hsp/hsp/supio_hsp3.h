@@ -2,6 +2,16 @@
 //
 //	supio.cpp 関数 (linux)
 //
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <unistd.h>
+#include <time.h>
+#include <sys/time.h>
+#include "hsp3config.h"
+#include "hsp3struct.h"
+#include "strbuf.h"
 
 char *mem_ini(int size);
 void mem_bye(void *ptr);
