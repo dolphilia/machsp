@@ -243,7 +243,7 @@
                 @throw [self make_nsexception:HSPERR_SYNTAX];
             }
         }
-        delete[] abc_hspctx.mem_var;
+        free(abc_hspctx.mem_var);
         abc_hspctx.mem_var = NULL;
     }
     abc_hspctx.mem_mcs = NULL;
@@ -340,7 +340,7 @@
     //		HspVar setup
     abc_hspctx.mem_var = NULL;
     if (hsp3cl_maxvar) {
-        abc_hspctx.mem_var = new value_t[hsp3cl_maxvar];
+        abc_hspctx.mem_var = (value_t*)malloc(sizeof(value_t) * hsp3cl_maxvar);
         for (int i = 0; i < hsp3cl_maxvar; i++) {
             value_t *pval = &abc_hspctx.mem_var[i];
             pval->mode = HSPVAR_MODE_NONE;

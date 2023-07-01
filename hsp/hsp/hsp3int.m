@@ -34,60 +34,60 @@
 #define EASE_LOOP          4096
 
 // デストラクタで自動的に sbFree を呼ぶ
-class CAutoSbFree {
-public:
-    CAutoSbFree(char **pptr);
-
-    ~CAutoSbFree();
-
-private:
-    // uncopyable;
-    CAutoSbFree(CAutoSbFree const &);
-
-    CAutoSbFree const &operator=(CAutoSbFree const &);
-
-private:
-    char **pptr_;
-};
-
-CAutoSbFree::CAutoSbFree(char **pptr) : pptr_(pptr) {
-}
-
-CAutoSbFree::~CAutoSbFree() {
-    strbuf_free(*pptr_);
-}
+//class CAutoSbFree {
+//public:
+//    CAutoSbFree(char **pptr);
+//
+//    ~CAutoSbFree();
+//
+//private:
+//    // uncopyable;
+//    CAutoSbFree(CAutoSbFree const &);
+//
+//    CAutoSbFree const &operator=(CAutoSbFree const &);
+//
+//private:
+//    char **pptr_;
+//};
+//
+//CAutoSbFree::CAutoSbFree(char **pptr) : pptr_(pptr) {
+//}
+//
+//CAutoSbFree::~CAutoSbFree() {
+//    strbuf_free(*pptr_);
+//}
 
 @implementation ViewController (hsp3int)
 
 //----Sort Routines
-- (bool)less_int_1:(DATA const &)lhs rhs:(DATA const &)rhs {
-    int cmp = (lhs.as.ikey - rhs.as.ikey);
-    return (cmp < 0) || (cmp == 0 && lhs.info < rhs.info);
+- (bool)less_int_1:(DATA const *)lhs rhs:(DATA const *)rhs {
+    int cmp = (lhs->as.ikey - rhs->as.ikey);
+    return (cmp < 0) || (cmp == 0 && lhs->info < rhs->info);
 }
 
-- (bool)less_int_0:(DATA const &)lhs rhs:(DATA const &)rhs {
-    int cmp = (lhs.as.ikey - rhs.as.ikey);
-    return (cmp > 0) || (cmp == 0 && lhs.info < rhs.info);
+- (bool)less_int_0:(DATA const *)lhs rhs:(DATA const *)rhs {
+    int cmp = (lhs->as.ikey - rhs->as.ikey);
+    return (cmp > 0) || (cmp == 0 && lhs->info < rhs->info);
 }
 
-- (bool)less_double_1:(DATA const &)lhs rhs:(DATA const &)rhs {
-    int cmp = (lhs.as.dkey < rhs.as.dkey ? -1 : (lhs.as.dkey > rhs.as.dkey ? 1 : 0));
-    return (cmp < 0) || (cmp == 0 && lhs.info < rhs.info);
+- (bool)less_double_1:(DATA const *)lhs rhs:(DATA const *)rhs {
+    int cmp = (lhs->as.dkey < rhs->as.dkey ? -1 : (lhs->as.dkey > rhs->as.dkey ? 1 : 0));
+    return (cmp < 0) || (cmp == 0 && lhs->info < rhs->info);
 }
 
-- (bool)less_double_0:(DATA const &)lhs rhs:(DATA const &)rhs {
-    int cmp = (lhs.as.dkey < rhs.as.dkey ? -1 : (lhs.as.dkey > rhs.as.dkey ? 1 : 0));
-    return (cmp > 0) || (cmp == 0 && lhs.info < rhs.info);
+- (bool)less_double_0:(DATA const *)lhs rhs:(DATA const *)rhs {
+    int cmp = (lhs->as.dkey < rhs->as.dkey ? -1 : (lhs->as.dkey > rhs->as.dkey ? 1 : 0));
+    return (cmp > 0) || (cmp == 0 && lhs->info < rhs->info);
 }
 
-- (bool)less_str_1:(DATA const &)lhs rhs:(DATA const &)rhs {
-    int cmp = (strcmp(lhs.as.skey, rhs.as.skey));
-    return (cmp < 0) || (cmp == 0 && lhs.info < rhs.info);
+- (bool)less_str_1:(DATA const *)lhs rhs:(DATA const *)rhs {
+    int cmp = (strcmp(lhs->as.skey, rhs->as.skey));
+    return (cmp < 0) || (cmp == 0 && lhs->info < rhs->info);
 }
 
-- (bool)less_str_0:(DATA const &)lhs rhs:(DATA const &)rhs {
-    int cmp = (strcmp(lhs.as.skey, rhs.as.skey));
-    return (cmp > 0) || (cmp == 0 && lhs.info < rhs.info);
+- (bool)less_str_0:(DATA const *)lhs rhs:(DATA const *)rhs {
+    int cmp = (strcmp(lhs->as.skey, rhs->as.skey));
+    return (cmp > 0) || (cmp == 0 && lhs->info < rhs->info);
 }
 
 - (int)NoteToData:(char *)adr data:(DATA *)data {
@@ -463,7 +463,7 @@ CAutoSbFree::~CAutoSbFree() {
     p = strbuf_alloc(capacity);
     len = 0;
 
-    CAutoSbFree autofree(&p);
+    //CAutoSbFree autofree(&p);
 
     while (1) {
         char fmt[32];

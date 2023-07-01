@@ -35,37 +35,21 @@
 }
 
 - (char *)note_update;
-
 - (void *)reffunc_intfunc:(int *)type_res arg:(int)arg;
-
 - (int)cmdfunc_intcmd:(int)cmd;
-
 - (void)hsp3typeinit_intcmd:(hsp_type_info_t *)info;
-
 - (void)hsp3typeinit_intfunc:(hsp_type_info_t *)info;
-
 - (void)Select:(char *)str;
-
 - (int)GetSize;
-
 - (char *)GetStr;
-
 - (int)GetMaxLine;
-
 - (int)GetLine:(char *)nres line:(int)line;
-
 - (int)GetLine:(char *)nres line:(int)line max:(int)max;
-
 - (int)PutLine:(char *)nstr line:(int)line ovr:(int)ovr;
-
 - (char *)GetLineDirect:(int)line;
-
 - (void)ResumeLineDirect;
-
 - (int)FindLine:(char *)nstr mode:(int)mode;
-
 - (int)nnget:(char *)nbase line:(int)line;
-
 - (int)FindLineSub:(char *)nstr mode:(int)mode;
 
 @end
