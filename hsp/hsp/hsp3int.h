@@ -22,6 +22,7 @@
 #import "hspwnd_linux.h"
 #import "strbuf.h"
 #import "supio_hsp3.h"
+#include "utility_hsp3int.h"
 
 #ifdef HSPRANDMT
 #include <random>

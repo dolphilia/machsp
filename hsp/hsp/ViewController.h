@@ -18,15 +18,6 @@
 #define HSP3_AXTYPE_NONE 0
 #define HSP3_AXTYPE_ENCRYPT 1
 
-typedef struct {
-    union {
-        int ikey;
-        double dkey;
-        char *skey;
-    } as;
-    int info; // ソートの前にこの要素があった位置
-} DATA;
-
 @interface ViewController : NSViewController <NSTextFieldDelegate> { // NSTextFieldのデリゲートのため
 @public
     AppDelegate *global;

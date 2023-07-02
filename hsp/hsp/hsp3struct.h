@@ -49,6 +49,15 @@
 #define EXFLG_3        0x8000
 #define CSTYPE         0x0fff
 
+typedef struct {
+    union {
+        int ikey;
+        double dkey;
+        char *skey;
+    } as;
+    int info; // ソートの前にこの要素があった位置
+} DATA;
+
 // HSP3.0 ヘッダー構造体
 typedef struct hsp_header_t {
     char h1;          // H

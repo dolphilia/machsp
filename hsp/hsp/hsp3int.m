@@ -59,99 +59,6 @@
 
 @implementation ViewController (hsp3int)
 
-//----Sort Routines
-- (bool)less_int_1:(DATA const *)lhs rhs:(DATA const *)rhs {
-    int cmp = (lhs->as.ikey - rhs->as.ikey);
-    return (cmp < 0) || (cmp == 0 && lhs->info < rhs->info);
-}
-
-- (bool)less_int_0:(DATA const *)lhs rhs:(DATA const *)rhs {
-    int cmp = (lhs->as.ikey - rhs->as.ikey);
-    return (cmp > 0) || (cmp == 0 && lhs->info < rhs->info);
-}
-
-- (bool)less_double_1:(DATA const *)lhs rhs:(DATA const *)rhs {
-    int cmp = (lhs->as.dkey < rhs->as.dkey ? -1 : (lhs->as.dkey > rhs->as.dkey ? 1 : 0));
-    return (cmp < 0) || (cmp == 0 && lhs->info < rhs->info);
-}
-
-- (bool)less_double_0:(DATA const *)lhs rhs:(DATA const *)rhs {
-    int cmp = (lhs->as.dkey < rhs->as.dkey ? -1 : (lhs->as.dkey > rhs->as.dkey ? 1 : 0));
-    return (cmp > 0) || (cmp == 0 && lhs->info < rhs->info);
-}
-
-- (bool)less_str_1:(DATA const *)lhs rhs:(DATA const *)rhs {
-    int cmp = (strcmp(lhs->as.skey, rhs->as.skey));
-    return (cmp < 0) || (cmp == 0 && lhs->info < rhs->info);
-}
-
-- (bool)less_str_0:(DATA const *)lhs rhs:(DATA const *)rhs {
-    int cmp = (strcmp(lhs->as.skey, rhs->as.skey));
-    return (cmp > 0) || (cmp == 0 && lhs->info < rhs->info);
-}
-
-- (int)NoteToData:(char *)adr data:(DATA *)data {
-    char *p = adr;
-    int line = 0;
-    while (*p != '\0') {
-        data[line].as.skey = p;
-        data[line].info = line;
-        while (*p != '\0') {
-            char c = *p;
-            if (c == '\n' || c == '\r') {
-                *p = '\0';
-            }
-            p++;
-            if (c == '\n') break;
-            if (c == '\r') {
-                if (*p == '\n') p++;
-                break;
-            }
-        }
-        line++;
-    }
-    return line;
-}
-
-- (int)GetNoteLines:(char *)adr {
-    int line = 0;
-    char *p = adr;
-    while (*p != '\0') {
-        while (*p != '\0') {
-            char c = *p++;
-            if (c == '\n') break;
-            if (c == '\r') {
-                if (*p == '\n') p++;
-                break;
-            }
-        }
-        line++;
-    }
-    return line;
-}
-
-- (size_t)DataToNoteLen:(DATA *)data num:(int)num {
-    size_t len = 0;
-    for (int i = 0; i < num; i++) {
-        char *s = data[i].as.skey;
-        len += strlen(s) + 2;  // strlen("¥r¥n")
-    }
-    return len;
-}
-
-- (void)DataToNote:(DATA *)data adr:(char *)adr num:(int)num {
-    char *p = adr;
-    char *s;
-    for (int i = 0; i < num; i++) {
-        s = data[i].as.skey;
-        strcpy(p, s);
-        p += strlen(s);
-        *p++ = 13;
-        *p++ = 10;  // Add CR/LF
-    }
-    *p = 0;
-}
-
 //----Sort Interface
 
 - (void)DataBye {
@@ -1455,13 +1362,13 @@
     sflag = [self code_getdi:0];  // パラメータ2:数値
 
     p = (char *) hspvar_core_ptr_offset(pv, ap);
-    i = [self GetNoteLines:p];
+    i = get_note_lines(p);
     if (i <= 0) {
         @throw [self make_nsexception:HSPERR_ILLEGAL_FUNCTION];
     }
 
     [self DataIni:i];
-    [self NoteToData:p data:hsp3int_data_temp];
+    note_to_data(p, hsp3int_data_temp);
     if (sflag == 0) {
         //$
         // std::sort(hsp3int_data_temp, hsp3int_data_temp + i, less_str_1);
@@ -1470,8 +1377,8 @@
         // std::sort(hsp3int_data_temp, hsp3int_data_temp + i, less_str_0);
     }
 
-    stmp = [self code_stmp:(int) [self DataToNoteLen:hsp3int_data_temp num:i] + 1];
-    [self DataToNote:hsp3int_data_temp adr:stmp num:i];
+    stmp = [self code_stmp:(int)data_to_note_len(hsp3int_data_temp, i) + 1];
+    data_to_note(hsp3int_data_temp, stmp, i);
     [self code_setva:pv aptr:ap type:HSPVAR_FLAG_STR ptr:stmp];  // 変数に値を代入
 }
 

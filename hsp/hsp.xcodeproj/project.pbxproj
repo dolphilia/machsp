@@ -41,6 +41,7 @@
 		8B719AAB1D86524A00F35EC5 /* hspvar_str.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A991D86524A00F35EC5 /* hspvar_str.c */; };
 		8B719AAC1D86524A00F35EC5 /* hspvar_struct.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A9A1D86524A00F35EC5 /* hspvar_struct.c */; };
 		8B719AAD1D86524A00F35EC5 /* stack.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B719A9D1D86524A00F35EC5 /* stack.c */; };
+		8B763B0A2A519F6C0014555D /* utility_hsp3int.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B763B092A519F6C0014555D /* utility_hsp3int.c */; };
 		8B7B03141DA78DCD004F4B68 /* utility_string.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B7B03121DA78DCD004F4B68 /* utility_string.c */; };
 /* End PBXBuildFile section */
 
@@ -140,6 +141,8 @@
 		8B719A9D1D86524A00F35EC5 /* stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stack.c; sourceTree = "<group>"; };
 		8B719AB01D86525600F35EC5 /* debug_message.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debug_message.h; sourceTree = "<group>"; };
 		8B739AA21DC1EB4F00B0EA30 /* hsp3struct_debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hsp3struct_debug.h; sourceTree = "<group>"; };
+		8B763B082A519F6C0014555D /* utility_hsp3int.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utility_hsp3int.h; sourceTree = "<group>"; };
+		8B763B092A519F6C0014555D /* utility_hsp3int.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = utility_hsp3int.c; sourceTree = "<group>"; };
 		8B7B03121DA78DCD004F4B68 /* utility_string.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utility_string.c; sourceTree = "<group>"; };
 		8B7B03131DA78DCD004F4B68 /* utility_string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utility_string.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -355,6 +358,8 @@
 				8B719A5A1D86521B00F35EC5 /* utility_pixel.c */,
 				8B719A5B1D86521B00F35EC5 /* utility_picture.h */,
 				8B719A5C1D86521B00F35EC5 /* utility_picture.c */,
+				8B763B082A519F6C0014555D /* utility_hsp3int.h */,
+				8B763B092A519F6C0014555D /* utility_hsp3int.c */,
 			);
 			name = utility;
 			sourceTree = "<group>";
@@ -520,6 +525,7 @@
 				8B719A541D86520A00F35EC5 /* SineWaveData.m in Sources */,
 				8B719A781D86522900F35EC5 /* stb_image.c in Sources */,
 				8B719AAD1D86524A00F35EC5 /* stack.c in Sources */,
+				8B763B0A2A519F6C0014555D /* utility_hsp3int.c in Sources */,
 				8B719AAC1D86524A00F35EC5 /* hspvar_struct.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

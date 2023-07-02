@@ -16,7 +16,7 @@
 
 @implementation ViewController (hsp)
 
-- (int)getU32:(unsigned short *)mcs {
+int get_u32(unsigned short *mcs) {
     return (mcs[1] << 16) | (mcs[0]);
 }
 
@@ -30,7 +30,7 @@
     hsp_exflg = hsp_csvalue & (EXFLG_1 | EXFLG_2);
     hsp_type_tmp = hsp_csvalue & CSTYPE;
     if (hsp_csvalue & EXFLG_3) { // 32bit val code
-        hsp_val_tmp = [self getU32:hsp_mcs];
+        hsp_val_tmp = get_u32(hsp_mcs);
         hsp_mcs += 2;
         return;
     }
