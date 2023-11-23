@@ -1,6 +1,6 @@
 # macOS版HSP
 
-OpenHSPベースのmacOS版HSPです。OS X 10.12.1 / Xcode 8.1で動作検証しています。
+OpenHSPベースのmacOS版HSPです。OS X 14.1.1 / Xcode 8.1で動作検証しています。
 
 ## Win版HSPとの違い 
 
