@@ -126,8 +126,6 @@ static void usage1(void) {
 
     //printf("!!!!!!!!!!!! \n");
     //[cwrap call_c];
-    swift_test *_swift = [[swift_test alloc] init];
-    [_swift _swift_test];
     return st;
 }
 

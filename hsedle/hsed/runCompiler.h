@@ -10,7 +10,6 @@
 #import <Cocoa/Cocoa.h>
 #import "MyWindow.h"
 #import "c_wrapper.h"
-#import "hsedle-Swift.h"
 
 @interface MyWindow (run) {
 }
