@@ -1,0 +1,8 @@
+//
+// Created by dolphilia on 2023/11/24.
+//
+
+#ifndef HSP_EDITOR_LITE_STATIC_GLOBAL_H
+#define HSP_EDITOR_LITE_STATIC_GLOBAL_H
+
+#endif //HSP_EDITOR_LITE_STATIC_GLOBAL_H
