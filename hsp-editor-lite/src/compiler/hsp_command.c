@@ -2,7 +2,7 @@
 // HSPの設定
 //
 
-char s_rec[1] = "", *hsp_prestr[] = {
+char s_rec[1] = "", *hsp_pre_str[] = {
         //
         //	label check
         //	  | opt value
@@ -365,7 +365,7 @@ char s_rec[1] = "", *hsp_prestr[] = {
 };
 
 
-char *hsp_prepp[] = {
+char *hsp_pre_preprocess[] = {
         s_rec,
         (char *) "$000 0 #addition",
         (char *) "$000 0 #cmd",

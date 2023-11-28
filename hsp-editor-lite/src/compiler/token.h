@@ -572,8 +572,8 @@ private:
     CMemBuf *ahtbuf;
     CStrNote *note;
     AHTMODEL *ahtmodel;                // AHTプロセスデータ
-    char common_path[HSP_MAX_PATH];    // 共通path
-    char search_path[HSP_MAX_PATH];    // 検索パス
+    char common_path[HSP_PATH_LENGTH_MAX];    // 共通path
+    char search_path[HSP_PATH_LENGTH_MAX];    // 検索パス
 
     int line;
     int val;
@@ -687,7 +687,7 @@ private:
     //
     int cg_errline;
     int cg_orgline;
-    char cg_orgfile[HSP_MAX_PATH];
+    char cg_orgfile[HSP_PATH_LENGTH_MAX];
 
     //		for SCNV
     //

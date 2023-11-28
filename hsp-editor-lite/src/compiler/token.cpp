@@ -1664,7 +1664,7 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
         type = GetToken();
         if (ctype) {
             if (type != '(') {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
                 SetError((char *) "ctypeマクロの直後には、丸括弧でくくられた引数リストが必要です");
 #else
                 SetError("C-Type macro syntax error");
@@ -1756,7 +1756,7 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
             if ((ctype) && (i == 1) && (macopt == 0) && (prm[0] == prme[0]))
                 noprm = 0;
             if (noprm) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
                 SetError((char *) "マクロの引数が多すぎます");
 #else
                 SetError("too many macro parameters");
@@ -1906,7 +1906,7 @@ int CToken::ReplaceLineBuf(char *str1, char *str2, char *repl, int opt, MACDEF *
             if (p == endp) { // 値省略時
                 macbuf = macdef->data + macdef->index[val];
                 if (*macbuf == 0) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
                     SetError((char *) "デフォルトパラメータのないマクロの引数は省略できません");
 #else
                     SetError("no default parameter");
@@ -2009,7 +2009,7 @@ ppresult_t CToken::PP_SwitchReverse(void) {
 
 ppresult_t CToken::PP_Include(int is_addition) {
     char *word = (char *) s3;
-    char tmp_spath[HSP_MAX_PATH];
+    char tmp_spath[HSP_PATH_LENGTH_MAX];
     int add_bak = 0;
     if (GetToken() != TOKEN_STRING) {
         if (is_addition) {
@@ -2996,7 +2996,7 @@ ppresult_t CToken::PP_Module(void) {
 ///
 ppresult_t CToken::PP_Global(void) {
     if (IsGlobalMode()) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
         SetError((char *) "#module と対応していない #global があります");
 #else
         SetError("already in global mode");
@@ -3686,10 +3686,10 @@ int CToken::ExpandLine(CMemBuf *buf, CMemBuf *src, char *refname) {
 ///
 int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
     int res;
-    char cname[HSP_MAX_PATH];
-    char purename[HSP_MAX_PATH];
-    char foldername[HSP_MAX_PATH];
-    char refname_copy[HSP_MAX_PATH];
+    char cname[HSP_PATH_LENGTH_MAX];
+    char purename[HSP_PATH_LENGTH_MAX];
+    char foldername[HSP_PATH_LENGTH_MAX];
+    char refname_copy[HSP_PATH_LENGTH_MAX];
     CMemBuf fbuf;
 
     getpath(fname, purename, 8);
@@ -3786,7 +3786,7 @@ int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
                 strcat(cname, purename);
                 if (fbuf.PutFile(cname) < 0) {
                     if (fileadd == 0) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
                         //@autoreleasepool {
                         //    AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
                         //    global.logString = [global.logString stringByAppendingFormat:@"#スクリプトファイルが見つかりません [%s]\n", purename];
@@ -3825,7 +3825,7 @@ int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
         res = StackCheck(linebuf);
         //res = tstack->StackCheck(linebuf);
         if (res) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
             //Mesf( (char *)"#スタックが空になっていないマクロタグが%d個あります [%s]", res, refname_copy );
             //@autoreleasepool {
             //    AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
@@ -3844,7 +3844,7 @@ int CToken::ExpandFile(CMemBuf *buf, char *fname, char *refname) {
 
     if (res) {
 
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
         //Mes((char *)"#重大なエラーが検出されています");
         //@autoreleasepool {
         //    AppDelegate *global = (AppDelegate *) [[NSApplication sharedApplication] delegate];
@@ -4135,7 +4135,7 @@ char *CToken::ExecSCNV(char *srcbuf, int opt) {
 ///
 void CToken::SetErrorSymbolOverdefined(char *keyword, int label_id) {
     char strtmp[0x100];
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
     sprintf(strtmp, "定義済みの識別子は使用できません [%s]", keyword);
 #else
     sprintf( strtmp,"symbol in use [%s]", keyword );

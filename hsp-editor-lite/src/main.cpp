@@ -11,7 +11,7 @@
 #include "compiler/hsp3config.h"
 #include "util/utility.h"
 
-static void usage1(void) {
+static void usage() {
     static char *p[] = {
         (char *) "usage: hspcmp [options] [filename]",
         (char *) "       -o??? set output file to ???",
@@ -22,96 +22,92 @@ static void usage1(void) {
         (char *) "       -u    output UTF-8 strings",
         (char *) "       -w    force debug window on",
         (char *) "       --compath=??? set common path to ???",
-        NULL
+        nullptr
     };
 }
 
 int main(int argc, const char *argv[]) {
-    int st = 0;
-    int cmpopt = 0;
-    int ppopt = HSC3_OPT_UTF8_IN;
-    int utfopt = 1;
-    int pponly;
-    char fname[HSP_MAX_PATH];
-    char fname2[HSP_MAX_PATH];
-    char oname[HSP_MAX_PATH];
-    char compath[HSP_MAX_PATH];
-    CHsc3 *hsc3 = NULL;
+    int result = 0;
+    int compile_option = 0;
+    int preprocess_option = HSC3_OPT_UTF8_IN;
+    int utf8_option = 1;
+    int preprocess_only = 0;
+    char file_name[HSP_PATH_LENGTH_MAX];
+    char file_name2[HSP_PATH_LENGTH_MAX];
+    char obj_name[HSP_PATH_LENGTH_MAX];
+    char common_path[HSP_PATH_LENGTH_MAX];
+
 
     if (argc < 2) { // check switch and prm
-        usage1();
+        usage();
         return -1;
     }
 
-    fname[0] = 0;
-    fname2[0] = 0;
-    oname[0] = 0;
+    file_name[0] = 0;
+    file_name2[0] = 0;
+    obj_name[0] = 0;
 
-    strcpy(compath, "common/");
+    strcpy(common_path, "common/");
 
     for (int i = 1; i < argc; i++) {
         if (*argv[i] != '-') {
-            strcpy(fname, argv[i]);
+            strcpy(file_name, argv[i]);
         } else {
-            if (strncmp(argv[i], "--compath=", 10) == 0) {
-                strcpy(compath, argv[i] + 10);
+            if (strncmp(argv[i], "--common_path=", 10) == 0) {
+                strcpy(common_path, argv[i] + 10);
                 continue;
             }
             switch (tolower(*(argv[i] + 1))) {
                 case 'c':
-                    ppopt |= HSC3_OPT_NO_HSPDEF;
+                    preprocess_option |= HSC3_OPT_NO_HSPDEF;
                     break;
                 case 'p':
-                    pponly = 1;
+                    preprocess_only = 1;
                     break;
                 case 'd':
-                    ppopt |= HSC3_OPT_DEBUG_MODE;
-                    cmpopt |= HSC3_MODE_DEBUG;
+                    preprocess_option |= HSC3_OPT_DEBUG_MODE;
+                    compile_option |= HSC3_MODE_DEBUG;
                     break;
                 case 'i':
-                    ppopt |= HSC3_OPT_UTF8_IN;
-                    utfopt = 1;
-                    cmpopt |= HSC3_MODE_UTF8;
+                    preprocess_option |= HSC3_OPT_UTF8_IN;
+                    utf8_option = 1;
+                    compile_option |= HSC3_MODE_UTF8;
                     break;
                 case 'u':
-                    utfopt = 1;
-                    cmpopt |= HSC3_MODE_UTF8;
+                    utf8_option = 1;
+                    compile_option |= HSC3_MODE_UTF8;
                     break;
                 case 'w':
-                    cmpopt |= HSC3_MODE_DEBUG_WIN;
+                    compile_option |= HSC3_MODE_DEBUG_WIN;
                     break;
                 case 'o':
-                    strcpy(oname, argv[i] + 2);
+                    strcpy(obj_name, argv[i] + 2);
                     break;
                 default:
-                    st = 1;
+                    result = 1;
                     break;
             }
         }
     }
 
-    if (oname[0] == 0) {
-        strcpy(oname, fname);
-        cutext(oname);
-        addext(oname, "ax");
+    if (obj_name[0] == 0) {
+        strcpy(obj_name, file_name);
+        cutext(obj_name);
+        addext(obj_name, "ax");
     }
-    strcpy(fname2, fname);
-    cutext(fname2);
-    addext(fname2, "i");
-    addext(fname, "hsp"); // 拡張子がなければ追加する
+    strcpy(file_name2, file_name);
+    cutext(file_name2);
+    addext(file_name2, "i");
+    addext(file_name, "hsp"); // 拡張子がなければ追加する
 
-    hsc3 = new CHsc3; // call main
-    hsc3->setCommonPath(compath);
-    st = hsc3->preProcess(fname, fname2, ppopt, fname);
-    if ((cmpopt < 2) && (st == 0)) {
-        st = hsc3->compile(fname2, oname, cmpopt);
+    HspCompiler *hsc3 = new HspCompiler;
+    hsc3->set_common_path(common_path);
+    result = hsc3->preprocess(file_name, file_name2, preprocess_option, file_name);
+    if ((compile_option < 2) && (result == 0)) {
+        result = hsc3->compile(file_name2, obj_name, compile_option);
     }
-    puts(hsc3->getError());
-    hsc3->preProcessEnd();
-    if (hsc3 != NULL) {
-        delete hsc3;
-        hsc3 = NULL;
-    }
-
-    return st;
+    puts(hsc3->get_error());
+    hsc3->end_preprocess();
+    delete hsc3;
+    return result;
 }

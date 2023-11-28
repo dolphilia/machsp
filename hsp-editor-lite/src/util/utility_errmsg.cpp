@@ -8,7 +8,7 @@
 
 #include "utility_errmsg.h"
 
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
 static char *error_message_list[] = {
         (char *) "",                                                        // 0
         (char *) "解釈できない文字コードです",                            // 1

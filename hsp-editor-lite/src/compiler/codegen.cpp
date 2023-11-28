@@ -142,7 +142,7 @@ void CToken::CalcCG_factor(void) {
             id = SetVarsFixed(cg_str, cg_defvarfix);
             if (lb->GetType(id) == TYPE_VAR) {
                 if (lb->GetInitFlag(id) == LAB_INIT_NO) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
                     // Mesf( (char *)"#未初期化の変数があります(%s)", cg_str );
                     //@autoreleasepool {
                     //    AppDelegate *global =
@@ -1746,7 +1746,7 @@ void CToken::GenerateCodePP_func(int deftype) {
 
     if (ref == 0 && (otflag & STRUCTDAT_OT_CLEANUP) == 0) {
         if (hed_cmpmode & CMPMODE_OPTINFO) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
             //@autoreleasepool {
             //    AppDelegate *global =
             //            (AppDelegate *) [[NSApplication sharedApplication] delegate];
@@ -1931,7 +1931,7 @@ int CToken::GetParameterTypeCG(char *name) {
     if (!strcmp(cg_str, "var"))
         return MPTYPE_SINGLEVAR;
     if (!strcmp(cg_str, "val")) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
         //@autoreleasepool {
         //    AppDelegate *global =
         //            (AppDelegate *) [[NSApplication sharedApplication] delegate];
@@ -2203,7 +2203,7 @@ void CToken::GenerateCodePP_module(void) {
             if (ref == 0) {
                 cg_flag = CG_FLAG_DISABLE;
                 if (hed_cmpmode & CMPMODE_OPTINFO) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
                     // Mesf( (char *)"#未使用のモジュールを削除しました %s", modname );
                     //@autoreleasepool {
                     //    AppDelegate *global =
@@ -2734,7 +2734,7 @@ int CToken::GenerateCodeMain(CMemBuf *buf) {
         errend = 0;
         for (a = 0; a < lb->GetCount(); a++) {
             if (lb->GetType(a) == TYPE_XLABEL) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
                 // Mesf( (char *)"#ラベルの定義が存在しません [%s]", lb->GetName(a) );
                 //@autoreleasepool {
                 //    AppDelegate *global =
@@ -2754,7 +2754,7 @@ int CToken::GenerateCodeMain(CMemBuf *buf) {
         //		関数未処理チェック
         for (a = 0; a < GET_FI_SIZE(); a++) {
             if (GET_FI(a)->index == STRUCTDAT_INDEX_DUMMY) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
                 // Mesf( (char *)"#関数が定義されていません [%s]",
                 // lb->GetName(GET_FI(a)->otindex) );
                 //@autoreleasepool {
@@ -2774,7 +2774,7 @@ int CToken::GenerateCodeMain(CMemBuf *buf) {
 
         //      ブレース対応チェック
         if (iflev > 0) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
             // Mesf( (char *)"#波括弧が閉じられていません" );
             //@autoreleasepool {
             //    AppDelegate *global =
@@ -3551,7 +3551,7 @@ int CToken::GenerateCode(CMemBuf *srcbuf, char *oname, int mode) {
 
         res = axbuf.SaveFile(oname);
         if (res < 0) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
             // Mes( (char *)"#出力ファイルを書き込めません" );
 //            @autoreleasepool {
 //                AppDelegate *global =
@@ -3614,7 +3614,7 @@ void CToken::CG_MesLabelDefinition(int label_id) {
 
     LABOBJ *const labobj = lb->GetLabel(label_id);
     if (labobj->def_file) {
-#ifdef JPNMSG
+#ifdef HSP_JP_MESSAGE
         // Mesf((char *)"#識別子「%s」の定義位置: line %d in [%s]",
         // lb->GetName(label_id), labobj->def_line, labobj->def_file);
 //        @autoreleasepool {

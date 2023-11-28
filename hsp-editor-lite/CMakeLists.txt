@@ -17,6 +17,6 @@ add_executable(hsp_editor_lite
         src/compiler/membuf.cpp
         src/compiler/token.cpp
         src/util/vec.c
-        src/compiler/hspcmd.c
+        src/compiler/hsp_command.c
         src/compiler/codegen.cpp
         src/util/str.c)
