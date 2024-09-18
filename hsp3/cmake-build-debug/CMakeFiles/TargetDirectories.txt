@@ -1,0 +1,3 @@
+/Users/dolphilia/github/machsp/hsp3/cmake-build-debug/CMakeFiles/hsp3.dir
+/Users/dolphilia/github/machsp/hsp3/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/dolphilia/github/machsp/hsp3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
